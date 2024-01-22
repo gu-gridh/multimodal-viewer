@@ -1,0 +1,149 @@
+html,
+body { 
+	margin:0px;
+	padding:0px;
+	font-family: "Barlow Condensed", sans-serif !important;
+	height:calc(100% - 80px);
+	width:100%;
+}
+
+#navigatorDiv{
+	position:absolute;
+	  width:80px;
+	  height:80px;
+	  margin-top:10px;
+	  margin-right:10px;
+	
+	}
+	
+	#ToolbarHorizontal {
+	  position: absolute;
+	  display: flex;
+	  bottom: 10px;
+	  width: 100%;
+	  z-index: 1000;
+	}
+	
+	#CenterNav {
+	  margin: auto;
+	}
+	
+	#ToolbarHorizontal span {
+	  background-color: rgba(35, 35, 35, 0.6);
+	  color: white;
+	  text-align: center;
+	  padding: 5px 10px 5px 10px;
+	  border-radius: 8px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  vertical-align: 13px;
+	  margin-left: 10px;
+	  margin-right: 10px;
+	}
+	
+	.interface-area{
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		width: 100%;
+		position: absolute;
+		bottom: 50px;
+		height:100px;
+	}
+	
+	#ToolbarBottom {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		padding-left:12px;
+		padding-right:10px;
+	  	width:auto;
+		height:48px;
+ 		background-color:rgb(0,0,0,0.8);
+ 		border-radius:8px;
+	  z-index: 1000;
+	  cursor:pointer;
+	  box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+	}
+	
+	#FullPage {
+	  background: url(../styles/interface/expand.svg);
+	  background-size: 100%;
+	  background-repeat: no-repeat;
+	  background-position: center;
+	  width: 30px;
+	  height: 30px;
+	  overflow: hidden;
+	  cursor:pointer;
+	}
+	
+	#Prev {
+	  background: url(../styles/interface/prev.png);
+	  background-size: 35px 35px;
+	  background-color: rgba(35, 35, 35, 0.9);
+	  background-repeat: no-repeat;
+	  background-position: center;
+	  display: inline-block;
+	  position: relative;
+	}
+	
+	#Next {
+	  background: url(../styles/interface/next.png);
+	  background-size: 35px 35px;
+	  background-color: rgba(35, 35, 35, 0.9);
+	  background-repeat: no-repeat;
+	  background-position: center;
+	  display: inline-block;
+	  position: relative;
+	}
+
+	#Home {
+		background: url(../styles/interface/frame.png);
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+		width: 30px;
+		height: 30px;
+		cursor:pointer;
+		overflow: hidden;
+	  }
+	
+	#ZoomIn {
+	  background: url(../styles/interface/plus_big.png);
+	  background-size: 100%;
+	  background-repeat: no-repeat;
+	  background-position: center;
+	  width: 35px;
+	  height: 35px;
+	  cursor:pointer;
+	  overflow: hidden;
+	}
+	
+	#ZoomOut {
+	  background: url(../styles/interface/minus_big.png);
+	  background-size: 100%;
+	  background-repeat: no-repeat;
+	  background-position: center;
+	  width: 35px;
+	  height: 35px;
+	  cursor:pointer;
+	  overflow: hidden;
+	  margin-left:5px;
+	}
+	.NavButton {
+	  width: 35px;
+	  height: 35px;
+	  color: white;
+	  opacity: 0.7;
+	  margin-right:8px; 
+	  margin-left:8px; 
+	  margin-top:8px; 
+	  margin-bottom:8px; 
+	  cursor:pointer;
+	}
+	.NavButton:hover {
+	  opacity: 1;
+	  cursor:pointer;
+	}
+
+

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IIIF Image Viewer</title>
+    <link rel="stylesheet" href="iiif.css">
+    <link rel="stylesheet" href="../styles/shared_styles.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
+    <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+</head>
+
+<body>
+    <!-- Container for OpenSeadragon -->
+    <div id="openseadragon" style="width: 100%; height: calc(100vh - 80px); background-color:var(--color-0);"></div>
+    <!-- <button onclick="viewAnnotations()">View Annotations</button>
+        <div id="annotationsJson" style="white-space: pre;"></div> -->
+
+        <div class="interface-area">
+    <div id="ToolbarBottom">
+
+        <a id="home" href="#home">
+            <div id="Home" class="NavButton"></div>
+        </a>
+       
+        <a id="zoom-in" href="#zoom-in">
+            <div id="ZoomIn" class="NavButton"></div>
+        </a>
+        <a id="zoom-out" href="#zoom-out">
+            <div id="ZoomOut" class="NavButton"></div>
+        </a>
+          <a id="full-page" href="#full-page">
+            <div id="FullPage" class="NavButton"></div>
+        </a> 
+    </div>
+</div>
+
+    <script>
+        var anno;
+
+        window.onload = function () {
+            var viewer = OpenSeadragon({
+                id: "openseadragon",
+                prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
+                tileSources: 'PLACEHOLDER_IIIF_IMAGE_URL',
+                immediateRender: false,
+                visibilityRatio: 1.0,
+                minZoomImageRatio: 0.8,
+                homeFillsViewer: true,
+                showZoomControl: true,
+                showHomeControl: true,
+                showFullPageControl: true,
+                showNavigator: true,
+                navigatorAutoFade: true,
+                fullPageButton: "full-page",
+                zoomInButton: "zoom-in",
+                zoomOutButton: "zoom-out",
+                homeButton: "home",
+            });
+
+            // Initialize the Annotorious plugin
+            anno = OpenSeadragon.Annotorious(viewer, {
+                // Additional configuration options
+            });
+
+            // Load annotations in W3C WebAnnotation format
+            anno.loadAnnotations('annotations.w3c.json');
+
+            // Attach handlers to listen to events
+            anno.on('createAnnotation', function (annotation) {
+                console.log('Annotation created:', annotation);
+            });
+
+            anno.on('clickAnnotation', function (annotation, element) {
+                console.log('Annotation clicked:', annotation);
+            });
+        };
+
+        // function viewAnnotations() {
+        //     var annotations = anno.getAnnotations();
+        //     var annotationsJson = JSON.stringify(annotations, null, 2); // Pretty print the JSON
+
+        //     console.log(annotationsJson); // Log to console
+
+        //     // Alternatively, display in an element on the page
+        //     document.getElementById('annotationsJson').textContent = annotationsJson;
+        // }
+    </script>
+</body>
+
+</html>

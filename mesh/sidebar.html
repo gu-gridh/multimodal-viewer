@@ -1,0 +1,353 @@
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+	<meta content="charset=UTF-8" />
+	<title>GRIDH Mesh Viewer</title>
+
+
+</head>
+<script>
+	async function fetchTitleAndUpdate() {
+		try {
+			const qValue = getQueryParameter('q');
+			const response = await fetch(`https://diana.dh.gu.se/api/etruscantombs/object3dhop/?id=${qValue}`);
+			
+			if (response.ok) {
+			const data = await response.json();
+			const title = data.results[0].title; 
+			const trianglesOptimized = data.results[0].triangles_optimized;
+			const trianglesFullResolution = data.results[0].triangles_full_resolution;
+            const urlOptimized = data.results[0].url_optimized;
+
+			if (urlOptimized) {
+				const downloadButton = document.getElementById("download-button");
+				downloadButton.classList.add("theme-button");
+				downloadButton.style.display = 'block'; // show the download button
+				downloadButton.setAttribute('href', urlOptimized);
+				downloadButton.setAttribute('download', '');
+			} else {
+				// Hide the button
+				const downloadButton = document.getElementById("download-button");
+				downloadButton.style.display = 'none';
+				console.error('url_optimized is null or undefined.');
+			}
+
+			// Update the title
+			if (document.getElementById("backend-info")) {
+				document.getElementById("backend-info").textContent = title;
+			} else {
+				console.error('Element with id "backend-info" not found.');
+			}
+			
+			// Update triangles optimized
+			if (document.getElementById("triangles-optimized-info")) {
+				document.getElementById("triangles-optimized-info").textContent = trianglesOptimized;
+			} else {
+				console.error('Element with id "triangles-optimized-info" not found.');
+			}
+
+			// Update triangles full resolution
+			if (document.getElementById("triangles-full-res-info")) {
+				document.getElementById("triangles-full-res-info").textContent = trianglesFullResolution;
+			} else {
+				console.error('Element with id "triangles-full-res-info" not found.');
+			}
+
+			} else {
+			console.error('Failed to fetch data:', response.status, response.statusText);
+			}
+		} catch (error) {
+			console.error('An error occurred:', error);
+		}
+	}
+
+	fetchTitleAndUpdate();
+
+	function getQueryParameter(paramName) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(paramName);
+	}
+
+
+	function AppearanceFunction() {
+		var the_looks = document.getElementById("the_looks");
+		var the_tools = document.getElementById("the_tools");
+		var the_abouts = document.getElementById("the_abouts");
+		var looks_menu = document.getElementById("looks_menu");
+		var tools_menu = document.getElementById("tools_menu");
+		var about_menu = document.getElementById("about_menu");
+		the_looks.style.display = "block";
+		the_tools.style.display = "none";
+		the_abouts.style.display = "none";
+		tools_menu.style.color = "white";
+		about_menu.style.color = "white";
+		looks_menu.style.color = "var(--selected)";
+	}
+
+
+	function ToolsFunction() {
+		//var the_looks = document.getElementById("the_looks");
+		var the_tools = document.getElementById("the_tools");
+		var the_abouts = document.getElementById("the_abouts");
+		//var looks_menu = document.getElementById("looks_menu");
+		var tools_menu = document.getElementById("tools_menu");
+		var about_menu = document.getElementById("about_menu");
+		//the_looks.style.display = "none";
+		the_abouts.style.display = "none";
+		the_tools.style.display = "block";
+		//looks_menu.style.color = "white";
+		tools_menu.style.color = "var(--selected)";
+		about_menu.style.color = "white";
+
+
+	}
+
+	function AboutFunction() {
+		//var the_looks = document.getElementById("the_looks");
+		var the_tools = document.getElementById("the_tools");
+		var the_abouts = document.getElementById("the_abouts");
+		//var looks_menu = document.getElementById("looks_menu");
+		var tools_menu = document.getElementById("tools_menu");
+		var about_menu = document.getElementById("about_menu");
+		//the_looks.style.display = "none";
+		the_abouts.style.display = "block";
+		the_tools.style.display = "none";
+		//looks_menu.style.color = "white";
+		tools_menu.style.color = "white";
+		about_menu.style.color = "var(--selected)";
+	}
+
+</script>
+
+<body>
+
+
+	<div class="switch">
+		<div id="about_menu" class="switch-button" onclick="AboutFunction()" style="color:var(--selected);">
+			About
+		</div>
+		<div id="tools_menu" class="switch-button" onclick="ToolsFunction()">
+			Tools
+		</div>
+
+	</div>
+
+	<div id="the_abouts" style="display:block">
+		<div class="pv-menu-list" style="line-height:1.8;">
+			<h2>Metadata</h2>
+
+			<div class="flex-container" style="
+				display: flex;
+				margin-bottom: 10px;
+				gap: 5px;
+			">
+				Title: <li id="backend-info">Title.</li>
+			</div>
+			<div class="flex-container" style="
+				display: flex;
+				margin-bottom: 10px;
+				gap: 5px;
+			">
+				Triangles optimized: <li id="triangles-optimized-info">Triangular data optimized.</li>
+			</div>
+			<div class="flex-container" style="
+				display: flex;
+				margin-bottom: 10px;
+				gap: 5px;
+			">
+				Triangules full resolution: <li id="triangles-full-res-info">Triangular data full resolution.</li>
+			</div>
+			<a id="download-button" style="display: none;">Download Optimized Mesh</a>
+
+			<!--Hotspot-->
+			<!-- <div class="tool-item">
+						<div class="tool-icon">
+				
+					<img id="hotspot_on" title="Hide Hotspots"         src="skins/info.png" style="position:absolute; visibility:hidden;"/>
+					  <img id="hotspot"    title="Show Hotspots"         src="skins/info.png"          />
+				
+					</div>
+					<div class="tool-label">Activate hotspots</div>
+				</div> -->
+			<!--Hotspot-->
+
+			<h2>The viewer</h2>
+			<li style="line-height:1.2;">The viewer is built with <a href="http://3dhop.net" target="_blank">3DHop</a>,
+				an open-source framework for the creation of interactive Web
+				presentations of high-resolution 3D models, oriented to the Cultural Heritage field.
+
+		</div>
+	</div>
+
+	<div id="the_tools" style="display:none; padding-top:30px;">
+
+		<div id="toolbar">
+
+			<div class="tool-item" style="margin-top:-10px;">
+				<h2>Texture and light</h2>
+			</div>
+
+			<!--COLOR>-->
+			<div class="tool-item">
+				<div class="tool-icon">
+
+					<img id="color_on" title="Disable Solid Color" src="skins/colour_off.png"
+						style="position:absolute; visibility:hidden;" />
+					<img id="color" title="Enable Solid Color" src="skins/colour_on.png" />
+
+				</div>
+				<div class="tool-label">Activate or deactivate colours</div>
+			</div>
+			<!--COLOR-->
+
+			<!--LIGHTING-->
+			<div class="tool-item">
+
+				<div class="tool-icon">
+					<img id="lighting_off" title="Enable Lighting" src="skins/light_off.png"
+						style="position:absolute; visibility:hidden;" />
+					<img id="lighting" title="Disable Lighting" src="skins/light_on.png" />
+
+				</div>
+				<div class="tool-label">Turn on or off scene lighting</div>
+			</div>
+			<!--LIGHTING-->
+
+			<!--LIGHT-->
+			<div class="tool-item">
+				<div class="tool-icon">
+
+					<img id="light_on" title="Disable Light Control" src="skins/move_on.png"
+						style="position:absolute; visibility:hidden;" />
+					<img id="light" title="Enable Light Control" src="skins/move_off.png" />
+
+				</div>
+				<div class="tool-label">Click and drag on the model to move the light source</div>
+			</div>
+			<!--LIGHT-->
+
+
+			<div class="tool-item">
+				<h2>Measurement</h2>
+			</div>
+
+			<!--MEASURE-->
+			<div class="tool-item">
+				<div class="tool-icon">
+
+					<img id="measure_on" title="Disable Measure Tool" src="skins/measure_on.png"
+						style="position:absolute; visibility:hidden;" />
+					<img id="measure" title="Enable Measure Tool" src="skins/measure_off.png" />
+
+				</div>
+				<div class="tool-label">Measure the model between two points</div>
+			</div>
+			<!--MEASURE-->
+
+			<!--SECTIONS-->
+			<div class="tool-item">
+				<h2>Segmentation</h2>
+
+				<div id="sections-box" class="output-box" style="display:block; margin-bottom:20px;">
+					<table class="output-table" onmousedown="event.stopPropagation()">
+						<tr>
+							<td>Plane</td>
+							<td>Position</td>
+							<td>Flip</td>
+						</tr>
+						<tr>
+							<td class="output-input-icon"><img id="xplane_on" title="Disable X Axis Section" src="skins/icons/sectionX_on.png"
+									onclick="sectionxSwitch()"
+									style="position:absolute; visibility:hidden;" />
+								<img id="xplane" title="Enable X Axis Section" src="skins/icons/sectionX.png"
+									onclick="sectionxSwitch()" /><br />
+							</td>
+							<td><input id="xplaneSlider" class="output-input-slider" type="range"
+									title="Move X Axis Section Position" /></td>
+
+							<td><input id="xplaneFlip" class="output-input" type="checkbox"
+									title="Flip X Axis Section Direction" /></td>
+						</tr>
+						<tr>
+							<td class="output-input-icon"><img id="yplane_on" title="Disable Y Axis Section" src="skins/icons/sectionY_on.png"
+									onclick="sectionySwitch()"
+									style="position:absolute; visibility:hidden;" />
+								<img id="yplane" title="Enable Y Axis Section" src="skins/icons/sectionY.png"
+									onclick="sectionySwitch()" /><br />
+							</td>
+
+							<td><input id="yplaneSlider" class="output-input-slider" type="range"
+									title="Move Y Axis Section Position" /></td>
+
+							<td><input id="yplaneFlip" class="output-input" type="checkbox"
+									title="Flip Y Axis Section Direction" /></td>
+						</tr>
+						<tr>
+							<td class="output-input-icon"><img id="zplane_on" title="Disable Z Axis Section" src="skins/icons/sectionZ_on.png"
+									onclick="sectionzSwitch()"
+									style="position:absolute; visibility:hidden;" />
+								<img id="zplane" title="Enable Z Axis Section" src="skins/icons/sectionZ.png"
+									onclick="sectionzSwitch()" /><br />
+							</td>
+							<td><input id="zplaneSlider" class="output-input-slider" type="range"
+									title="Move Y Axis Section Position" /></td>
+							<td><input id="zplaneFlip" class="output-input" type="checkbox"
+									title="Flip Z Axis Section Direction" /></td>
+						</tr>
+					</table>
+					<table class="output-table" onmousedown="event.stopPropagation()" style="text-align:center;">
+						<tr>
+							<td>Show planes&#32;<input id="showPlane" class="output-input" type="checkbox"
+									title="Show Section Planes" style="bottom:-3px;" /></td>
+							<td>Show edges&#32;<input id="showBorder" class="output-input" type="checkbox"
+									title="Show Section Edges" style="bottom:-3px;" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!--SECTIONS-->
+			<div class="tool-item">
+				<h2>Position and Camera</h2>
+			</div>
+			<!--HOME-->
+			<div class="tool-item">
+				<div class="tool-icon">
+					<img id="home" title="Home" src="skins/frame.png" />
+				</div>
+				<div class="tool-label">Return to start position</div>
+			</div>
+			<!--HOME-->
+
+			<!--CAMERA-->
+			<div class="tool-item">
+				<div class="tool-icon">
+
+					<img id="perspective" title="Perspective Camera" src="skins/perspective_no.png"
+						style="position:absolute; visibility:hidden;" />
+					<img id="orthographic" title="Orthographic Camera" src="skins/perspective.png" />
+
+				</div>
+				<div class="tool-label">Switch between perspective and orthographic view</div>
+			</div>
+			<!--CAMERA-->
+
+
+
+		</div>
+		<h4 style="margin-left:20px;"><a onclick="log(presenter.getTrackballPosition());">Get current position</a>
+		</h4>
+		<h4 style="margin-left:20px;"><a
+				onclick="presenter.animateToTrackballPosition([1.34,-34.72,0.37,-0.027,-0.027,0.40]);">Go to test
+				position</a></h4>
+		<textarea id="log-text"
+			style="focus:none; margin-bottom:50px; font-family:monospace; margin-left:20px; width:340px; text-align:center; height:auto; resize: none; text-align:center; border-style:none; background-color:rgb(240,240,240);"
+			readonly></textarea>
+	</div>
+
+	</div>
+	</div>
+
+</body>
+
+</html>

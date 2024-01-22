@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IIIF Image Viewer</title>
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="metadata.css">
+    <link rel="stylesheet" href="../styles/shared_styles.css">
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="image-container" style="display:none">
+            <p>Image goes here</p>
+        </div>
+
+        <div class="content" id="content">
+            <div class="metadata-text">
+                <div class="metadata-panel-title">
+                   Panel 118:2
+                </div>
+
+                <div class="metadata-inscription-title" style="display:none;">
+                   Title
+                </div>
+
+                <div class="metadata-content">
+
+                    <div class="metadata-item">
+                        <div class="label">Inscriptions:</div>
+                        <div class="theme-color-text tag">18</div>
+                    </div>
+
+                   
+                    <div class="metadata-item">
+                        <div class="label">Languages:</div>
+                        <div class="theme-color-text tag">3</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Room:</div>
+                        <div class="theme-color-text tag">118</div>
+                    </div>
+
+                   
+
+                    <div class="metadata-item" style="display:none;">
+                        <div class="label">Type:</div>
+                        <div class="theme-color-text tag">Text</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Tags:</div>
+                        <div class="theme-color-text tag">Saint</div>
+                    </div>
+
+                </div>
+                <div class="metadata-description">
+                    <h1>Documentation:</h1>
+                </div>
+
+                <div class="metadata-description">
+                    <h1>Transcription:</h1>
+                </div>
+                <div class="metadata-description">
+                    <h1>Translation:</h1>
+                </div>
+             
+                    <div class="metadata-center-button">
+                        <router-link :to="`/place/${place?.id_}`">
+                          <div class="theme-button" style="padding:10px 20px; text-align:center; width:auto;  color:white;">Add Inscription</div>
+                        </router-link>
+                      </div>
+         
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <title>Content Display</title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
+    <script src="./pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        html,
+        body {
+            height: 100vh;
+            width: 100vw;
+            margin: 0 !important;
+            overflow: hidden !important;
+            font-family: "Barlow Condensed", sans-serif !important;
+            -ms-overflow-style: none;
+        }
+
+        #main-content {
+            height: calc(100vh - 80px) !important;
+            width: 100vw;
+            display: flex;
+            overflow: hidden;
+        }
+
+        #left-pane,
+        #right-pane {
+            width: 50%;
+            height: 100%;
+        }
+
+        .ui-module-container {
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .ui-module {
+            top: 26px;
+
+            position: absolute;
+            background-color: black;
+            border-radius: 8px;
+            padding: 0px 10px;
+        }
+
+        .ui-module .ui-module-item {
+            padding: 5px;
+            margin: 5px;
+            color: white;
+            background-color: none;
+            float: left;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: auto;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .toggle-button {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #2e2e2e;
+            color: white;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+
+        .edit-button {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .image-container {
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        #footer-container {
+            background-color:blue;
+            position: absolute;
+            height: 80px;
+            bottom: 0px;
+            width: 100%;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-content">
+        <div id="left-pane">
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <div class="ui-module-item" onclick="changeLeftViewer('iiif')">Inscriptions</div>
+                    <div class="ui-module-item" onclick="changeLeftViewer('iiif')">Topography</div>
+                    <div class="ui-module-item" onclick="changeLeftViewer('mesh')">Surface Model</div>
+                    <div class="ui-module-item" onclick="changeLeftViewer('relight')">RTI</div>
+                </div>
+            </div>
+            <iframe id="left-Iframe" src="/iiif/iiif.html?q=125560" style="width:100%; height:100vh; border:none;"></iframe>
+        </div>
+        <div id="right-pane">
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <div class="ui-module-item" onclick="changeRightViewer('metadata')">Metadata</div>
+                    <div class="ui-module-item" onclick="changeRightViewer('pointcloud')">Spatial Context</div>
+                </div>
+            </div>
+            <iframe id="right-Iframe" src="/metadata/metadata.html"
+                style="width:100%; height:100vh; border:none;"></iframe>
+        </div>
+
+        <!--  <div class="container">
+            <div class="toggle-button" id="toggleButton">Toggle: Meta Data</div>
+            <div class="image-container">
+                <p>Image goes here</p>
+            </div>
+            <div class="content" id="content">
+                <h1>Title</h1>
+                <p>Type:</p>
+                <p>Language:</p>
+                <p>Tags:</p>
+                <p>Transcription:</p>
+                <p>Translation:</p>
+                <div class="edit-button">
+                    <button>Edit Inscription</button>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+    <div id="footer-container"></div>
+    <script>
+        $("#footer-container").load("styles/footer.html");
+    </script>
+
+    <script>
+        function changeLeftViewer(viewerType) {
+            var iframe = document.getElementById('left-Iframe');
+            if (viewerType === 'iiif') {
+                iframe.src = '/iiif/iiif.html?q=125560'; // Specific URL for IIIF Viewer
+            } else {
+                iframe.src = '/' + viewerType + '/' + viewerType + '.html?q=1';
+            }
+        }
+
+        function changeRightViewer(viewerType) {
+            var iframe = document.getElementById('right-Iframe');
+            if (viewerType === 'metadata') {
+                iframe.src = '/metadata/metadata.html'; // Specific URL for metadata Viewer
+            } else {
+                iframe.src = '/' + viewerType + '/' + viewerType + '.html?q=1';
+            }
+        }
+       /*  const toggleButton = document.getElementById('toggleButton');
+
+        toggleButton.addEventListener('click', () => {
+            if (toggleButton.textContent === 'Toggle: Meta Data') {
+                toggleButton.textContent = 'Toggle: Spatial Context';
+            } else {
+                toggleButton.textContent = 'Toggle: Meta Data';
+            }
+        }); */
+    </script>
+
+</body>
+
+</html>

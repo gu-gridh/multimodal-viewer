@@ -1,0 +1,11 @@
+
+.DS_Store
+node_modules/.package-lock.json
+node_modules/.yarn-integrity
+*.lock
+node_modules/send/node_modules/.bin/mime
+*.json
+!config.json
+!annotations.w3c.json
+!relight/rti-folder/*.json
+node_modules/.package-lock.json

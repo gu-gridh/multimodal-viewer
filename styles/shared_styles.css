@@ -1,0 +1,506 @@
+/*CSS here will be used by any file that has added the stylesheet*/
+
+/* CSS - Cascading Style Sheet */
+
+
+
+:root {
+
+    --color-0: rgba(38, 38, 38, 1);
+    --color-1: rgba(122, 129, 132, 1);
+    --color-2: rgba(48, 48, 48, 1);
+    --color-3: rgba(45, 109, 130, 1);
+    --color-4: rgba(180, 100, 100, 1);
+    --color-5: rgba(140, 60, 60, 1);
+
+    --bg-color: var(--color-0);
+    --bg-color-2: rgb(60, 80, 85);
+    --bg-light-color: rgba(48, 61, 65, 1);
+    --bg-dark-color: rgba(24, 31, 33, 1);
+    --bg-hover-color: var(--color-2);
+
+    --font-color: #ffffff;
+    --font-color-2: #ddd;
+    --border-color: black;
+
+    --measurement-detail-node-bg-light: var(--color-1);
+    --measurement-detail-node-bg-dark: var(--color-2);
+    --measurement-detail-area-bg-color: #eee;
+
+    --viewer-bg: rgba(48, 48, 48, 1);
+    --sidebar-bg: rgba(38, 38, 38, 1);
+    --selected: #47cbf6;
+
+
+}
+
+html,
+body {
+    font-family: "Barlow Condensed", sans-serif !important;
+}
+
+/* The title of the model */
+.title {
+    display:table-caption;
+    position: absolute;
+    z-index: 1000;
+    width:300px;
+    /* word-spacing: 100vw; */
+    margin: auto;
+    top: 30px;
+    right: 30px;
+    color: white;
+    text-align: right;
+    padding: 0px;
+    font-weight: 500;
+    line-height: 0.90;
+    font-size: 3.5vw;
+    pointer-events: none;
+}
+
+.theme-color-text {
+    color:var(--color-4) !important;
+}
+
+.theme-color-background {
+    background-color:var(--color-4)!important;
+}
+
+.theme-button {
+    background-color:var(--color-4);
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-top: 20px;
+    width: 150px;
+    color: var( --font-color);
+    cursor:pointer;
+}
+
+.theme-button:hover {
+    background-color:var(--color-5);
+}
+
+/* This is the label that states what type of viewer this is: mesh or point cloud */
+
+.model-viewer-id {
+    position: absolute;
+    z-index: 1000;
+    max-width: auto;
+    bottom: 90px;
+    right: 20px;
+    color: white;
+    text-align: right;
+    padding: 15px 15px;
+    font-weight: 400;
+    line-height: 0.90;
+    font-size: 2.0vw;
+    pointer-events: none;
+    text-transform: capitalize;
+}
+
+@media screen and (max-width: 1900px) {
+    .title {
+        font-size: 3.0em;
+    }
+
+    .model-viewer-id {
+        font-size: 2em;   
+    }
+}
+
+
+
+h3 {
+    cursor: pointer;
+    padding: 4px 10px 4px 20px;
+    font-size: 2em;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+h2 {
+    display: block;
+    text-align: left;
+    font-size: 1.2em;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding-left: 0px;
+    margin-right: 0px;
+    padding-top: 20px;
+    margin-bottom: 10px;
+}
+
+.tool-item h2 {
+    padding-top: 0px;
+    padding-left: 20px;
+}
+
+
+/* a flex-box style to keep things centered */
+.ui-overlay-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    position: absolute;
+    bottom: 60px;
+    pointer-events:none;
+
+}
+
+/* This one describes the look of the UI-element with the navigation instructions */
+#instructions {
+    pointer-events: none;
+    position: absolute;
+    z-index: 100000;
+    width: 340px;
+    height: auto;
+    bottom: 110px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 10px 10px;
+    font-size: 1.0em;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+}
+
+.short{
+    width: 290px!important;
+}
+
+#instructions .instruction-closer{
+    width:20px;
+    height:20px;
+    margin-top:-4px;
+    margin-right:8px;
+    border-radius:50%;
+    position:absolute;
+    right:0px;
+    color:white;
+background-image:url("close.png");
+background-size:18px 18px;
+background-repeat:no-repeat;
+background-position:center;
+    line-height:0;
+    font-size:40px;
+    pointer-events:auto;
+    cursor:pointer;
+}
+
+.instruction-closer:hover{
+    background-color:rgb(80,80,80);
+  }
+
+.LODtool {
+    pointer-events: auto;
+    position: absolute;
+    z-index: 100000;
+    width: 270px;
+    height: auto;
+    bottom: 20px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 0px 20px 5px 20px;
+    font-size: 1.0em;
+    line-height:2.0;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+}
+
+/* The switch between the different "tabs" in the sidebar */
+.switch {
+    color: white;
+    display: flex;
+    cursor: pointer;
+    font-size: 1.8em;
+}
+
+.switch-button {
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.switch-button:hover {
+    box-shadow: inset 2px 2px 20px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Metadata classes */
+
+.flex-container{
+    font-size:1.2em;
+}
+
+.flex-container .metadata {
+color:hsl(195, 70%, 72%)!important;
+}
+
+a:link {
+    color:hsl(195, 70%, 72%)!important;
+    }
+
+.flex-container .description{
+    line-height:1.2 !important;
+    font-size:0.9em !important;
+}
+
+/* Potree sidebar lists*/
+.pv-menu-list {
+    list-style-type: none;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    margin: 0px 0px;
+    overflow: hidden;
+}
+
+.pv-menu-list>* {
+    margin: 10px 20px;
+}
+
+/* Potree UI stuff */
+
+.LODtool .ui-slider-horizontal{
+height:4px;
+}
+
+.ui-slider-horizontal{
+    height:6px;
+    }
+
+.LODtool .ui-slider-handle {
+margin-top: -0.3em;
+margin-left: -.6em;
+width: 1.2em !important;
+height: 1.2em !important;
+border-radius:50% !important;
+}
+
+.ui-slider-handle {
+    margin-top: -0.15em;
+    margin-left: -.6em;
+    width: 1.1em !important;
+    height: 1.1em !important;
+    border-radius:50% !important;
+    }
+
+
+    .ui-state-active{
+        color:rgb(0, 113, 150)!important;
+        font-weight:600!important;
+        border-radius:5px!important;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+        transform:scale(1.03);
+        z-index:20!important;
+        border-style:none!important;
+        border-width:0px!important;
+    }
+
+    .ui-state-active:hover{
+        font-weight:600!important;
+    }
+
+    .ui-state-default{
+        border-style:none!important;
+
+
+    }
+
+
+    .potree_failpage{
+        color:white;
+        text-align:center;
+        background-color:var(--viewer-bg);
+        padding-top:15%;
+    }
+
+
+/* 3d hop tool layout*/
+.tool-item {
+    width: 100%;
+    float: left;
+}
+
+.tool-icon {
+    float: left;
+
+}
+
+.tool-label {
+    float: left;
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+
+
+
+.potree_menu_toggle{
+    display: none;
+}
+
+/* Hide away complexities on mobile */
+
+@media screen and (max-width: 800px) {
+
+    .instructions {
+        display: none;
+    }
+
+    .subtitle {
+        display: none;
+    }
+
+    .potree_menu_toggle{
+        display: none;
+    }
+
+}
+
+/* Point cloud annotation style */
+
+.annotation{
+    position:		absolute;
+	padding:		20px !important;
+	opacity:		0.8!important;
+	transform:		translate(-50%, -30px);
+	will-change:	left, top;
+}
+
+.annotation-titlebar{
+    font-family:    "Barlow Condensed", sans-serif !important;
+    font-weight:    300 !important;
+    color:			white;
+	background-color:rgb(180,50,50);
+	border-radius:	50% !important;
+    height:         20px!important;
+    width:          20px!important;
+	padding:		0px!important;
+	border:			1px solid rgba(255, 255, 255, 0.2) !important;
+	font-size:		0.0em !important;
+    box-shadow:     none!important;
+    transition: all 0.3s ease-in-out;
+ 
+}
+
+.annotation-titlebar:hover{
+    font-family:    "Barlow Condensed", sans-serif !important;
+    font-weight:    200 !important;
+    color:			white;
+	border-radius:	6px !important;
+    min-height:     20px!important;
+    min-width:      20px!important;
+    height:         auto!important;
+    width:          auto!important;
+	padding:		5px 10px!important;
+	border:			0px solid rgba(255, 255, 255, 0.0) !important;
+	font-size:		1.0em !important;
+    transform:		translate(0px, -5px)!important;
+    box-shadow:none!important;
+   
+}
+
+.annotation-expand{
+	color:			white;
+	font-size:		0.6em;
+	opacity:		1;
+}
+
+.annotation-action-icon{
+	width:			20px;
+	height:			20px;
+	display:		none!important;
+	vertical-align:	middle;
+	line-height:	1.5em;
+	text-align:		center;
+	font-family:	inherit!important;
+	font-weight:	inherit!important;
+	cursor: 		pointer;
+}
+
+.annotation-action-icon:hover{
+	filter:			drop-shadow(0px 0px 0px black)!important;
+	width:			24px;
+	height:			24px;
+	cursor: 		pointer;
+	
+}
+
+.annotation-item {
+	color:			white;
+	background-color: 	black;
+	opacity:		0.0 !important;
+	border-radius:	1.5em;
+	font-size:		1em;
+	line-height:	1.5em;
+	padding:		5px 15px 5px 15px !important;
+	font-weight:	200 !important;
+	display:		flex;
+	cursor:			default;
+}
+
+.annotation-item:hover {
+	box-shadow:		0 0 0px #000000 !important;
+	opacity:		1.0;
+    
+    color:			white;
+	background-color: 	black;
+	opacity:		1.0 !important;
+	border-radius:	1.5em;
+	font-size:		1em;
+	line-height:	1.5em;
+	padding:		5px 15px 5px 15px !important;
+	font-weight:	200 !important;
+	display:		flex;
+	cursor:			default;
+}
+
+.annotation-main{
+	display:		flex;
+	flex-grow:		1;
+}
+
+.annotation-label{
+	display:		inline-block;
+	height:			100%;
+	flex-grow:		1;
+	user-select:	none;
+	-moz-user-select: none;
+	z-index:		100;
+	vertical-align:	middle;
+	line-height:	1.5em;
+	cursor: 		pointer;
+	white-space:	nowrap;
+    font-family:	inherit!important;
+	font-weight:	inherit!important;
+}
+
+.annotation-description{
+	opacity: 		0;
+    pointer-events: none;
+}
+
+.annotation-description-close{
+	filter:			invert(100%);
+	float:			right;
+	opacity:		0.5;
+	margin:			0px 0px 8px 8px;
+}
+
+	
+.annotation-description-content{
+	color:			white;
+}
+
+.annotation-icon{
+	width:		20px;
+	height:		20px;
+	filter:		invert(100%);
+	margin:		2px 2px;
+	opacity:	1.0;
+}
+

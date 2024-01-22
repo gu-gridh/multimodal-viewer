@@ -1,0 +1,263 @@
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+	<meta content="charset=UTF-8" />
+	<title>GRIDH Mesh Viewer</title>
+	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+		rel="stylesheet">
+	<!--STYLESHEET-->
+	<link type="text/css" rel="stylesheet" href="stylesheet/3dmodule.css" />
+	<link rel="stylesheet" href="/styles/shared_styles.css">
+	<!--SPIDERGL-->
+	<script type="text/javascript" src="js/spidergl.js"></script>
+	<!--JQUERY-->
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<!--PRESENTER-->
+	<script type="text/javascript" src="js/presenter.js"></script>
+	<!--3D MODELS LOADING AND RENDERING-->
+	<script type="text/javascript" src="js/nexus.js"></script>
+	<script type="text/javascript" src="js/ply.js"></script>
+	<!--TRACKBALLS-->
+	<script type="text/javascript" src="js/trackball_turntable.js"></script>
+	<script type="text/javascript" src="js/trackball_turntable_pan.js"></script>
+	<script type="text/javascript" src="js/trackball_pantilt.js"></script>
+	<script type="text/javascript" src="js/trackball_sphere.js"></script>
+	<!--UTILITY-->
+	<script type="text/javascript" src="js/init.js"></script>
+
+</head>
+
+<body>
+
+	<!-- The content of the sidebar is fetched from the file sidebar.html -->
+	<div id="sidebar" style="background-color:var(--sidebar-bg)"></div>
+
+	<!-- And this is the main action -->
+
+	<div id="module-container" style="background-color:var(--viewer-bg)">
+
+		<div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
+
+			<!-- The draw canvas is the home of the 3d-model-->
+			<canvas id="draw-canvas" style="" />
+		</div>
+
+		<!-- This is the toogle for the sidebar and is hidden on mobile-->
+		<!-- <div id="menu-widget" onclick="MenuSwitch()"></div> -->
+
+		<!-- This is for the mobile view and should only be visible if there is a link to an AR-model-->
+	<!-- 	<div id="ar-widget"><a rel="ar" href="models/nordenskjoldcairnpreview.usdz"><img id="ar"
+					src="skins/augmented-reality.svg" /></a></div> -->
+
+
+		<!-- The mobile toolbar has fewer tools due to complexity issues. 
+		Perhaps these should also go into their own docuemnt to keep this document more focuses-->
+		<div id="mobile" style="display:flex; width:100%; justify-content:center;">
+
+			<div id="toolbar_m">
+				<div id="toolbar">
+					<img id="home_m" title="Home" src="../styles/interface/frame.png" />
+
+				
+
+						<!--COLOR>-->
+					<img id="zoomin"      title="Zoom In"                src="../styles/interface/plus_big.png"/>
+					<img id="zoomout"     title="Zoom Out"               src="../styles/interface/minus_big.png"/>
+
+					<!--COLOR>-->
+					<img id="color_on_m" title="Disable Solid Color" src="../styles/interface/colour_off.png"
+						style="position:absolute; visibility:hidden; " />
+					<img id="color_m" title="Enable Solid Color" src="../styles/interface/colour_on.png" />
+					<!--COLOR-->
+
+					<!--LIGHT-->
+					<img id="light_on_m" title="Disable Light Control" src="../styles/interface/light_on.png"
+						style="position:absolute; visibility:hidden;  " />
+					<img id="light_m" title="Enable Light Control" src="../styles/interface/light.png" />
+					<!--LIGHT-->
+
+					
+
+					<!--MEASURE-->
+					<img id="measure_on_m" title="Disable Measure Tool" src="skins/measure_on.png"
+						style="position:absolute; visibility:hidden;  " />
+					<img id="measure_m" title="Enable Measure Tool" src="skins/measure_off.png" />
+					<!--MEASURE-->
+
+						<!--FULLSCREEN-->
+						<img id="full_on"     title="Exit Full Screen"       src="../styles/interface/compress.svg" style="position:absolute; visibility:hidden;"/>
+						<img id="full"        title="Full Screen"            src="../styles/interface/expand.svg" style="position:relative;"/>
+					  <!--FULLSCREEN-->
+					
+
+					<!--CAMERA-->
+					<!-- <img id="perspective_m" title="Perspective Camera" src="skins/perspective_no.png"
+						style="position:absolute; visibility:hidden;" />
+					<img id="orthographic_m" title="Orthographic Camera" src="skins/perspective.png" /> -->
+					<!--CAMERA-->
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<!-- Title, fetched from the backed
+	<div class="title">
+	</div>
+	 -->
+
+	<!-- This can probably be static 
+	<div class="model-viewer-id">
+		Mesh Model <br> visualisation tool
+	</div>
+	-->
+
+
+
+	<div class="ui-overlay-container" style="height:100vh; z-index:1000; pointer-events:none;">
+		<!--MEASURE-->
+		<div id="measure-box" class="output-box">Measured length
+			<hr /><span id="measure-output" class="output-text" onmousedown="event.stopPropagation()">0.0</span>
+		</div>
+		<!--MEASURE-->
+	</div>
+
+	<!-- Here we  have a floating div with instructions on how to navigate -->
+	<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+
+		<div id="instructions" style="bottom:100px;">
+			<div class="instruction-closer"  onclick="$('#instructions').hide();"></div>
+			Double-click to change focus. <br>
+			Click-and-drag to navigate. Right-click and drag to pan. <br>
+			Scroll to zoom in and out.
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+	var presenter = null;
+	// document.querySelector('.title').textContent = PLACEHOLDER_TITLE; //set Title
+
+	function setup3dhop() {
+		presenter = new Presenter("draw-canvas");
+
+		presenter.setScene({
+			meshes: {
+				"mesh_comp": {
+					url: PLACEHOLDER_URL_PUBLIC
+				}
+			},
+			modelInstances: {
+				"modell": {
+					mesh: "mesh_comp",
+					color: [50, 50, 50]
+				}
+			},
+
+			/* These are the numbers that we need to be able to manipulate in backend when registering the model */
+			trackball: {
+				type: TurntablePanTrackball,
+				trackOptions: {
+					startPhi: PLACEHOLDER_STARTPHI,
+					startTheta: PLACEHOLDER_STARTTHETA,
+					startDistance: PLACEHOLDER_STARTDISTANCE,
+					startPanX: PLACEHOLDER_STARTPAN[0],
+					startPanY: PLACEHOLDER_STARTPAN[1],
+					startPanZ: PLACEHOLDER_STARTPAN[2],
+					minMaxPhi: PLACEHOLDER_MINMAXPHI,
+					minMaxTheta: PLACEHOLDER_MINMAXTHETA
+				}
+			}
+		});
+
+		//--MEASURE--
+		presenter._onEndMeasurement = onEndMeasure;
+		//--MEASURE--
+
+		//--SECTIONS--
+		sectiontoolInit();
+		//--SECTIONS--
+	}
+
+
+// Most of the functions have mobile variations, otherwise the buttons break
+	function actionsToolbar(action) {
+		// This one needs to be the same one as the above start position fetched from backend
+		if (action == 'home') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
+		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
+		//--FULLSCREEN--
+		else if (action == 'full' || action == 'full_on') fullscreenSwitch();
+		//--FULLSCREEN--
+		//--ZOOM--
+		else if (action == 'zoomin') presenter.zoomIn();
+		else if (action == 'zoomout') presenter.zoomOut();
+		//--ZOOM--
+		//--LIGHTING--
+		else if (action == 'lighting' || action == 'lighting_off') { presenter.enableSceneLighting(!presenter.isSceneLightingEnabled()); lightingSwitch(); }
+		//--LIGHTING--
+		//--LIGHT--
+		else if (action == 'light' || action == 'light_on') { presenter.enableLightTrackball(!presenter.isLightTrackballEnabled()); lightSwitch(); }
+		else if (action == 'light_m' || action == 'light_on_m') { presenter.enableLightTrackball(!presenter.isLightTrackballEnabled()); lightSwitch(); }
+		//--LIGHT--
+		//--CAMERA--
+		else if (action == 'perspective' || action == 'orthographic') { presenter.toggleCameraType(); cameraSwitch(); }
+		else if (action == 'perspective_m' || action == 'orthographic_m') { presenter.toggleCameraType(); cameraSwitch(); }
+		//--CAMERA--
+		//--COLOR--
+		else if (action == 'color' || action == 'color_on') { presenter.toggleInstanceSolidColor(HOP_ALL, true); colorSwitch(); }
+		else if (action == 'color_m' || action == 'color_on_m') { presenter.toggleInstanceSolidColor(HOP_ALL, true); colorSwitch(); }
+		//--COLOR--
+		//--MEASURE--
+		else if (action == 'measure' || action == 'measure_on') { presenter.enableMeasurementTool(!presenter.isMeasurementToolEnabled()); measureSwitch(); }
+		else if (action == 'measure_m' || action == 'measure_on_m') { presenter.enableMeasurementTool(!presenter.isMeasurementToolEnabled()); measureSwitch(); }
+		//--MEASURE--
+		//--HOTSPOT--
+		else if (action == 'hotspot' || action == 'hotspot_on') {
+			presenter.toggleSpotVisibility(HOP_ALL, true); presenter.enableOnHover(!presenter.isOnHoverEnabled());
+			hotspotSwitch();
+		}
+		//--HOTSPOT--
+		//--SCREENSHOT--
+		else if (action == 'screenshot') presenter.saveScreenshot();
+		//--SCREENSHOT--
+		//--SECTIONS--
+		else if (action == 'sections' || action == 'sections_on') { sectiontoolReset(); sectiontoolSwitch(); }
+		//--SECTIONS--
+	}
+
+	function log(msg) {
+		document.getElementById("log-text").innerHTML = "https://shfa.dh.gu.se/objectid/?" + msg + "\n";
+		document.getElementById("log-text").scrollTop = document.getElementById("log-text").scrollHeight;
+	}
+
+
+	//--MEASURE--
+	function onEndMeasure(measure) {
+		// measure.toFixed(2) sets the number of decimals when displaying the measure
+		// depending on the model measure units, use "mm","m","km" or whatever you have
+		$('#measure-output').html(measure.toFixed(2) + "dm");
+	}
+	//--MEASURE--
+
+	function MenuSwitch() {
+		var x = document.getElementById("module-container");
+		if (x.style.left === "420px") {
+			x.style.left = "0px";
+		} else {
+			x.style.left = "420px";
+		}
+	}
+
+	$(document).ready(function() {
+            // Sidebar loading moved here
+            $("#sidebar").load("/mesh/sidebar.html", function() {
+				init3dhop();
+				setup3dhop();
+		});
+	});
+
+</script>
+
+</html>

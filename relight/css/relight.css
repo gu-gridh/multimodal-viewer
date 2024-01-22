@@ -1,0 +1,138 @@
+.relight { 
+	position:absolute; 
+	touch-action: none; 
+	width:100%; 
+	height:calc(100vh - 80px); 
+	display: flex;
+	flex-direction: row;
+	justify-content: center; 
+	background-color:var(--color-0); 
+	font-family: "Barlow Condensed", sans-serif !important;
+
+}
+.relight canvas { 
+	position:absolute; 
+	width:100%; 
+	height:100%; 
+
+}
+.relight-toolbox { 
+	position: absolute; 
+	bottom:20px; 
+	width:auto; 
+	padding-left:12px;
+		padding-right:10px;
+	height:48px;
+	background-color:rgba(0,0,0,0.8); 
+	box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+	border-radius:8px;
+}
+.relight-toolbox > div 
+{ 
+	background-size:cover; 
+	cursor:pointer; 
+	margin-right:8px; 
+	margin-left:8px; 
+	margin-top:8px; 
+	margin-bottom:8px; 
+	opacity:0.8; 
+	max-width:30px; 
+	max-height:30px; 
+	float:left;
+}
+.relight-toolbox > div:hover { opacity:0.9; }
+.relight-home       { background-image: url(../../styles/interface/frame.png); background-size:30px!important; background-repeat:no-repeat;}
+.relight-zoomin     { background-image: url(../../styles/interface/plus_big.png);  }
+.relight-zoomout    { background-image: url(../../styles/interface/minus_big.png);  }
+.relight-rotate     { background-image: url(skins/minimal_light/rotate.png); }
+.relight-light      { background-image: url(../../styles/interface/light.png); }
+.relight-light_on   { background-image: url(../../styles/interface/light_on.png); }
+.relight-normals    { background-image: url(../../styles/interface/colour_on.png); }
+.relight-normals_on { background-image: url(../../styles/interface/colour_off.png); }
+.relight-full       { background-image: url(../../styles/interface/expand.svg);  }
+.relight-full_on    { background-image: url(../../styles/interface/compress.svg);   }
+.relight-info       { background-image: url(skins/minimal_light/help.png); }
+
+.relight {
+	position:relative;
+}
+
+.relight-info-dialog {
+	display:none;
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background-color:rgb(0, 0, 0, 0.5);
+}
+.relight-info-content {
+	display:none;
+	background-color:black;
+	padding:20px;
+	max-height: calc(100% - 100px);
+	width: 80%;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 5px;
+}
+
+.relight-scale {
+	position:absolute;
+	bottom:10px;
+	right:10px;
+	padding:20px 10px;
+	width:5%;
+	text-align:center;
+	z-index:1000;
+	background-color:rgba(0, 0, 0, 0.5);
+	color:#eee;
+	transition: opacity 1s ease;
+	opacity:1.0;
+}
+
+.relight-pagemap {
+	position:absolute;
+	top:10px;
+	right:10px;
+	background-color:rgb(255, 255, 255, 0.1);
+	transition: opacity 1s ease;
+	opacity:1.0;
+}
+
+.relight-pagemap[style]:hover {
+	opacity:1.0 !important;
+
+}
+
+.relight-pagemap-area {
+	position:absolute;
+	top:0px; left:0px;
+	border: 1px solid white;
+	box-shadow: 0 0 0 1px #ccc;
+	opacity:0.5;
+}
+
+@media screen and (max-width: 576px) {
+	.relight-toolbox > div { width: 9vmin; height: 9vmin; }
+	.relight-pagemap { display:none; }
+	.relight-scale { width:15%; }
+}
+@media screen and (min-width: 576px) {
+	.relight-toolbox > div {width: 9vmin; height: 9vmin; }
+	.relight-pagemap { display:none; }
+	.relight-scale { width:10%; }
+}
+@media screen and (min-width: 768px) {
+	.relight-toolbox > div {width: 7vmin; height: 7vmin; }
+	.relight-pagemap { display:block; width:200px; }
+	.relight-scale { width:7%; }
+}
+@media screen and (min-width: 992px) {
+	.relight-toolbox > div {width: 6vmin; height: 6vmin; }
+	.relight-pagemap { display:block; width:200px; }
+	.relight-scale { width:5%; }
+}
+

@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <link  rel="stylesheet" href="css/relight.css">
+    <link  rel="stylesheet" href="../styles/shared_styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
+    <style>
+      html, body, .relight { width:100%; height:calc(100vh - 80px); padding:0px; margin:0px; }
+    </style>
+    <script src="js/hammer.min.js"></script>
+    <script src="js/relight-viewer.min.js"></script>
+    <script src="../pointcloud/libs//jquery/jquery-3.1.1.min.js"></script>
+  </head>
+<body>
+  <!-- <div class="title">
+  </div> -->
+  <div class="relight">
+   
+  </div>
+  <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+
+    <div id="instructions" style="bottom:110px; width:280px;">
+      <div class="instruction-closer"  onclick="$('#instructions').hide();"></div>
+      Scroll to zoom in and out. <br> 
+      Click-and-drag to change light direction. <br>
+      Right-click and drag to pan. 
+    
+    </div>
+  </div>
+  <script>
+    var Relight = new RelightViewer('.relight', { url: "rti-folder", layout: "deepzoom" });
+    document.querySelector('.title').textContent = PLACEHOLDER_TITLE;
+  </script>
+</body>
+</html>

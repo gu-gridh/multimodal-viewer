@@ -1,0 +1,140 @@
+html,
+body { 
+	margin:0px;
+	padding:0px;
+	font-family: "Barlow Condensed", sans-serif !important;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width:100%;
+	height:100%;
+}
+
+.container{
+
+	width:80%;
+	padding-top:80px;
+}
+
+.image-container{
+	height:30%;
+	width:100%;
+	background-color:rgb(180,180,180);
+	color:white;
+	text-align:center;
+}
+
+.content{
+	width:100%;
+}
+
+    .placecard-text {
+	font-family: "Barlow Condensed", sans-serif;
+	color: black;
+	font-size: 1em;
+	text-align: left;
+	hyphens: auto;
+	line-height: 1.2;
+	padding: 10px 0px 0px 0px;
+  }
+  
+  .placecard-text p {
+	padding: 0px;
+  }
+  
+  .metadata-panel-title {
+	letter-spacing: -0.0rem;
+	text-align: left;
+	padding-bottom: 20px;
+	padding-top: 60px;
+	font-size: 5vw;
+	font-weight:300;
+  }
+
+  .metadata-inscription-title {
+	letter-spacing: -0.0rem;
+	text-align: left;
+	padding-bottom: 20px;
+	padding-top: 0px;
+	font-size: 5vw;
+	font-weight:300;
+  }
+  
+  
+  .metadata-subtitle {
+	letter-spacing: -0.0rem;
+	font-size: 2vw;
+	text-align: left;
+	width: calc(100%);
+	margin-bottom: 10px;
+	margin-top: -8px;
+	float: left;
+  
+  }
+  
+  .metadata-content {
+	padding: 0px 0px 10px 0px;
+	font-size: 2.5vw;
+	line-height: 1.2;
+	float: left;
+	width: 100%;
+  }
+  
+  .metadata-item {
+	float: left;
+	margin-bottom: 5px;
+
+	max-width:200px;
+	margin-right:50px;
+  }
+  
+  .metadata-content .label {
+	float: left;
+	text-align: left;
+	width: auto;
+  }
+  
+  
+  .metadata-content .tag {
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: auto;
+	/* text-transform: capitalize; */
+	font-weight: 600;
+  }
+  
+  
+  .metadata-description {
+	margin-top:10px;
+	text-align: justify;
+	font-weight: 300;
+	float:left;
+	width:100%;
+  }
+
+  .metadata-description h1 {
+	font-weight: 200;
+	font-size:3.0vw;
+  }
+  
+  .metadata-content .preview{
+	height:auto;
+	margin-top:10px;
+	max-height:100px;
+	padding-right:10px;
+	overflow:hidden;
+	font-size:90%;
+	mask-image: linear-gradient(180deg, #000 -30%, transparent);
+	}
+  
+  
+  .metadata-center-button {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding-bottom: 20px;
+  }
+
+
+

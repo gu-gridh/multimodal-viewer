@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+		rel="stylesheet" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>GRIDH Point Cloud Viewer</title>
+
+
+
+	<!-- CSS files -->
+	<link rel="stylesheet" type="text/css" href="build/potree/potree.css">
+	<link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="libs/openlayers3/ol.css">
+	<link rel="stylesheet" type="text/css" href="libs/spectrum/spectrum.css">
+	<link rel="stylesheet" type="text/css" href="libs/jstree/themes/mixed/style.css">
+
+	<link rel="stylesheet" href="/styles/shared_styles.css">
+</head>
+
+
+<body>
+	<!-- JavaScript files -->
+	<script src="./libs/jquery/jquery-3.1.1.min.js"></script>
+	<script src="./libs/spectrum/spectrum.js"></script>
+	<script src="./libs/jquery-ui/jquery-ui.min.js"></script>
+	<script src="./libs/other/BinaryHeap.js"></script>
+	<script src="./libs/tween/tween.min.js"></script>
+	<script src="./libs/d3/d3.js"></script>
+	<script src="./libs/proj4/proj4.js"></script>
+	<script src="./libs/openlayers3/ol.js"></script>
+	<script src="./libs/i18next/i18next.js"></script>
+	<script src="./libs/jstree/jstree.js"></script>
+	<script src="./build/potree/potree.js"></script>
+	<script src="./libs/plasio/js/laslaz.js"></script>
+
+
+	<!-- Title, fetched from the backed: -->
+	<div class="title">
+	</div>
+
+	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
+	<!-- INCLUDE SETTINGS HERE -->
+
+	<div class="potree_container"
+		style="position: relative; width: 100%; height: calc(100% - 80px); left: 0px; top: 0px; bottom:200px;">
+
+		<!--  specify the bakground-color -->
+		<div id="potree_render_area" style="background-color:var(--viewer-bg)"></div>
+		<div id="potree_sidebar_container" style="background-color:var(--sidebar-bg)"> </div>
+	</div>
+
+	<script type="module">
+		import * as THREE from "./libs/three.js/build/three.module.js";
+
+		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+		viewer.setMinNodeSize(0);
+
+		viewer.setEDLEnabled(true);
+
+		/* higher numbers for these leads to greater contrasts  */
+		viewer.setEDLRadius(1.2);
+		viewer.setEDLStrength(0.2);
+
+		/* Field of view and how many points can be shown  */
+		viewer.setFOV(40);
+		viewer.setPointBudget(3_000_000);
+		viewer.loadSettingsFromURL();
+
+		/* variants inlcude gradient, black, white, and skybox. Write "none" to just have the render-area background */
+		viewer.setBackground("none");
+
+		viewer.setDescription("");
+
+		viewer.loadGUI(() => {
+			viewer.setLanguage('en');
+		});
+
+		/* The link to the model. URL and name of tomb must be fetched from the backend */
+		const queryName = 'PLACEHOLDER_QUERY';
+		const pointCloudUrl = 'PLACEHOLDER_URL_PUBLIC';
+
+		// document.querySelector('.title').textContent = PLACEHOLDER_TITLE;
+
+		Potree.loadPointCloud(
+			pointCloudUrl,
+			"NameOfTomb",
+			function (e) {
+				viewer.scene.addPointCloud(e.pointcloud);
+				let material = e.pointcloud.material;
+
+				/* The size of the voxels (smaller = sharper) */
+				material.size = 0.3;
+
+				/* The shape of the voxels */
+				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+				material.shape = Potree.PointShape.CIRCLE;
+
+				const cameraPosition = PLACEHOLDER_CAMERA_POSITION;
+
+				/*  The position of the camera: x z y. These must be fetched in the backend */
+				viewer.scene.view.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+
+				/*  The center of rotation of the camera. These must be fetched in the backend. 
+				If these values are set to be identical to those of the position of the camera 
+				the user will be able to look around from a static point of view which is good for small spaces.
+				The user exits this mode by a double click to change focus point. 
+				Suggest intitial viewing direction by making a decimal or smaller deviation from the camera position */
+				const lookAtPosition = PLACEHOLDER_LOOK_AT;
+
+				viewer.scene.view.lookAt(new THREE.Vector3(lookAtPosition[0], lookAtPosition[1], lookAtPosition[2]));
+			}
+		);
+	</script>
+
+
+	<!-- <div class="model-viewer-id">
+		Point Cloud <br> visualisation tool
+	</div> -->
+	<div class="ui-overlay-container" style="position:absolute;  height:300px; top:25px; z-index:1000; display:none;">
+		<div id="orientation"
+			style="display:flex; flex-direction: row; justify-content: space-between; pointer-events:auto;width:230px; height:30px; border-radius:8px; background-color:rgba(0,0,0,0.8); padding:10px 15px; box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;">
+		</div>
+	</div>
+	<!-- Here we can have a floating div with instructions on how to navigate -->
+
+	<div class="ui-overlay-container" style="position:absolute;">
+		<div id="instructions" class="short">
+			<div class="instruction-closer" onclick="$('#instructions').hide();"></div>
+			Click-and-drag to change direction. <br>
+			Move with WASD- or Arrow-keys, or Double-click. <br>
+			Right-click-and-drag to pan.
+		</div>
+	</div>
+
+	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:80px; z-index:1000; color:white">
+		<div class="LODtool">
+			<span>Max points:</span> <span id="lblPointBudget"></span>
+			<div id="sldPointBudget"></div>
+		</div>
+	</div>
+</body>
+
+</html>

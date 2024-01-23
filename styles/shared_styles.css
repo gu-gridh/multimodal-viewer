@@ -80,6 +80,8 @@ body {
     background-color:var(--color-5);
 }
 
+
+
 /* This is the label that states what type of viewer this is: mesh or point cloud */
 
 .model-viewer-id {

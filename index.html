@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
     <script src="./pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-
+    <link rel="stylesheet" href="../styles/shared_styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         html,
@@ -45,7 +45,6 @@
 
         .ui-module {
             top: 26px;
-
             position: absolute;
             background-color: black;
             border-radius: 8px;
@@ -103,12 +102,29 @@
             width: 100%;
             z-index: 1000;
         }
+
+        .back-button{
+    position:absolute;
+    height:35px;
+    width:35px;
+    border-radius:50%;
+    background-color:rgba(0,0,0,0.8);
+    background-image:url(../styles/interface/back.png);
+    background-size:15px;
+    background-position:center;
+    background-repeat:no-repeat;
+    margin-top:28px;
+    margin-left:30px;
+    z-index:1000;
+}
     </style>
 </head>
 
 <body>
     <div id="main-content">
+       
         <div id="left-pane">
+            <div class="back-button"></div>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item" onclick="changeLeftViewer('iiif')">Inscriptions</div>
@@ -117,6 +133,7 @@
                     <div class="ui-module-item" onclick="changeLeftViewer('relight')">RTI</div>
                 </div>
             </div>
+          
             <iframe id="left-Iframe" src="/iiif/iiif.html?q=125560" style="width:100%; height:100vh; border:none;"></iframe>
         </div>
         <div id="right-pane">

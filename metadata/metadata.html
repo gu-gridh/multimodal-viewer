@@ -11,15 +11,14 @@
 </head>
 
 <body>
-    <div class="container">  
-            <div class="metadata-text">
+    <div class="container">
+        <div class="metadata-text">
+            <div class="metadata-panel">
+
                 <div class="metadata-panel-title">
                     Panel 118:2
                 </div>
 
-                <div class="metadata-inscription-title" style="display:none;">
-                    Title
-                </div>
 
                 <div class="metadata-content">
 
@@ -47,63 +46,68 @@
 
                 </div>
                 <div class="metadata-description">
-                    <h1>Documentation:</h1>
+                    <h1>Documentation</h1>
+                </div>
+            </div>
+            <div class="metadata-inscription">
+                <div class="metadata-inscription-close"></div>
+
+                <div class="image-container">
+
                 </div>
 
-                <div class="metadata-inscription">
+                <div class="metadata-content" style="padding-top:30px;">
 
-                    <div class="image-container">
-                        <p>Image goes here</p>
+                    <div class="metadata-inscription-title">
+                        Title
                     </div>
 
-                    <div class="metadata-content" style="padding-top:30px;">
-
-
-
-                        <div class="metadata-item">
-                            <div class="label">Type:</div>
-                            <div class="theme-color-text tag">Text</div>
-                        </div>
-
-                        <div class="metadata-item">
-                            <div class="label">Language:</div>
-                            <div class="theme-color-text tag">Greek</div>
-                        </div>
-
-                        <div class="metadata-item">
-                            <div class="label">Tags:</div>
-                            <div class="theme-color-text tag">Saint</div>
-                        </div>
-
+                    <div class="metadata-item">
+                        <div class="label">Type:</div>
+                        <div class="theme-color-text tag">Text</div>
                     </div>
 
-                    <div class="metadata-description">
-
-                        <h1>Transcription:</h1>
-                    </div>
-                    <div class="metadata-description">
-                        <h1>Translation:</h1>
+                    <div class="metadata-item">
+                        <div class="label">Language:</div>
+                        <div class="theme-color-text tag">Greek</div>
                     </div>
 
-
-                    <div class="metadata-center-button">
-                        <router-link :to="`/place/${place?.id_}`">
-                          <div class="theme-button" style="padding:10px 20px; text-align:center; width:auto;  color:white;">Edit Inscription</div>
-                        </router-link>
-                      </div>
-
+                    <div class="metadata-item">
+                        <div class="label">Tags:</div>
+                        <div class="theme-color-text tag">Saint</div>
+                    </div>
 
                 </div>
+
+                <div class="metadata-description">
+
+                    <h1>Transcription</h1>
+                </div>
+                <div class="metadata-description">
+                    <h1>Translation</h1>
+                </div>
+
 
                 <div class="metadata-center-button">
                     <router-link :to="`/place/${place?.id_}`">
                         <div class="theme-button"
-                            style="padding:10px 20px; text-align:center; width:auto;  color:white;">Add Inscription
+                            style="padding:10px 20px; text-align:center; width:auto;  color:white;">Edit Inscription
                         </div>
                     </router-link>
                 </div>
 
+
             </div>
+
+            <div class="metadata-center-button">
+                <router-link :to="`/place/${place?.id_}`">
+                    <div class="theme-button" style="padding:10px 20px; text-align:center; width:auto;  color:white;">
+                        Add Inscription
+                    </div>
+                </router-link>
+            </div>
+
+        </div>
 
     </div>
 </body>

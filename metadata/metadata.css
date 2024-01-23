@@ -1,41 +1,72 @@
 html,
-body { 
-	margin:0px;
-	padding:0px;
+body {
+	margin: 0px;
+	padding: 0px;
 	font-family: "Barlow Condensed", sans-serif !important;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	width:100%;
-	overflow:hidden;
+	width: 100%;
+	overflow: hidden;
 }
 
-.container{
-	height:calc(100vh - 160px) !important;
-	width:100%;
-	padding:60px 80px 20px 80px!important;
-	overflow:scroll;
-	overflow-x:hidden;
+.container {
+	height: calc(100vh - 160px) !important;
+	width: 100%;
+	padding: 60px 80px 20px 80px !important;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+.metadata-panel {
+	float:left;
 }
 
 .metadata-inscription {
-	border-radius:8px;
-	width:calc(100% + 0px);
-	margin-left:-20px;
-	background-color:rgb(240,240,240);
-	overflow:hidden;
-	padding:20px;
-  }
-
-.image-container{
-	height:30%;
-	width:100%;
-	background-color:rgb(180,180,180);
-	color:white;
-	text-align:center;
+	float:left;
+	border-radius: 8px;
+	width: calc(100%x);
+	margin-left: 0px;
+	background-color: rgb(240, 240, 240);
+	overflow: hidden;
+	padding: 20px;
+	margin-top:30px;
 }
 
-    .placecard-text {
+.metadata-inscription-close {
+	margin-top: -10px;
+	margin-left: -10px;
+	width: 30px;
+	height: 30px;
+	padding: 0px;
+	line-height: 1px;
+	font-size: 45px;
+	font-weight: 100;
+	border-radius: 50%;
+	color: white;
+	cursor: pointer;
+	pointer-events: auto;
+	z-index: 1000;
+	background-color: rgb(180, 100, 100);
+	background-image:url(../styles/close.png);
+	background-size:20px;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.metadata-inscription-close:hover {
+	background-color: rgb(140, 60, 60);
+}
+
+.image-container {
+	height: 30%;
+	width: 100%;
+	background-color: rgb(180, 180, 180);
+	color: white;
+	text-align: center;
+}
+
+.placecard-text {
 	font-family: "Barlow Condensed", sans-serif;
 	color: black;
 	font-size: 1em;
@@ -43,35 +74,35 @@ body {
 	hyphens: auto;
 	line-height: 1.2;
 	padding: 10px 0px 0px 0px;
-  }
-  
-  .placecard-text p {
+}
+
+.placecard-text p {
 	padding: 0px;
-  }
-  
-  .metadata-panel-title {
+}
+
+.metadata-panel-title {
 	letter-spacing: -0.0rem;
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 60px;
 	font-size: 5vw;
-	font-weight:300;
-  }
+	font-weight: 300;
+}
 
- 
-  
 
-  .metadata-inscription-title {
+
+
+.metadata-inscription-title {
 	letter-spacing: -0.0rem;
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 0px;
-	font-size: 5vw;
-	font-weight:300;
-  }
-  
-  
-  .metadata-subtitle {
+	font-size: 4vw;
+	font-weight: 300;
+}
+
+
+.metadata-subtitle {
 	letter-spacing: -0.0rem;
 	font-size: 2vw;
 	text-align: left;
@@ -79,72 +110,69 @@ body {
 	margin-bottom: 10px;
 	margin-top: -8px;
 	float: left;
-  
-  }
-  
-  .metadata-content {
+
+}
+
+.metadata-content {
 	padding: 0px 0px 10px 0px;
 	font-size: 2.5vw;
 	line-height: 1.2;
 	float: left;
 	width: 100%;
-  }
-  
-  .metadata-item {
+}
+
+.metadata-item {
 	float: left;
 	margin-bottom: 5px;
 
-	max-width:200px;
-	margin-right:50px;
-  }
-  
-  .metadata-content .label {
+	max-width: 200px;
+	margin-right: 50px;
+}
+
+.metadata-content .label {
 	float: left;
 	text-align: left;
 	width: auto;
-  }
-  
-  
-  .metadata-content .tag {
+}
+
+
+.metadata-content .tag {
 	float: left;
 	padding-left: 10px;
 	padding-right: 10px;
 	width: auto;
 	/* text-transform: capitalize; */
 	font-weight: 600;
-  }
-  
-  
-  .metadata-description {
-	margin-top:10px;
+}
+
+
+.metadata-description {
+	margin-top: 10px;
 	text-align: justify;
 	font-weight: 300;
-	float:left;
-	width:100%;
-  }
+	float: left;
+	width: 100%;
+}
 
-  .metadata-description h1 {
+.metadata-description h1 {
 	font-weight: 200;
-	font-size:3.0vw;
-  }
-  
-  .metadata-content .preview{
-	height:auto;
-	margin-top:10px;
-	max-height:100px;
-	padding-right:10px;
-	overflow:hidden;
-	font-size:90%;
+	font-size: 3.0vw;
+}
+
+.metadata-content .preview {
+	height: auto;
+	margin-top: 10px;
+	max-height: 100px;
+	padding-right: 10px;
+	overflow: hidden;
+	font-size: 90%;
 	mask-image: linear-gradient(180deg, #000 -30%, transparent);
-	}
-  
-  
-  .metadata-center-button {
+}
+
+
+.metadata-center-button {
 	display: flex;
 	justify-content: center;
 	width: 100%;
-	padding-bottom: 20px;
-  }
-
-
-
+	padding-bottom: 0px;
+}

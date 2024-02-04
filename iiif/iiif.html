@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="../styles/shared_styles.css">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
-        <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="../mesh/js/jquery.js"></script>
 </head>
 
@@ -20,37 +22,38 @@
     <!-- <button onclick="viewAnnotations()">View Annotations</button>
         <div id="annotationsJson" style="white-space: pre;"></div> -->
 
-        <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+    <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
 
-            <div id="instructions" style="bottom:100px; width:255px; display:none;">
-                <div class="instruction-closer"  onclick="$('#instructions').hide();"></div>
-               Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.
-            </div>
+        <div id="instructions" style="bottom:100px; width:255px; display:none;">
+            <div class="instruction-closer" onclick="$('#instructions').hide();"></div>
+            Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.
         </div>
-
-        <div class="interface-area">
-    <div id="ToolbarBottom">
-
-        <a id="home" href="#home">
-            <div id="Home" class="NavButton"></div>
-        </a>
-       
-        <a id="zoom-in" href="#zoom-in">
-            <div id="ZoomIn" class="NavButton"></div>
-        </a>
-        <a id="zoom-out" href="#zoom-out">
-            <div id="ZoomOut" class="NavButton"></div>
-        </a>
-          <a id="full-page" href="#full-page">
-            <div id="FullPage" class="NavButton"></div>
-        </a> 
-
-    </a>
-
-      <div class="NavButton" style="width:85px; line-height:2.0" onclick="$('#instructions').show();">Add inscription</div>
-
     </div>
-</div>
+
+    <div class="interface-area">
+        <div id="ToolbarBottom">
+
+            <a id="home" href="#home">
+                <div id="Home" class="NavButton"></div>
+            </a>
+
+            <a id="zoom-in" href="#zoom-in">
+                <div id="ZoomIn" class="NavButton"></div>
+            </a>
+            <a id="zoom-out" href="#zoom-out">
+                <div id="ZoomOut" class="NavButton"></div>
+            </a>
+            <a id="full-page" href="#full-page">
+                <div id="FullPage" class="NavButton"></div>
+            </a>
+
+            </a>
+
+            <div class="NavButton" style="width:85px; line-height:2.0" onclick="$('#instructions').show();">Add
+                inscription</div>
+
+        </div>
+    </div>
 
     <script>
         var anno;
@@ -78,7 +81,31 @@
             // Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {
                 // Additional configuration options
+                disableEditor: true
+
             });
+
+            anno.on('createSelection', async function (selection) {
+
+                // Tag to insert
+                selection.body = [{
+                    type: 'TextualBody',
+                    purpose: 'tagging',
+                    value: 'MyTag'
+                }];
+
+                // Step 3: update the selection and save it
+                // Remember that .updateSelected is an async function!
+                // You need to wait until it completes before saving
+                await anno.updateSelected(selection);
+                anno.saveSelected();
+
+                // Alternative:
+                // anno.updateSelected(selection, true);
+            });
+
+
+
 
             // Load annotations in W3C WebAnnotation format
             anno.loadAnnotations('annotations.w3c.json');

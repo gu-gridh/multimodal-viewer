@@ -10,8 +10,8 @@
         href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
         <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+    <script type="text/javascript" src="../mesh/js/jquery.js"></script>
 </head>
 
 <body>
@@ -19,6 +19,14 @@
     <div id="openseadragon" style="width: 100%; height: calc(100vh - 80px); background-color:var(--color-0);"></div>
     <!-- <button onclick="viewAnnotations()">View Annotations</button>
         <div id="annotationsJson" style="white-space: pre;"></div> -->
+
+        <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+
+            <div id="instructions" style="bottom:100px; width:255px; display:none;">
+                <div class="instruction-closer"  onclick="$('#instructions').hide();"></div>
+               Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.
+            </div>
+        </div>
 
         <div class="interface-area">
     <div id="ToolbarBottom">
@@ -39,7 +47,7 @@
 
     </a>
 
-      <div class="NavButton" style="width:85px; line-height:2.0">Add inscription</div>
+      <div class="NavButton" style="width:85px; line-height:2.0" onclick="$('#instructions').show();">Add inscription</div>
 
     </div>
 </div>

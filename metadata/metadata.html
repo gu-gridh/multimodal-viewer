@@ -52,7 +52,9 @@
             <div class="metadata-inscription">
                 <!-- <div class="metadata-inscription-close"></div> -->
 
-                <div class="image-container"></div>
+                <div class="image-container">
+                      <!-- Insert image carousel text -->
+                </div>
 
                 <div class="metadata-content" style="padding-top:0px;">
 
@@ -75,25 +77,36 @@
                         <div class="theme-color-text tag">Saint</div>
                     </div>
 
+                    <div class="metadata-description">
+                        <h1>Transcription</h1>
+                    </div>
+                    <div class="metadata-descriptio-text">
+                      <!-- Insert transcription text -->
+                    </div>
+
+                    <div class="metadata-description">
+                        <h1>Translation</h1>
+                    </div>
+                    <div class="metadata-descriptio-text">
+                    <!-- Insert translation text -->
+                    </div>
+
+                    <div class="metadata-description">
+                        <h1>Contribution</h1>
+                    </div>
+                    <div class="metadata-descriptio-text">
+                      <!-- Insert contribution text -->
+                    </div>
+
+
+                    <div class="metadata-center-button">
+                        <router-link :to="`/place/${place?.id_}`">
+                            <div class="theme-button"
+                                style="padding:10px 20px; text-align:center; width:auto;  color:white;">Edit Inscription
+                            </div>
+                        </router-link>
+                    </div>
                 </div>
-
-                <div class="metadata-description">
-
-                    <h1>Transcription</h1>
-                </div>
-                <div class="metadata-description">
-                    <h1>Translation</h1>
-                </div>
-
-
-                <div class="metadata-center-button">
-                    <router-link :to="`/place/${place?.id_}`">
-                        <div class="theme-button"
-                            style="padding:10px 20px; text-align:center; width:auto;  color:white;">Edit Inscription
-                        </div>
-                    </router-link>
-                </div>
-
 
             </div>
 

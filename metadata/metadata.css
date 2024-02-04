@@ -25,7 +25,7 @@ body {
 .metadata-inscription {
 	float:left;
 	border-radius: 8px;
-	width: calc(100%x);
+	width: calc(100% - 20px);
 	margin-left: 0px;
 	background-color: rgb(240, 240, 240);
 	overflow: hidden;

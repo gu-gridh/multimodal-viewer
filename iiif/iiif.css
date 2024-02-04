@@ -140,6 +140,7 @@ body {
 	  margin-top:8px; 
 	  margin-bottom:8px; 
 	  cursor:pointer;
+	  font-family: "Barlow Condensed", sans-serif !important;
 	}
 	.NavButton:hover {
 	  opacity: 1;

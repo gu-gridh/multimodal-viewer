@@ -1,0 +1,108 @@
+svg.a9s-annotationlayer .a9s-selection .a9s-outer,
+svg.a9s-annotationlayer .a9s-annotation .a9s-outer {
+  display: none;
+}
+
+svg.a9s-annotationlayer .a9s-handle .a9s-handle-outer {
+  display: none;
+}
+
+/** New style for the annotation outlines **/
+svg.a9s-annotationlayer .a9s-selection .a9s-inner,
+svg.a9s-annotationlayer .a9s-annotation .a9s-inner {
+  stroke-width: 2;
+  stroke: white;
+  stroke-dasharray: 2;
+}
+
+/** Disable the hover effect from the default stylesheet **/
+svg.a9s-annotationlayer .a9s-annotation.editable:hover .a9s-inner {
+  fill: transparent;
+}
+
+/** Corner handles **/
+svg.a9s-annotationlayer .a9s-handle .a9s-handle-inner {
+  fill: white;
+  stroke: white;
+}
+
+/** Enable the dim mask, black with 60% transparency **/
+svg.a9s-annotationlayer .a9s-selection-mask {
+  fill: rgba(0, 0, 0, 0.5);
+}
+
+
+
+.r6o-editor {
+  background-color: black !important;
+  color: white !important;
+}
+
+.r6o-widget.comment .r6o-editable-text{
+  color:white;
+  font-size: 22px;
+}
+
+.r6o-widget.comment .r6o-editable-text, .r6o-widget.comment .r6o-readonly-comment {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  resize: none;
+  font-family: "Barlow Condensed", sans-serif !important;
+  }
+
+  .r6o-widget.comment .r6o-editable-text, .r6o-widget.comment .r6o-readonly-comment {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    font-family: "Barlow Condensed", sans-serif !important;
+    }
+
+
+.r6o-widget.r6o-tag input {
+  width: 100%;
+  padding: 5px 8px!important;
+  min-width: 80px;
+  outline: none;
+  border: none;
+  line-height: 170%;
+  background-color: transparent;
+  color: #3f3f3f;
+  display:none;
+  }
+
+/** renders the up- or downwards arrow **/
+.r6o-arrow:after {
+  background-color: rgba(80,80,80,1.0) !important;
+}
+
+.r6o-editor-inner {
+  background-color: rgba(80,80,80,1.0) !important;
+  border-radius:8px!important;
+  padding:5px!important;
+}
+
+/** a list of editor widgets, each contained in a DIV **/
+.r6o-widget {
+  background-color: transparent !important;
+  color: white !important;
+  border-color:transparent!important;
+
+}
+
+.r6o-footer {
+
+
+}
+
+/** Trashcan icon **/
+.r6o-btn .left .delete-annotation {}
+
+.r6o-btn .outline {}

@@ -86,7 +86,7 @@ body {
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 30px;
-	font-size: 5vw;
+	font-size: 4.5vw;
 	font-weight: 300;
 }
 
@@ -98,14 +98,14 @@ body {
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 0px;
-	font-size: 4vw;
+	font-size: 3.5vw;
 	font-weight: 300;
 }
 
 
 .metadata-subtitle {
 	letter-spacing: -0.0rem;
-	font-size: 2vw;
+	font-size: 1.6vw;
 	text-align: left;
 	width: calc(100%);
 	margin-bottom: 10px;
@@ -116,7 +116,7 @@ body {
 
 .metadata-content {
 	padding: 0px 0px 10px 0px;
-	font-size: 2.5vw;
+	font-size: 2.3vw;
 	line-height: 1.2;
 	float: left;
 	width: 100%;
@@ -157,7 +157,7 @@ body {
 
 .metadata-description h1 {
 	font-weight: 200;
-	font-size: 3.0vw;
+	font-size: 2.5vw;
 }
 
 .metadata-content .preview {

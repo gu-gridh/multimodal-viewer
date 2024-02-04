@@ -83,6 +83,41 @@ svg.a9s-annotationlayer .a9s-selection-mask {
   background-color: rgba(80,80,80,1.0) !important;
 }
 
+.r6o-widget.comment .r6o-arrow-down {
+  display:none;
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  top: 9px;
+  right: 9px;
+  line-height: 22px;
+  background-color: transparent!important;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  border: 1px solid #e5e5e5;
+  cursor: pointer;
+  -webkit-border-radius: 1px;
+  -khtml-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+  }
+
+  .r6o-widget.comment .r6o-comment-dropdown-menu
+  {
+    position: absolute;
+    top: 32px;
+    right: 8px;
+    background-color: rgb(100,100,100)!important;
+    border: 1px solid #e5e5e5;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0;
+    z-index: 9999;
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    box-shadow: 0 2px 4px #0003;
+    }
+
 .r6o-editor-inner {
   background-color: rgba(80,80,80,1.0) !important;
   border-radius:8px!important;

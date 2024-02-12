@@ -30,6 +30,15 @@
         </div>
     </div>
 
+    <!--confirm annotation-->
+    <div id="savePopup" class="popup">
+        <div class="popup-content">
+            <p>Do you want to save this annotation?</p>
+            <button id="saveYes">Yes</button>
+            <button id="saveNo">No</button>
+        </div>
+    </div>
+
     <div class="interface-area">
         <div id="ToolbarBottom">
 
@@ -112,7 +121,20 @@
 
             // Attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {
-                console.log('Annotation created:', annotation);
+                // Show the popup
+                document.getElementById('savePopup').style.display = 'block';
+
+                // Handle Yes button click
+                document.getElementById('saveYes').onclick = function() {
+                    console.log('Annotation coordinates:', annotation.target.selector.value);
+                    document.getElementById('savePopup').style.display = 'none';
+                };
+
+                // Handle No button click
+                document.getElementById('saveNo').onclick = function() {
+                    anno.removeAnnotation(annotation.id);
+                    document.getElementById('savePopup').style.display = 'none';
+                };
             });
 
             anno.on('clickAnnotation', function (annotation, element) {
@@ -131,5 +153,4 @@
         // }
     </script>
 </body>
-
 </html>

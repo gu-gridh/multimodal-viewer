@@ -67,7 +67,24 @@
     <script>
         var anno;
 
+        function saveViewerState(viewer) {
+            var zoomLevel = viewer.viewport.getZoom();
+            var centerPoint = viewer.viewport.getCenter();
+            var state = {
+                zoom: zoomLevel,
+                center: { x: centerPoint.x, y: centerPoint.y }
+            };
+            localStorage.setItem('viewerState', JSON.stringify(state));
+        }
+
+        function getSavedViewerState() {
+            var state = localStorage.getItem('viewerState');
+            return state ? JSON.parse(state) : null;
+        }
+
         window.onload = function () {
+            var savedState = getSavedViewerState();
+
             var viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
@@ -85,6 +102,17 @@
                 zoomInButton: "zoom-in",
                 zoomOutButton: "zoom-out",
                 homeButton: "home",
+            });
+
+            viewer.addHandler('open', function() {
+                if (savedState) {
+                    viewer.viewport.zoomTo(savedState.zoom);
+                    viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
+                }
+            });
+
+            viewer.addHandler('viewport-change', function() {
+                saveViewerState(viewer);
             });
 
             // Initialize the Annotorious plugin

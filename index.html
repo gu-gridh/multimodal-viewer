@@ -132,8 +132,8 @@
             <div class="back-button"></div>
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item" onclick="changeLeftViewer('iiif')">Inscriptions</div>
-                    <div class="ui-module-item" onclick="changeLeftViewer('iiif')">Topography</div>
+                    <div class="ui-module-item" onclick="changeLeftViewer('inscription')">Inscriptions</div>
+                    <div class="ui-module-item" onclick="changeLeftViewer('topography')">Topography</div>
                     <div class="ui-module-item" onclick="changeLeftViewer('mesh')">Surface Model</div>
                     <div class="ui-module-item" onclick="changeLeftViewer('relight')">RTI</div>
                 </div>
@@ -179,9 +179,14 @@
     <script>
         function changeLeftViewer(viewerType) {
             var iframe = document.getElementById('left-Iframe');
-            if (viewerType === 'iiif') {
+            var currentUrl = new URL(iframe.src);
+
+            if (viewerType === 'inscription') {
                 iframe.src = '/iiif/iiif.html?q=125560'; // Specific URL for IIIF Viewer
-            } else {
+            } else if (viewerType === 'topography') {
+                iframe.src = '/iiif/iiif.html?q=125560';
+            } 
+            else {
                 iframe.src = '/' + viewerType + '/' + viewerType + '.html?q=1';
             }
         }

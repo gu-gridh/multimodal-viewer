@@ -510,21 +510,37 @@ border-radius:50% !important;
 .popup {
     display: none;
     position: fixed;
+    color:white;
     left: 50%;
-    top: 50%;
+    bottom: 115px;
     transform: translate(-50%, -50%);
-    border: 1px solid #ddd;
-    background-color: white;
+    border-radius:8px;
+    background-color:rgba(0,0,0,0.8);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     z-index: 1000;
+    width:310px;
 }
 
 .popup-content {
-    padding: 20px;
     text-align: center;
 }
 
+.popup-content p{
+    line-height:1.0;
+}
+
 .popup-content button {
-    margin: 10px;
-    padding: 5px 15px;
+    margin: 0px 10px 15px 10px;
+    padding: 8px 15px;
+    font-size:0.8em;
+    color:white;
+    background-color:rgb(60,60,60);
+    border-width:0.0px;
+    border-radius:6px;
+    border-color:none;
+}
+
+.popup-content button:hover {
+    background-color:rgb(80,80,80);
+
 }

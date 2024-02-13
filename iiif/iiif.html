@@ -33,9 +33,9 @@
     <!--confirm annotation-->
     <div id="savePopup" class="popup">
         <div class="popup-content">
-            <p>Do you want to save this annotation?</p>
-            <button id="saveYes">Yes</button>
-            <button id="saveNo">No</button>
+            <p>Are you satisfied with the selection?</p>
+            <button id="saveYes">It is correct</button>
+            <button id="saveNo">Redo the selection</button>
         </div>
     </div>
 
@@ -151,6 +151,7 @@
             anno.on('createAnnotation', function (annotation) {
                 // Show the popup
                 document.getElementById('savePopup').style.display = 'block';
+                document.getElementById('instructions').style.display = 'none';
 
                 // Handle Yes button click
                 document.getElementById('saveYes').onclick = function() {

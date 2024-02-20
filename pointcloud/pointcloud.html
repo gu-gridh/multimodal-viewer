@@ -76,8 +76,37 @@
 
 		viewer.setDescription("");
 
+		async function loadAnnotations() {
+			const response = await fetch('annotations.json'); 
+			const data = await response.json(); 
+
+			if (Array.isArray(data.annotations)) {
+				data.annotations.forEach(annotation => {
+
+					if (!Array.isArray(annotation.position) || annotation.position.length !== 3) {
+						console.error('Invalid position data', annotation);
+						return; 
+					}
+
+					const position = new THREE.Vector3(...annotation.position);
+
+					let ann = new Potree.Annotation({
+						title: annotation.title,
+						description: annotation.description,
+						position: position,
+					});
+
+					viewer.scene.annotations.add(ann);
+				});
+			} else {
+				console.error("Annotations data is not an array.");
+			}
+		}
+
+
 		viewer.loadGUI(() => {
 			viewer.setLanguage('en');
+			loadAnnotations(); // Call the function to load and display annotations
 		});
 
 		/* The link to the model. URL and name of tomb must be fetched from the backend */
@@ -115,6 +144,7 @@
 				viewer.scene.view.lookAt(new THREE.Vector3(lookAtPosition[0], lookAtPosition[1], lookAtPosition[2]));
 			}
 		);
+
 	</script>
 
 

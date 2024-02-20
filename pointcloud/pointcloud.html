@@ -76,6 +76,8 @@
 
 		viewer.setDescription("");
 
+		
+
 		async function loadAnnotations() {
 			const response = await fetch('annotations.json');
 			const data = await response.json();
@@ -114,17 +116,19 @@
 		const pointCloudUrl = 'PLACEHOLDER_URL_PUBLIC';
 
 		// document.querySelector('.title').textContent = PLACEHOLDER_TITLE;
-
 		Potree.loadPointCloud(
 			pointCloudUrl,
 			"NameOfTomb",
 			function (e) {
 				viewer.scene.addPointCloud(e.pointcloud);
 				let material = e.pointcloud.material;
-
+				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+				// material.activeAttributeName = "elevation";
+				
+				
 				/* The size of the voxels (smaller = sharper) */
 				material.size = 0.8;
-
+				
 				/* The shape of the voxels */
 				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 				material.shape = Potree.PointShape.CIRCLE;

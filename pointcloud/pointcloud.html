@@ -64,11 +64,11 @@
 
 		/* higher numbers for these leads to greater contrasts  */
 		viewer.setEDLRadius(1.2);
-		viewer.setEDLStrength(0.2);
+		viewer.setEDLStrength(0.0);
 
 		/* Field of view and how many points can be shown  */
 		viewer.setFOV(40);
-		viewer.setPointBudget(3_000_000);
+		viewer.setPointBudget(4_000_000);
 		viewer.loadSettingsFromURL();
 
 		/* variants inlcude gradient, black, white, and skybox. Write "none" to just have the render-area background */
@@ -123,7 +123,7 @@
 				let material = e.pointcloud.material;
 
 				/* The size of the voxels (smaller = sharper) */
-				material.size = 0.3;
+				material.size = 0.8;
 
 				/* The shape of the voxels */
 				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;

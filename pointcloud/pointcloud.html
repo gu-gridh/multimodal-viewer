@@ -77,15 +77,15 @@
 		viewer.setDescription("");
 
 		async function loadAnnotations() {
-			const response = await fetch('annotations.json'); 
-			const data = await response.json(); 
+			const response = await fetch('annotations.json');
+			const data = await response.json();
 
 			if (Array.isArray(data.annotations)) {
 				data.annotations.forEach(annotation => {
 
 					if (!Array.isArray(annotation.position) || annotation.position.length !== 3) {
 						console.error('Invalid position data', annotation);
-						return; 
+						return;
 					}
 
 					const position = new THREE.Vector3(...annotation.position);
@@ -158,7 +158,7 @@
 	</div>
 	<!-- Here we can have a floating div with instructions on how to navigate -->
 
-	<div class="ui-overlay-container" style="position:absolute;">
+	<div class="ui-overlay-container" style="position:absolute; bottom:110px;">
 		<div id="instructions" class="short">
 			<div class="instruction-closer" onclick="$('#instructions').hide();"></div>
 			Click-and-drag to change direction. <br>
@@ -169,6 +169,8 @@
 
 	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:80px; z-index:1000; color:white">
 		<div class="LODtool">
+			<span>Point Size:</span> <span id="lblPointSize"></span>
+		<div id="sldPointSize"></div>
 			<span>Max points:</span> <span id="lblPointBudget"></span>
 			<div id="sldPointBudget"></div>
 		</div>

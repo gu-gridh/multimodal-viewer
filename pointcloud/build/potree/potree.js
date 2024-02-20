@@ -80892,7 +80892,7 @@ ENDSEC
 				// GRIDH: point size slider
 
 				$('#sldPointSize').slider({
-					value: 0.3, // Default starting value
+					value: 0.8, // Default starting value
 					min: 0.1,
 					max: 2.0,
 					step: 0.01,

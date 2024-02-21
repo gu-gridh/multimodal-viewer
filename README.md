@@ -12,16 +12,9 @@ npm start
 
 ## Usage
 
-Sample URLs for testing:
 http://localhost:8094/ directs to the Home view
 
-http://localhost:8094/pointcloud/?q=2 directs to the Pointcloud Viewer where q is the id of the pointcloud
-
-http://localhost:8094/mesh/?q=1 directs to the 3dhop Viewer
-
-http://localhost:8094/relight/?q=1 directs to the Relight Viewer
-
-http://localhost:8094/iiif/?q=125560 directs to the IIIF Viewer
+Fetch for respective panel data by like so: http://localhost:8094/?q=118-02
 
 ## Installation
 

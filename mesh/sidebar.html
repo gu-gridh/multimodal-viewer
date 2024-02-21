@@ -9,57 +9,57 @@
 </head>
 <script>
 	async function fetchTitleAndUpdate() {
-		try {
-			const qValue = getQueryParameter('q');
-			const response = await fetch(`https://diana.dh.gu.se/api/etruscantombs/object3dhop/?id=${qValue}`);
+		// try {
+		// 	const qValue = getQueryParameter('q');
+		// 	const response = await fetch(`https://diana.dh.gu.se/api/etruscantombs/object3dhop/?id=${qValue}`);
 			
-			if (response.ok) {
-			const data = await response.json();
-			const title = data.results[0].title; 
-			const trianglesOptimized = data.results[0].triangles_optimized;
-			const trianglesFullResolution = data.results[0].triangles_full_resolution;
-            const urlOptimized = data.results[0].url_optimized;
+		// 	if (response.ok) {
+		// 	const data = await response.json();
+		// 	const title = data.results[0].title; 
+		// 	const trianglesOptimized = data.results[0].triangles_optimized;
+		// 	const trianglesFullResolution = data.results[0].triangles_full_resolution;
+        //     const urlOptimized = data.results[0].url_optimized;
 
-			if (urlOptimized) {
-				const downloadButton = document.getElementById("download-button");
-				downloadButton.classList.add("theme-button");
-				downloadButton.style.display = 'block'; // show the download button
-				downloadButton.setAttribute('href', urlOptimized);
-				downloadButton.setAttribute('download', '');
-			} else {
-				// Hide the button
-				const downloadButton = document.getElementById("download-button");
-				downloadButton.style.display = 'none';
-				console.error('url_optimized is null or undefined.');
-			}
+		// 	if (urlOptimized) {
+		// 		const downloadButton = document.getElementById("download-button");
+		// 		downloadButton.classList.add("theme-button");
+		// 		downloadButton.style.display = 'block'; // show the download button
+		// 		downloadButton.setAttribute('href', urlOptimized);
+		// 		downloadButton.setAttribute('download', '');
+		// 	} else {
+		// 		// Hide the button
+		// 		const downloadButton = document.getElementById("download-button");
+		// 		downloadButton.style.display = 'none';
+		// 		console.error('url_optimized is null or undefined.');
+		// 	}
 
-			// Update the title
-			if (document.getElementById("backend-info")) {
-				document.getElementById("backend-info").textContent = title;
-			} else {
-				console.error('Element with id "backend-info" not found.');
-			}
+		// 	// Update the title
+		// 	if (document.getElementById("backend-info")) {
+		// 		document.getElementById("backend-info").textContent = title;
+		// 	} else {
+		// 		console.error('Element with id "backend-info" not found.');
+		// 	}
 			
-			// Update triangles optimized
-			if (document.getElementById("triangles-optimized-info")) {
-				document.getElementById("triangles-optimized-info").textContent = trianglesOptimized;
-			} else {
-				console.error('Element with id "triangles-optimized-info" not found.');
-			}
+		// 	// Update triangles optimized
+		// 	if (document.getElementById("triangles-optimized-info")) {
+		// 		document.getElementById("triangles-optimized-info").textContent = trianglesOptimized;
+		// 	} else {
+		// 		console.error('Element with id "triangles-optimized-info" not found.');
+		// 	}
 
-			// Update triangles full resolution
-			if (document.getElementById("triangles-full-res-info")) {
-				document.getElementById("triangles-full-res-info").textContent = trianglesFullResolution;
-			} else {
-				console.error('Element with id "triangles-full-res-info" not found.');
-			}
+		// 	// Update triangles full resolution
+		// 	if (document.getElementById("triangles-full-res-info")) {
+		// 		document.getElementById("triangles-full-res-info").textContent = trianglesFullResolution;
+		// 	} else {
+		// 		console.error('Element with id "triangles-full-res-info" not found.');
+		// 	}
 
-			} else {
-			console.error('Failed to fetch data:', response.status, response.statusText);
-			}
-		} catch (error) {
-			console.error('An error occurred:', error);
-		}
+		// 	} else {
+		// 	console.error('Failed to fetch data:', response.status, response.statusText);
+		// 	}
+		// } catch (error) {
+		// 	console.error('An error occurred:', error);
+		// }
 	}
 
 	fetchTitleAndUpdate();

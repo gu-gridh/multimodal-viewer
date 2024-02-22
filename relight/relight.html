@@ -12,21 +12,31 @@
         height: calc(100vh - 80px); 
       }
       #rtiImageDropdown {
-        width: 20%;
+        min-width: 100px;
+        height:30px;
         padding: 5px 10px;
         color: white;
         cursor: pointer;
         z-index: 10;
-        top: 15%;
-        margin-left: 5%;
+        top: 80px;
+        margin-left: calc(50% - 50px);
         position: absolute;
-        background-color: black;
+        background-color: rgba(0,0,0,0.9);
         box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
-        border-radius: 8px;
+        border-radius: 6px;
         border-width: 0;
         font-family: "Barlow Condensed", sans-serif !important;
         font-size: 15px;
+        -webkit-appearance: none;
+        background-image: url("../styles/dropdown-arrow.png");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) 55%;
       }
+
+      #rtiImageDropdown:focus {
+  outline: none;
+}
       button {
         width: 15%;
         cursor: pointer;

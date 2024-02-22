@@ -27,12 +27,16 @@ app.get('/relight/relight.html', async (req, res) => {
       }
       const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
 
+      const dropdownHtml = rtiImages.map(rti => 
+        `<option value="${rti.url}">RTI ${rti.id}</option>`
+      ).join('');
+      
       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
-        const buttonsHtml = rtiImages.map(rti =>
-          `<button onclick="updateRTIImage('${rti.url}')">RTI ${rti.id}</button>`
-        ).join('');
-
-        modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', buttonsHtml);
+      
+      modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', 
+        `<select id="rtiImageDropdown" onchange="updateRTIImage(this.value)">
+          ${dropdownHtml}
+        </select>`);      
 
       res.send(modifiedHtml);
     });

@@ -5,17 +5,35 @@
     <link  rel="stylesheet" href="../styles/shared_styles.css">
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
     <style>
-      html, body, .relight { width:100%; height:calc(100vh - 80px); padding:0px; margin:0px; }
+      html, body { width:100%; height:calc(100vh - 80px); padding:0px; margin:0px; }
+      .relight {
+        position: relative; 
+        width: 100%; 
+        height: calc(100vh - 80px); 
+      }
+      #rti-buttons-container {
+        position: absolute; 
+        top: 10%;
+        right: 10px; 
+        left: 10px;
+        display: flex;
+        flex-direction: row; 
+        gap: 10px; 
+        flex-wrap: wrap;
+        z-index: 10;
+      }
+      button {
+        width: 15%;
+        cursor: pointer;
+      }
     </style>
     <script src="js/hammer.min.js"></script>
     <script src="js/relight-viewer.min.js"></script>
     <script src="../pointcloud/libs//jquery/jquery-3.1.1.min.js"></script>
   </head>
 <body>
-  <!-- <div class="title">
-  </div> -->
+  <div id="rti-buttons-container"><!-- PLACEHOLDER_FOR_BUTTONS --></div>
   <div class="relight">
-   
   </div>
   <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
 
@@ -28,7 +46,14 @@
     </div>
   </div>
   <script>
-    var Relight = new RelightViewer('.relight', { url: PLACEHOLDER_RTI, layout: "deepzoom" });
+    var initialRTIUrl = 'PLACEHOLDER_RTI';
+    var relightViewer = new RelightViewer('.relight', { url: initialRTIUrl, layout: "deepzoom" });
+
+    function updateRTIImage(url) {
+      if(relightViewer) {
+        relightViewer = new RelightViewer('.relight', { url: url, layout: "deepzoom" });
+      }
+    }
   </script>
 </body>
 </html>

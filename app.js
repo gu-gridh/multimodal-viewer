@@ -12,7 +12,37 @@ http://localhost:8094/?q=118-02 panel with Mesh/RTI
 http://localhost:8094/?q=120-20 panel with IIIF
 */
 
-//for index.html paths like: /relight/relight.html?q=1
+app.get('/relight/relight.html', async (req, res) => {
+  const queryName = req.query.q;
+  // Fetch RTI image data from the API
+  const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+  try {
+    const apiResponse = await axios.get(apiUrl);
+    const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
+
+    fs.readFile(path.join(__dirname, 'relight', 'relight.html'), 'utf8', (err, htmlData) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
+
+      let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
+        const buttonsHtml = rtiImages.map(rti =>
+          `<button onclick="updateRTIImage('${rti.url}')">RTI ${rti.id}</button>`
+        ).join('');
+
+        modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', buttonsHtml);
+
+      res.send(modifiedHtml);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//for other index.html paths like /pointcloud/pointcloud.html
 app.use('/:type/:file', async (req, res, next) => {
   const { type, file } = req.params;
   const queryName = req.query.q;
@@ -25,8 +55,6 @@ app.use('/:type/:file', async (req, res, next) => {
     if (type === 'pointcloud') {
       apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=${queryName}`;
     } else if (type === 'mesh') {
-      apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
-    } else if (type === 'relight') {
       apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
     } else if (type === 'iiif') {
       apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
@@ -64,9 +92,6 @@ app.use('/:type/:file', async (req, res, next) => {
           modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0,180.0]));
           modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0,180.0]));
           modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([45.0,20.0,0.0,0.0,0.0,1.5]));
-        }
-        else if (type === 'relight') {
-          modifiedData = modifiedData.replace(/PLACEHOLDER_RTI/g, JSON.stringify(modelData?.[0]?.properties?.attached_RTI?.[0]?.url || ''));
         }
         else if (type === 'iiif') {
           const basePath = "https://img.dh.gu.se/saintsophia/static/";

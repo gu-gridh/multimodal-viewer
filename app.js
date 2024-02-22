@@ -89,13 +89,13 @@ app.use('/:type/:file', async (req, res, next) => {
         else if (type === 'mesh') {
           // modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, JSON.stringify(modelData.title || ''));
           modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
-          // modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(45.0));
-          // modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(20.0));
-          // modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(3.5));
+          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
+          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
+          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
           modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0,0.0,0.0]));
           modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0,180.0]));
           modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0,180.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([45.0,20.0,0.0,0.0,0.0,1.5]));
+          modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0,0.0,0.0,0.0,0.0,1.5]));
         }
         else if (type === 'iiif') {
           const basePath = "https://img.dh.gu.se/saintsophia/static/";

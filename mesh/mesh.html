@@ -160,9 +160,9 @@
 			trackball: {
 				type: TurntablePanTrackball,
 				trackOptions: {
-					startPhi: [1.0],
-					startTheta: [1.0],
-					startDistance: [1.5],
+					startPhi: PLACEHOLDER_STARTPHI,
+					startTheta: PLACEHOLDER_STARTTHETA,
+					startDistance: PLACEHOLDER_STARTDISTANCE,
 					startPanX: PLACEHOLDER_STARTPAN[0],
 					startPanY: PLACEHOLDER_STARTPAN[1],
 					startPanZ: PLACEHOLDER_STARTPAN[2],
@@ -185,7 +185,7 @@
 // Most of the functions have mobile variations, otherwise the buttons break
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
-		if (action == 'home') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
+		if (action == 'home') presenter.animateToTrackballPosition([PLACEHOLDER_TRACKBALLSTART]);
 		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
 		//--FULLSCREEN--
 		else if (action == 'full' || action == 'full_on') fullscreenSwitch();

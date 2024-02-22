@@ -10,11 +10,11 @@
     "mesh": {
       "gargo": {
         "title": "Awesome Gargolye",
-        "trackballStart": [45, 20, 0, 0, 0, 1.5],
+        "trackballStart": [0, 0, 0, 0, 0, 1.5],
         "meshURL": "https://data.dh.gu.se/shfa_meshes/compressed/Kville 28 svärd.nxz",
-        "startPhi": 45.0,
-        "startTheta": 20.0,
-        "startDistance": 3.5,
+        "startPhi": 1.0,
+        "startTheta": 1.0,
+        "startDistance": 1.5,
         "startPan": [0.0, 0, 0.0],
         "minMaxPhi": [-180, 180],
         "minMaxTheta": [-180.0, 180.0]

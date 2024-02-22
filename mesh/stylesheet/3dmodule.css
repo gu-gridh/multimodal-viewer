@@ -279,7 +279,7 @@ table, th, td, tr {
     margin-top: 150px;
     margin-left: calc(50% - 110px);
     padding: 5px 10px 5px 10px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 #menu-widget {

@@ -14,7 +14,7 @@ npm start
 
 http://localhost:8094/ directs to the Home view
 
-Fetch for respective panel data by like so: http://localhost:8094/?q=118-02
+Fetch for respective panel data like so: http://localhost:8094/?q=118-02
 
 ## Installation
 

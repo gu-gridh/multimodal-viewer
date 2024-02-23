@@ -62,6 +62,8 @@ app.use('/:type/:file', async (req, res, next) => {
       apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
     } else if (type === 'iiif') {
       apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+    } else if (type === 'metadata') {
+      apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=${queryName}&depth=1`;
     } 
     else {
       return res.status(400).send('Invalid model type');
@@ -87,7 +89,6 @@ app.use('/:type/:file', async (req, res, next) => {
           modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js');
         }
         else if (type === 'mesh') {
-          // modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, JSON.stringify(modelData.title || ''));
           modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
           modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
           modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
@@ -103,6 +104,21 @@ app.use('/:type/:file', async (req, res, next) => {
           const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
           modifiedData = modifiedData.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
           modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, '');
+        }
+        else if (type === 'metadata') {
+          const metadata = apiResponse.data.results[0];
+            
+          let title = metadata?.title ?? 'Unknown';
+          let inscriptions = metadata?.number_of_inscriptions ?? 'Unknown';
+          let languages = metadata?.number_of_languages ?? 'Unknown';
+          let room = metadata?.room ?? 'Unknown';
+          let tags = (metadata?.tags ?? []).map(tag => tag.text).join(', ');
+      
+          modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, title);
+          modifiedData = modifiedData.replace(/PLACEHOLDER_ROOM/g, room);
+          modifiedData = modifiedData.replace(/PLACEHOLDER_INSCRIPTIONS/g, inscriptions);
+          modifiedData = modifiedData.replace(/PLACEHOLDER_LANGUAGES/g, languages);
+          modifiedData = modifiedData.replace(/PLACEHOLDER_TAGS/g, tags);
         }
         res.send(modifiedData);
       });
@@ -127,83 +143,6 @@ app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/metadata', express.static(path.join(__dirname, 'metadata')));
 
-// Router to handle incoming modelId
-// app.get('/:type', async (req, res) => {
-//   const queryName = req.query.q; // Fetch the 'q' parameter
-//   const modelType = req.params.type; // "pointcloud" or "mesh" or "relight"
-
-
-//   let apiUrl = '';
-//   console.log(modelType)
-
-//   // Set the API URL based on the modelType
-//   if (modelType === 'pointcloud') {
-//     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=${queryName}`;
-//   } else if (modelType === 'mesh') {
-//     apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
-//   } 
-//   else if (modelType === 'relight') {
-//     apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`; //to fix
-//   }
-//   else if (modelType === 'iiif') {
-//     apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`; //to fix
-//   }
-//   else {
-//     res.status(400).send('Invalid model type');
-//     return;
-//   }
-
-//   try {
-//     const apiResponse = await axios.get(apiUrl);
-
-//     if (apiResponse.data.features && apiResponse.data.features.length > 0) {
-  
-//       const modelData = apiResponse.data.features;
-//       console.log(modelData.properties.attached_photograph.iiif_file)
-
-//     fs.readFile(path.join(__dirname, modelType, `${modelType}.html`), 'utf8', (err, data) => {
-//       if (err) {
-//         console.error('Error reading the file:', err);
-//         res.status(500).send('Internal Server Error');
-//         return;
-//       }
-
-//       // Replacing placeholders with actual data fetched from API
-//       let modifiedData = data;
-//       if (modelType === 'pointcloud') {
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js');
-//       }
-//       else if (modelType === 'mesh') {
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(45.0));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(20.0));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(10.5));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify(0.0,0.0,0.0));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify(-180.0,180.0));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify(-180.0,180.0));
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify(45.0,20.0,0.0,0.0,0.0,1.5));
-//       }
-//       else if (modelType === 'relight') {
-//         modifiedData = modifiedData.replace(/PLACEHOLDER_RTI/g, JSON.stringify(modelData?.[0]?.properties?.attached_RTI?.[0]?.url || ''));
-//       }
-//       else if (modelType === 'iiif') {
-//         console.log('Request received for iiif.html with query:');
-
-//       }
-//       res.send(modifiedData);
-//     });
-//   }
-//   else {
-//     console.error('No results found in API response.');
-//     res.status(404).send('Not Found');
-//     return;
-//     }
-//   } catch (error) {
-//     console.error('Error fetching data from API:', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
 app.get('/', (req, res) => {
   const queryName = req.query.q || 'default';
 
@@ -214,9 +153,7 @@ app.get('/', (req, res) => {
     }
     
     let modifiedData = data
-      .replace(/PLACEHOLDER_IIIF/g, queryName)
-      .replace(/PLACEHOLDER_MESH/g, queryName)
-      .replace(/PLACEHOLDER_RTI/g, queryName);
+      .replace(/PLACEHOLDER_QUERY/g, queryName)
     res.send(modifiedData);
   });
 });

@@ -139,7 +139,7 @@
                 </div>
             </div>
           
-            <iframe id="left-Iframe" src="/iiif/iiif.html?q=PLACEHOLDER_IIIF" style="width:100%; height:100vh; border:none;"></iframe>
+            <iframe id="left-Iframe" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY" style="width:100%; height:100vh; border:none;"></iframe>
         </div>
         <div id="right-pane">
             <div class="ui-module-container">
@@ -164,26 +164,31 @@
             var currentUrl = new URL(iframe.src);
 
             if (viewerType === 'inscription') {
-                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_IIIF';
+                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_QUERY';
             } else if (viewerType === 'topography') {
-                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_IIIF';
+                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_QUERY';
             }
             else if (viewerType === 'mesh') {
-                iframe.src = '/mesh/mesh.html?q=PLACEHOLDER_MESH';
+                iframe.src = '/mesh/mesh.html?q=PLACEHOLDER_QUERY';
             }
             else if (viewerType === 'relight') {
-                iframe.src = '/relight/relight.html?q=PLACEHOLDER_RTI';
+                iframe.src = '/relight/relight.html?q=PLACEHOLDER_QUERY';
             }
         }
 
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = '/metadata/metadata.html'; 
+                iframe.src = '/metadata/metadata.html?q=PLACEHOLDER_QUERY'; 
             } else {
                 iframe.src = '/' + viewerType + '/' + viewerType + '.html?q=26';
             }
         }
+
+        $(document).ready(function() {
+            // Automatically trigger the metadata viewer to load.
+            changeRightViewer('metadata');
+        });
     </script>
 
 </body>

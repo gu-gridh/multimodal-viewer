@@ -180,8 +180,8 @@
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
                 iframe.src = '/metadata/metadata.html?q=PLACEHOLDER_QUERY'; 
-            } else {
-                iframe.src = '/' + viewerType + '/' + viewerType + '.html?q=26';
+            } else if (viewerType === 'pointcloud') {
+                iframe.src = '/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
 

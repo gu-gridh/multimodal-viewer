@@ -112,7 +112,7 @@
 		});
 
 		/* The link to the model. URL and name of tomb must be fetched from the backend */
-		const queryName = 'PLACEHOLDER_QUERY';
+		// const queryName = 'PLACEHOLDER_QUERY';
 		const pointCloudUrl = 'PLACEHOLDER_URL_PUBLIC';
 
 		// document.querySelector('.title').textContent = PLACEHOLDER_TITLE;
@@ -133,7 +133,7 @@
 				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 				material.shape = Potree.PointShape.CIRCLE;
 
-				const cameraPosition = PLACEHOLDER_CAMERA_POSITION;
+				const cameraPosition = 'PLACEHOLDER_POSITION';
 
 				/*  The position of the camera: x z y. These must be fetched in the backend */
 				viewer.scene.view.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -143,7 +143,7 @@
 				the user will be able to look around from a static point of view which is good for small spaces.
 				The user exits this mode by a double click to change focus point. 
 				Suggest intitial viewing direction by making a decimal or smaller deviation from the camera position */
-				const lookAtPosition = PLACEHOLDER_LOOK_AT;
+				const lookAtPosition = 'PLACEHOLDER_DIRECTION';
 
 				viewer.scene.view.lookAt(new THREE.Vector3(lookAtPosition[0], lookAtPosition[1], lookAtPosition[2]));
 			}

@@ -46,7 +46,35 @@ app.get('/relight/relight.html', async (req, res) => {
   }
 });
 
-//for other index.html paths like /pointcloud/pointcloud.html
+app.get('/pointcloud/pointcloud.html', async (req, res) => {
+  const queryName = req.query.q;
+  const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+  try {
+    const apiResponse = await axios.get(apiUrl);
+    const position = apiResponse.data.features[0]?.properties.spatial_position;
+    const direction = apiResponse.data.features[0]?.properties.spatial_direction;
+    
+    fs.readFile(path.join(__dirname, 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      let modifiedData = data;
+      const positionStr = position ? position.join(',') : '';
+      const directionStr = direction ? direction.join(',') : '';
+      
+      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js');
+      modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
+      modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
+      res.send(modifiedData);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//other paths including mesh, IIIF, metadata
 app.use('/:type/:file', async (req, res, next) => {
   const { type, file } = req.params;
   const queryName = req.query.q;
@@ -56,9 +84,7 @@ app.use('/:type/:file', async (req, res, next) => {
   } else {
     // Define the API URL based on the type and queryName
     let apiUrl;
-    if (type === 'pointcloud') {
-      apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=${queryName}`;
-    } else if (type === 'mesh') {
+    if (type === 'mesh') {
       apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
     } else if (type === 'iiif') {
       apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
@@ -73,61 +99,57 @@ app.use('/:type/:file', async (req, res, next) => {
       const apiResponse = await axios.get(apiUrl);
   
       if (apiResponse) {
+        const modelData = apiResponse.data.features;
+                    
+        fs.readFile(path.join(__dirname, type, file), 'utf8', (err, data) => {
+          if (err) {
+            console.error('Error reading the file:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+          }
+    
+          // Replacing placeholders with actual data fetched from API
+          let modifiedData = data;
+          if (type === 'mesh') {
+            modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0,0.0,0.0]));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0,180.0]));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0,180.0]));
+            modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0,0.0,0.0,0.0,0.0,1.5]));
+          }
+          else if (type === 'iiif') {
+            const basePath = "https://img.dh.gu.se/saintsophia/static/";
+            const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
+            const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
+            modifiedData = modifiedData.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
+            modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, '');
+          }
+          else if (type === 'metadata') {
+            const metadata = apiResponse.data.results[0];
 
-      const modelData = apiResponse.data.features;
-                  
-      fs.readFile(path.join(__dirname, type, file), 'utf8', (err, data) => {
-        if (err) {
-          console.error('Error reading the file:', err);
-          res.status(500).send('Internal Server Error');
-          return;
-        }
-  
-        // Replacing placeholders with actual data fetched from API
-        let modifiedData = data;
-        if (type === 'pointcloud') {
-          modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js');
-        }
-        else if (type === 'mesh') {
-          modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0,0.0,0.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0,180.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0,180.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0,0.0,0.0,0.0,0.0,1.5]));
-        }
-        else if (type === 'iiif') {
-          const basePath = "https://img.dh.gu.se/saintsophia/static/";
-          const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
-          const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-          modifiedData = modifiedData.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
-          modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, '');
-        }
-        else if (type === 'metadata') {
-          const metadata = apiResponse.data.results[0];
-            
-          let title = metadata?.title ?? 'Unknown';
-          let inscriptions = metadata?.number_of_inscriptions ?? 'Unknown';
-          let languages = metadata?.number_of_languages ?? 'Unknown';
-          let room = metadata?.room ?? 'Unknown';
-          let tags = (metadata?.tags ?? []).map(tag => tag.text).join(', ');
-      
-          modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, title);
-          modifiedData = modifiedData.replace(/PLACEHOLDER_ROOM/g, room);
-          modifiedData = modifiedData.replace(/PLACEHOLDER_INSCRIPTIONS/g, inscriptions);
-          modifiedData = modifiedData.replace(/PLACEHOLDER_LANGUAGES/g, languages);
-          modifiedData = modifiedData.replace(/PLACEHOLDER_TAGS/g, tags);
-        }
-        res.send(modifiedData);
-      });
+            let title = metadata?.title ?? 'Unknown';
+            let inscriptions = metadata?.number_of_inscriptions ?? 'Unknown';
+            let languages = metadata?.number_of_languages ?? 'Unknown';
+            let room = metadata?.room ?? 'Unknown';
+            let tags = (metadata?.tags ?? []).map(tag => tag.text).join(', ');
+        
+            modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, title);
+            modifiedData = modifiedData.replace(/PLACEHOLDER_ROOM/g, room);
+            modifiedData = modifiedData.replace(/PLACEHOLDER_INSCRIPTIONS/g, inscriptions);
+            modifiedData = modifiedData.replace(/PLACEHOLDER_LANGUAGES/g, languages);
+            modifiedData = modifiedData.replace(/PLACEHOLDER_TAGS/g, tags);
+          }
+          res.send(modifiedData);
+        });
     }
     else {
       console.error('No results found in API response.');
       res.status(404).send('Not Found');
       return;
-      }
+    }
     } catch (error) {
       console.error('Error fetching data from API:', error);
       res.status(500).send('Internal Server Error');
@@ -157,7 +179,6 @@ app.get('/', (req, res) => {
     res.send(modifiedData);
   });
 });
-
 
 // Fallback route to serve index.html
 app.get('*', (req, res) => {

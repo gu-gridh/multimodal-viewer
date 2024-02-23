@@ -36,7 +36,7 @@
 
 html,
 body {
-    font-family: "Barlow Condensed", sans-serif !important;
+    font-family: "Sofia Sans Extra Condensed", sans-serif !important;
 }
 
 /* The title of the model */
@@ -164,7 +164,8 @@ h2 {
     color: white;
     text-align: center;
     padding: 10px 10px;
-    font-size: 1.0em;
+    font-size: 0.8em;
+    line-height:1.5;
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
 }
 
@@ -207,7 +208,7 @@ background-position:center;
     color: white;
     text-align: center;
     padding: 0px 20px 5px 20px;
-    font-size: 1.0em;
+    font-size: 0.8em;
     line-height:2.0;
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
 }

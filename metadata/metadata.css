@@ -8,6 +8,7 @@ body {
 	justify-content: center;
 	width: 100%;
 	overflow: hidden;
+	background-color:rgb(207,200, 195);
 }
 
 .container {
@@ -25,9 +26,9 @@ body {
 .metadata-inscription {
 	float:left;
 	border-radius: 8px;
-	width: calc(100% - 20px);
+	width: calc(100% - 40px);
 	margin-left: 0px;
-	background-color: rgb(240, 240, 240);
+	background-color:rgb(230,225, 225);
 	overflow: hidden;
 	padding: 20px;
 	margin-top:30px;

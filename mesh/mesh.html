@@ -21,8 +21,6 @@
 	<!--TRACKBALLS-->
 	<script type="text/javascript" src="js/trackball_turntable.js"></script>
 	<script type="text/javascript" src="js/trackball_turntable_pan.js"></script>
-	<script type="text/javascript" src="js/trackball_pantilt.js"></script>
-	<script type="text/javascript" src="js/trackball_sphere.js"></script>
 	<!--UTILITY-->
 	<script type="text/javascript" src="js/init.js"></script>
 
@@ -238,7 +236,7 @@
 	function onEndMeasure(measure) {
 		// measure.toFixed(2) sets the number of decimals when displaying the measure
 		// depending on the model measure units, use "mm","m","km" or whatever you have
-		$('#measure-output').html(measure.toFixed(2) + "cm");
+		$('#measure-output').html(measure.toFixed(2)*100 + " cm");
 	}
 	//--MEASURE--
 

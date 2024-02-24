@@ -7,7 +7,8 @@ body {
 	flex-direction: row;
 	justify-content: center;
 	width: 100%;
-	overflow: hidden;
+	height:100vh;
+	overflow: hidden!important;
 	background-color:rgb(207,200, 195);
 }
 
@@ -15,21 +16,22 @@ body {
 	height: calc(100vh - 160px) !important;
 	width: 100%;
 	padding: 60px 60px 20px 60px !important;
-	overflow: scroll;
 	overflow-x: hidden;
 }
 
 .metadata-panel {
 	float:left;
+
 }
 
 .metadata-inscription {
+	height: auto;
 	float:left;
 	border-radius: 8px;
 	width: calc(100% - 40px);
 	margin-left: 0px;
 	background-color:rgb(230,225, 225);
-	overflow: hidden;
+	overflow: auto;
 	padding: 20px;
 	margin-top:30px;
 	margin-bottom:30px;

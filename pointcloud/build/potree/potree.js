@@ -89630,8 +89630,8 @@ ENDSEC
 				}
 
 				let distance = viewer.scene.cameraP.position.distanceTo(position);
-				let radius = annotation.boundingBox.getBoundingSphere(new Sphere()).radius;
-
+				let radius = annotation.boundingBox.getBoundingSphere(new Sphere()).radius;			
+				
 				let screenPos = new Vector3();
 				let screenSize = 0;
 
@@ -89651,6 +89651,17 @@ ENDSEC
 					} else {
 						screenSize = Utils.projectedRadiusOrtho(radius, viewer.scene.cameraO.projectionMatrix, renderAreaSize.x, renderAreaSize.y);
 					}
+				}
+
+					//beginning of some logic to hide far away annotations. 
+				//But how to show them when getting closer?
+				if (distance < 5) {
+					element.css("backgroundColor", "rgba(180,50,50,0.5");
+					element.css("pointerEvents", "auto");
+				}
+				else {
+					element.css("backgroundColor", "rgba(180,50,50,0.05");
+					element.css("pointerEvents", "none");
 				}
 
 				element.css("left", screenPos.x + "px");
@@ -89686,6 +89697,8 @@ ENDSEC
 
 			});
 
+			
+
 			let notVisibleAnymore = new Set(this.visibleAnnotations);
 			for (let annotation of visibleNow) {
 				annotation.display = true;
@@ -89697,6 +89710,9 @@ ENDSEC
 			for (let annotation of notVisibleAnymore) {
 				annotation.display = false;
 			}
+
+
+			
 
 		}
 
@@ -90006,6 +90022,7 @@ ENDSEC
 
 				}
 			}
+			
 
 			TWEEN.update(timestamp);
 

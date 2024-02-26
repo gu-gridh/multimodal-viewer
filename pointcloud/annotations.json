@@ -549,6 +549,7 @@
          "uuid":"616D5BC8-2E86-43EE-90E3-4A599CC0CC7F",
          "title":"120-20",
          "description":"Annotation Description",
+         "annoVisibleDistance":1,
          "position":[
             -15.909603000435112,
             -17.500548999189377,

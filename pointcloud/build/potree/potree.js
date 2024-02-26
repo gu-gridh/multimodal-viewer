@@ -89653,8 +89653,9 @@ ENDSEC
 					}
 				}
 
-					//beginning of some logic to hide far away annotations. 
-				//But how to show them when getting closer?
+				// GRIDH: Some logic to hide far away annotations using their alpha value and pointer events.
+				// If we set display to none they bug out 
+		
 				if (distance < 5) {
 					element.css("backgroundColor", "rgba(180,50,50,0.5");
 					element.css("pointerEvents", "auto");

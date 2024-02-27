@@ -7,9 +7,9 @@ body {
 	flex-direction: row;
 	justify-content: center;
 	width: 100%;
-	height:100vh;
-	overflow: hidden!important;
-	background-color:rgb(230,225, 220);
+	height: 100vh;
+	overflow: hidden !important;
+	background-color: rgb(230, 225, 220);
 }
 
 .container {
@@ -20,21 +20,21 @@ body {
 }
 
 .metadata-panel {
-	float:left;
+	float: left;
 
 }
 
 .metadata-inscription {
 	height: auto;
-	float:left;
+	float: left;
 	border-radius: 8px;
 	width: calc(100% - 40px);
 	margin-left: 0px;
-	background-color:rgba(255,255, 255,0.9);
+	background-color: rgba(255, 255, 255, 0.9);
 	overflow: auto;
 	padding: 20px;
-	margin-top:30px;
-	margin-bottom:30px;
+	margin-top: 30px;
+	margin-bottom: 30px;
 }
 
 .metadata-inscription-close {
@@ -52,10 +52,10 @@ body {
 	pointer-events: auto;
 	z-index: 1000;
 	background-color: rgb(180, 100, 100);
-	background-image:url(../styles/close.png);
-	background-size:20px;
-	background-repeat:no-repeat;
-	background-position:center;
+	background-image: url(../styles/close.png);
+	background-size: 20px;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 .metadata-inscription-close:hover {
@@ -93,8 +93,6 @@ body {
 }
 
 
-
-
 .metadata-inscription-title {
 	letter-spacing: -0.0rem;
 	text-align: left;
@@ -118,29 +116,59 @@ body {
 
 .metadata-content {
 	padding: 0px 0px 10px 0px;
-	font-size: 2.8vw;
 	line-height: 1.2;
 	float: left;
 	width: 100%;
 }
-@media screen and (min-width: 1300px) {
-.metadata-content {
-	font-size: 1.8em;
-}
-}
-
-@media screen and (max-width: 700px) {
-	.metadata-content {
-		font-size: 1.3em;
-	}
-	}
-
 
 .metadata-item {
 	float: left;
 	margin-bottom: 5px;
 	margin-right: 35px;
+	font-size: 1.3em;
 }
+
+.metadata-description h1 {
+	font-weight: 200;
+	font-size: 1.5em;
+}
+
+.metadata-content .preview {
+	height: auto;
+	margin-top: 10px;
+	max-height: 100px;
+	padding-right: 10px;
+	overflow: hidden;
+	font-size: 90%;
+	mask-image: linear-gradient(180deg, #000 -30%, transparent);
+}
+
+
+@media screen and (min-width: 1050px) {
+	.metadata-panel-title {
+		font-size: 3.5em !important;
+		font-weight: 300;
+	}
+
+	.metadata-item {
+		font-size: 1.5em;
+	}
+
+	.metadata-inscription-title {
+
+		font-size: 2.5em;
+
+	}
+
+	.metadata-description h1 {
+		font-weight: 200;
+		font-size: 2em;
+	}
+}
+
+
+
+
 
 .metadata-content .label {
 	float: left;
@@ -167,20 +195,7 @@ body {
 	width: 100%;
 }
 
-.metadata-description h1 {
-	font-weight: 200;
-	font-size: 3.5vw;
-}
 
-.metadata-content .preview {
-	height: auto;
-	margin-top: 10px;
-	max-height: 100px;
-	padding-right: 10px;
-	overflow: hidden;
-	font-size: 90%;
-	mask-image: linear-gradient(180deg, #000 -30%, transparent);
-}
 
 
 .metadata-center-button {

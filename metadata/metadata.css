@@ -166,6 +166,24 @@ body {
 	}
 }
 
+@media screen and (max-width: 700px) {
+	.metadata-panel-title {
+		font-size: 2.5em !important;
+		font-weight: 300;
+	}
+
+	.metadata-inscription-title {
+
+		font-size: 1.8em;
+
+	}
+
+	.metadata-description h1 {
+		font-weight: 200;
+		font-size: 1.6em;
+	}
+}
+
 
 
 

@@ -141,9 +141,6 @@
                 // anno.updateSelected(selection, true);
             });
 
-
-
-
             // Load annotations in W3C WebAnnotation format
             anno.loadAnnotations('annotations.w3c.json');
 
@@ -167,7 +164,13 @@
             });
 
             anno.on('clickAnnotation', function (annotation, element) {
-                console.log('Annotation clicked:', annotation);
+                const annotationData = {
+                    type: 'annotationClick',
+                    value: annotation.body[0].value
+                };
+
+                //send a message to the parent window (index.html) with the annotation data
+                window.parent.postMessage(annotationData, "*");
             });
         };
 

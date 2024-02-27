@@ -172,6 +172,28 @@
     </script>
 
     <script>
+       window.addEventListener('message', function(event) {
+            if (event.data.type === 'annotationClick') {
+                updateMetadataContent(event.data.value);
+            }
+        }, false);
+
+        function updateMetadataContent(newContent) {
+            var iframe = document.getElementById('right-Iframe');
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            if (iframeDoc) {
+                // target the specific element to update its content
+                var inscriptionElement = iframeDoc.getElementById('inscription-title');
+                if (inscriptionElement) {
+                    //update the inscription element with newContent
+                    inscriptionElement.innerText = newContent;
+                }
+            } else {
+                console.error('Cannot access iframe document');
+            }
+        }
+
         function changeLeftViewer(viewerType) {
             var iframe = document.getElementById('left-Iframe');
             var currentUrl = new URL(iframe.src);

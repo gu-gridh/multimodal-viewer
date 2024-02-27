@@ -5,7 +5,7 @@
         "body": [
           {
             "type": "TextualBody",
-            "value": "test1",
+            "value": "Test Annotation 1",
             "purpose": "commenting"
           }
         ],
@@ -25,7 +25,7 @@
         "body": [
           {
             "type": "TextualBody",
-            "value": "test2",
+            "value": "Test Annotation 2",
             "purpose": "commenting"
           }
         ],

@@ -2735,6 +2735,470 @@
                0
             ],
             "children": []
+         },
+         {
+            "uuid": "4DA89B13-1A71-44BE-B679-E1D0E5A366BC",
+            "title": "112-01",
+            "description": "Annotation Description",
+            "position": [
+               -26.68312299929965,
+               -4.578489006532671,
+               1.3224540000685447
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "A6F52F11-D636-48DA-8986-41DC885AE396",
+            "title": "112-02",
+            "description": "Annotation Description",
+            "position": [
+               -26.775442999237065,
+               -3.9962489928951257,
+               1.261934009441375
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "F5D50FEB-FC0D-4DF4-A03B-0522A38ECE28",
+            "title": "112-03",
+            "description": "Annotation Description",
+            "position": [
+               -24.683123008964543,
+               -2.0328090013172684,
+               1.2112139891281126
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "B5FFF92A-4FC1-4483-98A4-D71D311800A5",
+            "title": "112-04",
+            "description": "Annotation Description",
+            "position": [
+               -24.164463002503396,
+               -2.0239090033974705,
+               1.1932339938964835
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "24D7284F-BDE7-4923-A6AD-7E0BDDCCE104",
+            "title": "112-05",
+            "description": "Annotation Description",
+            "position": [
+               -23.49442299272824,
+               -1.9128089928236065,
+               2.02739399898672
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "DC3D5583-D7FF-4421-9189-F0AB8E3C0777",
+            "title": "112-06",
+            "description": "Annotation Description",
+            "position": [
+               -23.322902998807912,
+               -1.2439690033617055,
+               1.191134003051757
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "30606229-69C4-4211-A341-68AFC9EDDCF9",
+            "title": "112-07",
+            "description": "Annotation Description",
+            "position": [
+               -23.341203003111367,
+               -0.7130289938488019,
+               1.1717340024795524
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "703FCF78-B7BA-4A72-A6F4-49B7398DD12E",
+            "title": "112-08",
+            "description": "Annotation Description",
+            "position": [
+               -21.16518300414849,
+               1.3254910095844323,
+               1.1693140100135802
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "338D7A39-28CC-40D4-836F-EE3D4CB9BEC6",
+            "title": "112-10",
+            "description": "Annotation Description",
+            "position": [
+               -19.937983006747253,
+               1.4482109969959325,
+               1.0940339984979621
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "C2CE6B0A-610A-47A0-B0AF-127512F85103",
+            "title": "112-09",
+            "description": "Annotation Description",
+            "position": [
+               -20.628522998462202,
+               1.3243110007152623,
+               1.1480340036239616
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "FF238F04-9C53-4946-8F5C-144162BC74AA",
+            "title": "112-40",
+            "description": "Annotation Description",
+            "position": [
+               -19.262242989891057,
+               -7.470969000047685,
+               1.2633340033378593
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "E5FDC020-1B9A-4CDA-B98D-E78CC68E7AFA",
+            "title": "112-38",
+            "description": "Annotation Description",
+            "position": [
+               -19.08512300548363,
+               -6.273889000211597,
+               2.0165940024318685
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "D66982F7-5582-4DA9-A457-2F9787E29C4D",
+            "title": "112-36",
+            "description": "Annotation Description",
+            "position": [
+               -17.868643006937987,
+               -6.148989003767014,
+               1.378053996888637
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "19E1253A-DCB0-48E5-9EEE-E507EEAEB40E",
+            "title": "112-39",
+            "description": "Annotation Description",
+            "position": [
+               -19.263743000381474,
+               -6.951348999547008,
+               1.3338539993294471
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "515ED3A6-089F-45A4-8DB8-FA25DA99B7FC",
+            "title": "112-37",
+            "description": "Annotation Description",
+            "position": [
+               -18.401782994087228,
+               -6.149789002408028,
+               1.4524539971628183
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "CE29C21E-8681-4026-926A-6851EF535BE9",
+            "title": "112-35",
+            "description": "Annotation Description",
+            "position": [
+               -15.767303001883505,
+               -4.184649000010104,
+               1.296234008916854
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "390A6758-44AD-4767-B878-0532B39587D2",
+            "title": "112-33",
+            "description": "Annotation Description",
+            "position": [
+               -15.58488299853969,
+               -2.978669000129635,
+               1.2692339989032737
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "82DC3155-6B24-4711-810D-9370CD855F29",
+            "title": "112-34",
+            "description": "Annotation Description",
+            "position": [
+               -15.759303000572203,
+               -3.6606289927520734,
+               1.2524339976396552
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "4604DCD9-79EC-47E8-B8E7-062B34CDB600",
+            "title": "112-32",
+            "description": "Annotation Description",
+            "position": [
+               -14.867642998164186,
+               -2.8840690015735575,
+               1.2360340031471244
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "13A08786-604B-463D-9DBE-81ABA373335C",
+            "title": "112-31",
+            "description": "Annotation Description",
+            "position": [
+               -14.401302999985106,
+               -2.8888690008702227,
+               1.2470339956369392
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "5FCBD437-7D2B-4194-99A0-FEA80601FAA8",
+            "title": "112-11",
+            "description": "Annotation Description",
+            "position": [
+               -13.447243001132492,
+               8.282370993228916,
+               1.446453999904632
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "EBE2F1F9-9977-45F5-AC88-4866C021E25F",
+            "title": "112-12",
+            "description": "Annotation Description",
+            "position": [
+               -13.309443000524524,
+               8.876011006127364,
+               1.1744340034809104
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "EF08066F-A8A4-43AC-8021-78B35BC46A1C",
+            "title": "112-13",
+            "description": "Annotation Description",
+            "position": [
+               -11.589642994277952,
+               10.563631000286101,
+               1.1374139915599821
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "A344C74C-0EDE-44D4-9916-BDDC7C805002",
+            "title": "112-15-21m",
+            "description": "Annotation Description",
+            "position": [
+               -8.11888300028312,
+               12.755770992656714,
+               0.7059139999940394
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "7AD166A9-0D63-4645-A8DA-125F52BE7295",
+            "title": "112-14",
+            "description": "Annotation Description",
+            "position": [
+               -10.212622999621516,
+               11.072350995088577,
+               0.7032940078678127
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "2D2846A0-1EB6-42A4-BA05-A21C04A0FC65",
+            "title": "112-22m",
+            "description": "Annotation Description",
+            "position": [
+               -4.673563000929832,
+               11.901811002574924,
+               0.9748140107288359
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "1354C372-A5B4-4F11-B814-C094EA119FF5",
+            "title": "112-24-28m",
+            "description": "Annotation Description",
+            "position": [
+               -3.7653030006437263,
+               9.11223100003577,
+               0.7646139989986418
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "D6391370-3F17-41B9-88B3-80301AF7CADA",
+            "title": "112-30",
+            "description": "Annotation Description",
+            "position": [
+               -8.442543000858308,
+               3.271111005054472,
+               1.0992140005722044
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
+         },
+         {
+            "uuid": "6E52A944-B81D-41D9-9C11-02AE9508B28F",
+            "title": "122-23s",
+            "description": "Annotation Description",
+            "position": [
+               -4.711463001740455,
+               11.321530999904631,
+               0.02143399551773051
+            ],
+            "offset": [
+               0,
+               0,
+               0
+            ],
+            "children": []
          }
    ],
    "orientedImages":[

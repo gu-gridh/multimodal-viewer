@@ -2,7 +2,7 @@ html,
 body {
 	margin: 0px;
 	padding: 0px;
-	font-family: "Sofia Sans Extra Condensed", sans-serif !important;
+	font-family: "Oswald", sans-serif !important;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -19,6 +19,10 @@ body {
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
+	/*box-shadow: inset 10px 0px 20px 0px rgb(0, 0, 0, 0.3); */
+}
+
+.border {
 }
 
 /* .metadata-panel {
@@ -33,6 +37,7 @@ body {
 	margin-top: 10%;
 	background-color: var(--color-4);
 	color: white;
+	font-size:1.0em;
 }
 
 .language-toggle-buttons button:hover {
@@ -103,8 +108,8 @@ body {
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 30px;
-	font-size: 5.5vw;
-	font-weight: 300;
+	font-size: 4.8vw;
+	font-weight: 200;
 }
 
 
@@ -113,14 +118,14 @@ body {
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 0px;
-	font-size: 4.5vw;
-	font-weight: 300;
+	font-size: 3.5vw;
+	font-weight: 200;
 }
 
 
 .metadata-subtitle {
 	letter-spacing: -0.0rem;
-	font-size: 2.6vw;
+	font-size: 2.0vw;
 	text-align: left;
 	width: calc(100%);
 	margin-bottom: 10px;
@@ -140,12 +145,13 @@ body {
 	float: left;
 	margin-bottom: 5px;
 	margin-right: 35px;
-	font-size: 1.3em;
+	font-size: 1.1em;
+	font-weight:200;
 }
 
 .metadata-description h1 {
 	font-weight: 200;
-	font-size: 1.5em;
+	font-size: 1.3em;
 }
 
 .metadata-content .preview {
@@ -162,7 +168,7 @@ body {
 @media screen and (min-width: 1050px) {
 	.metadata-panel-title {
 		font-size: 3.5em !important;
-		font-weight: 300;
+		font-weight: 200;
 	}
 
 	.metadata-item {
@@ -183,8 +189,8 @@ body {
 
 @media screen and (max-width: 700px) {
 	.metadata-panel-title {
-		font-size: 2.5em !important;
-		font-weight: 300;
+		font-size: 2.3em !important;
+		font-weight: 200;
 	}
 
 	.metadata-inscription-title {

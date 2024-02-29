@@ -1,9 +1,10 @@
 {
-  "inscriptions": "написи",
-  "topography": "топографія",
+  "panel": "Панель",
+  "inscriptions": "Hаписи",
+  "topography": "Tопографія",
   "surfacemodel": "Поверхневі моделі",
   "rti": "RTI",
-  "metadata": "метадані",
+  "metadata": "Mетадані",
   "spatialcontext": "Просторовий контекст",
   "language": "Мова",
   "room": "Кімната",

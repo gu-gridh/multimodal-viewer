@@ -143,13 +143,10 @@
             <div class="back-button"></div>
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0">
-                        Inscriptions</div>
-                    <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);">
-                        Topography</div>
-                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);">Surface
-                        Model</div>
-                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('relight');moduleSwitcherLeft(4);">RTI</div>
+                    <div class="ui-module-item left" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0"></div>
+                    <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
+                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
+                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('relight');moduleSwitcherLeft(4);"></div>
                 </div>
             </div>
 
@@ -159,9 +156,8 @@
         <div id="right-pane">
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item right" id="btn5" onclick="changeRightViewer('metadata');moduleSwitcherRight(5);" style="opacity:1.0">Metadata
-                    </div>
-                    <div class="ui-module-item right" id="btn6" onclick="changeRightViewer('pointcloud');moduleSwitcherRight(6);">Spatial Context</div>
+                    <div class="ui-module-item right" id="btn5" onclick="changeRightViewer('metadata');moduleSwitcherRight(5);" style="opacity:1.0"></div>
+                    <div class="ui-module-item right" id="btn6" onclick="changeRightViewer('pointcloud');moduleSwitcherRight(6);"></div>
                 </div>
             </div>
             <iframe id="right-Iframe" src="/metadata/metadata.html"
@@ -171,32 +167,46 @@
 
     <div id="footer-container"></div>
     <script>
-        $("#footer-container").load("styles/footer.html");
+        $(document).ready(function() {
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
+    
+            $("#footer-container").load("styles/footer.html");
 
-        i18next
-            .use(i18nextHttpBackend)
-            .init({
-                fallbackLng: 'en',
-                debug: true,
-                backend: {
-                    loadPath: '/locales/{{lng}}/translation.json',
-                },
-            }, function(err, t) {
-                if (err) return console.error('i18next initialization error:', err);
-                window.addEventListener('message', function(event) {
-                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                        i18next.changeLanguage(event.data.lang, function(err, t) {
-                            if (err) return console.log('Something went wrong loading', err);
-                            document.getElementById('btn1').textContent = t('inscriptions');
-                            document.getElementById('btn2').textContent = t('topography');
-                            document.getElementById('btn3').textContent = t('surfacemodel');
-                            document.getElementById('btn4').textContent = t('rti');
-                            document.getElementById('btn5').textContent = t('metadata');
-                            document.getElementById('btn6').textContent = t('spatialcontext');
-                        });
-                    }
-                }, false);
-            });
+            i18next
+                .use(i18nextHttpBackend)
+                .init({
+                    lng: savedLang,
+                    fallbackLng: 'en',
+                    backend: {
+                        loadPath: '/locales/{{lng}}/translation.json',
+                    },
+                }, function(err, t) {
+                    if (err) return console.error('i18next initialization error:', err);
+                    
+                    applyTranslations();
+    
+                    window.addEventListener('message', function(event) {
+                        if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                            i18next.changeLanguage(event.data.lang, function(err, t) {
+                                if (err) return console.log('Something went wrong loading', err);
+                                applyTranslations();
+                            });
+                        }
+                    }, false);
+                });
+    
+            function applyTranslations() {
+                if (typeof i18next.t === 'function') 
+                {
+                    document.getElementById('btn1').textContent = i18next.t('inscriptions');
+                    document.getElementById('btn2').textContent = i18next.t('topography');
+                    document.getElementById('btn3').textContent = i18next.t('surfacemodel');
+                    document.getElementById('btn4').textContent = i18next.t('rti');
+                    document.getElementById('btn5').textContent = i18next.t('metadata');
+                    document.getElementById('btn6').textContent = i18next.t('spatialcontext');
+                }
+            }
+        });
     </script>
 
     <script>

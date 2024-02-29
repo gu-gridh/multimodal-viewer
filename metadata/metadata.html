@@ -15,34 +15,43 @@
 <body>  
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
+    
             i18next.use(i18nextHttpBackend).init({
+                lng: savedLang,
                 fallbackLng: 'en',
-                debug: true,
                 backend: {
                     loadPath: '/locales/{{lng}}/translation.json',
                 },
             }, function(err, t) {
-                if (err) console.error("i18next initialization error:", err);
+                if (err) {
+                    console.error("i18next initialization error:", err);
+                    return;
+                }
+                updateTranslations(t);
             });
         });
-
+    
         function changeLanguage(lang) {
-            i18next.changeLanguage(lang).then(() => {
+            i18next.changeLanguage(lang, function(err, t) {
+                if (err) {
+                    console.error("Error changing language:", err);
+                    return;
+                }
                 window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
-                updateTranslations();
-            }).catch(error => {
-                console.error("Error changing language:", error);
+                localStorage.setItem('i18nextLang', lang);
+                updateTranslations(t);
             });
         }
-
-        function updateTranslations() {
-            document.getElementById('lang1').textContent = i18next.t('inscriptions');
-            document.getElementById('lang2').textContent = i18next.t('language');
-            document.getElementById('lang3').textContent = i18next.t('room');
-            document.getElementById('lang4').textContent = i18next.t('tags');
-            document.getElementById('lang5').textContent = i18next.t('documentation');
+    
+        function updateTranslations(t) {
+            document.getElementById('lang1').textContent = t('inscriptions');
+            document.getElementById('lang2').textContent = t('language');
+            document.getElementById('lang3').textContent = t('room');
+            document.getElementById('lang4').textContent = t('tags');
+            document.getElementById('lang5').textContent = t('documentation');
         }
-    </script>
+    </script>    
         
     <div class="container">
         <div class="metadata-text">
@@ -56,24 +65,24 @@
                 <div class="metadata-content">
 
                     <div class="metadata-item">
-                        <div class="label" id="lang1">Inscriptions:</div>
+                        <div class="label" id="lang1"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_INSCRIPTIONS</div>
                     </div>
 
 
                     <div class="metadata-item">
-                        <div class="label" id="lang2">Languages:</div>
+                        <div class="label" id="lang2"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_LANGUAGES</div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label" id="lang3">Room:</div>
+                        <div class="label" id="lang3"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_ROOM</div>
                     </div>
 
 
                     <div class="metadata-item">
-                        <div class="label" id="lang4">Tags:</div>
+                        <div class="label" id="lang4"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_TAGS</div>
                     </div>
 
@@ -144,7 +153,7 @@
 
             <div class="language-toggle-buttons" style="text-align: center;">
                 <button onclick="changeLanguage('en')">English</button>
-                <button onclick="changeLanguage('uk')">Yкраїнська</button>
+                <button onclick="changeLanguage('uk')">Ukranian</button>
             </div>
 
         </div>

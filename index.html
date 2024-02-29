@@ -15,6 +15,9 @@
     <script src="./pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="../styles/shared_styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <script src="https://unpkg.com/i18next/dist/umd/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <style>
         html,
         body {
@@ -135,7 +138,7 @@
 
 <body>
     <div id="main-content">
-
+     
         <div id="left-pane">
             <div class="back-button"></div>
             <div class="ui-module-container">
@@ -169,6 +172,31 @@
     <div id="footer-container"></div>
     <script>
         $("#footer-container").load("styles/footer.html");
+
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                fallbackLng: 'en',
+                debug: true,
+                backend: {
+                    loadPath: '/locales/{{lng}}/translation.json',
+                },
+            }, function(err, t) {
+                if (err) return console.error('i18next initialization error:', err);
+                window.addEventListener('message', function(event) {
+                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                        i18next.changeLanguage(event.data.lang, function(err, t) {
+                            if (err) return console.log('Something went wrong loading', err);
+                            document.getElementById('btn1').textContent = t('inscriptions');
+                            document.getElementById('btn2').textContent = t('topography');
+                            document.getElementById('btn3').textContent = t('surfacemodel');
+                            document.getElementById('btn4').textContent = t('rti');
+                            document.getElementById('btn5').textContent = t('metadata');
+                            document.getElementById('btn6').textContent = t('spatialcontext');
+                        });
+                    }
+                }, false);
+            });
     </script>
 
     <script>

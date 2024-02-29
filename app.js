@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
-
 const app = express();
 
 /*
@@ -164,6 +163,7 @@ app.use('/relight', express.static(path.join(__dirname, 'relight')));
 app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/metadata', express.static(path.join(__dirname, 'metadata')));
+app.use('/locales', express.static(path.join(__dirname, 'locales')));
 
 app.get('/', (req, res) => {
   const queryName = req.query.q || 'default';

@@ -17,11 +17,26 @@ body {
 	width: 100%;
 	padding: 60px 60px 20px 60px !important;
 	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
-.metadata-panel {
+/* .metadata-panel {
 	float: left;
 
+} */
+
+.language-toggle-buttons button {
+	border-radius: 5px;
+	border-width: 0px;
+	padding: 8px 20px;
+	margin-top: 10%;
+	background-color: var(--color-4);
+	color: white;
+}
+
+.language-toggle-buttons button:hover {
+	background-color: var(--color-5);
 }
 
 .metadata-inscription {

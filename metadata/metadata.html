@@ -14,9 +14,41 @@
 
 <body>  
     <script>
+        function updateTranslations(t) {
+            document.getElementById('lang0').textContent = t('panel');
+            document.getElementById('lang1').textContent = t('inscriptions');
+            document.getElementById('lang2').textContent = t('language');
+            document.getElementById('lang3').textContent = t('room');
+            document.getElementById('lang4').textContent = t('tags');
+            document.getElementById('lang5').textContent = t('documentation');
+        }
+    
+        function setButtonLabel(language) {
+            document.getElementById('languageButton').textContent = language === 'uk' ? 'English' : 'Українською';
+        }
+    
+        function changeLanguage(lang) {
+            i18next.changeLanguage(lang, function(err, t) {
+                if (err) {
+                    console.error("Error changing language:", err);
+                    return;
+                }
+                window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
+                localStorage.setItem('i18nextLang', lang);
+                setButtonLabel(lang);
+                updateTranslations(t);
+            });
+        }
+    
+        function toggleLanguage() {
+            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';        
+            currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
+            changeLanguage(currentLanguage);
+        }
+    
         document.addEventListener('DOMContentLoaded', function() {
             const savedLang = localStorage.getItem('i18nextLang') || 'en';
-    
+        
             i18next.use(i18nextHttpBackend).init({
                 lng: savedLang,
                 fallbackLng: 'en',
@@ -28,40 +60,20 @@
                     console.error("i18next initialization error:", err);
                     return;
                 }
+                setButtonLabel(savedLang);
                 updateTranslations(t);
             });
         });
-    
-        function changeLanguage(lang) {
-            i18next.changeLanguage(lang, function(err, t) {
-                if (err) {
-                    console.error("Error changing language:", err);
-                    return;
-                }
-                window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
-                    localStorage.setItem('i18nextLang', lang);
-                    document.getElementById('englishbutton').visibility = 'hidden';
-                    updateTranslations(t);
-            });
-        }
-    
-        function updateTranslations(t) {
-            document.getElementById('lang0').textContent = t('panel');
-            document.getElementById('lang1').textContent = t('inscriptions');
-            document.getElementById('lang2').textContent = t('language');
-            document.getElementById('lang3').textContent = t('room');
-            document.getElementById('lang4').textContent = t('tags');
-            document.getElementById('lang5').textContent = t('documentation');
-        }
-    </script>    
+    </script>
+      
         
     <div class="container">
         <div class="border"></div>
 
-        <div class="language-toggle-buttons" style="">
-            <button id="englishbutton" onclick="changeLanguage('en')">English</button>
-            <button id="ukrainianbutton" onclick="changeLanguage('uk')">Українською</button>
+        <div class="language-toggle-buttons">
+            <button id="languageButton" onclick="toggleLanguage()"></button>
         </div>
+        
         <div class="metadata-text">
             <div class="metadata-panel">
 

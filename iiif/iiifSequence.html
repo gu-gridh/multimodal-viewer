@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IIIF Image Viewer</title>
+    <link rel="stylesheet" href="iiif.css">
+    <link rel="stylesheet" href="annotorious.css">
+    <link rel="stylesheet" href="../styles/shared_styles.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
+    <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+    <script type="text/javascript" src="../mesh/js/jquery.js"></script>
+</head>
+
+<body>
+    <!-- Container for OpenSeadragon -->
+    <div id="openseadragon" style="width: 100%; height: calc(100vh - 80px); background-color:black"></div>
+    <!-- <button onclick="viewAnnotations()">View Annotations</button>
+        <div id="annotationsJson" style="white-space: pre;"></div> -->
+
+    <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+
+        <div id="instructions" style="bottom:100px; width:255px; display:none;">
+            <div class="instruction-closer" onclick="$('#instructions').hide();"></div>
+            Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.
+        </div>
+    </div>
+
+    <!--confirm annotation-->
+    <div id="savePopup" class="popup">
+        <div class="popup-content">
+            <p>Are you satisfied with the selection?</p>
+            <button id="saveYes">It is correct</button>
+            <button id="saveNo">Redo the selection</button>
+        </div>
+    </div>
+
+    <div class="interface-area">
+        <div id="ToolbarHorizontal">
+      
+            <a id="prev-button">
+              <div id="Prev" class="NavButton"></div>
+            </a>             
+            <a id="next-button">
+              <div id="Next" class="NavButton"></div>
+            </a>
+          </div>
+        <div id="ToolbarBottom">
+
+            <a id="home" href="#home">
+                <div id="Home" class="NavButton"></div>
+            </a>
+
+            <a id="zoom-in" href="#zoom-in">
+                <div id="ZoomIn" class="NavButton"></div>
+            </a>
+            <a id="zoom-out" href="#zoom-out">
+                <div id="ZoomOut" class="NavButton"></div>
+            </a>
+            <a id="full-page" href="#full-page">
+                <div id="FullPage" class="NavButton"></div>
+            </a>
+            <div class="NavButton" style="width:85px; line-height:2.0" onclick="$('#instructions').show();">Add
+                inscription</div>
+
+        </div>
+    </div>
+
+    <script>
+        var anno;
+
+        function saveViewerState(viewer) {
+            var zoomLevel = viewer.viewport.getZoom();
+            var centerPoint = viewer.viewport.getCenter();
+            var state = {
+                zoom: zoomLevel,
+                center: { x: centerPoint.x, y: centerPoint.y }
+            };
+            localStorage.setItem('viewerState', JSON.stringify(state));
+        }
+
+        function getSavedViewerState() {
+            var state = localStorage.getItem('viewerState');
+            return state ? JSON.parse(state) : null;
+        }
+
+        window.onload = function () {
+            var savedState = getSavedViewerState();
+
+            var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
+            var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
+
+            var viewer = OpenSeadragon({
+                id: "openseadragon",
+                prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
+                tileSources: tileSources,
+                immediateRender: false,
+                visibilityRatio: 1.0,
+                minZoomImageRatio: 0.85,
+                homeFillsViewer: false,
+                showZoomControl: true,
+                showHomeControl: true,
+                showFullPageControl: true,
+                showNavigator: true,
+                navigatorAutoFade: true,
+                sequenceMode: true,
+                fullPageButton: "full-page",
+                zoomInButton: "zoom-in",
+                zoomOutButton: "zoom-out",
+                nextButton: "next-button",
+                previousButton: "prev-button",
+                homeButton: "home",
+            });
+
+            viewer.addHandler('open', function() {
+                if (savedState) {
+                    viewer.viewport.zoomTo(savedState.zoom);
+                    viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
+                }
+            });
+
+            viewer.addHandler('viewport-change', function() {
+                saveViewerState(viewer);
+            });
+
+            // Initialize the Annotorious plugin
+            anno = OpenSeadragon.Annotorious(viewer, {
+                // Additional configuration options
+                disableEditor: true
+
+            });
+
+            anno.on('createSelection', async function (selection) {
+
+                // Tag to insert
+                selection.body = [{
+                    type: 'TextualBody',
+                    purpose: 'tagging',
+                    value: 'MyTag'
+                }];
+
+                // Step 3: update the selection and save it
+                // Remember that .updateSelected is an async function!
+                // You need to wait until it completes before saving
+                await anno.updateSelected(selection);
+                anno.saveSelected();
+
+                // Alternative:
+                // anno.updateSelected(selection, true);
+            });
+
+            // Load annotations in W3C WebAnnotation format
+            anno.loadAnnotations('annotations.w3c.json');
+
+            // Attach handlers to listen to events
+            anno.on('createAnnotation', function (annotation) {
+                // Show the popup
+                document.getElementById('savePopup').style.display = 'block';
+                document.getElementById('instructions').style.display = 'none';
+
+                // Handle Yes button click
+                document.getElementById('saveYes').onclick = function() {
+                    console.log('Annotation coordinates:', annotation.target.selector.value);
+                    document.getElementById('savePopup').style.display = 'none';
+                };
+
+                // Handle No button click
+                document.getElementById('saveNo').onclick = function() {
+                    anno.removeAnnotation(annotation.id);
+                    document.getElementById('savePopup').style.display = 'none';
+                };
+            });
+
+            anno.on('clickAnnotation', function (annotation, element) {
+                const annotationData = {
+                    type: 'annotationClick',
+                    value: annotation.body[0].value
+                };
+
+                //send a message to the parent window (index.html) with the annotation data
+                window.parent.postMessage(annotationData, "*");
+            });
+        };
+
+        // function viewAnnotations() {
+        //     var annotations = anno.getAnnotations();
+        //     var annotationsJson = JSON.stringify(annotations, null, 2); // Pretty print the JSON
+
+        //     console.log(annotationsJson); // Log to console
+
+        //     // Alternatively, display in an element on the page
+        //     document.getElementById('annotationsJson').textContent = annotationsJson;
+        // }
+    </script>
+</body>
+</html>

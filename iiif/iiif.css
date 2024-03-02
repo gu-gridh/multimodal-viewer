@@ -98,8 +98,8 @@ body {
 	  #Prev, #Next {
 		position: relative; 
 		width: 30px;
-		height: 30px;
-		background-size: contain;
+		height: 20px;
+		background-size: 35px!important;
 		background-repeat: no-repeat;
 		background-position: center;
 		cursor: pointer;

@@ -41,14 +41,14 @@
 
     <div class="interface-area">
         <div id="ToolbarHorizontal">
-      
-            <a id="prev-button">
-              <div id="Prev" class="NavButton"></div>
-            </a>             
-            <a id="next-button">
-              <div id="Next" class="NavButton"></div>
+
+            <a id="prev-button" onclick="updateViewerState()">
+                <div id="Prev" class="NavButton"></div>
             </a>
-          </div>
+            <a id="next-button" onclick="updateViewerState()">
+                <div id="Next" class="NavButton"></div>
+            </a>
+        </div>
         <div id="ToolbarBottom">
 
             <a id="home" href="#home">
@@ -71,7 +71,8 @@
     </div>
 
     <script>
-        var anno;
+        //var anno;
+
 
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
@@ -106,6 +107,7 @@
                 showHomeControl: true,
                 showFullPageControl: true,
                 showNavigator: true,
+                preserveViewport: true,
                 navigatorAutoFade: true,
                 sequenceMode: true,
                 fullPageButton: "full-page",
@@ -114,76 +116,77 @@
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 homeButton: "home",
+
             });
 
-            viewer.addHandler('open', function() {
+            viewer.addHandler('open', function () {
                 if (savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }
             });
 
-            viewer.addHandler('viewport-change', function() {
+            viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
 
-            // Initialize the Annotorious plugin
-            anno = OpenSeadragon.Annotorious(viewer, {
-                // Additional configuration options
-                disableEditor: true
+            /*    // Initialize the Annotorious plugin
+               anno = OpenSeadragon.Annotorious(viewer, {
+                   // Additional configuration options
+                   disableEditor: true
+   
+               }); */
 
-            });
-
-            anno.on('createSelection', async function (selection) {
-
-                // Tag to insert
-                selection.body = [{
-                    type: 'TextualBody',
-                    purpose: 'tagging',
-                    value: 'MyTag'
-                }];
-
-                // Step 3: update the selection and save it
-                // Remember that .updateSelected is an async function!
-                // You need to wait until it completes before saving
-                await anno.updateSelected(selection);
-                anno.saveSelected();
-
-                // Alternative:
-                // anno.updateSelected(selection, true);
-            });
+            /*  anno.on('createSelection', async function (selection) {
+ 
+                 // Tag to insert
+                 selection.body = [{
+                     type: 'TextualBody',
+                     purpose: 'tagging',
+                     value: 'MyTag'
+                 }];
+ 
+                 // Step 3: update the selection and save it
+                 // Remember that .updateSelected is an async function!
+                 // You need to wait until it completes before saving
+                 await anno.updateSelected(selection);
+                 anno.saveSelected();
+ 
+                 // Alternative:
+                 // anno.updateSelected(selection, true);
+             }); */
 
             // Load annotations in W3C WebAnnotation format
-            anno.loadAnnotations('annotations.w3c.json');
+            //anno.loadAnnotations('annotations.w3c.json');
 
             // Attach handlers to listen to events
-            anno.on('createAnnotation', function (annotation) {
-                // Show the popup
-                document.getElementById('savePopup').style.display = 'block';
-                document.getElementById('instructions').style.display = 'none';
+            /*     anno.on('createAnnotation', function (annotation) {
+                    // Show the popup
+                    document.getElementById('savePopup').style.display = 'block';
+                    document.getElementById('instructions').style.display = 'none';
+    
+                    // Handle Yes button click
+                    document.getElementById('saveYes').onclick = function() {
+                        console.log('Annotation coordinates:', annotation.target.selector.value);
+                        document.getElementById('savePopup').style.display = 'none';
+                    };
+    
+                    // Handle No button click
+                    document.getElementById('saveNo').onclick = function() {
+                        anno.removeAnnotation(annotation.id);
+                        document.getElementById('savePopup').style.display = 'none';
+                    };
+                }); */
 
-                // Handle Yes button click
-                document.getElementById('saveYes').onclick = function() {
-                    console.log('Annotation coordinates:', annotation.target.selector.value);
-                    document.getElementById('savePopup').style.display = 'none';
-                };
+            /*   anno.on('clickAnnotation', function (annotation, element) {
+                  const annotationData = {
+                      type: 'annotationClick',
+                      value: annotation.body[0].value
+                  }; */
 
-                // Handle No button click
-                document.getElementById('saveNo').onclick = function() {
-                    anno.removeAnnotation(annotation.id);
-                    document.getElementById('savePopup').style.display = 'none';
-                };
-            });
-
-            anno.on('clickAnnotation', function (annotation, element) {
-                const annotationData = {
-                    type: 'annotationClick',
-                    value: annotation.body[0].value
-                };
-
-                //send a message to the parent window (index.html) with the annotation data
-                window.parent.postMessage(annotationData, "*");
-            });
+            //send a message to the parent window (index.html) with the annotation data
+            //window.parent.postMessage(annotationData, "*");
+       
         };
 
         // function viewAnnotations() {
@@ -197,4 +200,5 @@
         // }
     </script>
 </body>
+
 </html>

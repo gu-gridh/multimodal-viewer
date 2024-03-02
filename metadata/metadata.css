@@ -37,7 +37,8 @@ body {
 	margin-top: 0px;
 	background-color: var(--color-4);
 	color: white;
-	font-size:1.0em;
+	font-size:0.8em;
+	font-weight:200;
 }
 
 .language-toggle-buttons button:hover {

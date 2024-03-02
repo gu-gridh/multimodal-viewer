@@ -7,6 +7,12 @@ body {
 	width:100%;
 }
 
+#openseadragon.fullpage {
+	height: calc(100vh - 80px) !important;
+	width: calc(100%) !important;
+	z-index:10000!important;
+  }
+
 #navigatorDiv{
 	position:absolute;
 	  width:80px;

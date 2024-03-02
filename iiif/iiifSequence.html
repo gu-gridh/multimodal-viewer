@@ -16,28 +16,38 @@
     <script type="text/javascript" src="../mesh/js/jquery.js"></script>
 </head>
 
+<style>
+    #currentpage{
+        font-family:"Oswald", sans-serif!important;
+        color:white;
+        font-size:0.8em!important;
+        font-weight:100;
+
+    }
+</style>
+
 <body>
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh - 80px); background-color:black"></div>
     <!-- <button onclick="viewAnnotations()">View Annotations</button>
         <div id="annotationsJson" style="white-space: pre;"></div> -->
 
-    <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+   <!--  <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
 
         <div id="instructions" style="bottom:100px; width:255px; display:none;">
             <div class="instruction-closer" onclick="$('#instructions').hide();"></div>
             Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.
         </div>
     </div>
-
+ -->
     <!--confirm annotation-->
-    <div id="savePopup" class="popup">
+  <!--   <div id="savePopup" class="popup">
         <div class="popup-content">
             <p>Are you satisfied with the selection?</p>
             <button id="saveYes">It is correct</button>
             <button id="saveNo">Redo the selection</button>
         </div>
-    </div>
+    </div> -->
 
     <div class="interface-area">
         <div id="ToolbarHorizontal">
@@ -45,6 +55,7 @@
             <a id="prev-button" onclick="updateViewerState()">
                 <div id="Prev" class="NavButton"></div>
             </a>
+            <span id="currentpage">1 of 3</span>
             <a id="next-button" onclick="updateViewerState()">
                 <div id="Next" class="NavButton"></div>
             </a>
@@ -64,16 +75,16 @@
             <a id="full-page" href="#full-page">
                 <div id="FullPage" class="NavButton"></div>
             </a>
-            <div class="NavButton" style="width:85px; line-height:2.0" onclick="$('#instructions').show();">Add
-                inscription</div>
-
+        
         </div>
     </div>
 
     <script>
         //var anno;
 
-
+        OpenSeadragon.supportsFullScreen = false;
+        OpenSeadragon.supportsFullPage = true;
+        
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
@@ -129,6 +140,12 @@
             viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
+
+            viewer.addHandler("page", function (data) {
+                    document.getElementById("currentpage").innerHTML = ( data.page + 1 ) + " of 3";
+                    currentPage=data.page;
+                    getPage(currentPage+1);
+                });
 
             /*    // Initialize the Annotorious plugin
                anno = OpenSeadragon.Annotorious(viewer, {

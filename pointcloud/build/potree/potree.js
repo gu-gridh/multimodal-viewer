@@ -79398,7 +79398,7 @@ ENDSEC
 			// DISTANCE
 			elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/distance.svg',
-				'Measure the distance between points',
+				'',
 				() => {
 					$('#menu_measurements').next().slideDown();
 					let measurement = this.measuringTool.startInsertion({
@@ -79416,9 +79416,9 @@ ENDSEC
 			));
 
 			// HEIGHT
-			elToolbar.append(this.createToolIconExpanded(
+			 elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/height.svg',
-				'Measure the height between points',
+				'',
 				() => {
 					$('#menu_measurements').next().slideDown();
 					let measurement = this.measuringTool.startInsertion({
@@ -79435,12 +79435,12 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			));
+			)); 
 
 			// CIRCLE
-			elToolbar.append(this.createToolIconExpanded(
+		 	elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/circle.svg',
-				'Measure the radius of a circular area',
+				'',
 				() => {
 					$('#menu_measurements').next().slideDown();
 					let measurement = this.measuringTool.startInsertion({
@@ -79459,12 +79459,12 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			));
+			)); 
 
 			// AZIMUTH
-			elToolbar.append(this.createToolIconExpanded(
+		 	elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/azimuth.svg',
-				'Measure the azimuth of a circular area',
+				'',
 				() => {
 					$('#menu_measurements').next().slideDown();
 					let measurement = this.measuringTool.startInsertion({
@@ -79484,8 +79484,9 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			));
+			)); 
 
+			/* 
 			// AREA
 			elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/area.svg',
@@ -79523,7 +79524,7 @@ ENDSEC
 			// SPHERE VOLUME
 			elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/sphere_distances.svg',
-				'Measure an area volume with a sphere',
+				'',
 				() => {
 					let volume = this.volumeTool.startInsertion({ type: SphereVolume });
 
@@ -79532,9 +79533,9 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			));
-
-			// PROFILE
+			)); 
+*/
+		/* 	// PROFILE
 			elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/profile.svg',
 				'Highlight a profile',
@@ -79547,10 +79548,10 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			));
+			)); */
 
 			// ANNOTATION
-			elToolbar.append(this.createToolIconExpanded(
+		/* 	elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/annotation.svg',
 				'Annotate the model',
 				() => {
@@ -79562,19 +79563,19 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			));
+			)); */
 
 			// REMOVE ALL
 			elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/reset_tools.svg',
-				'Remove all measurements',
+				'',
 				() => {
 					this.viewer.scene.removeAllMeasurements();
 				}
 			));
 
 
-			{ // SHOW / HIDE Measurements
+			/* { // SHOW / HIDE Measurements
 				let elShow = $("#measurement_options_show");
 				elShow.selectgroup({ title: "Show/Hide labels" });
 
@@ -79585,7 +79586,7 @@ ENDSEC
 
 				let currentShow = this.measuringTool.showLabels ? "SHOW" : "HIDE";
 				elShow.find(`input[value=${currentShow}]`).trigger("click");
-			}
+			} */
 		}
 
 		initScene() {

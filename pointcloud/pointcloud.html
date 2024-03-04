@@ -22,6 +22,13 @@
 	<link rel="stylesheet" href="/styles/shared_styles.css">
 </head>
 
+<style>
+	#tools {
+		display: flex;
+		justify-content: center;
+	}
+</style>
+
 
 <body>
 	<!-- JavaScript files -->
@@ -76,7 +83,7 @@
 
 		viewer.setDescription("");
 
-		
+
 
 		async function loadAnnotations() {
 			const response = await fetch('annotations.json');
@@ -124,11 +131,11 @@
 				let material = e.pointcloud.material;
 				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 				// material.activeAttributeName = "elevation";
-				
-				
+
+
 				/* The size of the voxels (smaller = sharper) */
 				material.size = 0.8;
-				
+
 				/* The shape of the voxels */
 				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 				material.shape = Potree.PointShape.CIRCLE;
@@ -161,7 +168,7 @@
 	</div>
 	<!-- Here we can have a floating div with instructions on how to navigate -->
 
-	<div class="ui-overlay-container" style="position:absolute; bottom:110px;">
+	<div class="ui-overlay-container" style="position:absolute; bottom:150px;">
 		<div id="instructions" class="short">
 			<div class="instruction-closer" onclick="$('#instructions').hide();"></div>
 			Click-and-drag to change direction. <br>
@@ -170,10 +177,16 @@
 		</div>
 	</div>
 
-	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:80px; z-index:1000; color:white">
+
+	
+	<div class="ui-overlay-container" style="position:absolute; bottom:90px;">
+	<div id="tools" class="LODtool" style="height:40px; bottom:10px; position:relative; width:370px;  z-index:1000; pointer-events:auto;"></div>
+</div>
+
+	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:140px; z-index:1000; color:white">
 		<div class="LODtool" id="point-sliders">
 			<span>Point Size:</span> <span id="lblPointSize"></span>
-		<div id="sldPointSize"></div>
+			<div id="sldPointSize"></div>
 			<span>Max points:</span> <span id="lblPointBudget"></span>
 			<div id="sldPointBudget"></div>
 		</div>

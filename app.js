@@ -217,7 +217,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
-const PORT = 8094;
+const PORT = 8095;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

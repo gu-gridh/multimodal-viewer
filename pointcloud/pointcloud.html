@@ -183,12 +183,11 @@
 	</div>
 	<!-- Here we can have a floating div with instructions on how to navigate -->
 
-	<div class="ui-overlay-container" style="position:absolute; bottom:100px;">
-		<div id="instructions" class="short">
-			<div class="instruction-closer" onclick="$('#instructions').hide();"></div>
-			Click-and-drag to change direction. <br>
-			Move with WASD- or Arrow-keys, or Double-click. <br>
-			Right-click-and-drag to pan.
+	<div class="ui-overlay-container" style="position:absolute; bottom:100px; ">
+		<div id="instructions" class="" style="width:360px; padding:15px 10px;">
+			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
+			Click-and-drag to change direction. Move with WASD- <br>
+			or Arrow-keys, or Double-click. Right-click-and-drag to pan.
 		</div>
 	</div>
 
@@ -201,8 +200,8 @@
 			<div id="quality">
 				
 					<selectgroup id="splat_quality_options" style="width:100px;">
-						<option id="splat_quality_options_standard" value="standard">LQ</option>
-						<option id="splat_quality_options_hq" value="hq">HQ</option>
+						<option id="splat_quality_options_standard left" value="standard">LQ</option>
+						<option id="splat_quality_options_hq right" value="hq">HQ</option>
 					</selectgroup>
 				
 			</div>
@@ -211,11 +210,11 @@
 
 	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:130px; z-index:1000; color:white;">
 		<div class="LODtool" id="point-sliders" style="width:340px;"">
-			<div style=" width:calc(50% - 5px); float:left; padding-right:5px;">
+			<div style=" width:calc(50% - 10px); float:left; padding-right:10px;">
 			<span>Point Size:</span> <span id="lblPointSize"></span>
 			<div id="sldPointSize"></div>
 		</div>
-		<div style="width:calc(50% - 5px); float:left; padding-left:5px;">
+		<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
 			<span>Max points:</span> <span id="lblPointBudget"></span>
 			<div id="sldPointBudget"></div>
 		</div>

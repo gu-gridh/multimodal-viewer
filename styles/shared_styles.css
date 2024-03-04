@@ -134,6 +134,18 @@ h2 {
     margin-bottom: 10px;
 }
 
+
+.button-icon {
+   width: 25px !important;
+   height:25px!important;
+   opacity:0.8;
+}
+
+.button-icon:hover {
+    opacity:1.0;
+ }
+
+
 .tool-item h2 {
     padding-top: 0px;
     padding-left: 20px;
@@ -294,11 +306,19 @@ border-radius:50% !important;
     .ui-state-active{
         color:rgb(0, 213, 250)!important;
         font-weight:600!important;
-        border-radius:5px!important;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
         transform:scale(1.03);
         z-index:20!important;
     }
+
+    #splat_quality_options .left{
+        border-radius:5px 0px 0px 5px!important;
+    }
+
+    #splat_quality_options .right{
+        border-radius:0px 5px 5px 0px!important;
+    }
+
 
     .ui-state-active:hover{
         font-weight:600!important;

@@ -166,25 +166,25 @@ body {
 }
 
 
-@media screen and (min-width: 1050px) {
+@media screen and (min-width: 900px) {
 	.metadata-panel-title {
-		font-size: 3.5em !important;
+		font-size: 3.0em !important;
 		font-weight: 200;
 	}
 
 	.metadata-item {
-		font-size: 1.5em;
+		font-size: 1.2em;
 	}
 
 	.metadata-inscription-title {
 
-		font-size: 2.5em;
+		font-size: 2.0em;
 
 	}
 
 	.metadata-description h1 {
 		font-weight: 200;
-		font-size: 2em;
+		font-size: 1.5em;
 	}
 }
 

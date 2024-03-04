@@ -291,16 +291,13 @@ border-radius:50% !important;
     border-radius:50% !important;
     }
 
-
     .ui-state-active{
-        color:rgb(0, 113, 150)!important;
+        color:rgb(0, 213, 250)!important;
         font-weight:600!important;
         border-radius:5px!important;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
         transform:scale(1.03);
         z-index:20!important;
-        border-style:none!important;
-        border-width:0px!important;
     }
 
     .ui-state-active:hover{
@@ -309,8 +306,12 @@ border-radius:50% !important;
 
     .ui-state-default{
         border-style:none!important;
+    }
 
-
+    #splat_quality_options .ui-state-default{
+        border-style:none!important;
+        background-color:rgb(50,50,50)!important;
+        color:white;
     }
 
 

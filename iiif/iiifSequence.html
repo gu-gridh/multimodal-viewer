@@ -101,6 +101,7 @@
         }
 
         window.onload = function () {
+            var isInitialLoad = true;
             var savedState = getSavedViewerState();
 
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
@@ -131,9 +132,10 @@
             });
 
             viewer.addHandler('open', function () {
-                if (savedState) {
+                if (isInitialLoad && savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
+                    isInitialLoad = false;
                 }
             });
 

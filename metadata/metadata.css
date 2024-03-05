@@ -105,12 +105,15 @@ body {
 }
 
 .metadata-panel-title {
+	font-family: "Alumni Sans Pinstripe", sans-serif !important;
 	letter-spacing: -0.0rem;
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 30px;
 	font-size: 4.8vw;
-	font-weight: 200;
+	font-weight: 500;
+	
+	
 }
 
 

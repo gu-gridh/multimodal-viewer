@@ -74,7 +74,7 @@ app.get('/pointcloud/pointcloud.html', async (req, res) => {
 });
 
 app.get('/iiif/iiifSequence.html', async (req, res) => {  
-  const { q: queryName } = req.query; 
+  const { q: queryName } = req.query;
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
@@ -89,12 +89,15 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
     const modelData = apiResponse.data.features;
 
     if (modelData.length > 0 && modelData[0].properties.attached_topography) {
-      const basePath = "https://img.dh.gu.se/saintsophia/static/";
-      const topographyImages = modelData[0].properties.attached_topography.map(topography => `${basePath}${topography.iiif_file}/info.json`);
+      const basePathIiif = "https://img.dh.gu.se/saintsophia/static/";
+      const basePathJpg = "https://data.dh.gu.se/saintsophia/static/";
+
+      const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
+      const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathJpg}${topography.file}`);
       
       const htmlContent = fs.readFileSync(path.join(__dirname, 'iiif', 'iiifSequence.html'), 'utf8');
-
-      const updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImages));
+      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif));
+      updatedHtmlContent = updatedHtmlContent.replace('PLACEHOLDER_JPG_IMAGE_URLS', JSON.stringify(topographyImagesJpg));
 
       res.send(updatedHtmlContent);
     } else {

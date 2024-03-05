@@ -52,11 +52,11 @@
     <div class="interface-area">
         <div id="ToolbarHorizontal">
 
-            <a id="prev-button" onclick="updateViewerState()">
+            <a id="prev-button">
                 <div id="Prev" class="NavButton"></div>
             </a>
             <span id="currentpage">1 of 3</span>
-            <a id="next-button" onclick="updateViewerState()">
+            <a id="next-button">
                 <div id="Next" class="NavButton"></div>
             </a>
         </div>
@@ -75,13 +75,14 @@
             <a id="full-page" href="#full-page">
                 <div id="FullPage" class="NavButton"></div>
             </a>
-        
+            <a id="download" target="_blank">
+                <div id="Download" class="NavButton"></div>
+            </a>
         </div>
     </div>
 
     <script>
         //var anno;
-
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
         
@@ -106,6 +107,17 @@
 
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
             var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
+
+            function getPageUrl(pageIndex) {
+                var baseImageUrl = "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif";
+                var imageId = tileSources[pageIndex].split('/')[7];
+                return `${baseImageUrl}/${imageId}/full/full/0/default.jpg`;
+            }
+
+            function updateDownloadLink(pageIndex) {
+                var downloadLink = document.getElementById("download");
+                downloadLink.href = getPageUrl(pageIndex);
+            }
 
             var viewer = OpenSeadragon({
                 id: "openseadragon",
@@ -144,10 +156,10 @@
             });
 
             viewer.addHandler("page", function (data) {
-                    document.getElementById("currentpage").innerHTML = ( data.page + 1 ) + " of 3";
-                    currentPage=data.page;
-                    getPage(currentPage+1);
-                });
+                var pageIndex = data.page; 
+                document.getElementById("currentpage").innerHTML = (pageIndex + 1) + " of " + tileSources.length;
+                updateDownloadLink(pageIndex); 
+            });
 
             /*    // Initialize the Annotorious plugin
                anno = OpenSeadragon.Annotorious(viewer, {

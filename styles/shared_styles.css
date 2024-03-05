@@ -80,6 +80,29 @@ body {
     background-color:var(--color-5);
 }
 
+/* A common download button for all medi acategories */
+
+.download-button{
+    background: url(interface/downloadbutton.png);
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    overflow: hidden;
+    position:absolute;
+    bottom:0px;
+    Left: 30px;
+    background-color:rgb(0,0,0,0.7)!important;
+    border-radius:50%;
+}
+
+.download-button:hover{
+    background-color:rgb(0,0,0,1.0)!important;
+    cursor:pointer;
+}
+
 
 
 /* This is the label that states what type of viewer this is: mesh or point cloud */

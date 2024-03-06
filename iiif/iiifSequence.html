@@ -135,7 +135,7 @@
             function getPageUrl(pageIndex) {
                 var baseImageUrl = "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif";
                 var imageId = tileSources[pageIndex].split('/')[7];
-                return `${baseImageUrl}/${imageId}/full/full/0/default.jpg`;
+                return `${baseImageUrl}/${imageId}/full/350,/0/default.jpg`;
             }
 
             function updateDownloadLink(pageIndex) {
@@ -172,6 +172,7 @@
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                     document.getElementById("currentpage").innerHTML = "1 of " + tileSources.length;
+                    updateDownloadLink(0);
                     isInitialLoad = false;
                 }
             });

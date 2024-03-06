@@ -60,7 +60,7 @@
                 inscription</div>
 
         </div>
-        <a id="download">
+        <a id="download" target="_blank">
             <div id="" class="download-button" title="Download image"></div>
         </a>  
     </div>
@@ -83,6 +83,15 @@
         function getSavedViewerState() {
             var state = localStorage.getItem('viewerState');
             return state ? JSON.parse(state) : null;
+        }
+
+        function updateDownloadLink() {
+            var downloadLink = document.getElementById("download");
+            var baseImageUrl = "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif";
+            var placeholderUrl = 'PLACEHOLDER_IIIF_IMAGE_URL';
+            var imageId = placeholderUrl.replace(baseImageUrl + "/", "").split("/")[0];
+            var newDownloadUrl = baseImageUrl + "/" + imageId + "/full/350,/0/default.jpg";
+            downloadLink.href = newDownloadUrl;
         }
 
         window.onload = function () {
@@ -113,6 +122,7 @@
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }
+                updateDownloadLink(); 
             });
 
             viewer.addHandler('viewport-change', function() {

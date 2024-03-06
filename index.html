@@ -132,6 +132,11 @@
             margin-top: 28px;
             margin-left: 30px;
             z-index: 1000;
+            cursor:pointer;
+        }
+
+        .back-button:hover {
+            background-color: rgba(0, 0, 0, 1.0);
         }
     </style>
 
@@ -142,7 +147,9 @@
     <div id="main-content">
      
         <div id="left-pane">
+            <a href="https://ddd71807bd5.dh.gu.se">
             <div class="back-button"></div>
+        </a>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0"></div>

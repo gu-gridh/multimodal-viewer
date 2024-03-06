@@ -160,21 +160,14 @@
                 if (isInitialLoad && savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
-                 
+                    document.getElementById("currentpage").innerHTML = "1 of " + tileSources.length;
+                    isInitialLoad = false;
                 }
             });
 
             viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
-
-            viewer.addHandler("open", function (data) {
-                if (isInitialLoad && savedState) {
-                document.getElementById("currentpage").innerHTML =  "1 of " + tileSources.length;
-                isInitialLoad = false;
-                }
-            });
-
          
             viewer.addHandler("page", function (data) {
                 var pageIndex = data.page; 

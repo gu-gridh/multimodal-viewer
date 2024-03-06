@@ -76,9 +76,9 @@
                 <div id="FullPage" class="NavButton"></div>
             </a>                    
         </div>
-        <a id="download">
-            <div id="" class="download-button" title="Download image"></div>
-        </a>  
+            <a id="download" target="_blank">
+                <div id="" class="download-button" title="Download image"></div>
+            </a>
     </div>
 
     <script>
@@ -106,31 +106,42 @@
             var savedState = getSavedViewerState();
 
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
-            var downloadSourceString = 'PLACEHOLDER_JPG_IMAGE_URLS';
+            //var downloadSourceString = 'PLACEHOLDER_JPG_IMAGE_URLS';
             var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
-            var downloadSources = JSON.parse(downloadSourceString);
+            // var downloadSources = JSON.parse(downloadSourceString);
 
-            document.getElementById('download').addEventListener('click', function(event) {
-                event.preventDefault();
-                const pageIndex = viewer.currentPage();
-                const imageUrl = downloadSources[pageIndex];
+            // document.getElementById('download').addEventListener('click', function(event) {
+            //     event.preventDefault();
+            //     const pageIndex = viewer.currentPage();
+            //     const imageUrl = downloadSources[pageIndex];
                 
-                fetch(imageUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        const filename = `image_${pageIndex + 1}.jpg`;
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    })
-                    .catch(() => console.error("Could not download the image"));
-            });
+            //     fetch(imageUrl)
+            //         .then(response => response.blob())
+            //         .then(blob => {
+            //             const url = window.URL.createObjectURL(blob);
+            //             const filename = `image_${pageIndex + 1}.jpg`;
+            //             const a = document.createElement('a');
+            //             a.style.display = 'none';
+            //             a.href = url;
+            //             a.download = filename;
+            //             document.body.appendChild(a);
+            //             a.click();
+            //             window.URL.revokeObjectURL(url);
+            //             document.body.removeChild(a);
+            //         })
+            //         .catch(() => console.error("Could not download the image"));
+            // });
+
+            function getPageUrl(pageIndex) {
+                var baseImageUrl = "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif";
+                var imageId = tileSources[pageIndex].split('/')[7];
+                return `${baseImageUrl}/${imageId}/full/full/0/default.jpg`;
+            }
+
+            function updateDownloadLink(pageIndex) {
+                var downloadLink = document.getElementById("download");
+                downloadLink.href = getPageUrl(pageIndex);
+            }
 
             var viewer = OpenSeadragon({
                 id: "openseadragon",
@@ -172,6 +183,7 @@
             viewer.addHandler("page", function (data) {
                 var pageIndex = data.page; 
                 document.getElementById("currentpage").innerHTML = (pageIndex + 1) + " of " + tileSources.length;
+                updateDownloadLink(pageIndex); 
             });
 
             /*    // Initialize the Annotorious plugin

@@ -90,14 +90,14 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
 
     if (modelData.length > 0 && modelData[0].properties.attached_topography) {
       const basePathIiif = "https://img.dh.gu.se/saintsophia/static/";
-      const basePathJpg = "https://data.dh.gu.se/saintsophia/static/";
+      // const basePathJpg = "https://data.dh.gu.se/saintsophia/static/";
 
       const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-      const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathJpg}${topography.file}`);
+      //const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathJpg}${topography.file}`);
       
       const htmlContent = fs.readFileSync(path.join(__dirname, 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif));
-      updatedHtmlContent = updatedHtmlContent.replace('PLACEHOLDER_JPG_IMAGE_URLS', JSON.stringify(topographyImagesJpg));
+      //updatedHtmlContent = updatedHtmlContent.replace('PLACEHOLDER_JPG_IMAGE_URLS', JSON.stringify(topographyImagesJpg));
 
       res.send(updatedHtmlContent);
     } else {

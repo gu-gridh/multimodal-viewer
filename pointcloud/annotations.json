@@ -457,7 +457,7 @@
       },
       {
          "uuid":"45D7AB9B-98AA-4EBD-890F-3B808E1C0176",
-         "title":"<a href=https://santasophia.dh.gu.se/panel=120-26 target=_parent>120-15</a>",
+         "title":"120-15",
          "description":"Annotation Description",
          "position":[
             -19.401243003361706,
@@ -475,7 +475,7 @@
       },
       {
          "uuid":"FC13250D-666A-4DA1-89A6-D48ED90E5699",
-         "title":"120-16",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-16 target=_parent>120-16</a>",
          "description":"Annotation Description",
          "position":[
             -19.33954300200272,
@@ -529,12 +529,48 @@
       },
       {
          "uuid":"2F28A814-F3C0-4EEC-90AD-90F0B3881188",
-         "title":"120-19",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-19a target=_parent>120-19a</a>",
          "description":"Annotation Description",
          "position":[
-            -16.96538300188351,
-            -15.980048998974802,
-            -0.07474599725818631
+            -17.82504299904633,
+            -15.160688998545645,
+            1.4211539963164324
+         ],
+         "offset":[
+            0,
+            0,
+            0
+         ],
+         "children":[
+            
+         ]
+      },
+      {
+         "uuid":"2F28A814-F3C0-4EEC-90AD-90F0B3881188",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-19b target=_parent>120-19b</a>",
+         "description":"Annotation Description",
+         "position":[
+            -16.971242940681464,
+            -15.976508957466123,
+            0.058134005817413126
+         ],
+         "offset":[
+            0,
+            0,
+            0
+         ],
+         "children":[
+            
+         ]
+      },
+      {
+         "uuid":"2F28A814-F3C0-4EEC-90AD-90F0B3881188",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-19c target=_parent>120-19c</a>",
+         "description":"Annotation Description",
+         "position":[
+            -16.10686300152588,
+            -16.841408995112417,
+            1.3941140006675719
          ],
          "offset":[
             0,
@@ -547,7 +583,7 @@
       },
       {
          "uuid":"616D5BC8-2E86-43EE-90E3-4A599CC0CC7F",
-         "title":"120-20",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-20 target=_parent>120-20</a>",
          "description":"Annotation Description",
          "annoVisibleDistance":1,
          "position":[
@@ -566,7 +602,7 @@
       },
       {
          "uuid":"61732FFA-A6F6-415F-93DC-2DBDEA2BD517",
-         "title":"120-21",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-21 target=_parent>120-21</a>",
          "description":"Annotation Description",
          "position":[
             -15.777402994039534,
@@ -584,7 +620,7 @@
       },
       {
          "uuid":"D5207F36-DF4B-485F-9BF9-B6FB8E2E3CAC",
-         "title":"120-22",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-22 target=_parent>120-22</a>",
          "description":"Annotation Description",
          "position":[
             -15.071862994277964,
@@ -620,7 +656,7 @@
       },
       {
          "uuid":"E77F2BB8-681F-4D9A-8F80-31F490A7E884",
-         "title":"120-24",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-24 target=_parent>120-24</a>",
          "description":"Annotation Description",
          "position":[
             -12.420883005888939,
@@ -638,7 +674,7 @@
       },
       {
          "uuid":"8B346FE5-18A4-4780-BDF4-E658DD2F29CD",
-         "title":"120-25",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-25 target=_parent>120-25</a>",
          "description":"Annotation Description",
          "position":[
             -12.420482999117851,
@@ -656,7 +692,7 @@
       },
       {
          "uuid":"C71817AB-ED2B-4871-802B-A5214AF83EB9",
-         "title":"120-26",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=120-26 target=_parent>120-26</a>",
          "description":"Annotation Description",
          "position":[
             -12.25836300040531,
@@ -674,7 +710,7 @@
       },
       {
          "uuid": "3F8BAF7B-6BC2-44F2-A223-FCD34886E627",
-         "title": "115-01",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=115-01 target=_parent>115-01</a>",
          "description": "Annotation Description",
          "position": [
             -13.915302978065498,
@@ -1154,7 +1190,7 @@
       },
       {
          "uuid": "4B844004-199C-47AA-B92A-F89BB93BD5DD",
-         "title": "115-25",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=115-25 target=_parent>115-25</a>",
          "description": "Annotation description",
          "position": [
             -10.35246300295639,
@@ -1202,7 +1238,7 @@
       },
       {
          "uuid": "D0CA95AE-0E0E-474A-96C3-E9800047A72E",
-         "title": "115-27",
+         "title":"<a href=https://292d2fd034.dh.gu.se/?q=115-27 target=_parent>115-27</a>",
          "description": "Annotation Description",
          "position": [
             -11.541243009441374,
@@ -1234,7 +1270,7 @@
          },
          {
             "uuid": "4D679125-815F-4FC2-A6FB-55908D82430D",
-            "title": "118-02",
+            "title":"<a href=https://292d2fd034.dh.gu.se/?q=118-02 target=_parent>118-02</a>",
             "description": "Annotation Description",
             "position": [
                -10.730863000905991,

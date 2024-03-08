@@ -169,11 +169,15 @@ app.use('/:type/:file', async (req, res, next) => {
             let languages = metadata?.number_of_languages ?? 'Unknown';
             let room = metadata?.room ?? 'Unknown';
             let tags = (metadata?.tags ?? []).map(tag => tag.text).join(', ');
-        
+            let documentationObservations = (metadata?.documentation ?? []).map(doc => doc.observation).join(' ');
+            let documentationTextUkr = (metadata?.documentation ?? []).map(doc => doc.text_ukr).join(' ');
+                 
             modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, title);
             modifiedData = modifiedData.replace(/PLACEHOLDER_ROOM/g, room);
             modifiedData = modifiedData.replace(/PLACEHOLDER_INSCRIPTIONS/g, inscriptions);
             modifiedData = modifiedData.replace(/PLACEHOLDER_LANGUAGES/g, languages);
+            modifiedData = modifiedData.replace(/PLACEHOLDER_DOCUMENTATION_EN/g, documentationObservations);
+            modifiedData = modifiedData.replace(/PLACEHOLDER_DOCUMENTATION_UK/g, documentationTextUkr);
             modifiedData = modifiedData.replace(/PLACEHOLDER_TAGS/g, tags);
           }
           res.send(modifiedData);

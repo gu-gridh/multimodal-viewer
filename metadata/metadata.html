@@ -22,7 +22,6 @@
             document.getElementById('lang2').textContent = t('language');
             document.getElementById('lang3').textContent = t('room');
             document.getElementById('lang4').textContent = t('tags');
-            document.getElementById('lang5').textContent = t('documentation');
         }
     
         function setButtonLabel(language) {
@@ -46,6 +45,12 @@
             let currentLanguage = localStorage.getItem('i18nextLang') || 'en';        
             currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
             changeLanguage(currentLanguage);
+            toggleVisibility(currentLanguage);
+        }
+
+        function toggleVisibility(lang) {
+            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('documentation_uk').style.display = lang === 'uk' ? 'block' : 'none';
         }
     
         document.addEventListener('DOMContentLoaded', function() {
@@ -64,6 +69,7 @@
                 }
                 setButtonLabel(savedLang);
                 updateTranslations(t);
+                toggleVisibility(savedLang);
             });
         });
     </script>
@@ -110,8 +116,9 @@
 
                 </div>
                 <div class="metadata-description">
-                    <h1 id="lang5">Documentation</h1>
-                </div>
+                    <h1 id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</h1>
+                    <h1 id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</h1>
+                </div>                
             </div>
             <div class="metadata-inscription">
                 <!-- <div class="metadata-inscription-close"></div> -->

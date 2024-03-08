@@ -54,7 +54,7 @@ body {
 	background-color: rgba(255, 255, 255, 0.9);
 	overflow: auto;
 	padding: 20px;
-	margin-top: 30px;
+	margin-top: 20px;
 	margin-bottom: 30px;
 }
 
@@ -153,9 +153,11 @@ body {
 	font-weight:200;
 }
 
-.metadata-description h1 {
+.metadata-description .metadata-title {
 	font-weight: 200;
 	font-size: 1.3em;
+	line-height:1.2;
+	margin-bottom:0px;
 }
 
 .metadata-content .preview {
@@ -184,10 +186,6 @@ body {
 
 	}
 
-	.metadata-description h1 {
-		font-weight: 200;
-		font-size: 1.5em;
-	}
 }
 
 @media screen and (max-width: 850px) {
@@ -201,13 +199,17 @@ body {
 
 	}
 
-	.metadata-description h1 {
-		font-weight: 200;
-		font-size: 1.6em;
-	}
 }
 
-
+.metadata-description .label {
+	text-align: left;
+	width: auto;
+	font-size:1em;
+	line-height:1.2;
+	margin-top:0px;
+	font-weight:200;
+	min-height:20px;
+}
 
 
 

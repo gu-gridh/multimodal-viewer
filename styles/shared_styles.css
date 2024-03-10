@@ -418,9 +418,9 @@ border-radius:50% !important;
 	opacity:		1.0!important;
 	transform:		translate(-50%, -30px);
 	will-change:	left, top;
-    height:         20px!important;
-    width:          20px!important;
-    background-color:rgba(180,50,50,0.5);
+    height:         25px!important;
+    width:          25px!important;
+    background-color:rgba(180,50,50,0.8);
 	border-radius:	50% !important;
     opacity:        1;
 }

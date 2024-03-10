@@ -83,6 +83,7 @@ body {
 /* A common download button for all medi acategories */
 
 .download-button{
+    pointer-events:auto;
     background: url(interface/downloadbutton.png);
     background-size: 80%;
     background-repeat: no-repeat;

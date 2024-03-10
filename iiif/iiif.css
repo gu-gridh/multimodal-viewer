@@ -33,9 +33,11 @@ body {
 		width: 100%;
 		position: absolute;
 		bottom: 100px;
+		pointer-events:none;
 	}
 	
 	#ToolbarBottom {
+		pointer-events:none;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
@@ -70,6 +72,7 @@ body {
 	  	height: 30px;
 		cursor: pointer;
 		overflow: hidden;
+		pointer-events:auto;
 		}
 
 	#Home {
@@ -135,6 +138,7 @@ body {
 	}
 	
 	.NavButton {
+	pointer-events:auto;
 	  width: 35px;
 	  height: 35px;
 	  color: white;

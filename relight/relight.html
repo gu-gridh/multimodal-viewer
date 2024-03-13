@@ -4,6 +4,7 @@
     <link  rel="stylesheet" href="css/relight.css">
     <link  rel="stylesheet" href="../styles/shared_styles.css">
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <style>
       html, body { width:100%; height:calc(100vh - 80px); padding:0px; margin:0px; }
       .relight {
@@ -25,7 +26,7 @@
         box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
         border-radius: 6px;
         border-width: 0;
-        font-family: "Barlow Condensed", sans-serif !important;
+        font-family: "Oswald", sans-serif !important;
         font-size: 15px;
         -webkit-appearance: none;
         background-image: url("../styles/dropdown-arrow.png");
@@ -60,11 +61,11 @@
   </div>
   <script>
     var initialRTIUrl = 'PLACEHOLDER_RTI';
-    var relightViewer = new RelightViewer('.relight', { url: initialRTIUrl, layout: "deepzoom" });
+    var relightViewer = new RelightViewer('.relight', { url: initialRTIUrl, layout: "deepzoom", showLightDirections: true });
 
     function updateRTIImage(url) {
       if(relightViewer) {
-        relightViewer = new RelightViewer('.relight', { url: url, layout: "deepzoom" });
+        relightViewer = new RelightViewer('.relight', { url: url, layout: "deepzoom", showLightDirections: true  });
       }
     }
   </script>

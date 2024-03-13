@@ -285,6 +285,7 @@ g.openlime-expand {
 	pointer-events:none;
 	transform:scale(1.0);
 	user-select: none;
+	-webkit-user-select: none; /* Safari */
 }
 
 .openlime-layers-menu > * {
@@ -319,18 +320,24 @@ user-select: none;
 #entry_2{
 	border-radius: 8px 0px 0px 8px;
 	user-select: none;
+	overflow:hidden;
+	pointer-events:auto;
 	}
 
 
 #entry_3{
 	border-radius: 0px 0px 0px 0px;
 	user-select: none;
+	overflow:hidden;
+	pointer-events:auto;
 	}
 
 
 #entry_4{
 	border-radius: 0px 8px 8px 0px;
 	user-select: none;
+	overflow:hidden;
+	pointer-events:auto;
 	}
 
 
@@ -344,6 +351,7 @@ user-select: none;
 	height:auto;
 	overflow:hidden;
 	user-select: none;
+	pointer-events:none;
 }
 
 .active + .openlime-list {
@@ -354,6 +362,7 @@ user-select: none;
 	margin-right:20px;
 	bottom:10px;
 	user-select: none;
+	pointer-events:none;
 }
 
 .openlime-layers-menu .openlime-entry {
@@ -363,7 +372,7 @@ user-select: none;
 	text-decoration:none;
 	width:110px!important;
 	padding:10px 0px!important;
-	pointer-events:auto;
+	pointer-events:none;
 	user-select: none;
 	background-color: rgba(0,0,0,0.8); 
 	box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
@@ -395,6 +404,7 @@ user-select: none;
 	background-color: rgb(50, 50, 50); 
 	color:#fff;
 	user-select: none;
+	overflow:hidden;
 	
 }
 
@@ -403,6 +413,7 @@ user-select: none;
 	max-width:100%;
 	padding: 5px 5px 0px 20px;
 	user-select: none;
+	overflow:hidden;
 }
 
 .openlime-layers-menu .openlime-tool {

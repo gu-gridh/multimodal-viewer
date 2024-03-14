@@ -581,7 +581,6 @@ user-select: none;
 	display:flex;
 	align-items: center;
 	justify-content: center;
-
 	animation: fadeOut 3s;
 }
 
@@ -591,4 +590,20 @@ user-select: none;
 	66% { opacity: 0; }
 	100% { opacity: 0; }
   }
+
+
+.openlime-zoomin     { 
+	background-image: url(/css/plus_big.png)!important;  
+	opacity:0.4;
+}
+
+.openlime-rotate     { 
+display:auto;
+opacity:1;
+}
+
+
+.openlime-zoomout    { 
+	background: url(/css/minus_big.png)!important;
+}
 

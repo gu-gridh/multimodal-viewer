@@ -11,29 +11,68 @@
 	<link rel="stylesheet" href="css/skin.css"/>
 
 	<style>
-html, body {
-	margin: 0px;
-	padding: 0px;
-	height: 100%;
-	overflow:hidden;
-}
+		html, body {
+			margin: 0px;
+			padding: 0px;
+			height: 100%;
+			overflow:hidden;
+		}
 
-#openlime {
-	position:relative;
-	height: 100%
-}
+		#openlime {
+			position:relative;
+			height: 100%
+		}
 
-#openlime>canvas {
-	width: 100%;
-	height: 100%;
-	/* this is important, it would cause firefox flickering! */
-	overflow: hidden;
-}
+		#openlime>canvas {
+			width: 100%;
+			height: 100%;
+			/* this is important, it would cause firefox flickering! */
+			overflow: hidden;
+		}
+
+		.relight {
+			position: relative; 
+			width: 100%; 
+			height: calc(100vh - 80px); 
+		}
+
+		#rtiImageDropdown {
+			min-width: 100px;
+			height:30px;
+			padding: 5px 10px;
+			color: white;
+			cursor: pointer;
+			z-index: 10;
+			top: 80px;
+			margin-left: calc(50% - 50px);
+			position: absolute;
+			background-color: rgba(0,0,0,0.9);
+			box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+			border-radius: 6px;
+			border-width: 0;
+			font-family: "Oswald", sans-serif !important;
+			font-size: 15px;
+			-webkit-appearance: none;
+			background-image: url("../styles/dropdown-arrow.png");
+			background-size: 15px;
+			background-repeat: no-repeat;
+			background-position: calc(100% - 10px) 55%;
+		}
+
+		#rtiImageDropdown:focus {
+			outline: none;
+		}
+
+		button {
+			width: 15%;
+			cursor: pointer;
+		}
 
 	</style>
 </head>
 
 <body>
+	<div id="rti-buttons-container"><!-- PLACEHOLDER_FOR_BUTTONS --></div>
 	<div id="openlime"></div>
 </body>
 
@@ -42,24 +81,24 @@ html, body {
 <script>
 //autodetect type:
 async function autodetect() {
-	let response = await fetch('rti-folder/plane_0.tzi');
-	if(response.status == 200)
-		return "tarzoom";
+	// let response = await fetch('rti-folder/plane_0.tzi');
+	// if(response.status == 200)
+	// 	return "tarzoom";
 
-	response = await fetch('rti-folder/plane_0.dzi');
-	if(response.status == 200)
-		return "deepzoom";
+	// response = await fetch('rti-folder/plane_0.dzi');
+	// if(response.status == 200)
+	// 	return "deepzoom";
 
-        response = await fetch('rti-folder/planes.tzi');
-        if(response.status == 200)
-                return "itarzoom";
+    //     response = await fetch('rti-folder/planes.tzi');
+    //     if(response.status == 200)
+    //             return "itarzoom";
 
-	response = await fetch('rti-folder/plane_0.jpg');
-	if(response.status == 200)
-                return "image";
+	// response = await fetch('rti-folder/plane_0.jpg');
+	// if(response.status == 200)
+    //             return "image";
 
-	alert("Could not detect an RTI here");
-	return "";
+	// alert("Could not detect an RTI here");
+	// return "";
 }
 
 async function autodetectNormals(layout) {
@@ -82,31 +121,54 @@ async function autodetectNormals(layout) {
 	return false;
 }
 
+var lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+var currentLayer = null;
 
 async function init() {
-	let layout = await autodetect();
-	let normals = await autodetectNormals(layout);
-	var lime = new OpenLIME.Viewer('#openlime', { background:'black' });
+	var initialRTIUrl = 'PLACEHOLDER_RTI';
+	var infoUrl = initialRTIUrl + 'info.json';
+    currentLayer = new OpenLIME.Layer({
+        layout: 'deepzoom',
+        type: 'rti',
+        url: infoUrl,
+		// url: 'rti-folder/info.json',
+        normals: false
+    });
 
+    lime.canvas.addLayer('RTI', currentLayer);
+    OpenLIME.Skin.setUrl('css/skin.svg');
+    let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
+    ui.actions.light.active = true;
+    ui.actions.layers.display = false;
+    lime.camera.maxFixedZoom = 1;
+    window.lime = lime;
+}
 
-	let layer = new OpenLIME.Layer({ 
-		layout: layout, 
-		type:'rti',
-		url: 'rti-folder/info.json',
-		normals: normals
-	});
+function updateRTIImage(url) {
+	if (lime && currentLayer) {
+        lime.canvas.removeLayer(currentLayer); 
+        currentLayer = null;
+    }
 
-	lime.canvas.addLayer('RTI', layer); 
-	OpenLIME.Skin.setUrl('css/skin.svg');
-	let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
-	ui.actions.light.active = true;
-	ui.actions.layers.display = false;
-	lime.camera.maxFixedZoom = 1;
-	window.lime = lime;
+    let infoUrl = url + 'info.json';
+    lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+
+    let layer = new OpenLIME.Layer({
+        layout: 'deepzoom',
+        type: 'rti',
+        url: infoUrl,
+        normals: false
+    });
+
+    lime.canvas.addLayer('RTI', layer);
+    let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
+    ui.actions.light.active = true;
+    ui.actions.layers.display = false;
+    lime.camera.maxFixedZoom = 1;
+    window.lime = lime;
 }
 
 init();
-
 
 </script>
 

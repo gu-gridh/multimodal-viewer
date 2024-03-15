@@ -11,7 +11,7 @@ http://localhost:8094/?q=118-02 panel with Mesh/RTI
 http://localhost:8094/?q=120-20 panel with IIIF
 */
 
-app.get('/relight/relight.html', async (req, res) => {
+app.get('/relight/openlime.html', async (req, res) => {
   const queryName = req.query.q;
   // Fetch RTI image data from the API
   const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
@@ -19,7 +19,7 @@ app.get('/relight/relight.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
 
-    fs.readFile(path.join(__dirname, 'relight', 'relight.html'), 'utf8', (err, htmlData) => {
+    fs.readFile(path.join(__dirname, 'relight', 'openlime.html'), 'utf8', (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -31,12 +31,10 @@ app.get('/relight/relight.html', async (req, res) => {
       ).join('');
       
       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
-      
       modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', 
         `<select id="rtiImageDropdown" onchange="updateRTIImage(this.value)">
           ${dropdownHtml}
         </select>`);      
-
       res.send(modifiedHtml);
     });
   } catch (error) {

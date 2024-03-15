@@ -139,14 +139,12 @@
 .openlime-toolbar {
 	position:absolute; 
 	bottom:20px;
-	
 	border-radius:10px;
 	overflow:hidden;
-	width:330px!important;
-	height:48px;
+	width:280px!important;
+	height:43px;
 	padding-top:5px;
-	left:calc(50% - 160px);
-	
+	left:calc(50% - 140px);
 	display:flex;
 	flex-direction:row;
 	justify-content:space-evenly;
@@ -157,7 +155,7 @@
 
 .openlime-toolbar svg:not(:root) {
 	width:auto;
-	height: 40px;
+	height: 35px;
 	display: block;
 }
 
@@ -271,7 +269,7 @@ g.openlime-expand {
 .openlime-layers-menu {
 	position:absolute;
 	height:50px;
-	bottom:65px;
+	bottom:60px;
 	left:0px;
 	width:100%;
 	overflow:hidden;
@@ -293,7 +291,7 @@ g.openlime-expand {
 }
 
 .openlime-layers-menu.open {
-	bottom:65px;
+	bottom:60px;
 	height:50px;
 	transform:scale(1.0);
 	overflow:hidden;
@@ -342,9 +340,9 @@ user-select: none;
 
 
 .openlime-list {
-	width:330px!important;
+	width:280px!important;
 	position:absolute;
-	margin-left:calc(50% - 170px);
+	margin-left:calc(50% - 150px);
 	display:flex;
 	flex-direction:row;
 	justify-content:center;
@@ -370,7 +368,7 @@ user-select: none;
 	text-align:center;
 	cursor:pointer;
 	text-decoration:none;
-	width:110px!important;
+	width:100px!important;
 	padding:10px 0px!important;
 	pointer-events:none;
 	user-select: none;
@@ -594,7 +592,7 @@ user-select: none;
 
 .openlime-zoomin     { 
 	background-image: url(/css/plus_big.png)!important;  
-	opacity:0.4;
+	opacity:1.0;
 }
 
 .openlime-rotate     { 

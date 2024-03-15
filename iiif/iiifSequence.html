@@ -17,12 +17,12 @@
 </head>
 
 <style>
-    #currentpage{
-        font-family:"Oswald", sans-serif!important;
-        color:white;
-        font-size:0.8em!important;
-        font-weight:100;
-        pointer-events:none!important;
+    #currentpage {
+        font-family: "Oswald", sans-serif !important;
+        color: white;
+        font-size: 0.8em !important;
+        font-weight: 100;
+        pointer-events: none !important;
     }
 </style>
 
@@ -32,7 +32,7 @@
     <!-- <button onclick="viewAnnotations()">View Annotations</button>
         <div id="annotationsJson" style="white-space: pre;"></div> -->
 
-   <!--  <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+    <!--  <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
 
         <div id="instructions" style="bottom:100px; width:255px; display:none;">
             <div class="instruction-closer" onclick="$('#instructions').hide();"></div>
@@ -41,7 +41,7 @@
     </div>
  -->
     <!--confirm annotation-->
-  <!--   <div id="savePopup" class="popup">
+    <!--   <div id="savePopup" class="popup">
         <div class="popup-content">
             <p>Are you satisfied with the selection?</p>
             <button id="saveYes">It is correct</button>
@@ -60,7 +60,7 @@
                 <div id="Next" class="NavButton"></div>
             </a>
         </div>
-        <div id="ToolbarBottom">
+        <div class="toolbar-bottom">
 
             <a id="home" href="#home">
                 <div id="Home" class="NavButton"></div>
@@ -74,18 +74,20 @@
             </a>
             <a id="full-page" href="#full-page">
                 <div id="FullPage" class="NavButton"></div>
-            </a>                    
-        </div>
-            <a id="download" target="_blank">
-                <div id="" class="download-button" title="Download image"></div>
             </a>
+        </div>
+        <a id="download" target="_blank">
+            <div id="" class="download-button" title="Download image"></div>
+        </a>
+
+        <div id="topgraphy-guide" class="guide-button" title="Guide">?</div>
     </div>
 
     <script>
         //var anno;
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
-        
+
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
@@ -114,7 +116,7 @@
             //     event.preventDefault();
             //     const pageIndex = viewer.currentPage();
             //     const imageUrl = downloadSources[pageIndex];
-                
+
             //     fetch(imageUrl)
             //         .then(response => response.blob())
             //         .then(blob => {
@@ -180,11 +182,11 @@
             viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
-         
+
             viewer.addHandler("page", function (data) {
-                var pageIndex = data.page; 
+                var pageIndex = data.page;
                 document.getElementById("currentpage").innerHTML = (pageIndex + 1) + " of " + tileSources.length;
-                updateDownloadLink(pageIndex); 
+                updateDownloadLink(pageIndex);
             });
 
             /*    // Initialize the Annotorious plugin
@@ -243,7 +245,7 @@
 
             //send a message to the parent window (index.html) with the annotation data
             //window.parent.postMessage(annotationData, "*");
-       
+
         };
 
         // function viewAnnotations() {

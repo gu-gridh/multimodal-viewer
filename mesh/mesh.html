@@ -45,74 +45,60 @@
 		<!-- <div id="menu-widget" onclick="MenuSwitch()"></div> -->
 
 		<!-- This is for the mobile view and should only be visible if there is a link to an AR-model-->
-	<!-- 	<div id="ar-widget"><a rel="ar" href="models/nordenskjoldcairnpreview.usdz"><img id="ar"
+		<!-- 	<div id="ar-widget"><a rel="ar" href="models/nordenskjoldcairnpreview.usdz"><img id="ar"
 					src="skins/augmented-reality.svg" /></a></div> -->
 
 
 		<!-- The mobile toolbar has fewer tools due to complexity issues. 
 		Perhaps these should also go into their own docuemnt to keep this document more focuses-->
-		<div id="mobile" style="display:flex; width:100%; justify-content:center;">
+		<div class="interface-area">
 
-			<div id="toolbar_m">
+			<div id="toolbar_m" class="toolbar-bottom">
 				<div id="toolbar">
 					<img id="home_m" title="Home" src="../styles/interface/frame.png" />
 
-				
 
-						<!--COLOR>-->
-					<img id="zoomin"      title="Zoom In"                src="../styles/interface/plus_big.png"/>
-					<img id="zoomout"     title="Zoom Out"               src="../styles/interface/minus_big.png"/>
+					<!--ZOOM-->
+					<img id="zoomin" title="Zoom In" src="../styles/interface/plus_big.png" />
+					<img id="zoomout" title="Zoom Out" src="../styles/interface/minus_big.png" />
 
-					<!--COLOR>-->
+					<!--COLOR-->
 					<img id="color_on_m" title="Disable Solid Color" src="../styles/interface/colour_off.png"
 						style="position:absolute; visibility:hidden; " />
 					<img id="color_m" title="Enable Solid Color" src="../styles/interface/colour_on.png" />
-					<!--COLOR-->
+
 
 					<!--LIGHT-->
 					<img id="light_on_m" title="Disable Light Control" src="../styles/interface/light_on.png"
 						style="position:absolute; visibility:hidden;  " />
 					<img id="light_m" title="Enable Light Control" src="../styles/interface/light.png" />
-					<!--LIGHT-->
 
-					
 
 					<!--MEASURE-->
 					<img id="measure_on_m" title="Disable Measure Tool" src="skins/measure_on.png"
 						style="position:absolute; visibility:hidden;  " />
 					<img id="measure_m" title="Enable Measure Tool" src="skins/measure_off.png" />
-					<!--MEASURE-->
 
-						<!--FULLSCREEN-->
-						<img id="full_on"     title="Exit Full Screen"       src="../styles/interface/compress.svg" style="position:absolute; visibility:hidden;"/>
-						<img id="full"        title="Full Screen"            src="../styles/interface/expand.svg" style="position:relative;"/>
-					  <!--FULLSCREEN-->
-					
+
+					<!--FULLSCREEN-->
+					<img id="full_on" title="Exit Full Screen" src="../styles/interface/compress.svg"
+						style="position:absolute; visibility:hidden;" />
+					<img id="full" title="Full Screen" src="../styles/interface/expand.svg"
+						style="position:relative;" />
+					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
 					<!-- <img id="perspective_m" title="Perspective Camera" src="skins/perspective_no.png"
 						style="position:absolute; visibility:hidden;" />
 					<img id="orthographic_m" title="Orthographic Camera" src="skins/perspective.png" /> -->
-					<!--CAMERA-->
+
 				</div>
 			</div>
+			<div id="mesh-guide" class="guide-button" title="Guide">?</div>
 		</div>
 
-
+		
 	</div>
-
-	<!-- Title, fetched from the backed
-	<div class="title">
-	</div>
-	 -->
-
-	<!-- This can probably be static 
-	<div class="model-viewer-id">
-		Mesh Model <br> visualisation tool
-	</div>
-	-->
-
-
 
 	<div class="ui-overlay-container" style="height:100vh; z-index:1000; pointer-events:none;">
 		<!--MEASURE-->
@@ -125,12 +111,18 @@
 	<!-- Here we  have a floating div with instructions on how to navigate -->
 	<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
 
-		<div id="instructions" style="bottom:100px; width:335px; padding:15px 10px;">
-			<div class="instruction-closer"  onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
-			Double-click to focus. Click-and-drag to rotate. <br> 
+		<div id="instructions" style="bottom:100px; width:350px; padding:15px 10px;">
+			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
+			Double-click to focus. Click-and-drag to rotate. <br>
 			Right-click and drag to pan. Scroll to zoom in and out.
 		</div>
+
+
+
 	</div>
+
+
+
 </body>
 
 <script type="text/javascript">
@@ -180,7 +172,7 @@
 	}
 
 
-// Most of the functions have mobile variations, otherwise the buttons break
+	// Most of the functions have mobile variations, otherwise the buttons break
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
 		if (action == 'home') presenter.animateToTrackballPosition([PLACEHOLDER_TRACKBALLSTART]);
@@ -235,7 +227,7 @@
 	function onEndMeasure(measure) {
 		// measure.toFixed(2) sets the number of decimals when displaying the measure
 		// depending on the model measure units, use "mm","m","km" or whatever you have
-		$('#measure-output').html(measure.toFixed(2)*100 + " cm");
+		$('#measure-output').html(measure.toFixed(2) * 100 + " cm");
 	}
 	//--MEASURE--
 
@@ -248,11 +240,11 @@
 		}
 	}
 
-	$(document).ready(function() {
-            // Sidebar loading moved here
-            $("#sidebar").load("/mesh/sidebar.html", function() {
-				init3dhop();
-				setup3dhop();
+	$(document).ready(function () {
+		// Sidebar loading moved here
+		$("#sidebar").load("/mesh/sidebar.html", function () {
+			init3dhop();
+			setup3dhop();
 		});
 	});
 

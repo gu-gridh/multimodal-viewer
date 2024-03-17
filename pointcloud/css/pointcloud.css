@@ -1,0 +1,321 @@
+/*CSS here will be used by any file that has added the stylesheet*/
+
+/* CSS - Cascading Style Sheet */
+
+
+.LODtool {
+    pointer-events: auto;
+    position: absolute;
+    z-index: 100000;
+    width: 270px;
+    height: auto;
+    bottom: 20px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 0px 20px 5px 20px;
+    font-size: 0.8em;
+    line-height: 2.0;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+    border-style: solid;
+    border-color: grey;
+    border-width:0.5px 0px 0px 0px;
+    
+}
+
+.LODtool span{
+    user-select: none;
+    -webkit-user-select: none;
+    cursor:default;
+}
+
+
+
+/* Potree sidebar lists*/
+.pv-menu-list {
+    list-style-type: none;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    margin: 0px 0px;
+    overflow: hidden;
+}
+
+.pv-menu-list>* {
+    margin: 10px 20px;
+}
+
+/* Potree UI stuff */
+
+#quality {
+    padding: 0px;
+}
+
+.button-icon {
+    height: 20px;
+}
+
+.tool-icon-expanded {
+    height: 42px;
+}
+
+.LODtool .ui-slider-horizontal {
+    height: 4px;
+}
+
+.ui-slider-horizontal {
+    height: 6px;
+}
+
+.LODtool .ui-slider-handle {
+    margin-top: -0.3em;
+    margin-left: -.6em;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    border-radius: 50% !important;
+}
+
+.ui-slider-handle {
+    margin-top: -0.15em;
+    margin-left: -.6em;
+    width: 1.1em !important;
+    height: 1.1em !important;
+    border-radius: 50% !important;
+}
+
+.ui-state-active {
+    color: rgb(0, 213, 250) !important;
+    font-weight: 600 !important;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+    transform: scale(1.03);
+    z-index: 20 !important;
+}
+
+#splat_quality_options .left {
+    border-radius: 5px 0px 0px 5px !important;
+}
+
+#splat_quality_options .right {
+    border-radius: 0px 5px 5px 0px !important;
+}
+
+
+.ui-state-active:hover {
+    font-weight: 600 !important;
+}
+
+.ui-state-default {
+    border-style: none !important;
+}
+
+
+#splat_quality_options .ui-state-default {
+    border-style: none !important;
+    background-color: rgb(50, 50, 50) !important;
+    color: white;
+}
+
+.ui-button {
+    margin-top: -3px !important;
+}
+
+
+
+.potree_failpage {
+    color: white;
+    text-align: center;
+    background-color: var(--viewer-bg);
+    padding-top: 15%;
+}
+
+.potree_menu_toggle {
+    display: none;
+}
+
+/* Hide away complexities on mobile */
+
+@media screen and (max-width: 800px) {
+
+    .potree_menu_toggle {
+        display: none;
+    }
+
+}
+
+/* Point cloud annotation style */
+
+.annotation {
+    position: absolute;
+    padding: 0px !important;
+    opacity: 1.0 !important;
+    transform: translate(-50%, -30px);
+    will-change: left, top;
+    height: 25px !important;
+    width: 25px !important;
+    background-color: rgba(180, 50, 50, 0.8);
+    border-radius: 50% !important;
+    opacity: 1;
+}
+
+.annotation-titlebar {
+    font-family: "Barlow Condensed", sans-serif !important;
+    font-weight: 300 !important;
+    color: white;
+    background-color: inherit;
+    border-radius: inherit;
+    height: inherit;
+    width: inherit;
+    padding: 0px !important;
+    border: 0px solid rgba(255, 255, 255, 0.0) !important;
+    font-size: 0.0em !important;
+    line-height: 0.0 !important;
+    box-shadow: none !important;
+    transition: all 0.3s ease-in-out;
+    display: auto !important;
+    overflow: hidden !important;
+    opacity: inherit;
+
+}
+
+.annotation-titlebar:hover {
+    font-family: "Barlow Condensed", sans-serif !important;
+    background-color: rgba(180, 50, 50, 1.0);
+    font-weight: 200 !important;
+    color: white;
+    border-radius: 6px !important;
+    min-height: 20px !important;
+    min-width: 20px !important;
+    height: auto !important;
+    width: auto !important;
+    padding: 5px 10px !important;
+    border: 0px solid rgba(255, 255, 255, 0.0) !important;
+    font-size: 1.0em !important;
+    transform: translate(-15px, -5px) !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-expand {
+    color: white;
+    font-size: 0.6em;
+    opacity: 1;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-action-icon {
+    width: 20px;
+    height: 20px;
+    display: none !important;
+    vertical-align: middle;
+    line-height: 1.5em;
+    text-align: center;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    cursor: pointer;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+
+}
+
+.annotation-action-icon:hover {
+    filter: drop-shadow(0px 0px 0px black) !important;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-item {
+    color: white;
+    background-color: black;
+    opacity: 0.0 !important;
+    border-radius: 1.5em;
+    font-size: 1em;
+    line-height: 1.5em;
+    padding: 5px 15px 5px 15px !important;
+    font-weight: 200 !important;
+    display: flex;
+    cursor: default;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-item:hover {
+    box-shadow: 0 0 0px #000000 !important;
+    opacity: 1.0;
+
+    color: white;
+    background-color: black;
+    opacity: 1.0 !important;
+    border-radius: 1.5em;
+    font-size: 1em;
+    line-height: 1.5em;
+    padding: 5px 15px 5px 15px !important;
+    font-weight: 200 !important;
+    display: flex;
+    cursor: default;
+}
+
+.annotation-main {
+    display: flex;
+    flex-grow: 1;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-label {
+    display: inline-block;
+    height: 100%;
+    flex-grow: 1;
+    user-select: none;
+    -moz-user-select: none;
+    z-index: 100;
+    vertical-align: middle;
+    line-height: 1.5em;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+
+}
+
+.annotation-description {
+    opacity: 0;
+    pointer-events: none;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-description-close {
+    filter: invert(100%);
+    float: right;
+    opacity: 0.5;
+    margin: 0px 0px 8px 8px;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+
+.annotation-description-content {
+    color: white;
+    pointer-events: none !important;
+    display: none !important;
+    overflow: hidden !important;
+}
+
+.annotation-icon {
+    width: 20px;
+    height: 20px;
+    filter: invert(100%);
+    margin: 2px 2px;
+    opacity: 1.0;
+}

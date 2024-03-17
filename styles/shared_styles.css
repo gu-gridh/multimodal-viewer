@@ -415,6 +415,7 @@ margin-left:calc(50% - 235px);
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     user-select: none;
 	-webkit-user-select: none; /* Safari */
+    transition: all 0.5s ease-in-out;
 }
 
 .short {

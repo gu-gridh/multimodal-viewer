@@ -60,12 +60,66 @@
 	<script src="./libs/plasio/js/laslaz.js"></script>
 
 
-	<!-- Title, fetched from the backed: -->
-	<div class="title">
-	</div>
 
 	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
 	<!-- INCLUDE SETTINGS HERE -->
+
+
+	<div id="guide"
+		onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');"
+		style="">
+		<div class="guide-content">
+			<!-- <h1>User Guide: <br>Spatial Context</h1> -->
+			<div class="guide-instructions">
+				<div class="guide-instructions-intro">
+					Click-and-drag to change direction. Move with WASD- <br>
+					or Arrow-keys, or Double-click. Right-click-and-drag to pan.<br>
+					Use the sliders to adjust the look and density of the pointcloud.
+				</div>
+
+				<div id="guide-instructions-tools">
+					<h2>Tools</h2>
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(build/potree/resources/icons/distance.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Distance tool.</p> Use to measure distances. Click to place measure points, and
+							right-click
+							to finish.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(build/potree/resources/icons/height.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Height tool.</p> Use to measure heights between two points. Click to place measure
+							points.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(build/potree/resources/icons/circle.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Radius tool.</p> Use to measure the radius of a circle. Place two measure points by
+							clicking
+							and then ajdust the shape by moving the pointer. Click when done.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(build/potree/resources/icons/remove.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Clear.</p> Clear away all measurements in the scene.
+						</div>
+					</div>
+					<div class="guide-closer">Close</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div class="potree_container"
 		style="position: relative; width: 100%; height: calc(100% - 80px); left: 0px; top: 0px; bottom:200px;">
@@ -172,15 +226,14 @@
 	</script>
 
 
-	<!-- <div class="model-viewer-id">
-		Point Cloud <br> visualisation tool
-	</div> -->
+
 	<div class="ui-overlay-container" style="position:absolute;  height:300px; top:25px; z-index:1000; display:none;">
 		<div id="orientation"
 			style="display:flex; flex-direction: row; justify-content: space-between; pointer-events:auto;width:230px; height:30px; border-radius:8px; background-color:rgba(0,0,0,0.8); padding:10px 15px; box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;">
 		</div>
 	</div>
-	<!-- Here we can have a floating div with instructions on how to navigate -->
+
+	<!-- Here we have a floating div with instructions on how to navigate -->
 
 	<div class="ui-overlay-container" style="position:absolute; bottom:100px; ">
 		<div id="instructions" class="" style="width:350px; padding:15px 10px;">
@@ -191,34 +244,38 @@
 	</div>
 
 
-
 	<div class="interface-area">
 		<div class="toolbar-bottom" style="width:350px;">
 			<div id="tools"></div>
 			<div id="quality">
-				
-					<selectgroup id="splat_quality_options" style="width:100px;">
-						<option id="splat_quality_options_standard left" value="standard">LQ</option>
-						<option id="splat_quality_options_hq right" value="hq">HQ</option>
-					</selectgroup>
-				
+
+				<selectgroup id="splat_quality_options" style="width:100px;">
+					<option id="splat_quality_options_standard left" value="standard">LQ</option>
+					<option id="splat_quality_options_hq right" value="hq">HQ</option>
+				</selectgroup>
+
 			</div>
 		</div>
-		<div id="mesh-guide" class="guide-button" title="Guide">?</div>
+		<div class="guide-button" title="User Guide" onclick="$('#instructions').hide(); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+			?</div>
 	</div>
 
 	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:135px; z-index:1000; color:white;">
-		<div class="LODtool" id="point-sliders" style="width:330px;"">
-			<div style=" width:calc(50% - 10px); float:left; padding-right:10px;">
-			<span>Point Size:</span> <span id="lblPointSize"></span>
-			<div id="sldPointSize"></div>
+		<div class="LODtool" id="point-sliders" style="width:330px;">
+			<div style="width:calc(50% - 10px); float:left; padding-right:10px;">
+				<span>Point Size:</span> <span id="lblPointSize"></span>
+				<div id="sldPointSize"></div>
+			</div>
+			<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
+				<span>Max points:</span> <span id="lblPointBudget"></span>
+				<div id="sldPointBudget"></div>
+			</div>
 		</div>
-		<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
-			<span>Max points:</span> <span id="lblPointBudget"></span>
-			<div id="sldPointBudget"></div>
-		</div>
-	</div>
-	</div>
+
+
+
+
+
 </body>
 
 </html>

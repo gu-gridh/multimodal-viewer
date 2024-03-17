@@ -2586,7 +2586,7 @@
                     },
                     ruler: {
                         title: "Ruler",
-                        display: !1,
+                        display: !0,
                         task: (t) => {
                             this.toggleRuler();
                         },

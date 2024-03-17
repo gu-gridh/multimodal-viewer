@@ -28,6 +28,67 @@
 
 <body>
 
+	<div id="guide"
+		onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');"
+		style="">
+		<div class="guide-content">
+			<!-- <h1>User Guide: <br>Spatial Context</h1> -->
+			<div class="guide-instructions">
+				<div class="guide-instructions-intro">
+					Double-click to focus. Click-and-drag to rotate. <br>
+					Right-click and drag to pan. Scroll to zoom in and out.
+				</div>
+
+				<div id="guide-instructions-tools">
+					<h2>Tools</h2>
+					
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/frame.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Frame object.</p> Changes the view to the original position.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/colour_on.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Color tool.</p> Switches on and off the 3D model's color information. 
+							With the colors off and the light in the right direction, details will appear in higher contrast.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/light_on.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Light tool.</p> Switches on and off the light controls. When activated, click and drag towards the edges of the screen to enhance details. 
+							To rotate the 3D model, deactivate the light controls.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/distance_on.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Measure tool.</p> Switches on and off the ruler. When activated, click on two places to measure the distance between them.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/expand.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Full screen.</p> Activates full screen mode. Click ESC to exit.
+						</div>
+					</div>
+					<div class="guide-closer">Close</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- The content of the sidebar is fetched from the file sidebar.html -->
 	<div id="sidebar" style="background-color:var(--sidebar-bg)"></div>
 
@@ -75,9 +136,9 @@
 
 
 					<!--MEASURE-->
-					<img id="measure_on_m" title="Disable Measure Tool" src="skins/measure_on.png"
+					<img id="measure_on_m" title="Disable Measure Tool" src="../styles/interface/distance_on.svg"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="measure_m" title="Enable Measure Tool" src="skins/measure_off.png" />
+					<img id="measure_m" title="Enable Measure Tool" src="../styles/interface/distance_off.svg" />
 
 
 					<!--FULLSCREEN-->
@@ -94,7 +155,7 @@
 
 				</div>
 			</div>
-			<div id="mesh-guide" class="guide-button" title="Guide">?</div>
+			<div class="guide-button" title="User Guide" onclick="$('#instructions').hide(); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
 		</div>
 
 		
@@ -110,15 +171,11 @@
 
 	<!-- Here we  have a floating div with instructions on how to navigate -->
 	<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
-
 		<div id="instructions" style="bottom:100px; width:350px; padding:15px 10px;">
 			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
 			Double-click to focus. Click-and-drag to rotate. <br>
 			Right-click and drag to pan. Scroll to zoom in and out.
 		</div>
-
-
-
 	</div>
 
 

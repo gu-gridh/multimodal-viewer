@@ -79348,6 +79348,7 @@ ENDSEC
 		}
 
 
+		/* GRIDH: commented out a number of tools to fit the required functions in Saint Sophia */
 
 		initToolbar() {
 
@@ -79462,7 +79463,7 @@ ENDSEC
 			)); 
 
 			// AZIMUTH
-		 	elToolbar.append(this.createToolIconExpanded(
+		/*  	elToolbar.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/azimuth.svg',
 				'',
 				() => {
@@ -79484,7 +79485,7 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			)); 
+			));  */
 
 			/* 
 			// AREA

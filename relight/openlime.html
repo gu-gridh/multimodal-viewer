@@ -8,8 +8,9 @@
 	<meta charset="UTF-8" />
 
 	<link rel="icon" type="image/png" href="">
-	<link rel="stylesheet" href="css/skin.css"/>
+	<link rel="stylesheet" href="css/openlime.css"/>
 	<link rel="stylesheet" href="../styles/shared_styles.css"/>
+	<script type="text/javascript" src="../mesh/js/jquery.js"></script>
 
 	<style>
 		html, body {
@@ -79,9 +80,68 @@
 	<div id="rti-buttons-container"><!-- PLACEHOLDER_FOR_BUTTONS --></div>
 
 	<div id="openlime">
-		<div id="rti-guide" class="guide-button" title="Guide" style="bottom:23px;">?</div>
+		<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+			<div id="instructions" style="bottom:60px; width:340px; padding:15px 10px;">
+				<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
+				Browse available RTI-sets with the menu at the top. <br> 
+				Click and drag to change light direction. Scroll to zoom. <br> 
+			    Deactivate light controls to pan by click-dragging. 
+			</div>
+		</div>
+		<div class="guide-button" title="User Guide" style="bottom:23px"onclick="$('#instructions').hide(); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
 	</div>
 	
+	<div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
+		<div class="guide-content">
+			<!-- <h1>User Guide: <br>Spatial Context</h1> -->
+			<div class="guide-instructions">
+				<div class="guide-instructions-intro">
+					Browse available RTI-sets with the menu at the top. <br>
+					Click and drag to change light direction. Scroll to zoom in and out. <br>
+					When light controls are deactivated, click and drag to pan the image.
+					
+				</div>
+
+				<div id="guide-instructions-tools">
+					<h2>Tools</h2>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url()"></div>
+						<div class="guide-instructions-item-label">
+							<p>Shader layers.</p> Switch between <p>Light, Diffuse,</p> and <p>Specular</p> layers to enhance different details.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/frame.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Frame object.</p> Changes the view to the original position.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/light_on.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Light tool.</p> Switches on and off the light controls. When activated, click and drag to change light direction. 
+							To pan the image, deactivate the light controls.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../styles/interface/expand.svg)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Full screen.</p> Activates full screen mode. Click ESC to exit.
+						</div>
+					</div>
+					<div class="guide-closer">Close</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 <script src="js/openlime.js"></script>

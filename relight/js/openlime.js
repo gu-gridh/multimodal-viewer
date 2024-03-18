@@ -2801,9 +2801,18 @@
             }
         }
         toggleLightController(t) {
-            let e = this.viewer.containerElement.classList.toggle("openlime-light-active", t);
-            this.lightActive = e;
-            for (let t of Object.values(this.viewer.canvas.layers)) for (let i of t.controllers) "light" == i.control && ((i.active = !0), (i.activeModifiers = e ? [0, 2, 4] : [2, 4]));
+            let shouldActivate = t !== undefined ? t : !this.lightActive;
+            this.viewer.containerElement.classList.toggle("openlime-light-active", shouldActivate);
+            this.lightActive = shouldActivate;
+        
+            for (let layer of Object.values(this.viewer.canvas.layers)) {
+                for (let controller of layer.controllers) {
+                    if (controller.control === "light") {
+                        controller.active = shouldActivate;
+                        controller.activeModifiers = shouldActivate ? [0, 2, 4] : [2, 4];
+                    }
+                }
+            }
         }
         toggleFullscreen() {
             let t = this.viewer.canvasElement,

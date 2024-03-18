@@ -204,7 +204,7 @@ async function init() {
     });
 
     lime.canvas.addLayer('RTI', currentLayer);
-    OpenLIME.Skin.setUrl('css/skin.svg');
+	OpenLIME.Skin.setUrl('css/skin.svg');
     let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
     ui.actions.light.active = true;
     ui.actions.layers.display = false;
@@ -229,11 +229,13 @@ function updateRTIImage(url) {
     });
 
     lime.canvas.addLayer('RTI', layer);
+	OpenLIME.Skin.setUrl('css/skin.svg');
     let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
     ui.actions.light.active = true;
     ui.actions.layers.display = false;
     lime.camera.maxFixedZoom = 1;
     window.lime = lime;
+	//lime.redraw();
 }
 
 init();

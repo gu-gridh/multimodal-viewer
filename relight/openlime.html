@@ -212,7 +212,19 @@ async function init() {
     window.lime = lime;
 }
 
+function removePreviousLimeViewer() {
+    const selectors = ['.openlime-overlay', '.openlime-lightdir', '.openlime-layers-menu', '.openlime-toolbar'];
+
+    selectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+            element.parentNode.removeChild(element);
+        });
+    });
+}
+
 function updateRTIImage(url) {
+	removePreviousLimeViewer();
+
 	if (lime && currentLayer) {
         lime.canvas.removeLayer(currentLayer); 
         currentLayer = null;
@@ -235,7 +247,7 @@ function updateRTIImage(url) {
     ui.actions.layers.display = false;
     lime.camera.maxFixedZoom = 1;
     window.lime = lime;
-	//lime.redraw();
+	// lime.redraw();
 }
 
 init();

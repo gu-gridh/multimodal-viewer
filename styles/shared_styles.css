@@ -423,6 +423,8 @@ h2 {
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     user-select: none;
 	-webkit-user-select: none; /* Safari */
+    -webkit-backdrop-filter: blur(3px); 
+    backdrop-filter: blur(3px); 
     transition: all 0.5s ease-in-out;
 }
 

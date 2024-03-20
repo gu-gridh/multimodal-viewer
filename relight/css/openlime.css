@@ -154,6 +154,8 @@
 	border-style: solid;
     border-color: grey;
     border-width:0.5px 0px 0px 0px;
+	-webkit-backdrop-filter: blur(3px); 
+    backdrop-filter: blur(3px); 
 }
 
 .openlime-toolbar svg:not(:root) {

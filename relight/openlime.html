@@ -224,7 +224,7 @@ function removePreviousLimeViewer() {
 
 function updateRTIImage(url) {
 	removePreviousLimeViewer();
-
+	
 	if (lime && currentLayer) {
         lime.canvas.removeLayer(currentLayer); 
         currentLayer = null;
@@ -248,9 +248,11 @@ function updateRTIImage(url) {
     lime.camera.maxFixedZoom = 1;
     window.lime = lime;
 	// lime.redraw();
+	document.getElementById("openlime").focus();
 }
 
 init();
+
 
 </script>
 

@@ -213,46 +213,51 @@ async function init() {
 }
 
 function removePreviousLimeViewer() {
-    const selectors = ['.openlime-overlay', '.openlime-lightdir', '.openlime-layers-menu', '.openlime-toolbar'];
+    const selectors = ['.openlime-overlay', '.openlime-lightdir', '.openlime-layers-menu', '.openlime-toolbar', '#openlime canvas'];
 
     selectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(element => {
             element.parentNode.removeChild(element);
         });
     });
+
+    let allElementsRemoved = selectors.every(selector => document.querySelector(selector) === null);
+    return allElementsRemoved;
 }
 
 function updateRTIImage(url) {
-	removePreviousLimeViewer();
+    let allElementsRemoved = removePreviousLimeViewer();
 	
-	if (lime && currentLayer) {
-        lime.canvas.removeLayer(currentLayer); 
-        currentLayer = null;
+    if (allElementsRemoved) {
+        if (lime && currentLayer) {
+            lime.canvas.removeLayer(currentLayer); 
+            currentLayer = null;
+        }
+
+        let infoUrl = url + 'info.json';
+        lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+
+        let layer = new OpenLIME.Layer({
+            layout: 'deepzoom',
+            type: 'rti',
+            url: infoUrl,
+            normals: false
+        });
+
+        lime.canvas.addLayer('RTI', layer);
+        OpenLIME.Skin.setUrl('css/skin.svg');
+        let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
+        ui.actions.light.active = true;
+        ui.actions.layers.display = false;
+        lime.camera.maxFixedZoom = 1;
+        window.lime = lime;
+        document.getElementById("openlime").focus();
+    } else {
+        console.error("Not all elements were removed. Viewer update aborted.");
     }
-
-    let infoUrl = url + 'info.json';
-    lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
-
-    let layer = new OpenLIME.Layer({
-        layout: 'deepzoom',
-        type: 'rti',
-        url: infoUrl,
-        normals: false
-    });
-
-    lime.canvas.addLayer('RTI', layer);
-	OpenLIME.Skin.setUrl('css/skin.svg');
-    let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin.svg', showLightDirections: true });
-    ui.actions.light.active = true;
-    ui.actions.layers.display = false;
-    lime.camera.maxFixedZoom = 1;
-    window.lime = lime;
-	// lime.redraw();
-	document.getElementById("openlime").focus();
 }
 
 init();
-
 
 </script>
 

@@ -2626,41 +2626,40 @@
                     }),
                 this.viewer.pointerManager.onEvent(this.panzoom),
                 this.menu.push({ section: "Layers" });
-            for (let [t, e] of Object.entries(this.viewer.canvas.layers)) {
-                let i = [];
-                for (let s of e.getModes()) {
-                    let n = {
-                        button: s,
-                        mode: s,
-                        layer: t,
-                        onclick: () => {
-                            e.setMode(s);
-                        },
-                        status: () => (e.getMode() == s ? "active" : ""),
-                    };
-                    "Specular" == s &&
-                        e.shader.setSpecularExp &&
-                        (n.list = [
-                            {
-                                slider: "",
-                                oninput: (t) => {
-                                    e.shader.setSpecularExp(t.target.value);
+                    for (let [t, e] of Object.entries(this.viewer.canvas.layers)) {
+                        let i = [];
+                        for (let s of e.getModes()) {
+                            let displayName = s.charAt(0).toUpperCase() + s.slice(1); //capitalize the first letter
+                            let n = {
+                                button: displayName, 
+                                mode: s, 
+                                layer: t,
+                                onclick: () => {
+                                    e.setMode(s); 
                                 },
+                                status: () => (e.getMode() == s ? "active" : ""),
+                            };
+                            if ("Specular" == s && e.shader.setSpecularExp) {
+                                n.list = [{
+                                    slider: "",
+                                    oninput: (t) => {
+                                        e.shader.setSpecularExp(t.target.value);
+                                    },
+                                }];
+                            }
+                            i.push(n);
+                        }
+                        let s = {
+                            button: e.label || t,
+                            onclick: () => {
+                                this.setLayer(e);
                             },
-                        ]),
-                        i.push(n);
-                }
-                let s = {
-                    button: e.label || t,
-                    onclick: () => {
-                        this.setLayer(e);
-                    },
-                    status: () => (e.visible ? "active" : ""),
-                    list: i,
-                    layer: t,
-                };
-                e.annotations && s.list.push(e.annotationsEntry()), this.menu.push(s);
-            }
+                            status: () => (e.visible ? "active" : ""),
+                            list: i,
+                            layer: t,
+                        };
+                        e.annotations && s.list.push(e.annotationsEntry()), this.menu.push(s);
+                    }
             let s = new S(
                 (t, e) => {
                     for (let i of n) i.setLight([t, e], 0);

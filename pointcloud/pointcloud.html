@@ -122,7 +122,7 @@
 	</div>
 
 	<div class="potree_container"
-		style="position: relative; width: 100%; height: calc(100% - 80px); left: 0px; top: 0px; bottom:200px;">
+		style="position: relative; width: 100%; height: calc(100%); left: 0px; top: 0px; bottom:200px;">
 
 		<!--  specify the bakground-color -->
 		<div id="potree_render_area" style="background-color:var(--viewer-bg)"></div>
@@ -235,7 +235,7 @@
 
 	<!-- Here we have a floating div with instructions on how to navigate -->
 
-	<div class="ui-overlay-container" style="position:absolute; bottom:100px; ">
+	<div class="ui-overlay-container" style="position:absolute; bottom:20px; ">
 		<div id="instructions" class="" style="width:350px; padding:15px 10px;">
 			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
 			Click-and-drag to change direction. Move with WASD- <br>
@@ -259,7 +259,7 @@
 		<div class="guide-button" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
 	</div>
 
-	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:135px; z-index:1000; color:white;">
+	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:55px; z-index:1000; color:white;">
 		<div class="LODtool" id="point-sliders" style="width:330px;">
 			<div style="width:calc(50% - 10px); float:left; padding-right:10px;">
 				<span>Point Size:</span> <span id="lblPointSize"></span>

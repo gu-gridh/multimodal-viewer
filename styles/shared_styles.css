@@ -186,7 +186,7 @@ h2 {
     align-items: center;
     width: 100%;
     position: absolute;
-    bottom: 100px;
+    bottom: 20px;
     pointer-events: none;
 }
 
@@ -266,7 +266,7 @@ h2 {
     top:0px;
     pointer-events: none;
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100%);
     background-color: rgb(0, 0, 0, 0.7);
     -webkit-backdrop-filter: blur(6px); 
     backdrop-filter: blur(6px);

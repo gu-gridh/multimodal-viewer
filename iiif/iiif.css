@@ -3,7 +3,7 @@ body {
 	margin:0px;
 	padding:0px;
 	font-family: "Oswald", sans-serif !important;
-	height:calc(100% - 80px);
+	min-height:calc(100vh);
 	width:100%;
 }
 

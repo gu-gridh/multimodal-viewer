@@ -19,26 +19,36 @@
     <style>
         html,
         body {
-            height: 100vh;
+            top:0px;
+            height:  100%!important;
             width: 100vw;
             margin: 0 !important;
             overflow: hidden !important;
             font-family: "Oswald", sans-serif !important;
             -ms-overflow-style: none;
             font-size: 108% !important;
+            background-color:grey;
+            display: flex;
+            flex-direction: column;
         }
 
         #main-content {
-            height: calc(100vh - 80px) !important;
+            height: calc(100% - 80px) !important;
             width: 100vw;
             display: flex;
             overflow: hidden;
+            background-color:green;
         }
 
         #left-pane,
         #right-pane {
             width: 50%;
-            height: 100%;
+            height: calc(100%)!important;
+            overflow:hidden;
+        }
+
+        .iframes{
+            height:calc(100%);
         }
 
         .ui-module-container {
@@ -113,12 +123,11 @@
         }
 
         #footer-container {
-            background-color: blue;
             position: absolute;
-            height: 80px;
             bottom: 0px;
             width: 100%;
             z-index: 1000;
+    
         }
 
         .back-button {
@@ -161,8 +170,8 @@
                 </div>
             </div>
 
-            <iframe id="left-Iframe" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY"
-                style="width:100%; height:100vh; border:none;"></iframe>
+            <iframe id="left-Iframe" class="iframes" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY"
+                style="width:100%; border:none;"></iframe>
         </div>
         <div id="right-pane">
             <div class="ui-module-container">
@@ -171,12 +180,14 @@
                     <div class="ui-module-item right" id="btn6" onclick="changeRightViewer('pointcloud');moduleSwitcherRight(6);"></div>
                 </div>
             </div>
-            <iframe id="right-Iframe" src="/metadata/metadata.html"
-                style="width:100%; height:100vh; border:none;"></iframe>
+            <iframe id="right-Iframe" class="iframes" src="/metadata/metadata.html"
+                style="width:100%; border:none;"></iframe>
         </div>
+        <div id="footer-container"></div>
     </div>
+   
 
-    <div id="footer-container"></div>
+   
     <script>
         $(document).ready(function() {
             const savedLang = localStorage.getItem('i18nextLang') || 'en';

@@ -7,9 +7,9 @@ const app = express();
 
 /*
 Sample URLs for testing:
-http://localhost:8094/ Home
-http://localhost:8094/?q=118-02 panel with Mesh/RTI
-http://localhost:8094/?q=120-20 panel with IIIF
+http://localhost:8095/ Home
+http://localhost:8095/?q=118-02
+http://localhost:8095/?q=120-20 
 */
 
 app.get('/relight/openlime.html', async (req, res) => {

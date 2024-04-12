@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
+const config = require('./config.json');
 const app = express();
 
 /*
@@ -14,7 +15,7 @@ http://localhost:8094/?q=120-20 panel with IIIF
 app.get('/relight/openlime.html', async (req, res) => {
   const queryName = req.query.q;
   // Fetch RTI image data from the API
-  const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+  const apiUrl = `${config.panel}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
@@ -45,7 +46,7 @@ app.get('/relight/openlime.html', async (req, res) => {
 
 app.get('/pointcloud/pointcloud.html', async (req, res) => {
   const queryName = req.query.q;
-  const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+  const apiUrl = `${config.panel}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
     const position = apiResponse.data.features[0]?.properties.spatial_position;
@@ -60,7 +61,7 @@ app.get('/pointcloud/pointcloud.html', async (req, res) => {
       const positionStr = position ? position.join(',') : '';
       const directionStr = direction ? direction.join(',') : '';
       
-      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js');
+      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, `${config.pointcloud}`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
       res.send(modifiedData);
@@ -76,7 +77,7 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
-  const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+  const apiUrl = `${config.panel}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
 
@@ -87,15 +88,12 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
     const modelData = apiResponse.data.features;
 
     if (modelData.length > 0 && modelData[0].properties.attached_topography) {
-      const basePathIiif = "https://img.dh.gu.se/saintsophia/static/";
-      // const basePathJpg = "https://data.dh.gu.se/saintsophia/static/";
+      const basePathIiif = `${config.basePath}`;
 
       const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-      //const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathJpg}${topography.file}`);
       
       const htmlContent = fs.readFileSync(path.join(__dirname, 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif));
-      //updatedHtmlContent = updatedHtmlContent.replace('PLACEHOLDER_JPG_IMAGE_URLS', JSON.stringify(topographyImagesJpg));
 
       res.send(updatedHtmlContent);
     } else {
@@ -119,18 +117,17 @@ app.use('/:type/:file', async (req, res, next) => {
     // Define the API URL based on the type and queryName
     let apiUrl;
     if (type === 'mesh') {
-      apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+      apiUrl = `${config.panel}${queryName}`;
     } else if (type === 'iiif') {
-      apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=${queryName}`;
+      apiUrl = `${config.panel}${queryName}`;
     } else if (type === 'metadata') {
-      apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=${queryName}&depth=1`;
+      apiUrl = `${config.metadata}${queryName}&depth=1`;
     } else {
       return res.status(400).send('Invalid model type');
     }
 
     try {
       const apiResponse = await axios.get(apiUrl);
-  
       if (apiResponse) {
         const modelData = apiResponse.data.features;
                     
@@ -154,14 +151,13 @@ app.use('/:type/:file', async (req, res, next) => {
             modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0,0.0,0.0,0.0,0.0,1.5]));
           }
           else if (type === 'iiif') {
-            const basePath = "https://img.dh.gu.se/saintsophia/static/";
+            const basePath = `${config.basePath}`;
             const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
             const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
             modifiedData = modifiedData.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
           }       
           else if (type === 'metadata') {
             const metadata = apiResponse.data.results[0];
-
             let title = metadata?.title ?? 'Unknown';
             let inscriptions = metadata?.number_of_inscriptions ?? 'Unknown';
             let languages = metadata?.number_of_languages ?? 'Unknown';
@@ -214,6 +210,7 @@ app.get('/', (req, res) => {
     
     let modifiedData = data
       .replace(/PLACEHOLDER_QUERY/g, queryName)
+      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
     res.send(modifiedData);
   });
 });

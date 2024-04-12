@@ -201,6 +201,7 @@ app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/metadata', express.static(path.join(__dirname, 'metadata')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
+app.use('/libs', express.static(path.join(__dirname, 'libs')));
 
 app.get('/', (req, res) => {
   const queryName = req.query.q || 'default';

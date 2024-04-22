@@ -117,14 +117,10 @@
 		Perhaps these should also go into their own docuemnt to keep this document more focuses-->
 		<div class="interface-area-top">
 		<div id="ToolbarHorizontal">
-		
-			<a id="prev-button">
-				<div id="Prev" class="SwitchButton" onclick="presenter.toggleInstanceVisibilityByName('mesh1', true); presenter.toggleInstanceVisibilityByName('mesh2', false);"></div>
-			</a>
+				<div id="Prev" class="SwitchButton" onclick="presenter.setInstanceVisibilityByName('mesh1', true, true); presenter.setInstanceVisibilityByName('mesh2', false, false);"></div>
 			<span id="currentpage"></span>
-			<a id="next-button">
-				<div id="Next" class="SwitchButton"  onclick="presenter.toggleInstanceVisibilityByName('mesh1', false); presenter.toggleInstanceVisibilityByName('mesh2', true);"></div>
-			</a>
+				<div id="Next" class="SwitchButton"  onclick="presenter.setInstanceVisibilityByName('mesh1', false, false); presenter.setInstanceVisibilityByName('mesh2', true, true);"></div>
+
 		</div>  
 	</div>  
 

@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-	height: calc(100vh - 160px) !important;
+	height: calc(100vh - 80px) !important;
 	width: 100%;
 	padding: 60px 60px 20px 60px !important;
 	overflow-x: hidden;

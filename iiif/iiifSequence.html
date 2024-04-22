@@ -17,13 +17,7 @@
 </head>
 
 <style>
-    #currentpage {
-        font-family: "Oswald", sans-serif !important;
-        color: white;
-        font-size: 0.8em !important;
-        font-weight: 100;
-        pointer-events: none !important;
-    }
+   
 </style>
 
 <body>
@@ -49,17 +43,21 @@
         </div>
     </div> -->
 
-    <div class="interface-area">
-        <div id="ToolbarHorizontal">
+    <div class="interface-area-top">
+    <div id="ToolbarHorizontal">
 
-            <a id="prev-button">
-                <div id="Prev" class="NavButton"></div>
-            </a>
-            <span id="currentpage"></span>
-            <a id="next-button">
-                <div id="Next" class="NavButton"></div>
-            </a>
-        </div>
+        <a id="prev-button">
+            <div id="Prev" class="SwitchButton"></div>
+        </a>
+        <span id="currentpage"></span>
+        <a id="next-button">
+            <div id="Next" class="SwitchButton"></div>
+        </a>
+    </div>
+</div>
+
+    <div class="interface-area">
+        
         <div class="toolbar-bottom">
 
             <a id="home" href="#home">
@@ -266,7 +264,7 @@
             <div class="guide-instructions-intro">
                 
                 Scroll to zoom in and out. Click and drag to pan the view. <br>
-                Use the arrows above the toolbar to browse between different analytical layers.
+                If available, use the arrows at the top to browse between different analytical layers.
                 
             </div>
 

@@ -35,7 +35,8 @@
 			<div class="guide-instructions">
 				<div class="guide-instructions-intro">
 					Double-click to focus. Click-and-drag to rotate. <br>
-					Right-click and drag to pan. Scroll to zoom in and out.
+					Right-click and drag to pan. Scroll to zoom in and out.<br>
+					If available, use the arrows at the top to browse between alternative models.
 				</div>
 
 				<div id="guide-instructions-tools">
@@ -88,6 +89,8 @@
 		</div>
 	</div>
 
+
+
 	<!-- The content of the sidebar is fetched from the file sidebar.html -->
 	<div id="sidebar" style="background-color:var(--sidebar-bg)"></div>
 
@@ -99,6 +102,7 @@
 
 			<!-- The draw canvas is the home of the 3d-model-->
 			<canvas id="draw-canvas" style="" />
+			
 		</div>
 
 		<!-- This is the toogle for the sidebar and is hidden on mobile-->
@@ -111,7 +115,32 @@
 
 		<!-- The mobile toolbar has fewer tools due to complexity issues. 
 		Perhaps these should also go into their own docuemnt to keep this document more focuses-->
+		<div class="interface-area-top">
+		<div id="ToolbarHorizontal">
+		
+			<a id="prev-button">
+				<div id="Prev" class="SwitchButton"></div>
+			</a>
+			<span id="currentpage"></span>
+			<a id="next-button">
+				<div id="Next" class="SwitchButton"></div>
+			</a>
+		</div>  
+	</div>  
+
 		<div class="interface-area">
+		
+				<div id="ToolbarHorizontal">
+		
+					<a id="prev-button">
+						<div id="Prev" class="SwitchButton"></div>
+					</a>
+					<span id="currentpage">1 of</span>
+					<a id="next-button">
+						<div id="Next" class="SwitchButton"></div>
+					</a>
+				</div>  
+		
 
 			<div id="toolbar_m" class="toolbar-bottom">
 				<div id="toolbar">

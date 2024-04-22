@@ -2,7 +2,7 @@
 {
     "mesh": {
       "gargo": {
-        "title": "Awesome Gargolye",
+        "title": "Gargolye",
         "trackballStart": [0, 0, 0, 0, 0, 1.5],
         "meshURL": "https://data.dh.gu.se/shfa_meshes/compressed/Kville 28 svärd.nxz",
         "startPhi": 1.0,

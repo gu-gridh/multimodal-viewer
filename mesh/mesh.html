@@ -119,29 +119,17 @@
 		<div id="ToolbarHorizontal">
 		
 			<a id="prev-button">
-				<div id="Prev" class="SwitchButton"></div>
+				<div id="Prev" class="SwitchButton" onclick="presenter.toggleInstanceVisibilityByName('mesh1', true); presenter.toggleInstanceVisibilityByName('mesh2', false);"></div>
 			</a>
 			<span id="currentpage"></span>
 			<a id="next-button">
-				<div id="Next" class="SwitchButton"></div>
+				<div id="Next" class="SwitchButton"  onclick="presenter.toggleInstanceVisibilityByName('mesh1', false); presenter.toggleInstanceVisibilityByName('mesh2', true);"></div>
 			</a>
 		</div>  
 	</div>  
 
 		<div class="interface-area">
 		
-				<div id="ToolbarHorizontal">
-		
-					<a id="prev-button">
-						<div id="Prev" class="SwitchButton"></div>
-					</a>
-					<span id="currentpage">1 of</span>
-					<a id="next-button">
-						<div id="Next" class="SwitchButton"></div>
-					</a>
-				</div>  
-		
-
 			<div id="toolbar_m" class="toolbar-bottom">
 				<div id="toolbar">
 					<img id="home_m" title="Home" src="../styles/interface/frame.png" />
@@ -219,14 +207,18 @@
 
 		presenter.setScene({
 			meshes: {
-				"mesh_comp": {
-					url: PLACEHOLDER_MESH
-				}
+				"mesh1": {url: PLACEHOLDER_MESH},
+				"mesh2": {url: "https://data.dh.gu.se/saintsophia/mesh/114-27.nxz"}
 			},
 			modelInstances: {
-				"modell": {
-					mesh: "mesh_comp",
+				"mesh1": {
+					mesh: "mesh1",
 					color: [50, 50, 50]
+				},
+				"mesh2": {
+					mesh: "mesh2",
+					color: [50, 50, 50],
+					visible: false
 				}
 			},
 

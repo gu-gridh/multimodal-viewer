@@ -127,7 +127,7 @@ export class InputHandler extends EventDispatcher {
 
 		e.preventDefault();
 
-		if (e.touches.length === 1) {
+		if (e.touches.length === 1 || e.touches.length === 3) {
 			let rect = this.domElement.getBoundingClientRect();
 			let x = e.touches[0].pageX - rect.left;
 			let y = e.touches[0].pageY - rect.top;
@@ -135,6 +135,7 @@ export class InputHandler extends EventDispatcher {
 
 			if (this.drag) {
 				this.drag.mouse = 1;
+				if(e.touches.length === 3) this.drag.mouse = 2;
 
 				this.drag.lastDrag.x = x - this.drag.end.x;
 				this.drag.lastDrag.y = y - this.drag.end.y;

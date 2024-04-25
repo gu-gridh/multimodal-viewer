@@ -52,10 +52,10 @@
             <a id="zoom-out" href="#zoom-out">
                 <div id="ZoomOut" class="NavButton"></div>
             </a>
-            <a id="full-page" href="#full-page">
+            <a id="full-page1" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton"></div>
             </a>
-
+            
             <div class="NavButton annotate-button" style="width:60px; line-height:2.0" onclick="$('#instructions').show();">Annotate</div>
 
         </div>
@@ -92,6 +92,11 @@
             var imageId = placeholderUrl.replace(baseImageUrl + "/", "").split("/")[0];
             var newDownloadUrl = baseImageUrl + "/" + imageId + "/full/full/0/default.jpg";
             downloadLink.href = newDownloadUrl;
+        }
+
+        //notify index.html that the panel button has been clicked
+        function togglePane() {
+            window.parent.postMessage({ type: 'togglePane' }, '*');
         }
 
         window.onload = function () {

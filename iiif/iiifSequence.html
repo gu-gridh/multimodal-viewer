@@ -70,7 +70,7 @@
             <a id="zoom-out" href="#zoom-out">
                 <div id="ZoomOut" class="NavButton"></div>
             </a>
-            <a id="full-page" href="#full-page">
+            <a id="full-page1" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton"></div>
             </a>
         </div>
@@ -246,15 +246,10 @@
 
         };
 
-        // function viewAnnotations() {
-        //     var annotations = anno.getAnnotations();
-        //     var annotationsJson = JSON.stringify(annotations, null, 2); // Pretty print the JSON
-
-        //     console.log(annotationsJson); // Log to console
-
-        //     // Alternatively, display in an element on the page
-        //     document.getElementById('annotationsJson').textContent = annotationsJson;
-        // }
+        //notify index.html that the panel button has been clicked
+        function togglePane() {
+            window.parent.postMessage({ type: 'togglePane' }, '*');
+        }
     </script>
 
 <div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">

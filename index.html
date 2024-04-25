@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Content Display</title>
+    <title>Multimodal Tool</title>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -42,7 +42,7 @@
 
         #left-pane,
         #right-pane {
-            width: 50%;
+            width: 100%;
             height: calc(100%)!important;
             overflow:hidden;
         }
@@ -81,7 +81,7 @@
             cursor: pointer;
             opacity:0.7;
             user-select: none;
-    -webkit-user-select: none;
+            -webkit-user-select: none;
         }
 
         .ui-module .ui-module-item:hover {
@@ -92,14 +92,6 @@
             max-width: auto;
             margin: 0 auto;
             padding: 20px;
-        }
-
-        .toggle-button {
-            display: inline-block;
-            padding: 5px 10px;
-            background-color: #2e2e2e;
-            color: white;
-            cursor: pointer;
         }
 
         .content {
@@ -149,9 +141,11 @@
         .back-button:hover {
             background-color: rgba(0, 0, 0, 1.0);
         }
+
+        #left-pane, #right-pane {
+            transition: width 0.5s ease-in-out; 
+        }
     </style>
-
-
 </head>
 
 <body>
@@ -169,9 +163,10 @@
                     <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('relight');moduleSwitcherLeft(4);"></div>
                 </div>
             </div>
-
-            <iframe id="left-Iframe" class="iframes" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY"
+            <div id="left-pane">
+                <iframe id="left-Iframe" class="iframes" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY"
                 style="width:100%; border:none;"></iframe>
+            </div>
         </div>
         <div id="right-pane">
             <div class="ui-module-container">
@@ -180,13 +175,13 @@
                     <div class="ui-module-item right" id="btn6" onclick="changeRightViewer('pointcloud');moduleSwitcherRight(6);"></div>
                 </div>
             </div>
-            <iframe id="right-Iframe" class="iframes" src="/metadata/metadata.html"
+            <div id="right-pane">
+                <iframe id="right-Iframe" class="iframes" src="/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe>
+            </div>
         </div>
         <div id="footer-container"></div>
     </div>
-   
-
    
     <script>
         $(document).ready(function() {
@@ -229,12 +224,32 @@
                 }
             }
         });
+
+        function toggleRightPane() {
+            var leftPane = document.getElementById('left-pane');
+            var rightPane = document.getElementById('right-pane');
+            var uiModuleContainer = rightPane.querySelector('.ui-module-container');
+            if (rightPane.style.width === '0px') {
+                rightPane.style.width = '50%';
+                leftPane.style.width = '50%';
+                uiModuleContainer.style.display = 'flex'; 
+
+            } else {
+                rightPane.style.width = '0px';
+                leftPane.style.width = '100%';
+                uiModuleContainer.style.display = 'none'; 
+
+            }
+        }
     </script>
 
     <script>
        window.addEventListener('message', function(event) {
             if (event.data.type === 'annotationClick') {
                 updateMetadataContent(event.data.value);
+            }
+            if (event.data.type === 'togglePane') {
+                toggleRightPane();
             }
         }, false);
 

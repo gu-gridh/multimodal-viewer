@@ -157,9 +157,9 @@
             </a>
             <div class="ui-module-container">
                 <div class="ui-module">
+                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
                     <div class="ui-module-item left" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0"></div>
                     <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
-                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
                     <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('relight');moduleSwitcherLeft(4);"></div>
                 </div>
             </div>
@@ -169,12 +169,12 @@
             </div>
         </div>
         <div id="right-pane">
-            <div class="ui-module-container">
+            <!-- <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn5" onclick="changeRightViewer('metadata');moduleSwitcherRight(5);" style="opacity:1.0"></div>
                     <div class="ui-module-item right" id="btn6" onclick="changeRightViewer('pointcloud');moduleSwitcherRight(6);"></div>
                 </div>
-            </div>
+            </div> -->
             <div id="right-pane">
                 <iframe id="right-Iframe" class="iframes" src="/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe>

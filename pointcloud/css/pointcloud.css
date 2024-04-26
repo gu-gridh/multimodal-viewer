@@ -61,6 +61,16 @@
     height: 42px;
 }
 
+#toolsExtra .button-icon {
+    height: 35px!important;
+    width: 35px!important;
+    margin-top:-2px;
+}
+
+#toolsExtra .tool-icon-expanded {
+    height: 35px!important;
+}
+
 .LODtool .ui-slider-horizontal {
     height: 4px;
 }

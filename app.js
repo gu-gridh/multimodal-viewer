@@ -110,7 +110,46 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
   }
 });
 
-//other paths including mesh, IIIF, metadata
+app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
+  const { projectName } = req.params;
+  const queryName = req.query.q;
+  if (!queryName) {
+    return res.status(400).send('Query parameter is missing');
+  }
+
+  const apiUrl = `${config.metadata}${queryName}&depth=1`;
+  try {
+    const apiResponse = await axios.get(apiUrl);
+    if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
+      return res.status(404).send('Data not found');
+    }
+
+    const metadata = apiResponse.data.results[0];
+    const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
+
+    fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      let modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, metadata.title ?? 'Unknown')
+                                 .replace(/PLACEHOLDER_ROOM/g, metadata.room ?? 'Unknown')
+                                 .replace(/PLACEHOLDER_INSCRIPTIONS/g, metadata.number_of_inscriptions ?? 'Unknown')
+                                 .replace(/PLACEHOLDER_LANGUAGES/g, metadata.number_of_languages ?? 'Unknown')
+                                 .replace(/PLACEHOLDER_DOCUMENTATION_EN/g, metadata.documentation.map(doc => doc.observation).join(' '))
+                                 .replace(/PLACEHOLDER_DOCUMENTATION_UK/g, metadata.documentation.map(doc => doc.text_ukr).join(' '))
+                                 .replace(/PLACEHOLDER_TAGS/g, metadata.tags.map(tag => tag.text).join(', '));
+
+      res.send(modifiedHtml);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//other paths including mesh, IIIF
 app.use('/:type/:file', async (req, res, next) => {
   const { type, file } = req.params;
   const queryName = req.query.q;
@@ -124,8 +163,6 @@ app.use('/:type/:file', async (req, res, next) => {
       apiUrl = `${config.panel}${queryName}`;
     } else if (type === 'iiif') {
       apiUrl = `${config.panel}${queryName}`;
-    } else if (type === 'metadata') {
-      apiUrl = `${config.metadata}${queryName}&depth=1`;
     } else {
       return res.status(400).send('Invalid model type');
     }
@@ -159,24 +196,6 @@ app.use('/:type/:file', async (req, res, next) => {
             const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
             const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
             modifiedData = modifiedData.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
-          }       
-          else if (type === 'metadata') {
-            const metadata = apiResponse.data.results[0];
-            let title = metadata?.title ?? 'Unknown';
-            let inscriptions = metadata?.number_of_inscriptions ?? 'Unknown';
-            let languages = metadata?.number_of_languages ?? 'Unknown';
-            let room = metadata?.room ?? 'Unknown';
-            let tags = (metadata?.tags ?? []).map(tag => tag.text).join(', ');
-            let documentationObservations = (metadata?.documentation ?? []).map(doc => doc.observation).join(' ');
-            let documentationTextUkr = (metadata?.documentation ?? []).map(doc => doc.text_ukr).join(' ');
-                 
-            modifiedData = modifiedData.replace(/PLACEHOLDER_TITLE/g, title);
-            modifiedData = modifiedData.replace(/PLACEHOLDER_ROOM/g, room);
-            modifiedData = modifiedData.replace(/PLACEHOLDER_INSCRIPTIONS/g, inscriptions);
-            modifiedData = modifiedData.replace(/PLACEHOLDER_LANGUAGES/g, languages);
-            modifiedData = modifiedData.replace(/PLACEHOLDER_DOCUMENTATION_EN/g, documentationObservations);
-            modifiedData = modifiedData.replace(/PLACEHOLDER_DOCUMENTATION_UK/g, documentationTextUkr);
-            modifiedData = modifiedData.replace(/PLACEHOLDER_TAGS/g, tags);
           }
           res.send(modifiedData);
         });
@@ -199,7 +218,7 @@ app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
 app.use('/rti', express.static(path.join(__dirname, 'rti')));
 app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
 app.use('/shared', express.static(path.join(__dirname, 'shared')));
-app.use('/metadata', express.static(path.join(__dirname, 'metadata')));
+app.use('/projects', express.static(path.join(__dirname, 'projects')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));
 

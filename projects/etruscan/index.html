@@ -176,8 +176,7 @@
                 </div>
             </div>
             <div id="right-pane">
-                <iframe id="right-Iframe" class="iframes" src="/metadata/metadata.html"
-                style="width:100%; border:none;"></iframe>
+                <iframe id="right-Iframe" class="iframes" src="/projects/etruscan/metadata/metadata.html" style="width:100%; border:none;"></iframe>
             </div>
         </div>
         <div id="footer-container"></div>
@@ -289,7 +288,7 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = '/metadata/metadata.html?q=PLACEHOLDER_QUERY';
+                iframe.src = `/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             } else if (viewerType === 'pointcloud') {
                 iframe.src = '/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IIIF Image Viewer</title>
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="metadata.css">
+    <link rel="stylesheet" href="../../../shared/shared_styles.css">
+    <script src="../../../libs/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
+</head>
+
+<body>  
+    <script>
+        function updateTranslations(t) {
+            document.getElementById('lang0').textContent = t('panel');
+            document.getElementById('lang1').textContent = t('inscriptions');
+            document.getElementById('lang2').textContent = t('language');
+            document.getElementById('lang3').textContent = t('room');
+            document.getElementById('lang4').textContent = t('tags');
+            document.getElementById('lang5').textContent = t('documentation');
+        }
+    
+        function setButtonLabel(language) {
+            document.getElementById('languageButton').textContent = language === 'uk' ? 'In English' : 'Українською';
+        }
+    
+        function changeLanguage(lang) {
+            i18next.changeLanguage(lang, function(err, t) {
+                if (err) {
+                    console.error("Error changing language:", err);
+                    return;
+                }
+                window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
+                localStorage.setItem('i18nextLang', lang);
+                setButtonLabel(lang);
+                updateTranslations(t);
+            });
+        }
+    
+        function toggleLanguage() {
+            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';        
+            currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
+            changeLanguage(currentLanguage);
+            toggleVisibility(currentLanguage);
+        }
+
+        function toggleVisibility(lang) {
+            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('documentation_uk').style.display = lang === 'uk' ? 'block' : 'none';
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
+        
+            i18next.use(i18nextHttpBackend).init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/locales/{{lng}}/translation.json',
+                },
+            }, function(err, t) {
+                if (err) {
+                    console.error("i18next initialization error:", err);
+                    return;
+                }
+                setButtonLabel(savedLang);
+                updateTranslations(t);
+                toggleVisibility(savedLang);
+            });
+        });
+    </script>
+      
+        
+    <div class="container">
+        <div class="border"></div>
+
+        <div class="language-toggle-buttons">
+            <button id="languageButton" onclick="toggleLanguage()"></button>
+        </div>
+        
+        <div class="metadata-text">SOPHIA
+            <div class="metadata-panel">
+
+                <div class="metadata-panel-title">
+                   <div id="lang0" style="display:inline;">Panel</div> PLACEHOLDER_TITLE
+                </div>
+
+
+                <div class="metadata-content">
+                    <div class="metadata-item">
+                        <div class="label" id="lang1"></div>
+                        <div class="theme-color-text tag">PLACEHOLDER_INSCRIPTIONS</div>
+                    </div>
+
+
+                    <div class="metadata-item">
+                        <div class="label" id="lang2"></div>
+                        <div class="theme-color-text tag">PLACEHOLDER_LANGUAGES</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="lang3"></div>
+                        <div class="theme-color-text tag">PLACEHOLDER_ROOM</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="lang4"></div>
+                        <div class="theme-color-text tag">PLACEHOLDER_TAGS</div>
+                    </div>
+                </div>
+
+                <div class="metadata-description">
+                    <div class="metadata-title" id="lang5"></div>
+                    <div class="label" id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</div>
+                    <div class="label" id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</div>
+                </div>                
+            </div>
+            <div class="metadata-inscription">
+                <!-- <div class="metadata-inscription-close"></div> -->
+
+                <div class="image-container">
+                      <!-- Insert image carousel text -->
+                </div>
+
+                <div class="metadata-content" style="padding-top:0px;">
+
+                    <div class="metadata-inscription-title" id="inscription-title">
+                        Inscription identification number
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Type:</div>
+                        <div class="theme-color-text tag">Text</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Language:</div>
+                        <div class="theme-color-text tag">Greek</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Tags:</div>
+                        <div class="theme-color-text tag">Saint</div>
+                    </div>
+
+                    <div class="metadata-description">
+                        <div class="metadata-title">Transcription</div>
+                        <div class="label"></div>
+                    </div>
+                    <div class="metadata-descriptio-text">
+                      <!-- Insert transcription text -->
+                    </div>
+
+                    <div class="metadata-description">
+                        <div class="metadata-title">Translation</div>
+                        <div class="label"></div>
+                    </div>
+                    <div class="metadata-descriptio-text">
+                    <!-- Insert translation text -->
+                    </div>
+
+                    <div class="metadata-description">
+                        <div class="metadata-title">Contribution</div>
+                        <div class="label"></div>
+                    </div>
+                    <div class="metadata-descriptio-text">
+                      <!-- Insert contribution text -->
+                    </div>
+
+                    <div class="metadata-center-button">
+                        <router-link :to="`/place/${place?.id_}`">
+                            <div class="theme-button"
+                                style="padding:8px 20px; text-align:center; width:auto;  color:white;">Edit Inscription
+                            </div>
+                        </router-link>
+                    </div>
+                </div>
+
+            </div>
+
+        
+
+        </div>
+
+    </div>
+</body>
+
+</html>

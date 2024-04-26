@@ -16,7 +16,7 @@ http://localhost:8095/?q=118-02
 http://localhost:8095/?q=120-20 
 */
 
-app.get('/relight/openlime.html', async (req, res) => {
+app.get('/rti/openlime.html', async (req, res) => {
   const queryName = req.query.q;
   // Fetch RTI image data from the API
   const apiUrl = `${config.panel}${queryName}`;
@@ -24,7 +24,7 @@ app.get('/relight/openlime.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
 
-    fs.readFile(path.join(__dirname, 'relight', 'openlime.html'), 'utf8', (err, htmlData) => {
+    fs.readFile(path.join(__dirname, 'rti', 'openlime.html'), 'utf8', (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -196,7 +196,7 @@ app.use('/:type/:file', async (req, res, next) => {
 
 app.use('/mesh', express.static(path.join(__dirname, 'mesh')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
-app.use('/relight', express.static(path.join(__dirname, 'relight')));
+app.use('/rti', express.static(path.join(__dirname, 'rti')));
 app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/metadata', express.static(path.join(__dirname, 'metadata')));

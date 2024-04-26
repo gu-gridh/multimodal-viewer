@@ -160,7 +160,7 @@
                     <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
                     <div class="ui-module-item left" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0"></div>
                     <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
-                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('relight');moduleSwitcherLeft(4);"></div>
+                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);"></div>
                 </div>
             </div>
             <div id="left-pane">
@@ -281,8 +281,8 @@
             else if (viewerType === 'mesh') {
                 iframe.src = '/mesh/mesh.html?q=PLACEHOLDER_QUERY';
             }
-            else if (viewerType === 'relight') {
-                iframe.src = '/relight/openlime.html?q=PLACEHOLDER_QUERY';
+            else if (viewerType === 'rti') {
+                iframe.src = '/rti/openlime.html?q=PLACEHOLDER_QUERY';
             }
         }
 

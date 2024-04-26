@@ -164,21 +164,21 @@
 
 
 			<!-- APPEARANCE -->
-			<div class="switch">
-				<div id="about_menu" style="color:var(--selected);" class="switch-button" onclick="AboutFunction()">
+			<div class="switch" style="display:none;">
+				<!-- <div id="about_menu" style="color:var(--selected);" class="switch-button" onclick="AboutFunction()">
 					About
 				</div>
 				<div id="looks_menu" class="switch-button" onclick="AppearanceFunction()">
 					Appearance
-				</div>
-				<div id="tools_menu" class="switch-button" onclick="ToolsFunction()">
+				</div> -->
+				<!-- <div id="tools_menu" class="switch-button" onclick="ToolsFunction()">
 					Tools
-				</div>
+				</div> -->
 
 			</div>
 			<div id="the_looks" style="display:none;">
 				<ul class="pv-menu-list" style="line-height:1.8;">
-					<h2>Quality</h2>
+				
 					<li>
 						<!-- <selectgroup id="splat_quality_options">
 							<option id="splat_quality_options_standard" value="standard">Standard</option>
@@ -198,19 +198,7 @@
 						<div id="sldPointBudget"></div>
 					</li> -->
 
-					<li><span>Field of view:</span> <span id="lblFOV"></span>
-						<div id="sldFOV"></div>
-					</li>
-
-					<h2>Eye-Dome-Lighting</h2>
-
-					<li><label><input type="checkbox" id="chkEDLEnabled" /><span> EDL enabled</span></label></li>
-					<li><span>Radius:</span> <span id="lblEDLRadius"></span>
-						<div id="sldEDLRadius"></div>
-					</li>
-					<li><span>Strength:</span> <span id="lblEDLStrength"></span>
-						<div id="sldEDLStrength"></div>
-					</li>
+				
 					<!-- <li><span data-i18n="appearance.edl_opacity"></span>: <span id="lblEDLOpacity"></span><div id="sldEDLOpacity"></div></li> -->
 
 					<!-- <div class="divider"><span>Background</span></div>
@@ -237,7 +225,7 @@
 
 
 
-			<div id="the_tools" style="display:none;">
+			<div id="the_tools" style="display:block;">
 				
 				<div class="pv-menu-list" style="line-height:1.8;">
 
@@ -245,9 +233,23 @@
 					
 					<div id="navigation"></div>
 				
+					<li><span>Field of view:</span> <span id="lblFOV"></span>
+						<div id="sldFOV"></div>
+					</li>
+
+					<h2>Eye-Dome-Lighting</h2>
+
+					<li><label><input type="checkbox" id="chkEDLEnabled" style="display:none;"/></label></li>
+					<li><span>Radius:</span> <span id="lblEDLRadius"></span>
+						<div id="sldEDLRadius"></div>
+					</li>
+					<li><span>Strength:</span> <span id="lblEDLStrength"></span>
+						<div id="sldEDLStrength"></div>
+					</li>
+					
 					<h2 style="width:100%;">Measurement</h2>
 					
-					<!-- <div id="tools" style="width:100%; float:left;"></div>-->
+					<div id="toolsExtra" style="width:100%; float:left;"></div>
 
 					<!-- 	<li>
 				<selectgroup id="measurement_options_show">
@@ -355,7 +357,7 @@
 
 		<!-- ABOUT -->
 
-		<div id="the_abouts" style="display:block">
+		<div id="the_abouts" style="display:none">
 			<div class="pv-menu-list" style="line-height:1.8;">
 				<h2>Metadata</h2>
 

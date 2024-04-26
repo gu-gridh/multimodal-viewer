@@ -86,7 +86,7 @@
 }
 
 .ui-state-active {
-    color: rgb(0, 213, 250) !important;
+    color: rgb(0, 0, 0) !important;
     font-weight: 600 !important;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
     transform: scale(1.03);
@@ -116,6 +116,9 @@
     background-color: rgb(50, 50, 50) !important;
     color: white;
 }
+#splat_quality_options .ui-state-active {
+color: rgb(0, 213, 250) !important;
+}
 
 .ui-button {
     margin-top: -3px !important;
@@ -130,18 +133,29 @@
     padding-top: 15%;
 }
 
+.orientation{
+    display:flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    pointer-events:auto;
+    width:230px; 
+    height:30px; 
+    border-radius:8px; 
+    background-color:rgba(0,0,0,0.8); 
+    padding:10px 15px; 
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+}
+
 .potree_menu_toggle {
-    display: none;
+    display: block;
 }
 
 /* Hide away complexities on mobile */
 
-@media screen and (max-width: 800px) {
-
+@media screen and (max-width: 1250px) {
     .potree_menu_toggle {
         display: none;
     }
-
 }
 
 /* Point cloud annotation style */

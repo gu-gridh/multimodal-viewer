@@ -79352,27 +79352,10 @@ ENDSEC
 
 		initToolbar() {
 
-			// ANGLE
 			let elToolbar = $('#tools');
-			/* elToolbar.append(this.createToolIcon(
-				Potree.resourcePath + '/icons/angle.png',
-				'[title]tt.angle_measurement',
-				() => {
-					$('#menu_measurements').next().slideDown();
-					let measurement = this.measuringTool.startInsertion({
-						showDistances: false,
-						showAngles: true,
-						showArea: false,
-						closed: true,
-						maxMarkers: 3,
-						name: 'Angle'});
+			let elToolbarExtra = $('#toolsExtra');
 
-					let measurementsRoot = $("#jstree_scene").jstree().get_json("measurements");
-					let jsonNode = measurementsRoot.children.find(child => child.data.uuid === measurement.uuid);
-					$.jstree.reference(jsonNode.id).deselect_all();
-					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
-				}
-			)); */
+		
 
 			// POINT
 			/* elToolbar.append(this.createToolIcon(
@@ -79487,9 +79470,9 @@ ENDSEC
 				}
 			));  */
 
-			/* 
+			 
 			// AREA
-			elToolbar.append(this.createToolIconExpanded(
+			elToolbarExtra.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/area.svg',
 				'Measure an area by drawing a polygon',
 				() => {
@@ -79509,7 +79492,7 @@ ENDSEC
 			));
 
 			// VOLUME
-			elToolbar.append(this.createToolIconExpanded(
+			elToolbarExtra.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/volume.svg',
 				'Measure an area volume with a cube',
 				() => {
@@ -79523,9 +79506,9 @@ ENDSEC
 			));
 
 			// SPHERE VOLUME
-			elToolbar.append(this.createToolIconExpanded(
+			elToolbarExtra.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/sphere_distances.svg',
-				'',
+				'Measure an area volume with a sphere',
 				() => {
 					let volume = this.volumeTool.startInsertion({ type: SphereVolume });
 
@@ -79535,9 +79518,9 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
 			)); 
-*/
-		/* 	// PROFILE
-			elToolbar.append(this.createToolIconExpanded(
+
+		 	// PROFILE
+			elToolbarExtra.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/profile.svg',
 				'Highlight a profile',
 				() => {
@@ -79549,10 +79532,10 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			)); */
+			)); 
 
 			// ANNOTATION
-		/* 	elToolbar.append(this.createToolIconExpanded(
+		elToolbarExtra.append(this.createToolIconExpanded(
 				Potree.resourcePath + '/icons/annotation.svg',
 				'Annotate the model',
 				() => {
@@ -79564,7 +79547,28 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
-			)); */
+			)); 
+
+			/* 	// ANGLE
+				elToolbarExtra.append(this.createToolIcon(
+					Potree.resourcePath + '/icons/angle.png',
+					'Measure angles by drawing a triangle',
+					() => {
+						$('#menu_measurements').next().slideDown();
+						let measurement = this.measuringTool.startInsertion({
+							showDistances: false,
+							showAngles: true,
+							showArea: false,
+							closed: true,
+							maxMarkers: 3,
+							name: 'Angle'});
+	
+						let measurementsRoot = $("#jstree_scene").jstree().get_json("measurements");
+						let jsonNode = measurementsRoot.children.find(child => child.data.uuid === measurement.uuid);
+						$.jstree.reference(jsonNode.id).deselect_all();
+						$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
+					}
+				));  */
 
 			// REMOVE ALL
 			elToolbar.append(this.createToolIconExpanded(

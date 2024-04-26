@@ -11,7 +11,7 @@
         rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <script src="./pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="../styles/shared_styles.css">
+    <link rel="stylesheet" href="../shared/shared_styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <script src="./libs/i18next.min.js"></script>
@@ -128,7 +128,7 @@
             width: 35px;
             border-radius: 50%;
             background-color: rgba(0, 0, 0, 0.8);
-            background-image: url(../styles/interface/back.png);
+            background-image: url(../shared/interface/back.png);
             background-size: 15px;
             background-position: center;
             background-repeat: no-repeat;
@@ -187,7 +187,7 @@
         $(document).ready(function() {
             const savedLang = localStorage.getItem('i18nextLang') || 'en';
     
-            $("#footer-container").load("styles/footer.html");
+            $("#footer-container").load("shared/footer.html");
 
             i18next
                 .use(i18nextHttpBackend)

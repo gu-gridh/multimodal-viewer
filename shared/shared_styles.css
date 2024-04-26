@@ -256,11 +256,11 @@ h2 {
 }
 
 #Prev {
-    background-image: url(../styles/interface/prev.png);
+    background-image: url(../shared/interface/prev.png);
 }
 
 #Next {
-    background-image: url(../styles/interface/next.png);
+    background-image: url(../shared/interface/next.png);
     margin-left: 10px;
 }
 

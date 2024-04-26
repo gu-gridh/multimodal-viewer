@@ -198,7 +198,7 @@ app.use('/mesh', express.static(path.join(__dirname, 'mesh')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
 app.use('/rti', express.static(path.join(__dirname, 'rti')));
 app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
-app.use('/styles', express.static(path.join(__dirname, 'styles')));
+app.use('/shared', express.static(path.join(__dirname, 'shared')));
 app.use('/metadata', express.static(path.join(__dirname, 'metadata')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));

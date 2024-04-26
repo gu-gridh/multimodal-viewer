@@ -71,6 +71,20 @@
     height: 35px!important;
 }
 
+#clipping_tools .button-icon {
+    height: 35px!important;
+    width: 35px!important;
+    margin-top:-2px;
+}
+
+#clipping_tools .tool-icon-expanded {
+    height: 35px!important;
+    width: 35px!important;
+    margin-top:-2px;
+}
+
+
+
 .LODtool .ui-slider-horizontal {
     height: 4px;
 }

@@ -227,16 +227,16 @@
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
-            var uiModuleContainer = rightPane.querySelector('.ui-module-container');
+            // var uiModuleContainer = rightPane.querySelector('.ui-module-container');
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
-                uiModuleContainer.style.display = 'flex'; 
+                // uiModuleContainer.style.display = 'flex'; 
 
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
-                uiModuleContainer.style.display = 'none'; 
+                // uiModuleContainer.style.display = 'none'; 
 
             }
         }

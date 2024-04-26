@@ -17,9 +17,11 @@ PROJECT=etrucan npm start
 
 ## Usage
 
-http://localhost:8095/ directs to the Home view
-
 Fetch for respective panel data like so: http://localhost:8095/?q=118-02
+Sample URLs for testing:
+http://localhost:8095/ Home
+http://localhost:8095/?q=118-02
+http://localhost:8095/?q=120-20 
 
 ## Installation
 

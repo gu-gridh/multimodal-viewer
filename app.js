@@ -2,19 +2,20 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
-const config = require('./config.json');
 const dotenv = require('dotenv'); 
 
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-/*
-Sample URLs for testing:
-http://localhost:8095/ Home
-http://localhost:8095/?q=118-02
-http://localhost:8095/?q=120-20 
-*/
+const configPath = path.join(__dirname, 'projects', projectName, 'config.json');
+let config;
+try {
+    config = require(configPath);
+} catch (error) {
+    console.error(`Failed to load config for project ${projectName}:`, error);
+    process.exit(1);
+}
 
 app.get('/rti/openlime.html', async (req, res) => {
   const queryName = req.query.q;

@@ -252,7 +252,7 @@ table, th, td, tr {
     position: absolute;
     width: 160px;
     height: auto;
-    margin-top: 150px;
+    margin-top: 143px;
     margin-left: calc(50% - 110px);
     padding: 5px 10px 5px 10px;
     background-color: rgba(0, 0, 0, 0.8);

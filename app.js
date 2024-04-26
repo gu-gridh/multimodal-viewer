@@ -221,9 +221,9 @@ app.get('/', (req, res) => {
 });
 
 // Fallback route to serve index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '/index.html'));
+// });
 
 const PORT = 8095;
 app.listen(PORT, () => {

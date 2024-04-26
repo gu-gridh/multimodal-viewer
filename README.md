@@ -9,7 +9,7 @@ A Node.js application built with Express for visualizing and interacting with me
 ## Getting Started
 
 npm install
-define a .env.local variable with PROJECT=etruscan/shfa/sophia + nom start:
+define a .env.local variable with PROJECT=etruscan/shfa/sophia + npm start:
 
 PROJECT=sophia npm start
 PROJECT=shfa npm start

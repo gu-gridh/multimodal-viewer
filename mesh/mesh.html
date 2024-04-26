@@ -154,10 +154,8 @@
 
 
 					<!--FULLSCREEN-->
-					<img id="full_on" title="Exit Full Screen" src="../styles/interface/compress.svg"
-						style="position:absolute; visibility:hidden;" />
-					<img id="full" title="Full Screen" src="../styles/interface/expand.svg"
-						style="position:relative;" />
+					<img id="full1" title="Full Screen1" src="../styles/interface/expand.svg"
+						style="position:relative;" onclick="togglePane()" />
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
@@ -311,6 +309,10 @@
 		} else {
 			x.style.left = "420px";
 		}
+	}
+
+	function togglePane() {
+		window.parent.postMessage({ type: 'togglePane' }, '*');
 	}
 
 	$(document).ready(function () {

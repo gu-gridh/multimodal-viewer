@@ -3,7 +3,6 @@ import { createI18n } from 'vue-i18n';
 const messages = {
     en: {
       portaltitle: "Saint \nSophia's\nInscriptions",
-      etruscanabout: "The portal is published by GRIDH at the university of Gothenburg in close collaboration with the Swedish Institute in Rome.",
       documentation: "Documentation by category",
       timeperiod: "Time period",
       tag: "Tag",
@@ -62,7 +61,6 @@ const messages = {
 
     uk: {
       portaltitle: "Написи \nСвятої \nСофії",
-      etruscanabout: "The portal is published by GRIDH at the university of Gothenburg in close collaboration with the Swedish Institute in Rome.",
       documentation: "Documentation by category",
       timeperiod: "Time period",
       tag: "Tag",

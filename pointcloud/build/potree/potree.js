@@ -13,7 +13,7 @@
 	 */
 
 	/**
-	 * And additional slight modifications by Jonathan Westin for the GRIDH-implementation
+	 * And additional slight modifications by Jonathan Westin and Tristan Bridge for the GRIDH-implementation
 	 */
 
 

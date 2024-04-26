@@ -3,7 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 const config = require('./config.json');
+const dotenv = require('dotenv'); 
+
+dotenv.config({ path: './.env.local' });
 const app = express();
+const projectName = process.env.PROJECT || 'default';
 
 /*
 Sample URLs for testing:
@@ -200,17 +204,18 @@ app.use('/locales', express.static(path.join(__dirname, 'locales')));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));
 
 app.get('/', (req, res) => {
+  const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
   const queryName = req.query.q || 'default';
 
-  fs.readFile(path.join(__dirname, 'index.html'), 'utf8', (err, data) => {
+  fs.readFile(indexPath, 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading the file:', err);
       return res.status(500).send('Internal Server Error');
     }
     
     let modifiedData = data
-      .replace(/PLACEHOLDER_QUERY/g, queryName)
-      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+    .replace(/PLACEHOLDER_QUERY/g, queryName)
+    .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
     res.send(modifiedData);
   });
 });

@@ -32,7 +32,7 @@
 	async function fetchTitleAndUpdate() {
 		try {
 			const qValue = getQueryParameter('q');
-			const response = await fetch(`https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=${qValue}`);
+			const response = await fetch(``);
 			
 			if (response.ok) {
 			const data = await response.json();
@@ -91,7 +91,7 @@
 		}
 	}
 
-	fetchTitleAndUpdate();
+	// fetchTitleAndUpdate();
 
 	function getQueryParameter(paramName) {
 		const urlParams = new URLSearchParams(window.location.search);

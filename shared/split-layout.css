@@ -1,0 +1,135 @@
+/*CSS here will be used by any file that has added the stylesheet*/
+
+/* CSS - Cascading Style Sheet */
+
+
+#main-content {
+    height: calc(100% - 80px) !important;
+    width: 100vw;
+    display: flex;
+    overflow: hidden;
+    /* background-color:green; */
+}
+
+#left-pane,
+#right-pane {
+    width: 100%;
+    height: calc(100%)!important;
+    overflow:hidden;
+}
+
+.iframes{
+    height:calc(100%);
+}
+
+.ui-module-container {
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.ui-module {
+    top: 26px;
+    font-size:0.9em;
+    font-weight:300;
+    line-height:1.0;
+    position: absolute;
+    background-color: black;
+    border-radius: 8px;
+    padding: 0px 6px;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.5) !important;
+}
+
+.ui-module .ui-module-item {
+    padding: 5px 10px 6px 10px;
+    letter-spacing:0.5px;
+    margin: 5px;
+    color: white;
+    background-color: none;
+    float: left;
+    cursor: pointer;
+    opacity:0.7;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.ui-module .ui-module-item:hover {
+    opacity:1.0!important;
+}
+
+.container {
+    max-width: auto;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.content {
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+
+.image-container {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 50px;
+    height: 300px;
+    margin-top: 20px;
+}
+
+#footer-container {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+#left-pane, #right-pane {
+    transition: width 0.5s ease-in-out; 
+}
+
+.compact{
+    display:none;
+}
+
+.photo{
+    display:none;
+}
+
+/* Small screen adaption  */
+
+@media screen and (max-width: 1050px) {
+
+    #main-content {
+        height: calc(100% - 0px) !important;
+      
+    }
+    .compact{
+        display:block;
+    }
+
+    #right-pane{
+        display:none;
+    }
+
+    #footer-container{
+        display:none;
+    }
+
+  
+    
+}
+
+@media screen and (max-width: 600px) {
+.ui-module {
+    font-size:0.85em;
+}
+
+.ui-module .ui-module-item {
+    padding: 5px 2px 6px 2px;
+}
+
+}

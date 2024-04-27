@@ -52,17 +52,20 @@
             <a id="zoom-out" href="#zoom-out">
                 <div id="ZoomOut" class="NavButton"></div>
             </a>
-            <a id="full-page1" href="#full-page" onclick="togglePane()">
-                <div id="FullPage" class="NavButton"></div>
+            <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
+                <div id="FullPage" class="NavButton full-page"></div>
             </a>
-            
-            <div class="NavButton annotate-button" style="width:60px; line-height:2.0" onclick="$('#instructions').show();">Annotate</div>
+
+            <div class="NavButton annotate-button compact" style="width:60px; line-height:2.0"
+                onclick="$('#instructions').show();">Annotate</div>
 
         </div>
         <a id="download" target="_blank">
-            <div id="" class="download-button" title="Download image"></div>
-        </a>  
-        <div class="guide-button" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
+            <div id="" class="download-button compact" title="Download image"></div>
+        </a>
+        <div class="guide-button compact" title="User Guide"
+            onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+            ?</div>
     </div>
 
     <script>
@@ -122,15 +125,15 @@
                 homeButton: "home",
             });
 
-            viewer.addHandler('open', function() {
+            viewer.addHandler('open', function () {
                 if (savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }
-                updateDownloadLink(); 
+                updateDownloadLink();
             });
 
-            viewer.addHandler('viewport-change', function() {
+            viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
 
@@ -170,13 +173,13 @@
                 document.getElementById('instructions').style.display = 'none';
 
                 // Handle Yes button click
-                document.getElementById('saveYes').onclick = function() {
+                document.getElementById('saveYes').onclick = function () {
                     console.log('Annotation coordinates:', annotation.target.selector.value);
                     document.getElementById('savePopup').style.display = 'none';
                 };
 
                 // Handle No button click
-                document.getElementById('saveNo').onclick = function() {
+                document.getElementById('saveNo').onclick = function () {
                     anno.removeAnnotation(annotation.id);
                     document.getElementById('savePopup').style.display = 'none';
                 };
@@ -191,7 +194,9 @@
                 //send a message to the parent window (index.html) with the annotation data
                 window.parent.postMessage(annotationData, "*");
             });
+          
         };
+
 
         // function viewAnnotations() {
         //     var annotations = anno.getAnnotations();
@@ -202,50 +207,55 @@
         //     // Alternatively, display in an element on the page
         //     document.getElementById('annotationsJson').textContent = annotationsJson;
         // }
+
     </script>
 
-<div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
-    <div class="guide-content">
-        <!-- <h1>User Guide: <br>Spatial Context</h1> -->
-        <div class="guide-instructions">
-            <div class="guide-instructions-intro">
-                
-                Scroll to zoom in and out. Click and drag to pan the view. <br>
-                
-            </div>
 
-            <div id="guide-instructions-tools">
-                <h2>Tools</h2>
-                <div class="guide-instructions-item">
-                    <div class="guide-instructions-item-icon"
-                        style="background-image:url(../shared/interface/frame.png)"></div>
-                    <div class="guide-instructions-item-label">
-                        <p>Frame object.</p> Changes the view to the original position.
-                    </div>
+
+    <div id="guide"
+        onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
+        <div class="guide-content">
+            <!-- <h1>User Guide: <br>Spatial Context</h1> -->
+            <div class="guide-instructions">
+                <div class="guide-instructions-intro">
+
+                    Scroll to zoom in and out. Click and drag to pan the view. <br>
+
                 </div>
 
-                <div class="guide-instructions-item">
-                    <div class="guide-instructions-item-icon"
-                        style="background-image:url(../shared/interface/expand.svg)"></div>
-                    <div class="guide-instructions-item-label">
-                        <p>Full screen.</p> Activates full screen mode. Click ESC to exit.
+                <div id="guide-instructions-tools">
+                    <h2>Tools</h2>
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(../shared/interface/frame.png)"></div>
+                        <div class="guide-instructions-item-label">
+                            <p>Frame object.</p> Changes the view to the original position.
+                        </div>
                     </div>
-                </div>
 
-                <div class="guide-instructions-item">
-                    <div class="guide-instructions-item-icon"
-                        style="background-image:url()"></div>
-                    <div class="guide-instructions-item-label">
-                        <p>Annotate.</p> Register a new inscriptions by clicking Annotate and then hold shift-key while clicking and dragging a rectangle around the inscription.
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(../shared/interface/expand.svg)"></div>
+                        <div class="guide-instructions-item-label">
+                            <p>Full screen.</p> Activates full screen mode. Click ESC to exit.
+                        </div>
                     </div>
+
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon" style="background-image:url()"></div>
+                        <div class="guide-instructions-item-label">
+                            <p>Annotate.</p> Register a new inscriptions by clicking Annotate and then hold shift-key
+                            while clicking and dragging a rectangle around the inscription.
+                        </div>
+                    </div>
+
+
+                    <div class="guide-closer">Close</div>
                 </div>
-
-
-                <div class="guide-closer">Close</div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
+
 </html>

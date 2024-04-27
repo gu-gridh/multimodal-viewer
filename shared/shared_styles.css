@@ -622,25 +622,25 @@ a:link {
     margin-top: 5px;
 }
 
-
-
-
 .potree_menu_toggle {
     display: none;
 }
 
+
 /* Hide away complexities on mobile */
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 400px) {
 
-    .instructions {
+    .compact {
         display: none;
     }
 
-    .subtitle {
+    .full-page {
         display: none;
     }
 }
+
+
 
 
 /*styling for pop-up of annotations*/

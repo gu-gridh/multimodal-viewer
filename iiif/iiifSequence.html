@@ -70,15 +70,15 @@
             <a id="zoom-out" href="#zoom-out">
                 <div id="ZoomOut" class="NavButton"></div>
             </a>
-            <a id="full-page1" href="#full-page" onclick="togglePane()">
-                <div id="FullPage" class="NavButton"></div>
+            <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
+                <div id="FullPage" class="NavButton full-page"></div>
             </a>
         </div>
         <a id="download" target="_blank">
-            <div id="" class="download-button" title="Download image"></div>
+            <div id="" class="download-button compact" title="Download image"></div>
         </a>
 
-        <div class="guide-button" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
+        <div class="guide-button compact" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
     </div>
 
     <script>

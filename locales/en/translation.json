@@ -1,11 +1,13 @@
 {
   "panel": "Surface",
   "inscriptions": "Inscriptions",
+  "Orthophoto": "Orthophoto",
   "topography": "Topography",
   "surfacemodel": "Surface Model",
   "mesh": "Mesh",
   "rti": "RTI",
   "metadata": "Metadata",
+  "about": "About",
   "spatialcontext": "Spatial Context",
   "language": "Language",
   "room": "Room",

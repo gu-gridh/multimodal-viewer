@@ -200,6 +200,7 @@
 		presenter = new Presenter("draw-canvas");
 
 		presenter.setScene({
+
 			meshes: {
 				"mesh1": {url: PLACEHOLDER_MESH},
 				"mesh2": {url: "https://data.dh.gu.se/saintsophia/mesh/114-27.nxz"}
@@ -207,14 +208,17 @@
 			modelInstances: {
 				"mesh1": {
 					mesh: "mesh1",
-					color: [50, 50, 50]
+					color: [0.75, 0.75, 0.75],
+				
 				},
 				"mesh2": {
 					mesh: "mesh2",
-					color: [50, 50, 50],
+					color: [0.75, 0.75, 0.75],
 					visible: false
 				}
 			},
+
+			
 
 			/* These are the numbers that we need to be able to manipulate in backend when registering the model */
 			trackball: {
@@ -232,7 +236,10 @@
 				}
 			}
 		});
-
+		for (inst in presenter._scene.modelInstances){
+		presenter._scene.modelInstances[inst].specularColor = [0.1,0.1,0.1,256.0];
+	}
+		
 		//--MEASURE--
 		presenter._onEndMeasurement = onEndMeasure;
 		//--MEASURE--

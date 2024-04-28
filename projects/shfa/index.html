@@ -119,7 +119,7 @@
         $(document).ready(function () {
             const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-            $("#footer-container").load("shared/footer.html");
+            $("#footer-container").load("/projects/shfa/footer.html");
 
             i18next
                 .use(i18nextHttpBackend)
@@ -223,7 +223,7 @@
                 iframe.src = '/rti/openlime.html?q=PLACEHOLDER_QUERY';
             }
             else if (viewerType === 'metadata-compact') {
-                iframe.src = `/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframe.src = `/projects/shfa/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             }
         }
 

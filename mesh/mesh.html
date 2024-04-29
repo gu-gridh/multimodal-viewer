@@ -127,9 +127,11 @@
 		<div class="interface-area">
 		
 			<div id="toolbar_m" class="toolbar-bottom">
-				<div id="toolbar">
-					<img id="home_m" title="Home" src="../shared/interface/frame.png" />
 
+				<div id="toolbar">
+					<img id="trackball_position" title="Get Trackball Position" src="../shared/interface/ios-share.svg" onclick="logTrackballPosition();" />
+
+					<img id="home_m" title="Home" src="../shared/interface/frame.png" />
 
 					<!--ZOOM-->
 					<img id="zoomin" title="Zoom In" src="../shared/interface/plus_big.png" />
@@ -218,8 +220,6 @@
 				}
 			},
 
-			
-
 			/* These are the numbers that we need to be able to manipulate in backend when registering the model */
 			trackball: {
 				type: TurntablePanTrackball,
@@ -236,9 +236,24 @@
 				}
 			}
 		});
+
+		const urlParams = new URLSearchParams(window.location.search);
+		const phi = parseFloat(urlParams.get('phi'));
+		const theta = parseFloat(urlParams.get('theta'));
+		const panX = parseFloat(urlParams.get('panX'));
+		const panY = parseFloat(urlParams.get('panY'));
+		const panZ = parseFloat(urlParams.get('panZ'));
+		const zoom = parseFloat(urlParams.get('zoom'));
+
+		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
+			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
+		} else {
+			console.error('Invalid parameters for trackball animation');
+		}
+
 		for (inst in presenter._scene.modelInstances){
-		presenter._scene.modelInstances[inst].specularColor = [0.1,0.1,0.1,256.0];
-	}
+			presenter._scene.modelInstances[inst].specularColor = [0.1,0.1,0.1,256.0];
+		}
 		
 		//--MEASURE--
 		presenter._onEndMeasurement = onEndMeasure;
@@ -249,6 +264,32 @@
 		//--SECTIONS--
 	}
 
+	function logTrackballPosition() {
+		if (presenter && presenter.getTrackballPosition) {
+			const position = presenter.getTrackballPosition();
+
+			const currentUrl = new URL(window.location.href);
+
+			const baseUrl = `${currentUrl.protocol}//${currentUrl.host}/`;
+			const url = new URL(baseUrl);
+
+			const queryParams = new URLSearchParams(window.location.search);
+			queryParams.forEach((value, key) => {
+				url.searchParams.set(key, value);
+			});
+
+			url.searchParams.set('phi', position[0].toFixed(12));
+			url.searchParams.set('theta', position[1].toFixed(12));
+			url.searchParams.set('panX', position[2].toFixed(12));
+			url.searchParams.set('panY', position[3].toFixed(12));
+			url.searchParams.set('panZ', position[4].toFixed(12));
+			url.searchParams.set('zoom', position[5].toFixed(2));
+
+			navigator.clipboard.writeText(url.toString())
+		} else {
+			console.error('Trackball position function not available');
+		}
+	}
 
 	// Most of the functions have mobile variations, otherwise the buttons break
 	function actionsToolbar(action) {

@@ -102,8 +102,8 @@
                         onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div>
                 </div>
             </div>
-            <iframe id="left-Iframe" class="iframes" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY"
-                style="width:100%; border:none;"></iframe>
+            <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
+
         </div>
         <div id="right-pane">
             <div class="ui-module-container">
@@ -122,32 +122,37 @@
 
     <script>
         $(document).ready(function () {
-            const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-            $("#footer-container").load("/projects/sophia/footer.html");
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewerType = determineInitialViewer(urlParams);
+        changeLeftViewer(viewerType);
 
-            i18next
-                .use(i18nextHttpBackend)
-                .init({
-                    lng: savedLang,
-                    fallbackLng: 'en',
-                    backend: {
-                        loadPath: '/locales/{{lng}}/translation.json',
-                    },
-                }, function (err, t) {
-                    if (err) return console.error('i18next initialization error:', err);
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-                    applyTranslations();
+        $("#footer-container").load("/projects/sophia/footer.html");
 
-                    window.addEventListener('message', function (event) {
-                        if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                            i18next.changeLanguage(event.data.lang, function (err, t) {
-                                if (err) return console.log('Something went wrong loading', err);
-                                applyTranslations();
-                            });
-                        }
-                    }, false);
-                });
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/locales/{{lng}}/translation.json',
+                },
+            }, function (err, t) {
+                if (err) return console.error('i18next initialization error:', err);
+
+                applyTranslations();
+
+                window.addEventListener('message', function (event) {
+                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                        i18next.changeLanguage(event.data.lang, function (err, t) {
+                            if (err) return console.log('Something went wrong loading', err);
+                            applyTranslations();
+                        });
+                    }
+                }, false);
+            });
 
             function applyTranslations() {
                 if (typeof i18next.t === 'function') {
@@ -161,6 +166,13 @@
                 }
             }
         });
+
+        function determineInitialViewer(params) {
+            if (params.has('phi')) {
+                return 'mesh'; 
+            }
+            return 'inscription'; 
+        }
 
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
@@ -193,11 +205,11 @@
                 uiModuleContainer.style.display = 'none';
             }
         }
-     
+
         $(window).resize(function () {
-                if ($('#right-pane').css('display') === 'none') {
-                    // here i would very much like to be able to hide all FullPage-buttons  
-                }
+            if ($('#right-pane').css('display') === 'none') {
+                // here i would very much like to be able to hide all FullPage-buttons  
+            }
         });
     </script>
 
@@ -231,22 +243,40 @@
         }
 
         function changeLeftViewer(viewerType) {
-            var iframe = document.getElementById('left-Iframe');
-            var currentUrl = new URL(iframe.src);
+            const iframe = document.getElementById('left-Iframe');
+            const queryString = window.location.search;
 
-            if (viewerType === 'inscription') {
-                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_QUERY';
-            } else if (viewerType === 'topography') {
-                iframe.src = '/iiif/iiifSequence.html?q=PLACEHOLDER_QUERY';
+            let src;
+            switch (viewerType) {
+                case 'inscription':
+                    src = `/iiif/iiif.html${queryString}`;
+                    buttonNum = 1;
+                    break;
+                case 'topography':
+                    src = `/iiif/iiifSequence.html${queryString}`;
+                    buttonNum = 2;
+                    break;
+                case 'mesh':
+                    src = `/mesh/mesh.html${queryString}`;
+                    buttonNum = 3;
+                    break;
+                case 'rti':
+                    src = `/rti/openlime.html${queryString}`;
+                    buttonNum = 4;
+                    break;
+                case 'metadata-compact':
+                    src = `/projects/sophia/metadata/metadata.html${queryString}`;
+                    buttonNum = 5;
+                    break;
+                default:
+                    src = `/iiif/iiif.html${queryString}`; 
+                    buttonNum = 1;
+                    break;
             }
-            else if (viewerType === 'mesh') {
-                iframe.src = '/mesh/mesh.html?q=PLACEHOLDER_QUERY';
-            }
-            else if (viewerType === 'rti') {
-                iframe.src = '/rti/openlime.html?q=PLACEHOLDER_QUERY';
-            }
-            else if (viewerType === 'metadata-compact') {
-                iframe.src = `/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+
+            if (iframe) {
+                iframe.src = src;
+                moduleSwitcherLeft(buttonNum);
             }
         }
 

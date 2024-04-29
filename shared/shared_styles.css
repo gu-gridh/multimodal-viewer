@@ -108,7 +108,53 @@ body {
     transform: scale(1.07);
 }
 
+.share-button {
+    pointer-events: auto;
+    background: url(interface/ios-share.svg);
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 50px;
+    Left: 30px;
+    background-color: rgb(0, 0, 0, 0.8) !important;
+    border-radius: 50%;
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+}
 
+.share-button:hover {
+    background-color: rgb(0, 0, 0, 1.0) !important;
+    cursor: pointer;
+    transform: scale(1.07);
+}
+
+#share-label{
+    display:none;
+    font-family: "Oswald", sans-serif !important;
+    position:relative;
+    border-radius:6px;
+    padding:5px;
+   text-align:center;
+    background-color: rgb(0, 0, 0, 0.8) !important;
+    user-select: none;
+    -webkit-user-select: none;
+    margin-left:45px;
+    margin-top:7px;
+    min-width:80px;
+    color:white;
+    z-index:10000;
+    font-size:0.8em;
+}
+
+.deactivated{
+    opacity:0.5;
+    pointer-events:none;
+}
 
 /* This is the label that states what type of viewer this is: mesh or point cloud */
 

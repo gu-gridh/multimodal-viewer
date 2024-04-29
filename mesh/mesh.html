@@ -129,8 +129,6 @@
 			<div id="toolbar_m" class="toolbar-bottom">
 
 				<div id="toolbar">
-					<img id="trackball_position" title="Get Trackball Position" src="../shared/interface/ios-share.svg" onclick="logTrackballPosition();" />
-
 					<img id="home_m" title="Home" src="../shared/interface/frame.png" />
 
 					<!--ZOOM-->
@@ -156,7 +154,7 @@
 
 
 					<!--FULLSCREEN-->
-					<img id="full1" class="full-page full-screen-option" title="Full Screen1" src="../shared/interface/expand.svg"
+					<img id="full1" class="full-page full-screen-option" title="Full Screen" src="../shared/interface/expand.svg"
 						style="position:relative;" onclick="togglePane()" />
 					<!--FULLSCREEN-->
 
@@ -168,6 +166,12 @@
 				</div>
 			</div>
 			<div class="guide-button compact" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
+			<a id="download" target="_blank">
+				<div id="" class="download-button compact deactivated" title="Download image"></div>
+			</a>
+
+			<div id="trackball_position" class="share-button compact" title="Copy link to view" onclick="logTrackballPosition();"><div id="share-label">Link copied</div></div>
+			
 		</div>
 
 		
@@ -265,6 +269,7 @@
 	}
 
 	function logTrackballPosition() {
+		$('#share-label').css('display', 'block');
 		if (presenter && presenter.getTrackballPosition) {
 			const position = presenter.getTrackballPosition();
 

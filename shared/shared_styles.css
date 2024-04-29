@@ -80,6 +80,8 @@ body {
     background-color: var(--color-5);
 }
 
+
+
 /* A common download button for all media categories */
 
 .download-button {
@@ -99,7 +101,7 @@ body {
     border-radius: 50%;
     user-select: none;
     -webkit-user-select: none;
-    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+ 
 }
 
 .download-button:hover {
@@ -107,6 +109,8 @@ body {
     cursor: pointer;
     transform: scale(1.07);
 }
+
+/* A common share button for all media categories */
 
 .share-button {
     pointer-events: auto;
@@ -124,7 +128,7 @@ body {
     border-radius: 50%;
     user-select: none;
     -webkit-user-select: none;
-    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.2s ease-in-out;
 }
 
 .share-button:hover {
@@ -134,21 +138,49 @@ body {
 }
 
 #share-label{
-    display:none;
     font-family: "Oswald", sans-serif !important;
-    position:relative;
+    position:absolute;
     border-radius:6px;
     padding:5px;
-   text-align:center;
+    text-align:center;
     background-color: rgb(0, 0, 0, 0.8) !important;
-    user-select: none;
-    -webkit-user-select: none;
     margin-left:45px;
     margin-top:7px;
     min-width:80px;
     color:white;
-    z-index:10000;
     font-size:0.8em;
+    pointer-events:none;
+    user-select: none;
+    -webkit-user-select: none;
+    opacity:0.0;
+
+}
+
+.share-animation{
+    animation: share-popup 3s normal forwards ease-in-out;
+}
+
+@keyframes share-popup {
+    from {
+        opacity: 0;
+        transform: scale(0, 0);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1.0, 1.0);
+    }
+  
+    80% {
+        transform: scale(1.0, 1.0);
+        opacity: 1;
+    }
+    99% {
+        transform: scale(0.0, 0.0);
+    }
+    to {
+        opacity: 0;
+        display:none;
+    }
 }
 
 .deactivated{
@@ -359,7 +391,6 @@ h2 {
     font-family: "Oswald", sans-serif !important;
     user-select: none;
     -webkit-user-select: none;
-    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     z-index: 1000;
 }
 

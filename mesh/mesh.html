@@ -28,7 +28,8 @@
 
 <body>
 
-	<div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');"
+	<div id="guide"
+		onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');"
 		style="">
 		<div class="guide-content">
 			<!-- <h1>User Guide: <br>Spatial Context</h1> -->
@@ -54,8 +55,9 @@
 						<div class="guide-instructions-item-icon"
 							style="background-image:url(../shared/interface/colour_on.png)"></div>
 						<div class="guide-instructions-item-label">
-							<p>Color tool.</p> Switches on and off the 3D model's color information. 
-							With the colors off and the light in the right direction, details will appear in higher contrast.
+							<p>Color tool.</p> Switches on and off the 3D model's color information.
+							With the colors off and the light in the right direction, details will appear in higher
+							contrast.
 						</div>
 					</div>
 
@@ -63,7 +65,8 @@
 						<div class="guide-instructions-item-icon"
 							style="background-image:url(../shared/interface/light_on.png)"></div>
 						<div class="guide-instructions-item-label">
-							<p>Light tool.</p> Switches on and off the light controls. When activated, click and drag towards the edges of the screen to enhance details. 
+							<p>Light tool.</p> Switches on and off the light controls. When activated, click and drag
+							towards the edges of the screen to enhance details.
 							To rotate the 3D model, deactivate the light controls.
 						</div>
 					</div>
@@ -72,7 +75,8 @@
 						<div class="guide-instructions-item-icon"
 							style="background-image:url(../shared/interface/distance_on.svg)"></div>
 						<div class="guide-instructions-item-label">
-							<p>Measure tool.</p> Switches on and off the ruler. When activated, click on two places to measure the distance between them.
+							<p>Measure tool.</p> Switches on and off the ruler. When activated, click on two places to
+							measure the distance between them.
 						</div>
 					</div>
 
@@ -102,7 +106,7 @@
 
 			<!-- The draw canvas is the home of the 3d-model-->
 			<canvas id="draw-canvas" style="" />
-			
+
 		</div>
 
 		<!-- This is the toogle for the sidebar and is hidden on mobile-->
@@ -116,24 +120,28 @@
 		<!-- The mobile toolbar has fewer tools due to complexity issues. 
 		Perhaps these should also go into their own docuemnt to keep this document more focuses-->
 		<div class="interface-area-top">
-		<div id="ToolbarHorizontal">
-				<div id="Prev" class="SwitchButton" onclick="presenter.setInstanceVisibilityByName('mesh1', true, true); presenter.setInstanceVisibilityByName('mesh2', false, false);"></div>
-			<span id="currentpage"></span>
-				<div id="Next" class="SwitchButton"  onclick="presenter.setInstanceVisibilityByName('mesh1', false, false); presenter.setInstanceVisibilityByName('mesh2', true, true);"></div>
+			<div id="ToolbarHorizontal">
+				<div id="Prev" class="SwitchButton"
+					onclick="presenter.setInstanceVisibilityByName('mesh1', true, true); presenter.setInstanceVisibilityByName('mesh2', false, false);">
+				</div>
+				<span id="currentpage"></span>
+				<div id="Next" class="SwitchButton"
+					onclick="presenter.setInstanceVisibilityByName('mesh1', false, false); presenter.setInstanceVisibilityByName('mesh2', true, true);">
+				</div>
 
-		</div>  
-	</div>  
+			</div>
+		</div>
 
 		<div class="interface-area">
-		
+
 			<div id="toolbar_m" class="toolbar-bottom">
 
 				<div id="toolbar">
 					<img id="home_m" title="Home" src="../shared/interface/frame.png" />
 
 					<!--ZOOM-->
-					<img id="zoomin" title="Zoom In" src="../shared/interface/plus_big.png" />
-					<img id="zoomout" title="Zoom Out" src="../shared/interface/minus_big.png" />
+					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom In" src="../shared/interface/plus_big.png" />
+					<img id="zoomout" class="narrow-toolbar-icon" title="Zoom Out" src="../shared/interface/minus_big.png" />
 
 					<!--COLOR-->
 					<img id="color_on_m" title="Disable Solid Color" src="../shared/interface/colour_off.png"
@@ -154,8 +162,8 @@
 
 
 					<!--FULLSCREEN-->
-					<img id="full1" class="full-page full-screen-option" title="Full Screen" src="../shared/interface/expand.svg"
-						style="position:relative;" onclick="togglePane()" />
+					<img id="full1" class="full-page full-screen-option" title="Full Screen"
+						src="../shared/interface/expand.svg" style="position:relative;" onclick="togglePane()" />
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
@@ -165,16 +173,21 @@
 
 				</div>
 			</div>
-			<div class="guide-button compact" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
+			<div class="guide-button compact" title="User Guide"
+				onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+				?</div>
 			<a id="download" target="_blank">
 				<div id="" class="download-button compact deactivated" title="Download image"></div>
 			</a>
 
-			<div id="trackball_position" class="share-button compact" title="Copy link to view" onclick="logTrackballPosition();"><div id="share-label">Link copied</div></div>
-			
+			<div id="trackball_position" class="share-button compact" title="Copy link to view"
+				onclick="logTrackballPosition();">
+				<div id="share-label">Link copied</div>
+			</div>
+
 		</div>
 
-		
+
 	</div>
 
 	<div class="ui-overlay-container" style="height:100vh; z-index:1000; pointer-events:none;">
@@ -187,7 +200,7 @@
 
 	<!-- Here we  have a floating div with instructions on how to navigate -->
 	<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
-		<div id="instructions" style="bottom:20px; width:350px; padding:15px 10px;">
+		<div id="instructions" style="bottom:20px; width:315px; padding:15px 10px;">
 			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
 			Double-click to focus. Click-and-drag to rotate. <br>
 			Right-click and drag to pan. Scroll to zoom in and out.
@@ -208,14 +221,14 @@
 		presenter.setScene({
 
 			meshes: {
-				"mesh1": {url: PLACEHOLDER_MESH},
-				"mesh2": {url: "https://data.dh.gu.se/saintsophia/mesh/114-27.nxz"}
+				"mesh1": { url: PLACEHOLDER_MESH },
+				"mesh2": { url: "https://data.dh.gu.se/saintsophia/mesh/114-27.nxz" }
 			},
 			modelInstances: {
 				"mesh1": {
 					mesh: "mesh1",
 					color: [0.75, 0.75, 0.75],
-				
+
 				},
 				"mesh2": {
 					mesh: "mesh2",
@@ -255,10 +268,10 @@
 			console.error('Invalid parameters for trackball animation');
 		}
 
-		for (inst in presenter._scene.modelInstances){
-			presenter._scene.modelInstances[inst].specularColor = [0.1,0.1,0.1,256.0];
+		for (inst in presenter._scene.modelInstances) {
+			presenter._scene.modelInstances[inst].specularColor = [0.1, 0.1, 0.1, 256.0];
 		}
-		
+
 		//--MEASURE--
 		presenter._onEndMeasurement = onEndMeasure;
 		//--MEASURE--
@@ -269,7 +282,12 @@
 	}
 
 	function logTrackballPosition() {
-		$('#share-label').css('display', 'block');
+		// $('#share-label').css('opacity', '1.0');
+		// $('#share-label').css('transform', 'scale(1.0)');
+		$('#share-label').addClass('share-animation').delay(3000).queue(function () {
+			$('#share-label').removeClass('share-animation').dequeue();
+		});
+
 		if (presenter && presenter.getTrackballPosition) {
 			const position = presenter.getTrackballPosition();
 

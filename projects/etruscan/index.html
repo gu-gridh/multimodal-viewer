@@ -240,6 +240,22 @@
 
             }
         }
+
+        function toggleLeftPane() {
+            var leftPane = document.getElementById('left-pane');
+            var rightPane = document.getElementById('right-pane');
+            var uiModuleContainer = leftPane.querySelector('.ui-module-container');
+
+            if (leftPane.style.width  === '1px') {
+                leftPane.style.width = '50%';
+                rightPane.style.width = '50%';
+                uiModuleContainer.style.display = 'flex';
+            } else {
+                leftPane.style.width = '1px';
+                rightPane.style.width = '99%';
+                uiModuleContainer.style.display = 'none';
+            }
+        }
     </script>
 
     <script>
@@ -249,6 +265,9 @@
             }
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
+            }
+            if (event.data.type === 'togglePane2') {
+                toggleLeftPane();
             }
         }, false);
 

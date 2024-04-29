@@ -79419,6 +79419,15 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).deselect_all();
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
+			));
+
+			// FULLSCREEN
+			elToolbar.append(this.createToolIconExpanded(
+				'../shared/interface/expand.svg',
+				'',
+				() => {
+					window.parent.postMessage({ type: 'togglePane2' }, '*');
+				}
 			)); 
 
 			// CIRCLE

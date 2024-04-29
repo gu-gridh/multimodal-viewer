@@ -1656,6 +1656,7 @@
                 l = {},
                 h = o.level,
                 c = o.pyramid[h];
+                
             for (let t = c.yLow; t < c.yHigh; t++)
                 for (let e = c.xLow; e < c.xHigh; e++) {
                     let i = h;

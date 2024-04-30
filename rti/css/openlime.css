@@ -604,10 +604,7 @@ user-select: none;
   }
 
 
-.openlime-zoomin     { 
-	background-image: url(/css/plus_big.png)!important;  
-	opacity:1.0;
-}
+
 
 .openlime-rotate     { 
 display:auto;
@@ -616,6 +613,6 @@ opacity:1;
 
 
 .openlime-zoomout    { 
-	background: url(/css/minus_big.png)!important;
+
 }
 

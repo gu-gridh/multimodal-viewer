@@ -209,7 +209,7 @@ async function autodetectNormals(layout) {
 	return false;
 }
 
-var lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+var lime = new OpenLIME.Viewer('#openlime', { background: 'var(--viewer-bg)' });
 var currentLayer = null;
 
 async function init() {

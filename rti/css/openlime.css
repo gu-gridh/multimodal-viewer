@@ -1,6 +1,6 @@
 .openlime {
 	position: relative;
-	background-color:#000;
+	background-color:var(--viewer-bg);
 	height:100%;
 }
 

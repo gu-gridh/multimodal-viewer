@@ -172,6 +172,8 @@ body {
 
 
 @media screen and (min-width: 900px) {
+
+
 	.metadata-panel-title {
 		font-size: 3.0em !important;
 	}
@@ -189,6 +191,12 @@ body {
 }
 
 @media screen and (max-width: 850px) {
+	.container {
+		height: auto !important;
+		padding: 90px 60px 40px 60px !important;
+	}
+
+
 	.metadata-panel-title {
 		font-size: 2.8em !important;
 	}

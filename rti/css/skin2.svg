@@ -281,7 +281,7 @@
        class="openlime-button openlime-ruler">
         <image
         width="50" height="50"
-        xlink:href="../shared/interface/distance_off.svg"
+        xlink:href="../shared/interface/pen.png"
         />
     </g>
     <g

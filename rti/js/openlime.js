@@ -2579,7 +2579,7 @@
                         },
                     },
                     ruler: {
-                        title: "Ruler",
+                        title: "Draw",
                         display: !0,
                         task: (t) => {
                             this.toggleRuler();

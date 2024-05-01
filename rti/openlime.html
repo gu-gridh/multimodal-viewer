@@ -83,11 +83,11 @@
 
 	<div id="openlime">
 		<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
-			<div id="instructions" style="bottom:60px; width:280px; padding:15px 10px;">
+			<div id="instructions" style="bottom:60px; width:300px; padding:15px 10px;">
 				<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
 				Browse available RTI-sets with the menu at the top. <br> 
 				Click and drag to change light direction. Scroll to zoom. <br> 
-			    Deactivate light controls to pan by click-dragging. 
+			    Deactivate light controls to pan view. 
 			</div>
 		</div>
 		<div class="guide-button compact" title="User Guide" style="bottom:23px" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
@@ -139,6 +139,14 @@
 						<div class="guide-instructions-item-label">
 							<p>Light tool.</p> Switches on and off the light controls. When activated, click and drag to change light direction. 
 							To pan the image, deactivate the light controls.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
+							style="background-image:url(../shared/interface/pen.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Line tool.</p> Activates the line tool. Click again to erase all lines.
 						</div>
 					</div>
 

@@ -141,10 +141,10 @@
 	bottom:20px;
 	border-radius:10px;
 	overflow:hidden;
-	width:360px!important;
+	width:280px!important;
 	height:43px;
 	padding-top:5px;
-	left:calc(50% - 180px);
+	left:calc(50% - 140px);
 	display:flex;
 	flex-direction:row;
 	justify-content:space-evenly;
@@ -347,9 +347,9 @@ user-select: none;
 
 
 .openlime-list {
-	width:360px;
+	width:280px;
 	position:absolute;
-	margin-left:calc(50% - 180px);
+	margin-left:calc(50% - 140px);
 	display:flex;
 	flex-direction:row;
 	justify-content:center;

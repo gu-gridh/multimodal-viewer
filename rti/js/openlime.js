@@ -2553,14 +2553,7 @@
                             i.deltaZoom(250, 0.8, 0, 0);
                         },
                     },
-                    fullscreen: {
-                        title: "Fullscreen",
-                        display: !0,
-                        key: "f",
-                        task: (t) => {
-                            this.toggleFullscreen();
-                        },
-                    },
+                  
                     layers: {
                         title: "Layers",
                         display: !0,
@@ -2590,6 +2583,14 @@
                         display: !0,
                         task: (t) => {
                             this.toggleRuler();
+                        },
+                    },
+                    fullscreen: {
+                        title: "Fullscreen",
+                        display: !0,
+                        key: "f",
+                        task: (t) => {
+                            this.toggleFullscreen();
                         },
                     },
                     help: {

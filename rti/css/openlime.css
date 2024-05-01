@@ -407,7 +407,7 @@ user-select: none;
 
 .openlime-layers-menu .openlime-entry.active,
 .openlime-layers-menu .openlime-entry:active {
-	background-color: rgb(50, 50, 50); 
+	background-color: rgb(70, 70, 70); 
 	color:#fff;
 	user-select: none;
 }

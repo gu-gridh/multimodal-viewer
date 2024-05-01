@@ -79348,7 +79348,7 @@ ENDSEC
 		}
 
 
-		/* GRIDH: commented out a number of tools to fit the required functions in Saint Sophia */
+		// GRIDH: commented out a number of tools to fit the required functions in GRIDH's Multimodal Viewer
 
 		initToolbar() {
 
@@ -79420,15 +79420,6 @@ ENDSEC
 					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
 				}
 			));
-
-			// FULLSCREEN
-			elToolbar.append(this.createToolIconExpanded(
-				'../shared/interface/expand.svg',
-				'',
-				() => {
-					window.parent.postMessage({ type: 'togglePane2' }, '*');
-				}
-			)); 
 
 			// CIRCLE
 		 	elToolbar.append(this.createToolIconExpanded(
@@ -79587,6 +79578,15 @@ ENDSEC
 					this.viewer.scene.removeAllMeasurements();
 				}
 			));
+
+					// FULLSCREEN
+					elToolbar.append(this.createToolIconExpanded(
+						'../shared/interface/expand.svg',
+						'',
+						() => {
+							window.parent.postMessage({ type: 'togglePane2' }, '*');
+						}
+					)); 
 
 
 			/* { // SHOW / HIDE Measurements

@@ -82,6 +82,22 @@ body {
 
 
 
+#full-screen-label{
+    display:none;
+    color:white;
+    font-size:0.9em;
+    font-weight:200;
+    width:auto;
+    right:calc(60px);
+    margin-top:30px;
+    border-radius:8px;
+    padding:5px 15px;
+    background-color:rgba(0,0,0,0.8);
+    position:absolute;
+}
+
+
+
 /* A common download button for all media categories */
 
 .download-button {

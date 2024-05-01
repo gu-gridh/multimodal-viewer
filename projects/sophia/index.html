@@ -47,7 +47,7 @@
             margin-top: 20px;
         }
 
-        .back-button {
+        #back-button {
             position: absolute;
             height: 35px;
             width: 35px;
@@ -63,18 +63,18 @@
             cursor: pointer;
         }
 
-        .back-button:hover {
+        #back-button:hover {
             background-color: rgba(0, 0, 0, 1.0);
         }
 
         @media screen and (max-width: 1000px) {
-            .back-button {
+            #back-button {
                 margin-left: 20px;
             }
         }
 
         @media screen and (max-width: 500px) {
-            .back-button {
+            #back-button {
                 display:none;
             }
         }
@@ -86,8 +86,9 @@
 
         <div id="left-pane">
             <a href="PLACEHOLDER_BACKBUTTON">
-                <div class="back-button"></div>
+                <div id="back-button"></div>
             </a>
+           
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left orthophoto" id="btn1"
@@ -174,19 +175,24 @@
             return 'inscription'; 
         }
 
+ 
+
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = rightPane.querySelector('.ui-module-container');
+            var backButton = document.getElementById('back-button');
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
                 uiModuleContainer.style.display = 'flex';
+                backButton.style.display = 'block';
 
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
                 uiModuleContainer.style.display = 'none';
+                backButton.style.display = 'none';
             }
         }
 
@@ -194,15 +200,17 @@
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
-
+            var backButton = document.getElementById('back-button');
             if (leftPane.style.width  === '1px') {
                 leftPane.style.width = '50%';
                 rightPane.style.width = '50%';
                 uiModuleContainer.style.display = 'flex';
+                backButton.style.display = 'block';
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '99%';
                 uiModuleContainer.style.display = 'none';
+                backButton.style.display = 'none';
             }
         }
 

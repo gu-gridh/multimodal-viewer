@@ -91,12 +91,9 @@
            
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left orthophoto" id="btn1"
-                        onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
-                    <div class="ui-module-item left" id="btn2"
-                        onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
-                    <div class="ui-module-item left" id="btn3"
-                        onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
+                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
+                    <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
+                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
                     <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
                     <div class="ui-module-item left compact" id="btn5"
@@ -166,16 +163,24 @@
                     document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
             }
+
+            changeRightViewer('metadata');
         });
 
         function determineInitialViewer(params) {
-            if (params.has('phi')) {
-                return 'mesh'; 
+            const path = window.location.pathname.toLowerCase();
+            if (path.includes('/mesh') || params.has('phi')) {
+                return 'mesh';
+            } else if (path.includes('/orthophoto')) {
+                return 'orthophoto';
+            } else if (path.includes('/topography')) {
+                return 'topography';
+            } else if (path.includes('/rti')) {
+                return 'rti';
+            } else {
+                return 'inscription'; //default
             }
-            return 'inscription'; 
         }
-
- 
 
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
@@ -255,29 +260,31 @@
             const queryString = window.location.search;
 
             let src;
+            let newPath;
             switch (viewerType) {
                 case 'inscription':
                     src = `/iiif/iiif.html${queryString}`;
+                    newPath = `/orthophoto${queryString}`;
                     buttonNum = 1;
                     break;
                 case 'topography':
                     src = `/iiif/iiifSequence.html${queryString}`;
+                    newPath = `/topography${queryString}`;
                     buttonNum = 2;
                     break;
                 case 'mesh':
-                    src = `/mesh/mesh.html${queryString}`;
+                    src = `/3dhop/3dhop.html${queryString}`;
+                    newPath = `/mesh${queryString}`;
                     buttonNum = 3;
                     break;
                 case 'rti':
-                    src = `/rti/openlime.html${queryString}`;
+                    src = `/openlime/openlime.html${queryString}`;
+                    newPath = `/rti${queryString}`;
                     buttonNum = 4;
                     break;
-                case 'metadata-compact':
-                    src = `/projects/sophia/metadata/metadata.html${queryString}`;
-                    buttonNum = 5;
-                    break;
                 default:
-                    src = `/iiif/iiif.html${queryString}`; 
+                    src = `/iiif/iiif.html${queryString}`;
+                    newPath = `/orthophoto${queryString}`;
                     buttonNum = 1;
                     break;
             }
@@ -285,6 +292,8 @@
             if (iframe) {
                 iframe.src = src;
                 moduleSwitcherLeft(buttonNum);
+                //update browser URL
+                window.history.pushState({}, '', newPath);
             }
         }
 
@@ -296,12 +305,6 @@
                 iframe.src = '/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
-
-        $(document).ready(function () {
-            // Automatically trigger the metadata viewer to load.
-            changeRightViewer('metadata');
-        });
-
 
         function moduleSwitcherLeft(num) {
             $('.left').css('opacity', '0.6');

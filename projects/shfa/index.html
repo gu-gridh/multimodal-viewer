@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Sophia Multimodal tool</title>
+    <title>SHFA Multimodal tool</title>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -96,8 +96,8 @@
                     <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);"></div>
                     <div class="ui-module-item left compact" id="btn5" onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div></div>
             </div>
-            <iframe id="left-Iframe" class="iframes" src="/mesh/mesh.html?q=PLACEHOLDER_QUERY"
-                style="width:100%; border:none;"></iframe>
+            <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
+
         </div>
         <div id="right-pane">
             <!-- <div class="ui-module-container">
@@ -116,9 +116,14 @@
 
     <script>
         $(document).ready(function () {
-            const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-            $("#footer-container").load("/projects/shfa/footer.html");
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewerType = determineInitialViewer(urlParams);
+        changeLeftViewer(viewerType);
+
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
+        $("#footer-container").load("/projects/sophia/footer.html");
 
             i18next
                 .use(i18nextHttpBackend)
@@ -154,7 +159,24 @@
                     document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
             }
+
+            changeRightViewer('metadata');
         });
+
+        function determineInitialViewer(params) {
+            const path = window.location.pathname.toLowerCase();
+            if (path.includes('/mesh') || params.has('phi')) {
+                return 'mesh';
+            } else if (path.includes('/orthophoto')) {
+                return 'orthophoto';
+            } else if (path.includes('/topography')) {
+                return 'topography';
+            } else if (path.includes('/rti')) {
+                return 'rti';
+            } else {
+                return 'mesh'; //default
+            }
+        }
 
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
@@ -232,22 +254,44 @@
         }
 
         function changeLeftViewer(viewerType) {
-            var iframe = document.getElementById('left-Iframe');
-            var currentUrl = new URL(iframe.src);
+            const iframe = document.getElementById('left-Iframe');
+            const queryString = window.location.search;
 
-            if (viewerType === 'inscription') {
-                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_QUERY';
-            } else if (viewerType === 'topography') {
-                iframe.src = '/iiif/iiifSequence.html?q=PLACEHOLDER_QUERY';
+            let src;
+            let newPath;
+            switch (viewerType) {
+                case 'inscription':
+                    src = `/iiif/iiif.html${queryString}`;
+                    newPath = `/orthophoto${queryString}`;
+                    buttonNum = 1;
+                    break;
+                case 'topography':
+                    src = `/iiif/iiifSequence.html${queryString}`;
+                    newPath = `/topography${queryString}`;
+                    buttonNum = 2;
+                    break;
+                case 'mesh':
+                    src = `/3dhop/3dhop.html${queryString}`;
+                    newPath = `/mesh${queryString}`;
+                    buttonNum = 3;
+                    break;
+                case 'rti':
+                    src = `/openlime/openlime.html${queryString}`;
+                    newPath = `/rti${queryString}`;
+                    buttonNum = 4;
+                    break;
+                default:
+                    src = `/iiif/iiif.html${queryString}`;
+                    newPath = `/orthophoto${queryString}`;
+                    buttonNum = 1;
+                    break;
             }
-            else if (viewerType === 'mesh') {
-                iframe.src = '/mesh/mesh.html?q=PLACEHOLDER_QUERY';
-            }
-            else if (viewerType === 'rti') {
-                iframe.src = '/rti/openlime.html?q=PLACEHOLDER_QUERY';
-            }
-            else if (viewerType === 'metadata-compact') {
-                iframe.src = `/projects/shfa/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+
+            if (iframe) {
+                iframe.src = src;
+                moduleSwitcherLeft(buttonNum);
+                //update browser URL
+                window.history.pushState({}, '', newPath);
             }
         }
 
@@ -259,12 +303,6 @@
                 iframe.src = '/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
-
-        $(document).ready(function () {
-            // Automatically trigger the metadata viewer to load.
-            changeRightViewer('metadata');
-        });
-
 
         function moduleSwitcherLeft(num) {
             $('.left').css('opacity', '0.6');

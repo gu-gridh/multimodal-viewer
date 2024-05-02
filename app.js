@@ -17,7 +17,7 @@ try {
     process.exit(1);
 }
 
-app.get('/rti/openlime.html', async (req, res) => {
+app.get('/openlime/openlime.html', async (req, res) => {
   const queryName = req.query.q;
   // Fetch RTI image data from the API
   const apiUrl = `${config.panel}${queryName}`;
@@ -25,7 +25,7 @@ app.get('/rti/openlime.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
 
-    fs.readFile(path.join(__dirname, 'rti', 'openlime.html'), 'utf8', (err, htmlData) => {
+    fs.readFile(path.join(__dirname, 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -150,7 +150,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
   }
 });
 
-//other paths including mesh, IIIF
+//other paths including 3dhop, IIIF
 app.use('/:type/:file', async (req, res, next) => {
   const { type, file } = req.params;
   const queryName = req.query.q;
@@ -160,7 +160,7 @@ app.use('/:type/:file', async (req, res, next) => {
   } else {
     // Define the API URL based on the type and queryName
     let apiUrl;
-    if (type === 'mesh') {
+    if (type === '3dhop') {
       apiUrl = `${config.panel}${queryName}`;
     } else if (type === 'iiif') {
       apiUrl = `${config.panel}${queryName}`;
@@ -182,7 +182,7 @@ app.use('/:type/:file', async (req, res, next) => {
     
           // Replacing placeholders with actual data fetched from API
           let modifiedData = data;
-          if (type === 'mesh') {
+          if (type === '3dhop') {
             modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
             modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
             modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
@@ -214,16 +214,16 @@ app.use('/:type/:file', async (req, res, next) => {
   }
 });
 
-app.use('/mesh', express.static(path.join(__dirname, 'mesh')));
+app.use('/3dhop', express.static(path.join(__dirname, '3dhop')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
-app.use('/rti', express.static(path.join(__dirname, 'rti')));
+app.use('/openlime', express.static(path.join(__dirname, 'openlime')));
 app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
 app.use('/shared', express.static(path.join(__dirname, 'shared')));
 app.use('/projects', express.static(path.join(__dirname, 'projects')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
   const queryName = req.query.q || 'default';
 

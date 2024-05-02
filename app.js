@@ -214,6 +214,14 @@ app.use('/:type/:file', async (req, res, next) => {
   }
 });
 
+app.use((req, res, next) => { //remove trailing slashes
+  if (req.path.endsWith('/') && req.path.length > 1) {
+      const newPath = req.path.slice(0, -1) + req.url.slice(req.path.length);
+      return res.redirect(301, newPath);
+  }
+  next();
+});
+
 app.use('/3dhop', express.static(path.join(__dirname, '3dhop')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
 app.use('/openlime', express.static(path.join(__dirname, 'openlime')));

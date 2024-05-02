@@ -17,10 +17,9 @@ PROJECT=etrucan npm start
 
 ## Usage
 
-Fetch for respective panel data like so: http://localhost:8095/?q=118-02  
 Sample URLs for testing:  
-http://localhost:8095/?q=118-02  
-http://localhost:8095/?q=120-20  
+http://localhost:8095/mesh?q=118-02  
+http://localhost:8095/mesh?q=120-20  
 
 ## Installation
 

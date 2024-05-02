@@ -1,4 +1,4 @@
-# Multimodal Modelviewer
+# Multimodal Viewer
 A Node.js application built with Express for visualizing and interacting with meshes, pointclouds, and IIIF images. It uses the 3DHOP, Potree, Relight, OpenLime, and Openseadragon libraries.
 
 ## Table of Contents

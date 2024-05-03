@@ -18,8 +18,8 @@ PROJECT=etrucan npm start
 ## Usage
 
 Sample URLs for testing:  
-http://localhost:8095/mesh?q=118-02  
-http://localhost:8095/mesh?q=120-20  
+http://localhost:8095/mesh?q=118-02/orthophoto  
+http://localhost:8095/mesh?q=120-20/orthophoto  
 
 ## Installation
 

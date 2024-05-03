@@ -168,17 +168,32 @@
         });
 
         function determineInitialViewer(params) {
-            const path = window.location.pathname.toLowerCase();
-            if (path.includes('/mesh') || params.has('phi')) {
+            const qValue = params.get('q');
+            //check if phi is present in the URL
+            const hasPhi = params.has('phi');
+
+            if (hasPhi) {
                 return 'mesh';
-            } else if (path.includes('/orthophoto')) {
-                return 'orthophoto';
-            } else if (path.includes('/topography')) {
-                return 'topography';
-            } else if (path.includes('/rti')) {
-                return 'rti';
-            } else {
-                return 'inscription'; //default
+            }
+            
+            if (qValue) {
+                const segments = qValue.split('/');
+                if (segments.length > 1) {
+                    const viewerType = segments[1];
+                    //match the viewerType to the expected strings
+                    switch (viewerType) {
+                        case 'mesh':
+                            return 'mesh';
+                        case 'topography':
+                            return 'topography';
+                        case 'rti':
+                            return 'rti';
+                        case 'orthophoto':
+                            return 'orthophoto';
+                        default:
+                            return 'orthophoto'; //default
+                    }
+                }
             }
         }
 
@@ -254,37 +269,43 @@
                 console.error('Cannot access iframe document');
             }
         }
-
+        
         function changeLeftViewer(viewerType) {
             const iframe = document.getElementById('left-Iframe');
             const queryString = window.location.search;
+            const params = new URLSearchParams(queryString);
+
+            let qValue = params.get('q');
+            if (qValue.includes('/')) {
+                qValue = qValue.split('/')[0];
+            }
 
             let src;
             let newPath;
             switch (viewerType) {
-                case 'inscription':
+                case 'orthophoto':
                     src = `/iiif/iiif.html${queryString}`;
-                    newPath = `/orthophoto${queryString}`;
+                    newPath = `/?q=${qValue}/orthography`;
                     buttonNum = 1;
                     break;
                 case 'topography':
                     src = `/iiif/iiifSequence.html${queryString}`;
-                    newPath = `/topography${queryString}`;
+                    newPath = `/?q=${qValue}/topography`;
                     buttonNum = 2;
                     break;
                 case 'mesh':
                     src = `/3dhop/3dhop.html${queryString}`;
-                    newPath = `/mesh${queryString}`;
+                    newPath = `/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
                 case 'rti':
                     src = `/openlime/openlime.html${queryString}`;
-                    newPath = `/rti${queryString}`;
+                    newPath = `/?q=${qValue}/rti`;
                     buttonNum = 4;
                     break;
                 default:
                     src = `/iiif/iiif.html${queryString}`;
-                    newPath = `/orthophoto${queryString}`;
+                    newPath = `/?q=${qValue}/orthophoto`;
                     buttonNum = 1;
                     break;
             }

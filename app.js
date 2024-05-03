@@ -18,7 +18,8 @@ try {
 }
 
 app.get('/openlime/openlime.html', async (req, res) => {
-  const queryName = req.query.q;
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   // Fetch RTI image data from the API
   const apiUrl = `${config.panel}${queryName}`;
   try {
@@ -50,7 +51,8 @@ app.get('/openlime/openlime.html', async (req, res) => {
 });
 
 app.get('/pointcloud/pointcloud.html', async (req, res) => {
-  const queryName = req.query.q;
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   const apiUrl = `${config.panel}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -78,7 +80,8 @@ app.get('/pointcloud/pointcloud.html', async (req, res) => {
 });
 
 app.get('/iiif/iiifSequence.html', async (req, res) => {  
-  const { q: queryName } = req.query;
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
@@ -113,7 +116,8 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
 
 app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
   const { projectName } = req.params;
-  const queryName = req.query.q;
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
@@ -154,76 +158,70 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
   }
 });
 
-//other paths including 3dhop, IIIF
-app.use('/:type/:file', async (req, res, next) => {
-  const { type, file } = req.params;
-  const queryName = req.query.q;
-
+app.get('/3dhop/3dhop.html', async (req, res) => {
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
-    next(); // No query parameter, proceed to static serving
-  } else {
-    // Define the API URL based on the type and queryName
-    let apiUrl;
-    if (type === '3dhop') {
-      apiUrl = `${config.panel}${queryName}`;
-    } else if (type === 'iiif') {
-      apiUrl = `${config.panel}${queryName}`;
-    } else {
-      return res.status(400).send('Invalid model type');
-    }
+    return res.status(400).send('Query parameter is missing');
+  }
 
-    try {
-      const apiResponse = await axios.get(apiUrl);
-      if (apiResponse) {
-        const modelData = apiResponse.data.features;
-                    
-        fs.readFile(path.join(__dirname, type, file), 'utf8', (err, data) => {
-          if (err) {
-            console.error('Error reading the file:', err);
-            res.status(500).send('Internal Server Error');
-            return;
-          }
-    
-          // Replacing placeholders with actual data fetched from API
-          let modifiedData = data;
-          if (type === '3dhop') {
-            modifiedData = modifiedData.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0,0.0,0.0]));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0,180.0]));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0,180.0]));
-            modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0,0.0,0.0,0.0,0.0,1.5]));
-          }
-          else if (type === 'iiif') {
-            const basePath = `${config.basePath}`;
-            const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
-            const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-            modifiedData = modifiedData.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
-          }
-          res.send(modifiedData);
-        });
-    }
-    else {
-      console.error('No results found in API response.');
-      res.status(404).send('Not Found');
-      return;
-    }
-    } catch (error) {
-      console.error('Error fetching data from API:', error);
-      res.status(500).send('Internal Server Error');
-    }
+  const apiUrl = `${config.panel}${queryName}`;
+  try {
+    const apiResponse = await axios.get(apiUrl);
+    const modelData = apiResponse.data.features;
 
+    fs.readFile(path.join(__dirname, '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]));
+      modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
+
+      res.send(modifiedData);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    return res.status(500).send('Internal Server Error');
   }
 });
 
-app.use((req, res, next) => { //remove trailing slashes
-  if (req.path.endsWith('/') && req.path.length > 1) {
-      const newPath = req.path.slice(0, -1) + req.url.slice(req.path.length);
-      return res.redirect(301, newPath);
+app.get('/iiif/iiif.html', async (req, res) => {
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
+  if (!queryName) {
+    return res.status(400).send('Query parameter is missing');
   }
-  next();
+
+  const apiUrl = `${config.panel}${queryName}`;
+  try {
+    const apiResponse = await axios.get(apiUrl);
+    const modelData = apiResponse.data.features;
+
+    fs.readFile(path.join(__dirname, 'iiif', 'iiif.html'), 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const basePath = `${config.basePath}`;
+      const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
+      const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
+      let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
+
+      res.send(modifiedData);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    return res.status(500).send('Internal Server Error');
+  }
 });
 
 app.use('/3dhop', express.static(path.join(__dirname, '3dhop')));
@@ -235,6 +233,7 @@ app.use('/projects', express.static(path.join(__dirname, 'projects')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));
 
+// Fallback route, serve index.html
 app.get('*', (req, res) => {
   const queryName = req.query.q;
 
@@ -257,11 +256,6 @@ app.get('*', (req, res) => {
     res.send(modifiedData);
   });
 });
-
-// Fallback route to serve index.html
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '/index.html'));
-// });
 
 const PORT = 8095;
 app.listen(PORT, () => {

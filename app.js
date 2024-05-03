@@ -125,7 +125,11 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
       return res.status(404).send('Data not found');
     }
 
-    const metadata = apiResponse.data.results[0];
+    const metadata = apiResponse.data.results?.[0];
+    if (!metadata) {
+      return res.status(404).send('Data not found or malformed');
+    }
+
     const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
 
     fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
@@ -232,8 +236,14 @@ app.use('/locales', express.static(path.join(__dirname, 'locales')));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));
 
 app.get('*', (req, res) => {
+  const queryName = req.query.q;
+
+  if (!queryName) {
+    const indexPath = path.join(__dirname, 'index.html');
+    return res.sendFile(indexPath);
+  }
+
   const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
-  const queryName = req.query.q || 'default';
 
   fs.readFile(indexPath, 'utf8', (err, data) => {
     if (err) {

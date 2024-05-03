@@ -13,7 +13,7 @@ define a .env.local variable with PROJECT=etruscan/shfa/sophia + npm start:
 
 PROJECT=sophia npm start  
 PROJECT=shfa npm start  
-PROJECT=etrucan npm start  
+PROJECT=etruscan npm start  
 
 ## Usage
 

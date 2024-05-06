@@ -303,6 +303,11 @@
                     newPath = `/?q=${qValue}/rti`;
                     buttonNum = 4;
                     break;
+                case 'metadata-compact':
+                    src = `/projects/sophia/metadata/metadata.html${queryString}`;
+                    newPath = `/?q=${qValue}`;
+                    buttonNum = 5;
+                    break;
                 default:
                     src = `/modules/iiif/iiif.html${queryString}`;
                     newPath = `/?q=${qValue}/orthophoto`;

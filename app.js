@@ -79,7 +79,7 @@ app.get('/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
-app.get('/iiif/iiifSequence.html', async (req, res) => {  
+app.get('/modules/iiif/iiifSequence.html', async (req, res) => {  
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -100,7 +100,7 @@ app.get('/iiif/iiifSequence.html', async (req, res) => {
 
       const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
       
-      const htmlContent = fs.readFileSync(path.join(__dirname, 'iiif', 'iiifSequence.html'), 'utf8');
+      const htmlContent = fs.readFileSync(path.join(__dirname,  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif));
 
       res.send(updatedHtmlContent);
@@ -193,7 +193,7 @@ app.get('/3dhop/3dhop.html', async (req, res) => {
   }
 });
 
-app.get('/iiif/iiif.html', async (req, res) => {
+app.get('/modules/iiif/iiif.html', async (req, res) => { 
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -205,7 +205,7 @@ app.get('/iiif/iiif.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const modelData = apiResponse.data.features;
 
-    fs.readFile(path.join(__dirname, 'iiif', 'iiif.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -227,7 +227,7 @@ app.get('/iiif/iiif.html', async (req, res) => {
 app.use('/3dhop', express.static(path.join(__dirname, '3dhop')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
 app.use('/openlime', express.static(path.join(__dirname, 'openlime')));
-app.use('/iiif', express.static(path.join(__dirname, 'iiif')));
+app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));
 app.use('/shared', express.static(path.join(__dirname, 'shared')));
 app.use('/projects', express.static(path.join(__dirname, 'projects')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));

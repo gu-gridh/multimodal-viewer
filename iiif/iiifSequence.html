@@ -14,6 +14,7 @@
     <script
         src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="../3dhop/js/jquery.js"></script>
+    <script src="openseadragon-bookmark-url.js"></script>
 </head>
 
 <style>
@@ -78,8 +79,8 @@
             <div id="" class="download-button compact" title="Download image"></div>
         </a>
 
-        <div id="trackball_position" class="share-button compact deactivated" title="Copy link to view"
-        onclick="logTrackballPosition();">
+        <div id="trackball_position" class="share-button compact" title="Copy link to view"
+            onclick="logPosition();">
         <div id="share-label">Link copied</div>
     </div>
 
@@ -88,6 +89,7 @@
 
     <script>
         //var anno;
+        let urlToCopy = '';
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
@@ -109,33 +111,8 @@
         window.onload = function () {
             var isInitialLoad = true;
             var savedState = getSavedViewerState();
-
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
-            //var downloadSourceString = 'PLACEHOLDER_JPG_IMAGE_URLS';
             var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
-            // var downloadSources = JSON.parse(downloadSourceString);
-
-            // document.getElementById('download').addEventListener('click', function(event) {
-            //     event.preventDefault();
-            //     const pageIndex = viewer.currentPage();
-            //     const imageUrl = downloadSources[pageIndex];
-
-            //     fetch(imageUrl)
-            //         .then(response => response.blob())
-            //         .then(blob => {
-            //             const url = window.URL.createObjectURL(blob);
-            //             const filename = `image_${pageIndex + 1}.jpg`;
-            //             const a = document.createElement('a');
-            //             a.style.display = 'none';
-            //             a.href = url;
-            //             a.download = filename;
-            //             document.body.appendChild(a);
-            //             a.click();
-            //             window.URL.revokeObjectURL(url);
-            //             document.body.removeChild(a);
-            //         })
-            //         .catch(() => console.error("Could not download the image"));
-            // });
 
             function getPageUrl(pageIndex) {
                 var baseImageUrl = "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif";
@@ -169,8 +146,22 @@
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 homeButton: "home",
-
             });
+
+            viewer.addHandler('bookmark-url-change', function(event) {
+                const url = new URL(event.url);
+                let query = url.searchParams.get('q') || '';
+                const parts = query.split('/');
+                const prefix = parts[0]; 
+                const suffix = 'topography';
+                const newQuery = prefix + '/' + suffix;
+                const fragment = url.hash;
+                const newPath = '/?q=' + newQuery;
+                const newUrl = url.origin + newPath + fragment;
+                urlToCopy = newUrl;
+            });
+
+            viewer.bookmarkUrl();
 
             viewer.addHandler('open', function () {
                 if (isInitialLoad && savedState) {
@@ -191,65 +182,21 @@
                 document.getElementById("currentpage").innerHTML = (pageIndex + 1) + " of " + tileSources.length;
                 updateDownloadLink(pageIndex);
             });
-
-            /*    // Initialize the Annotorious plugin
-               anno = OpenSeadragon.Annotorious(viewer, {
-                   // Additional configuration options
-                   disableEditor: true
-   
-               }); */
-
-            /*  anno.on('createSelection', async function (selection) {
- 
-                 // Tag to insert
-                 selection.body = [{
-                     type: 'TextualBody',
-                     purpose: 'tagging',
-                     value: 'MyTag'
-                 }];
- 
-                 // Step 3: update the selection and save it
-                 // Remember that .updateSelected is an async function!
-                 // You need to wait until it completes before saving
-                 await anno.updateSelected(selection);
-                 anno.saveSelected();
- 
-                 // Alternative:
-                 // anno.updateSelected(selection, true);
-             }); */
-
-            // Load annotations in W3C WebAnnotation format
-            //anno.loadAnnotations('annotations.w3c.json');
-
-            // Attach handlers to listen to events
-            /*     anno.on('createAnnotation', function (annotation) {
-                    // Show the popup
-                    document.getElementById('savePopup').style.display = 'block';
-                    document.getElementById('instructions').style.display = 'none';
-    
-                    // Handle Yes button click
-                    document.getElementById('saveYes').onclick = function() {
-                        console.log('Annotation coordinates:', annotation.target.selector.value);
-                        document.getElementById('savePopup').style.display = 'none';
-                    };
-    
-                    // Handle No button click
-                    document.getElementById('saveNo').onclick = function() {
-                        anno.removeAnnotation(annotation.id);
-                        document.getElementById('savePopup').style.display = 'none';
-                    };
-                }); */
-
-            /*   anno.on('clickAnnotation', function (annotation, element) {
-                  const annotationData = {
-                      type: 'annotationClick',
-                      value: annotation.body[0].value
-                  }; */
-
-            //send a message to the parent window (index.html) with the annotation data
-            //window.parent.postMessage(annotationData, "*");
-
         };
+
+        function logPosition() {
+            $('#share-label').addClass('share-animation').delay(3000).queue(function () {
+                $('#share-label').removeClass('share-animation').dequeue();
+            });
+
+            if (urlToCopy) {
+                navigator.clipboard.writeText(urlToCopy)
+                    .then(() => console.log(urlToCopy + ' copied to clipboard'))
+                    .catch(err => console.error('Could not copy URL:', err));
+            } else {
+                console.error('No URL to copy');
+            }
+        }
 
         //notify index.html that the panel button has been clicked
         function togglePane() {

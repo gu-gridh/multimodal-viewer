@@ -14,6 +14,7 @@
     <script
         src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="../3dhop/js/jquery.js"></script>
+    <script src="openseadragon-bookmark-url.js"></script>
 </head>
 
 <body>
@@ -62,8 +63,8 @@
         <a id="download" target="_blank">
             <div id="" class="download-button compact" title="Download image"></div>
         </a>
-        <div id="trackball_position" class="share-button compact deactivated" title="Copy link to view"
-				onclick="logTrackballPosition();">
+        <div id="trackball_position" class="share-button compact" title="Copy link to view"
+				onclick="logPosition();">
 				<div id="share-label">Link copied</div>
 			</div>
 
@@ -74,6 +75,7 @@
 
     <script>
         var anno;
+        let urlToCopy = '';
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
@@ -128,6 +130,21 @@
                 zoomOutButton: "zoom-out",
                 homeButton: "home",
             });
+
+            viewer.addHandler('bookmark-url-change', function(event) {
+                const url = new URL(event.url);
+                let query = url.searchParams.get('q') || '';
+                const parts = query.split('/');
+                const prefix = parts[0]; 
+                const suffix = 'orthophoto'; 
+                const newQuery = prefix + '/' + suffix;
+                const fragment = url.hash;
+                const newPath = '/?q=' + newQuery;
+                const newUrl = url.origin + newPath + fragment;
+                urlToCopy = newUrl;
+            });
+
+            viewer.bookmarkUrl();
 
             viewer.addHandler('open', function () {
                 if (savedState) {
@@ -201,6 +218,19 @@
           
         };
 
+        function logPosition() {
+            $('#share-label').addClass('share-animation').delay(3000).queue(function () {
+                $('#share-label').removeClass('share-animation').dequeue();
+            });
+
+            if (urlToCopy) {
+                navigator.clipboard.writeText(urlToCopy)
+                    .then(() => console.log(urlToCopy + ' copied to clipboard'))
+                    .catch(err => console.error('Could not copy URL:', err));
+            } else {
+                console.error('No URL to copy');
+            }
+        }
 
         // function viewAnnotations() {
         //     var annotations = anno.getAnnotations();

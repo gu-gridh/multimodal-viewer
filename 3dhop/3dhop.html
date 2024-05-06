@@ -281,33 +281,36 @@
 	}
 
 	function logTrackballPosition() {
-		// $('#share-label').css('opacity', '1.0');
-		// $('#share-label').css('transform', 'scale(1.0)');
 		$('#share-label').addClass('share-animation').delay(3000).queue(function () {
 			$('#share-label').removeClass('share-animation').dequeue();
 		});
 
 		if (presenter && presenter.getTrackballPosition) {
 			const position = presenter.getTrackballPosition();
-
 			const currentUrl = new URL(window.location.href);
 
-			const baseUrl = `${currentUrl.protocol}//${currentUrl.host}/`;
-			const url = new URL(baseUrl);
+			const queryParams = new URLSearchParams(currentUrl.search);
+			let query = queryParams.get('q') || '';
 
-			const queryParams = new URLSearchParams(window.location.search);
-			queryParams.forEach((value, key) => {
-				url.searchParams.set(key, value);
-			});
+			const parts = query.split('/');
+			const prefix = parts[0]; 
+			const suffix = 'mesh'; 
 
-			url.searchParams.set('phi', position[0].toFixed(12));
-			url.searchParams.set('theta', position[1].toFixed(12));
-			url.searchParams.set('panX', position[2].toFixed(12));
-			url.searchParams.set('panY', position[3].toFixed(12));
-			url.searchParams.set('panZ', position[4].toFixed(12));
-			url.searchParams.set('zoom', position[5].toFixed(2));
+			const newQuery = prefix + '/' + suffix;
 
-			navigator.clipboard.writeText(url.toString())
+			queryParams.set('q', newQuery);
+			queryParams.set('phi', position[0].toFixed(12));
+			queryParams.set('theta', position[1].toFixed(12));
+			queryParams.set('panX', position[2].toFixed(12));
+			queryParams.set('panY', position[3].toFixed(12));
+			queryParams.set('panZ', position[4].toFixed(12));
+			queryParams.set('zoom', position[5].toFixed(2));
+
+			const newUrl = `${currentUrl.origin}/?${queryParams.toString()}`;
+
+			navigator.clipboard.writeText(newUrl)
+				.then(() => console.log('URL copied to clipboard'))
+				.catch(err => console.error('Could not copy URL:', err));
 		} else {
 			console.error('Trackball position function not available');
 		}

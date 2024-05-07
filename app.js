@@ -50,7 +50,7 @@ app.get('/modules/openlime/openlime.html', async (req, res) => {
   }
 });
 
-app.get('/pointcloud/pointcloud.html', async (req, res) => {
+app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   const apiUrl = `${config.panel}${queryName}`;
@@ -59,7 +59,7 @@ app.get('/pointcloud/pointcloud.html', async (req, res) => {
     const position = apiResponse.data.features[0]?.properties.spatial_position;
     const direction = apiResponse.data.features[0]?.properties.spatial_direction;
     
-    fs.readFile(path.join(__dirname, 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -225,7 +225,7 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
 });
 
 app.use('/modules/3dhop', express.static(path.join(__dirname, 'modules', '3dhop')));
-app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
+app.use('/modules/pointcloud', express.static(path.join(__dirname, 'modules', 'pointcloud')));
 app.use('/modules/openlime', express.static(path.join(__dirname, 'modules', 'openlime')));
 app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));
 app.use('/shared', express.static(path.join(__dirname, 'shared')));

@@ -79581,7 +79581,7 @@ ENDSEC
 
 					// FULLSCREEN
 					elToolbar.append(this.createToolIconExpanded(
-						'../shared/interface/expand.svg',
+						'../../shared/interface/expand.svg',
 						'',
 						() => {
 							window.parent.postMessage({ type: 'togglePane2' }, '*');

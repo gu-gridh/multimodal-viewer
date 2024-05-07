@@ -120,7 +120,7 @@
        transform="translate(6.0832644)">
           <image
         width="50" height="50"
-        xlink:href="../shared/interface/frame.png"
+        xlink:href="../../shared/interface/frame.png"
         />
     </g>
     <g
@@ -149,7 +149,7 @@
        transform="translate(4.8700496)">
       <image
         width="50" height="50"
-        xlink:href="../shared/interface/plus_big.png"
+        xlink:href="../../shared/interface/plus_big.png"
         />
     </g>
     <g
@@ -158,7 +158,7 @@
        transform="translate(3.6568246)">
         <image
         width="50" height="50"
-        xlink:href="../shared/interface/minus_big.png"
+        xlink:href="../../shared/interface/minus_big.png"
         />
     </g>
     <g
@@ -166,7 +166,7 @@
        class="openlime-button openlime-fullscreen">
         <image
         width="50" height="50"
-        xlink:href="../shared/interface/expand.svg"
+        xlink:href="../../shared/interface/expand.svg"
         />
       </g>
       <g
@@ -281,7 +281,7 @@
        class="openlime-button openlime-ruler">
         <image
         width="50" height="50"
-        xlink:href="../shared/interface/pen.png"
+        xlink:href="../../shared/interface/pen.png"
         />
     </g>
     <g

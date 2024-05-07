@@ -17,7 +17,7 @@ try {
     process.exit(1);
 }
 
-app.get('/openlime/openlime.html', async (req, res) => {
+app.get('/modules/openlime/openlime.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   // Fetch RTI image data from the API
@@ -26,7 +26,7 @@ app.get('/openlime/openlime.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
 
-    fs.readFile(path.join(__dirname, 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
+    fs.readFile(path.join(__dirname, 'modules', 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -226,7 +226,7 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
 
 app.use('/modules/3dhop', express.static(path.join(__dirname, 'modules', '3dhop')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
-app.use('/openlime', express.static(path.join(__dirname, 'openlime')));
+app.use('/modules/openlime', express.static(path.join(__dirname, 'modules', 'openlime')));
 app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));
 app.use('/shared', express.static(path.join(__dirname, 'shared')));
 app.use('/projects', express.static(path.join(__dirname, 'projects')));

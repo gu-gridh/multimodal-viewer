@@ -158,7 +158,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
   }
 });
 
-app.get('/3dhop/3dhop.html', async (req, res) => {
+app.get('/modules/3dhop/3dhop.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -170,7 +170,7 @@ app.get('/3dhop/3dhop.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const modelData = apiResponse.data.features;
 
-    fs.readFile(path.join(__dirname, '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -224,7 +224,7 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
   }
 });
 
-app.use('/3dhop', express.static(path.join(__dirname, '3dhop')));
+app.use('/modules/3dhop', express.static(path.join(__dirname, 'modules', '3dhop')));
 app.use('/pointcloud', express.static(path.join(__dirname, 'pointcloud')));
 app.use('/openlime', express.static(path.join(__dirname, 'openlime')));
 app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));

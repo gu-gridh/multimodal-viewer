@@ -165,6 +165,15 @@
             }
 
             changeRightViewer('metadata');
+
+            //hide specific elements in the left iframe
+            // $("#left-Iframe").on("load", function () {
+            //     //access the iframe's document
+            //     var iframeDoc = $(this).contents();
+            //     //hide the element with the class `full-screen-option`
+            //     iframeDoc.find(".full-screen-option").css("display", "none");
+            //     iframeDoc.find(".annotate-option").css("display", "none");
+            // });
         });
 
         function determineInitialViewer(params) {

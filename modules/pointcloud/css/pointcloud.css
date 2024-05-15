@@ -166,8 +166,9 @@ color: rgb(0, 213, 250) !important;
     height:30px; 
     border-radius:8px; 
     background-color:rgba(0,0,0,0.8); 
-    padding:10px 15px; 
+    padding: 5px 15px 15px 15px;
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+    margin-top: 50px;
 }
 
 .potree_menu_toggle {
@@ -178,6 +179,10 @@ color: rgb(0, 213, 250) !important;
 
 @media screen and (max-width: 1250px) {
     .potree_menu_toggle {
+        display: none;
+    }
+    
+    .orientation {
         display: none;
     }
 }

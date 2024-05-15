@@ -150,13 +150,15 @@
 
 		viewer.setDescription("");
 
-
+		const displayAnnotations = 'PLACEHOLDER_DISPLAY_ANNOTATIONS';
 
 		async function loadAnnotations() {
 			const response = await fetch('annotations.json');
 			const data = await response.json();
 
 			if (Array.isArray(data.annotations)) {
+				if (!displayAnnotations) return;
+
 				data.annotations.forEach(annotation => {
 
 					if (!Array.isArray(annotation.position) || annotation.position.length !== 3) {

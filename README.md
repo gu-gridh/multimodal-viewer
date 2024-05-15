@@ -27,7 +27,7 @@ npm install
 
 ## Deployment 
 
-If already running, identify the topmost process attached to the viewer and kill the id 
-Create a screen with screen -S multimodalviewer   
-Cd to the correct location and run the deploy script ./deploy-... & 
-Deattach from the current screen 
+If already running, identify the topmost process attached to the viewer and kill the id  
+Create a screen with screen -S multimodalviewer  
+Cd to the correct location and run the deploy script ./deploy-... &  
+Deattach from the current screen  

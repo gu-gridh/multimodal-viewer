@@ -25,7 +25,7 @@
         }
     
         function setButtonLabel(language) {
-            document.getElementById('languageButton').textContent = language === 'uk' ? 'In English' : 'Українською';
+            document.getElementById('languageButton').textContent = language === 'sv' ? 'In English' : 'På svenska';
         }
     
         function changeLanguage(lang) {
@@ -35,15 +35,15 @@
                     return;
                 }
                 window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
-                localStorage.setItem('i18nextLang', lang);
+                localStorage.setItem('i18nextLangSHFA', lang);
                 setButtonLabel(lang);
                 updateTranslations(t);
             });
         }
     
         function toggleLanguage() {
-            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';        
-            currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
+            let currentLanguage = localStorage.getItem('i18nextLangSHFA') || 'en';        
+            currentLanguage = currentLanguage === 'en' ? 'sv' : 'en';
             changeLanguage(currentLanguage);
             toggleVisibility(currentLanguage);
         }
@@ -54,7 +54,7 @@
         }
     
         document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('i18nextLang') || 'en';
+            const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
         
             i18next.use(i18nextHttpBackend).init({
                 lng: savedLang,
@@ -82,7 +82,7 @@
             <button id="languageButton" onclick="toggleLanguage()"></button>
         </div>
         
-        <div class="metadata-text">SHFA
+        <div class="metadata-text">
             <div class="metadata-panel">
 
                 <div class="metadata-panel-title">
@@ -116,77 +116,9 @@
 
                 <div class="metadata-description">
                     <div class="metadata-title" id="lang5"></div>
-                    <div class="label" id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</div>
-                    <div class="label" id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</div>
                 </div>                
             </div>
-            <div class="metadata-inscription">
-                <!-- <div class="metadata-inscription-close"></div> -->
-
-                <div class="image-container">
-                      <!-- Insert image carousel text -->
-                </div>
-
-                <div class="metadata-content" style="padding-top:0px;">
-
-                    <div class="metadata-inscription-title" id="inscription-title">
-                        Inscription identification number
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label">Type:</div>
-                        <div class="theme-color-text tag">Text</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label">Language:</div>
-                        <div class="theme-color-text tag">Greek</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label">Tags:</div>
-                        <div class="theme-color-text tag">Saint</div>
-                    </div>
-
-                    <div class="metadata-description">
-                        <div class="metadata-title">Transcription</div>
-                        <div class="label"></div>
-                    </div>
-                    <div class="metadata-descriptio-text">
-                      <!-- Insert transcription text -->
-                    </div>
-
-                    <div class="metadata-description">
-                        <div class="metadata-title">Translation</div>
-                        <div class="label"></div>
-                    </div>
-                    <div class="metadata-descriptio-text">
-                    <!-- Insert translation text -->
-                    </div>
-
-                    <div class="metadata-description">
-                        <div class="metadata-title">Contribution</div>
-                        <div class="label"></div>
-                    </div>
-                    <div class="metadata-descriptio-text">
-                      <!-- Insert contribution text -->
-                    </div>
-
-                    <div class="metadata-center-button">
-                        <router-link :to="`/place/${place?.id_}`">
-                            <div class="theme-button"
-                                style="padding:8px 20px; text-align:center; width:auto;  color:white;">Edit Inscription
-                            </div>
-                        </router-link>
-                    </div>
-                </div>
-
-            </div>
-
-        
-
         </div>
-
     </div>
 </body>
 

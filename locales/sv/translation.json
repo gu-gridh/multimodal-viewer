@@ -1,0 +1,16 @@
+{
+  "panel": "Surface",
+  "inscriptions": "Inskriptioner",
+  "Orthophoto": "Orthophoto",
+  "topography": "Topography",
+  "surfacemodel": "Surface model",
+  "mesh": "Mesh",
+  "rti": "RTI",
+  "metadata": "Metadata",
+  "about": "Om",
+  "spatialcontext": "Spatial context",
+  "language": "Språk",
+  "room": "Rum",
+  "tags": "Taggar",
+  "documentation": "Dokumentation"
+}

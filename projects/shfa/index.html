@@ -121,7 +121,7 @@
         const viewerType = determineInitialViewer(urlParams);
         changeLeftViewer(viewerType);
 
-        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+        const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
 
         $("#footer-container").load("/projects/sophia/footer.html");
 
@@ -155,8 +155,6 @@
                     document.getElementById('btn3').textContent = i18next.t('mesh');
                     document.getElementById('btn4').textContent = i18next.t('rti');
                     document.getElementById('btn5').textContent = i18next.t('about');
-                    document.getElementById('btn6').textContent = i18next.t('about');
-                    document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
             }
 

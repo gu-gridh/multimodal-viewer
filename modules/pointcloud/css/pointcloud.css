@@ -157,7 +157,7 @@ color: rgb(0, 213, 250) !important;
     padding-top: 15%;
 }
 
-.orientation{
+/* .orientation{
     display:flex; 
     flex-direction: row; 
     justify-content: space-between; 
@@ -169,7 +169,7 @@ color: rgb(0, 213, 250) !important;
     padding: 5px 15px 15px 15px;
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     margin-top: 50px;
-}
+} */
 
 .potree_menu_toggle {
     display: block;
@@ -182,9 +182,9 @@ color: rgb(0, 213, 250) !important;
         display: none;
     }
     
-    .orientation {
+    /* .orientation {
         display: none;
-    }
+    } */
 }
 
 /* Point cloud annotation style */

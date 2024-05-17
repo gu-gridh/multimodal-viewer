@@ -13,7 +13,8 @@ define a .env.local variable with PROJECT=etruscan/shfa/sophia + npm start:
 
 PROJECT=sophia npm start  
 PROJECT=shfa npm start  
-PROJECT=etruscan npm start  
+PROJECT=etruscan npm start
+PROJECT=dubb npm start  
 
 ## Usage
 
@@ -25,9 +26,3 @@ http://localhost:8095/?q=120-20/orthophoto
 
 npm install
 
-## Deployment 
-
-If already running, identify the topmost process attached to the viewer and kill the id  
-Create a screen with screen -S multimodalviewer  
-Cd to the correct location and run the deploy script ./deploy-... &  
-Deattach from the current screen  

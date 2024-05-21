@@ -93,7 +93,6 @@
                     <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);" style="opacity:1.0;"></div>
                     <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);"></div>
                     <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
-                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);"></div>
                     <div class="ui-module-item left compact" id="btn5" onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div></div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
@@ -123,7 +122,7 @@
 
         const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
 
-        $("#footer-container").load("/projects/sophia/footer.html");
+        $("#footer-container").load("/projects/shfa/footer.html");
 
             i18next
                 .use(i18nextHttpBackend)
@@ -153,7 +152,6 @@
                     document.getElementById('btn1').textContent = i18next.t('Orthophoto');
                     document.getElementById('btn2').textContent = i18next.t('topography');
                     document.getElementById('btn3').textContent = i18next.t('mesh');
-                    document.getElementById('btn4').textContent = i18next.t('rti');
                     document.getElementById('btn5').textContent = i18next.t('about');
                 }
             }
@@ -180,8 +178,6 @@
                             return 'mesh';
                         case 'topography':
                             return 'topography';
-                        case 'rti':
-                            return 'rti';
                         case 'orthophoto':
                             return 'orthophoto';
                         default:
@@ -189,6 +185,7 @@
                     }
                 }
             }
+            return 'mesh'; 
         }
 
         function toggleRightPane() {
@@ -293,11 +290,6 @@
                     src = `/modules/3dhop/3dhop.html${queryString}`;
                     newPath = `/?q=${qValue}/mesh`;
                     buttonNum = 3;
-                    break;
-                case 'rti':
-                    src = `/modules/openlime/openlime.html${queryString}`;
-                    newPath = `/?q=${qValue}/rti`;
-                    buttonNum = 4;
                     break;
                 case 'metadata-compact':
                     src = `/projects/shfa/metadata/metadata.html${queryString}`;

@@ -12,6 +12,7 @@
       "minMaxTheta": [-180.0, 180.0]
     }
   },
+  "appFile": "app.js",
   "displayAnnotations": false,
   "backButton": "https://ddd71807bd5.dh.gu.se",
   "panel": "https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=",

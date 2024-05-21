@@ -16,16 +16,13 @@
 <body>  
     <script>
         function updateTranslations(t) {
-            document.getElementById('lang0').textContent = t('panel');
-            document.getElementById('lang1').textContent = t('inscriptions');
-            document.getElementById('lang2').textContent = t('language');
-            document.getElementById('lang3').textContent = t('room');
-            document.getElementById('lang4').textContent = t('tags');
-            document.getElementById('lang5').textContent = t('documentation');
+
+            document.getElementById('lang1').textContent = t('tags');
+
         }
     
         function setButtonLabel(language) {
-            document.getElementById('languageButton').textContent = language === 'sv' ? 'In English' : 'På svenska';
+            document.getElementById('languageButton').textContent = language === 'sv' ? 'In English' : 'På Svenska';
         }
     
         function changeLanguage(lang) {
@@ -45,13 +42,9 @@
             let currentLanguage = localStorage.getItem('i18nextLangSHFA') || 'en';        
             currentLanguage = currentLanguage === 'en' ? 'sv' : 'en';
             changeLanguage(currentLanguage);
-            toggleVisibility(currentLanguage);
         }
 
-        function toggleVisibility(lang) {
-            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
-            document.getElementById('documentation_uk').style.display = lang === 'uk' ? 'block' : 'none';
-        }
+  
     
         document.addEventListener('DOMContentLoaded', function() {
             const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
@@ -69,12 +62,10 @@
                 }
                 setButtonLabel(savedLang);
                 updateTranslations(t);
-                toggleVisibility(savedLang);
             });
         });
     </script>
       
-        
     <div class="container">
         <div class="border"></div>
 
@@ -86,37 +77,87 @@
             <div class="metadata-panel">
 
                 <div class="metadata-panel-title">
-                   <div id="lang0" style="display:inline;">Panel</div> PLACEHOLDER_TITLE
+                   <div style="display:inline;"></div> PLACEHOLDER_TITLE
                 </div>
 
 
                 <div class="metadata-content">
 
                     <div class="metadata-item">
+                        <div class="label">Site</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_SITE</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Date</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_DATE</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Creator</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_CREATOR</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Institution</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_INSTITUTION</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Datings</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_DATINGS</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Geology</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_GEOLOGY</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Vertices</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_NUM_VERTICES</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Faces</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_NUM_FACES</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Photos</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_NUM_PHOTOS</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Dimensions</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_DIMENSIONS</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Method</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_METHOD</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Weather</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_WEATHER</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Camera Lens</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_CAMERA_LENS</div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label">Camera Model</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_CAMERA_MODEL</div>
+                    </div>
+
+                    <div class="metadata-item">
                         <div class="label" id="lang1"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_INSCRIPTIONS</div>
+                        <div class="theme-color-text tag">PLACEHOLDER_KEYWORDS</div>
                     </div>
-
-
-                    <div class="metadata-item">
-                        <div class="label" id="lang2"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_LANGUAGES</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label" id="lang3"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_ROOM</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label" id="lang4"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_TAGS</div>
-                    </div>
-                </div>
-
-                <div class="metadata-description">
-                    <div class="metadata-title" id="lang5"></div>
-                </div>                
+                </div>             
             </div>
         </div>
     </div>

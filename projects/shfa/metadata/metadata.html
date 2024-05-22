@@ -4,7 +4,7 @@
 <head>
     <title>IIIF Image Viewer</title>
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
-        rel="stylesheet" />
+    rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="metadata.css">
@@ -13,20 +13,20 @@
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
 </head>
 
-<body>  
+<body>
     <script>
-        function updateTranslations(t) {
-
+        function updateTranslations(t, lang) {
+            document.getElementById('keywords_sv').style.display = lang === 'sv' ? 'block' : 'none';
+            document.getElementById('keywords_en').style.display = lang === 'en' ? 'block' : 'none';
             document.getElementById('lang1').textContent = t('tags');
-
         }
-    
+
         function setButtonLabel(language) {
             document.getElementById('languageButton').textContent = language === 'sv' ? 'In English' : 'På Svenska';
         }
-    
+
         function changeLanguage(lang) {
-            i18next.changeLanguage(lang, function(err, t) {
+            i18next.changeLanguage(lang, function (err, t) {
                 if (err) {
                     console.error("Error changing language:", err);
                     return;
@@ -34,52 +34,49 @@
                 window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
                 localStorage.setItem('i18nextLangSHFA', lang);
                 setButtonLabel(lang);
-                updateTranslations(t);
+                updateTranslations(t, lang);
             });
         }
-    
+
         function toggleLanguage() {
-            let currentLanguage = localStorage.getItem('i18nextLangSHFA') || 'en';        
+            let currentLanguage = localStorage.getItem('i18nextLangSHFA') || 'en';
             currentLanguage = currentLanguage === 'en' ? 'sv' : 'en';
             changeLanguage(currentLanguage);
         }
 
-  
-    
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
-        
+
             i18next.use(i18nextHttpBackend).init({
                 lng: savedLang,
                 fallbackLng: 'en',
                 backend: {
                     loadPath: '/locales/{{lng}}/translation.json',
                 },
-            }, function(err, t) {
+            }, function (err, t) {
                 if (err) {
                     console.error("i18next initialization error:", err);
                     return;
                 }
                 setButtonLabel(savedLang);
-                updateTranslations(t);
+                updateTranslations(t, savedLang);
             });
         });
     </script>
-      
+
     <div class="container">
         <div class="border"></div>
 
         <div class="language-toggle-buttons">
             <button id="languageButton" onclick="toggleLanguage()"></button>
         </div>
-        
+
         <div class="metadata-text">
             <div class="metadata-panel">
 
                 <div class="metadata-panel-title">
-                   <div style="display:inline;"></div> PLACEHOLDER_TITLE
+                    <div style="display:inline;"></div> PLACEHOLDER_TITLE
                 </div>
-
 
                 <div class="metadata-content">
 
@@ -152,15 +149,15 @@
                         <div class="label">Camera Model</div>
                         <div class="theme-color-text tag">PLACEHOLDER_CAMERA_MODEL</div>
                     </div>
+                </div>
 
-                    <div class="metadata-item">
-                        <div class="label" id="lang1"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_KEYWORDS</div>
-                    </div>
-                </div>             
+                <div class="metadata-item" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
+                    <div class="label" id="lang1" style="margin-bottom: 0.5rem;">Label</div>
+                    <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
+                    <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN</div>
+                </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 
 </html>

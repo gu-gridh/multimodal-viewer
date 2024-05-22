@@ -107,7 +107,40 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
           return res.status(404).send('Data not found or malformed');
       }
 
-      const title = metadata.text || 'Unknown';
+      const shfaData = metadata.shfa_3d_data ? metadata.shfa_3d_data[0] : {};
+      const site = shfaData.site || {};
+      const institution = shfaData.institution || {};
+      const geology = shfaData.geology || {};
+      const creators = shfaData.creators || [];
+      const datings = shfaData.datings || [];
+      const three_d_mesh = shfaData.three_d_mesh || {};
+      const image = shfaData.image || {};
+
+      //group keywords by category
+      const categories = {};
+      shfaData.keywords.forEach(keyword => {
+          const categorySV = keyword.category || 'Uncategorized';
+          const categoryEN = keyword.category_translation || 'Uncategorized';
+          if (!categories[categorySV]) {
+              categories[categorySV] = { sv: [], en: [], categoryEN: categoryEN, categorySV: categorySV };
+          }
+          categories[categorySV].sv.push(keyword.text);
+          categories[categorySV].en.push(keyword.english_translation);
+      });
+
+      //convert grouped keywords to HTML with inline styles
+      const formatKeywords = (categories, lang) => {
+          return Object.entries(categories).map(([category, keywords]) => {
+              const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
+              const keywordList = keywords[lang].join(', ');
+              return `<div style="margin-bottom: 10px;">
+                          <span style="font-weight: normal; color: initial; font-weight: 200;">${categoryLabel}:</span> <span style="display: inline; font-weight: 400">${keywordList}</span>
+                      </div>`;
+          }).join('');
+      };
+
+      const keywordTextsSV = formatKeywords(categories, 'sv');
+      const keywordTextsEN = formatKeywords(categories, 'en');
 
       const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
 
@@ -117,52 +150,25 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
               return res.status(500).send('Internal Server Error');
           }
 
-          //extracting data
-          const shfaData = metadata.shfa_3d_data ? metadata.shfa_3d_data[0] : {};
-          const site = shfaData.site || {};
-          const institution = shfaData.institution || {};
-          const geology = shfaData.geology || {};
-          const creators = shfaData.creators || [];
-          const keywords = shfaData.keywords || [];
-          const datings = shfaData.datings || [];
-          const three_d_mesh = shfaData.three_d_mesh || {};
-          const image = shfaData.image || {};
-
-          const siteName = site.raa_id || 'Unknown';
-          const institutionName = institution.name || 'Unknown';
-          const creatorNames = creators.map(creator => creator.name).join(', ') || 'Unknown';
-          const keywordTexts = keywords.map(keyword => keyword.text).join(', ') || 'Unknown';
-          const datingTexts = datings.map(dating => dating.text).join(', ') || 'Unknown';
-          const geologyType = geology.type || 'Unknown';
-
-          const numVertices = three_d_mesh.num_vertices || 'Unknown';
-          const numFaces = three_d_mesh.num_faces || 'Unknown';
-          const numPhotos = three_d_mesh.num_photos || 'Unknown';
-          const dimensions = three_d_mesh.dimensions ? three_d_mesh.dimensions.join(', ') : 'Unknown';
-          const method = three_d_mesh.method || 'Unknown';
-          const weather = three_d_mesh.weather ? three_d_mesh.weather.join(', ') : 'Unknown';
-
-          const cameraLens = image.camera_lens || 'Unknown';
-          const cameraModel = image.camera_model || 'Unknown';
-
           //replacing placeholders
           let modifiedHtml = htmlData
-              .replace(/PLACEHOLDER_TITLE/g, title)
-              .replace(/PLACEHOLDER_SITE/g, siteName)
-              .replace(/PLACEHOLDER_DATE/g, shfaData.date)
-              .replace(/PLACEHOLDER_CREATOR/g, creatorNames)
-              .replace(/PLACEHOLDER_INSTITUTION/g, institutionName)
-              .replace(/PLACEHOLDER_KEYWORDS/g, keywordTexts)
-              .replace(/PLACEHOLDER_DATINGS/g, datingTexts)
-              .replace(/PLACEHOLDER_GEOLOGY/g, geologyType)
-              .replace(/PLACEHOLDER_NUM_VERTICES/g, numVertices)
-              .replace(/PLACEHOLDER_NUM_FACES/g, numFaces)
-              .replace(/PLACEHOLDER_NUM_PHOTOS/g, numPhotos)
-              .replace(/PLACEHOLDER_DIMENSIONS/g, dimensions)
-              .replace(/PLACEHOLDER_METHOD/g, method)
-              .replace(/PLACEHOLDER_WEATHER/g, weather)
-              .replace(/PLACEHOLDER_CAMERA_LENS/g, cameraLens)
-              .replace(/PLACEHOLDER_CAMERA_MODEL/g, cameraModel);
+              .replace(/PLACEHOLDER_TITLE/g, metadata.text || 'Unknown')
+              .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
+              .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
+              .replace(/PLACEHOLDER_SITE/g, site.raa_id || 'Unknown')
+              .replace(/PLACEHOLDER_DATE/g, shfaData.date || 'Unknown')
+              .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator.name).join(', ') || 'Unknown')
+              .replace(/PLACEHOLDER_INSTITUTION/g, institution.name || 'Unknown')
+              .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating.text).join(', ') || 'Unknown')
+              .replace(/PLACEHOLDER_GEOLOGY/g, geology.type || 'Unknown')
+              .replace(/PLACEHOLDER_NUM_VERTICES/g, three_d_mesh.num_vertices || 'Unknown')
+              .replace(/PLACEHOLDER_NUM_FACES/g, three_d_mesh.num_faces || 'Unknown')
+              .replace(/PLACEHOLDER_NUM_PHOTOS/g, three_d_mesh.num_photos || 'Unknown')
+              .replace(/PLACEHOLDER_DIMENSIONS/g, three_d_mesh.dimensions ? three_d_mesh.dimensions.join(', ') : 'Unknown')
+              .replace(/PLACEHOLDER_METHOD/g, three_d_mesh.method || 'Unknown')
+              .replace(/PLACEHOLDER_WEATHER/g, three_d_mesh.weather ? three_d_mesh.weather.join(', ') : 'Unknown')
+              .replace(/PLACEHOLDER_CAMERA_LENS/g, image.camera_lens || 'Unknown')
+              .replace(/PLACEHOLDER_CAMERA_MODEL/g, image.camera_model || 'Unknown');
 
           res.send(modifiedHtml);
       });

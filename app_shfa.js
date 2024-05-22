@@ -94,7 +94,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
       return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.metadata}${queryName}`;
+  const apiUrl = `${config.metadata}${queryName}&depth=2`;
 
   try {
       const apiResponse = await axios.get(apiUrl);
@@ -180,7 +180,7 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
       return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${config.panel}${queryName}&depth=2`;
 
   try {
       const apiResponse = await axios.get(apiUrl);
@@ -198,20 +198,24 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
           return res.status(404).send('No three_d_mesh or mesh_url found');
       }
 
+      const meshUrl = modelData.three_d_mesh.mesh_url;
+      const qualityUrl = modelData.three_d_mesh.quality_url || '';
+
       fs.readFile(path.join(__dirname, 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
           if (err) {
               console.error('Error reading the file:', err);
               return res.status(500).send('Internal Server Error');
           }
 
-          let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData.three_d_mesh.mesh_url));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]));
-          modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
+          let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
+                                  .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(qualityUrl))
+                                  .replace(/PLACEHOLDER_STARTPHI/g, 0.0)
+                                  .replace(/PLACEHOLDER_STARTTHETA/g, 0.0)
+                                  .replace(/PLACEHOLDER_STARTDISTANCE/g, 1.5)
+                                  .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
+                                  .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
+                                  .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
+                                  .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
 
           res.send(modifiedData);
       });

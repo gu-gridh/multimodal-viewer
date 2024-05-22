@@ -178,6 +178,7 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
       }
 
       let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
+      modifiedData = modifiedData .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));

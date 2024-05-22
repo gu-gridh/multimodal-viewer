@@ -25,6 +25,11 @@
 	<script type="text/javascript" src="js/init.js"></script>
 
 </head>
+<style>
+	#Prev, #Next {
+    	display: none; /*initially hide buttons*/
+	}
+</style>
 
 <body>
 
@@ -127,7 +132,6 @@
 				<div id="Next" class="SwitchButton"
 					onclick="presenter.setInstanceVisibilityByName('mesh1', false, false); presenter.setInstanceVisibilityByName('mesh2', true, true);">
 				</div>
-
 			</div>
 		</div>
 
@@ -211,6 +215,8 @@
 </body>
 
 <script type="text/javascript">
+	var currentPage = 1;
+	var totalPages = 2; 
 	var presenter = null;
 	// document.querySelector('.title').textContent = PLACEHOLDER_TITLE; //set Title
 
@@ -218,7 +224,6 @@
 		presenter = new Presenter("draw-canvas");
 
 		presenter.setScene({
-
 			meshes: {
 				"mesh1": { url: PLACEHOLDER_MESH },
 				"mesh2": { url: PLACEHOLDER_SECOND_MESH }
@@ -277,6 +282,39 @@
 		//--SECTIONS--
 		sectiontoolInit();
 		//--SECTIONS--
+
+		updateUI(); //initialize UI based on content availability
+	}
+
+	function updateUI() {
+		var hasSecondMesh = PLACEHOLDER_SECOND_MESH.trim() !== '';
+		$('#Prev, #Next').toggle(hasSecondMesh); //show or hide buttons based on mesh2
+		if (!hasSecondMesh) {
+			totalPages = 1;
+		} else {
+			totalPages = 2;
+		}
+		$('#currentpage').text(hasSecondMesh ? (currentPage + ' of ' + totalPages) : ''); //update counter text
+	}
+
+	$('#Next').click(function() {
+		if (currentPage < totalPages) {
+			currentPage++;
+			switchMeshVisibility();
+		}
+	});
+
+	$('#Prev').click(function() {
+		if (currentPage > 1) {
+			currentPage--;
+			switchMeshVisibility();
+		}
+	});
+
+	function switchMeshVisibility() {
+		presenter.setInstanceVisibilityByName('mesh1', currentPage === 1);
+		presenter.setInstanceVisibilityByName('mesh2', currentPage === 2);
+		updateUI(); //update UI every time the page changes
 	}
 
 	function logTrackballPosition() {

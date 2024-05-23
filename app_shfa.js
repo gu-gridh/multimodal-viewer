@@ -134,7 +134,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
               const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
               const keywordList = keywords[lang].join(', ');
               return `<div style="margin-bottom: 10px;">
-                          <span style="font-weight: normal; color: initial; font-weight: 200;">${categoryLabel}:</span> <span style="display: inline; font-weight: 400">${keywordList}</span>
+                          <span style="color: #fff; font-weight: 600; font-size: 120%;">${categoryLabel}:</span> <span style="display: inline; color: rgb(200, 225, 250) !important; font-weight: 400; font-size: 120%;">${keywordList}</span>
                       </div>`;
           }).join('');
       };

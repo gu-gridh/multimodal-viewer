@@ -11,7 +11,72 @@
     <link rel="stylesheet" href="../../../shared/shared_styles.css">
     <script src="../../../libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+    rel="stylesheet" />
 </head>
+<style>
+#languageButton {
+    background: #646464;
+    font-family: "Barlow Condensed", sans-serif !important;
+    color: #fff;
+    font-size: 120%;
+}
+
+#languageButton:hover {
+    background: #505a64;
+}
+
+.container {
+    background: rgb(55, 55, 55)
+}
+
+.metadata-panel-title {
+    font-size: 1.8em;
+    text-align: left;
+    color: #fff;
+    font-weight: 400;
+    font-family: "Barlow Condensed", sans-serif !important;
+}
+
+.metadata-container {
+    font-family: "Barlow Condensed", sans-serif !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;  
+}
+
+.metadata-item-container-font {
+    font-family: "Barlow Condensed", sans-serif !important;
+}
+
+.metadata-item-container {
+    display: flex;
+    align-items: center;  
+    width: 32%;  
+    margin-bottom: 10px;  
+    margin-right: 1%;  
+}
+
+.tag-label {
+    width: 120px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 120%;
+    flex: 1; 
+    white-space: wrap;  
+    padding-right: 5px;  
+}
+
+.info-label {
+    width: 120px;
+    font-weight: 400;
+    font-size: 120%;
+    flex: 2; 
+    text-align: left;  
+    white-space: wrap;
+    color: rgb(200, 225, 250) !important;
+}
+</style>
 
 <body>
     <script>
@@ -78,81 +143,81 @@
                     <div style="display:inline;"></div> PLACEHOLDER_TITLE
                 </div>
 
-                <div class="metadata-content">
+                <div class="metadata-container">
 
-                    <div class="metadata-item">
-                        <div class="label">Site</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_SITE</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Site:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Date</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_DATE</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Date:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DATE</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Creator</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_CREATOR</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Creator:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_CREATOR</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Institution</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_INSTITUTION</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Institution:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_INSTITUTION</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Datings</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_DATINGS</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Dating:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DATINGS</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Geology</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_GEOLOGY</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Geology:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_GEOLOGY</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Vertices</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_NUM_VERTICES</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Vertices:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_VERTICES</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Faces</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_NUM_FACES</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Faces:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_FACES</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Photos</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_NUM_PHOTOS</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Photos:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_PHOTOS</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Dimensions</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_DIMENSIONS</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Dimensions:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DIMENSIONS</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Method</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_METHOD</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Method:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_METHOD</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Weather</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_WEATHER</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Weather:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_WEATHER</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Camera Lens</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_CAMERA_LENS</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Camera Lens:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_LENS</div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label">Camera Model</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_CAMERA_MODEL</div>
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Camera Model:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_MODEL</div>
                     </div>
                 </div>
 
-                <div class="metadata-item" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
-                    <div class="label" id="lang1" style="margin-bottom: 0.5rem;">Label</div>
+                <div class="metadata-item-container-font" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
+                    <div class="tag-label" id="lang1" style="margin-bottom: 0.5rem;"></div>
                     <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
                     <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN</div>
                 </div>

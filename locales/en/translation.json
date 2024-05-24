@@ -11,6 +11,7 @@
   "spatialcontext": "Spatial Context",
   "language": "Language",
   "room": "Room",
-  "tags": "Tags:",
-  "documentation": "Documentation"
+  "tags": "Tags",
+  "documentation": "Documentation",
+  "image": "Image"
 }

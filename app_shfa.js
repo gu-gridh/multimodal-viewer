@@ -50,34 +50,34 @@ try {
 //   }
 // });
 
-app.get('/modules/iiif/iiifSequence.html', async (req, res) => {  
+app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${config.panel}${queryName}&depth=2`;
   try {
     const apiResponse = await axios.get(apiUrl);
 
-    if (!apiResponse || !apiResponse.data || !apiResponse.data.features) {
+    if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
       return res.status(404).send('Data not found');
     }
 
-    const modelData = apiResponse.data.features;
+    const modelData = apiResponse.data.results;
 
-    if (modelData.length > 0 && modelData[0].properties.attached_topography) {
-      const basePathIiif = `${config.basePath}`;
+    //check for the presence of colour_images
+    if (modelData.length > 0 && modelData[0].colour_images) {
 
-      const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-      
-      const htmlContent = fs.readFileSync(path.join(__dirname,  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
-      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif));
+      //Extract all IIIF image URLs from colour_images
+      const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
+      const htmlContent = fs.readFileSync(path.join(__dirname, 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
+      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls));
 
       res.send(updatedHtmlContent);
     } else {
-      console.log('No attached topography images found.');
-      res.send('No attached topography images found.');
+      console.log('No colour images found.');
+      res.send('No colour images found.');
     }
   } catch (error) {
     console.error('Error fetching data from API:', error);
@@ -94,7 +94,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
       return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.metadata}${queryName}&depth=2`;
+  const apiUrl = `${config.metadata}${queryName}&depth=3`;
 
   try {
       const apiResponse = await axios.get(apiUrl);
@@ -118,22 +118,24 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
 
       //group keywords by category
       const categories = {};
-      shfaData.keywords.forEach(keyword => {
-          const categorySV = keyword.category || 'Uncategorized';
-          const categoryEN = keyword.category_translation || 'Uncategorized';
-          if (!categories[categorySV]) {
-              categories[categorySV] = { sv: [], en: [], categoryEN: categoryEN, categorySV: categorySV };
-          }
-          categories[categorySV].sv.push(keyword.text);
-          categories[categorySV].en.push(keyword.english_translation);
-      });
+      if (shfaData.keywords) {  //check if keywords exist before iterating
+          shfaData.keywords.forEach(keyword => {
+              const categorySV = keyword.category || 'Uncategorized';
+              const categoryEN = keyword.category_translation || 'Uncategorized';
+              if (!categories[categorySV]) {
+                  categories[categorySV] = { sv: [], en: [], categoryEN, categorySV };
+              }
+              categories[categorySV].sv.push(keyword.text);
+              categories[categorySV].en.push(keyword.english_translation);
+          });
+      }
 
       //convert grouped keywords to HTML with inline styles
       const formatKeywords = (categories, lang) => {
           return Object.entries(categories).map(([category, keywords]) => {
               const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
               const keywordList = keywords[lang].join(', ');
-              return `<div style="margin-bottom: 10px;">
+              return `<div style="margin-bottom: 15px;">
                           <span style="color: #fff; font-weight: 600; font-size: 120%;">${categoryLabel}:</span> <span style="display: inline; color: rgb(200, 225, 250) !important; font-weight: 400; font-size: 120%;">${keywordList}</span>
                       </div>`;
           }).join('');
@@ -152,24 +154,23 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
 
           //replacing placeholders
           let modifiedHtml = htmlData
-              .replace(/PLACEHOLDER_TITLE/g, metadata.text || 'Unknown')
-              .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
-              .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
-              .replace(/PLACEHOLDER_SITE/g, site.raa_id || 'Unknown')
-              .replace(/PLACEHOLDER_DATE/g, shfaData.date || 'Unknown')
-              .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator.name).join(', ') || 'Unknown')
-              .replace(/PLACEHOLDER_INSTITUTION/g, institution.name || 'Unknown')
-              .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating.text).join(', ') || 'Unknown')
-              .replace(/PLACEHOLDER_GEOLOGY/g, geology.type || 'Unknown')
-              .replace(/PLACEHOLDER_NUM_VERTICES/g, three_d_mesh.num_vertices || 'Unknown')
-              .replace(/PLACEHOLDER_NUM_FACES/g, three_d_mesh.num_faces || 'Unknown')
-              .replace(/PLACEHOLDER_NUM_PHOTOS/g, three_d_mesh.num_photos || 'Unknown')
-              .replace(/PLACEHOLDER_DIMENSIONS/g, three_d_mesh.dimensions ? three_d_mesh.dimensions.join(', ') : 'Unknown')
-              .replace(/PLACEHOLDER_METHOD/g, three_d_mesh.method || 'Unknown')
-              .replace(/PLACEHOLDER_WEATHER/g, three_d_mesh.weather ? three_d_mesh.weather.join(', ') : 'Unknown')
-              .replace(/PLACEHOLDER_CAMERA_LENS/g, image.camera_lens || 'Unknown')
-              .replace(/PLACEHOLDER_CAMERA_MODEL/g, image.camera_model || 'Unknown');
-
+            .replace(/PLACEHOLDER_TITLE/g, site?.raa_id || 'Unknown')
+            .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
+            .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
+            .replace(/PLACEHOLDER_SITE/g, site?.raa_id || 'Unknown')
+            .replace(/PLACEHOLDER_DATE/g, shfaData?.date || 'Unknown')
+            .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator?.name).join(', ') || 'Unknown')
+            .replace(/PLACEHOLDER_INSTITUTION/g, institution?.name || 'Unknown')
+            .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating?.text).join(', ') || 'Unknown')
+            .replace(/PLACEHOLDER_GEOLOGY/g, geology?.type || 'Unknown')
+            .replace(/PLACEHOLDER_NUM_VERTICES/g, three_d_mesh?.num_vertices || 'Unknown')
+            .replace(/PLACEHOLDER_NUM_FACES/g, three_d_mesh?.num_faces || 'Unknown')
+            .replace(/PLACEHOLDER_NUM_PHOTOS/g, three_d_mesh?.num_photos || 'Unknown')
+            .replace(/PLACEHOLDER_DIMENSIONS/g, three_d_mesh.dimensions ? three_d_mesh.dimensions.join(', ') : 'Unknown')
+            .replace(/PLACEHOLDER_METHOD/g, three_d_mesh.method?.text || 'Unknown')
+            .replace(/PLACEHOLDER_WEATHER/g, three_d_mesh.weather?.map(w => w?.text).join(', ') || 'Unknown')
+            .replace(/PLACEHOLDER_CAMERA_LENS/g, image.camera_lens?.name || 'Unknown')
+            .replace(/PLACEHOLDER_CAMERA_MODEL/g, image.camera_model?.name || 'Unknown');
           res.send(modifiedHtml);
       });
   } catch (error) {
@@ -228,37 +229,6 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
   } catch (error) {
       console.error('Error fetching data from API:', error);
       return res.status(500).send('Internal Server Error');
-  }
-});
-
-app.get('/modules/iiif/iiif.html', async (req, res) => { 
-  const fullQuery = req.query.q;
-  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  if (!queryName) {
-    return res.status(400).send('Query parameter is missing');
-  }
-
-  const apiUrl = `${config.panel}${queryName}`;
-  try {
-    const apiResponse = await axios.get(apiUrl);
-    const modelData = apiResponse.data.features;
-
-    fs.readFile(path.join(__dirname, 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-
-      const basePath = `${config.basePath}`;
-      const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
-      const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-      let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
-
-      res.send(modifiedData);
-    });
-  } catch (error) {
-    console.error('Error fetching data from API:', error);
-    return res.status(500).send('Internal Server Error');
   }
 });
 

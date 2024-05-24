@@ -42,7 +42,8 @@
     font-family: "Barlow Condensed", sans-serif !important;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;  
+    justify-content: flex-start;
+    margin-bottom: 15px;
 }
 
 .metadata-item-container-font {
@@ -67,6 +68,17 @@
     padding-right: 5px;  
 }
 
+.tag-label-header {
+    font-family: "Barlow Condensed", sans-serif !important;
+    width: 120px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 160%;
+    flex: 1; 
+    white-space: wrap;  
+    padding-right: 5px;  
+}
+
 .info-label {
     width: 120px;
     font-weight: 400;
@@ -84,6 +96,8 @@
             document.getElementById('keywords_sv').style.display = lang === 'sv' ? 'block' : 'none';
             document.getElementById('keywords_en').style.display = lang === 'en' ? 'block' : 'none';
             document.getElementById('lang1').textContent = t('tags');
+            document.getElementById('lang2').textContent = t('image');
+            document.getElementById('lang3').textContent = t('mesh');
         }
 
         function setButtonLabel(language) {
@@ -143,6 +157,8 @@
                     <div style="display:inline;"></div> PLACEHOLDER_TITLE
                 </div>
 
+                <div class="tag-label-header" id="lang3" style="margin-bottom: 15px;"></div>
+
                 <div class="metadata-container">
 
                     <div class="metadata-item-container">
@@ -156,7 +172,7 @@
                     </div>
 
                     <div class="metadata-item-container">
-                        <div class="tag-label">Creator:</div>
+                        <div class="tag-label">Mesh creator:</div>
                         <div class="theme-color-text info-label">PLACEHOLDER_CREATOR</div>
                     </div>
 
@@ -206,7 +222,7 @@
                     </div>
 
                     <div class="metadata-item-container">
-                        <div class="tag-label">Camera Lens:</div>
+                        <div class="tag-label">Camera lens:</div>
                         <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_LENS</div>
                     </div>
 
@@ -216,8 +232,29 @@
                     </div>
                 </div>
 
+                <div class="tag-label-header" id="lang2" style="margin-bottom: 15px;"></div>
+
+                <div class="metadata-container">
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Site:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
+                    </div>
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Date:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DATE</div>
+                    </div>
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label">Creator:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_CREATOR</div>
+                    </div>
+
+                </div>
+
                 <div class="metadata-item-container-font" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
-                    <div class="tag-label" id="lang1" style="margin-bottom: 0.5rem;"></div>
+                    <div class="tag-label-header" id="lang1" style="margin-bottom: 15px;"></div>
                     <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
                     <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN</div>
                 </div>

@@ -91,8 +91,7 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);" style="opacity:1.0;"></div>
-                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);"></div>
-                    <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
+                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('visualisation');moduleSwitcherLeft(1);"></div>
                     <div class="ui-module-item left compact" id="btn5" onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div></div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
@@ -149,8 +148,7 @@
 
             function applyTranslations() {
                 if (typeof i18next.t === 'function') {
-                    document.getElementById('btn1').textContent = i18next.t('Orthophoto');
-                    document.getElementById('btn2').textContent = i18next.t('topography');
+                    document.getElementById('btn1').textContent = 'Visualisation'
                     document.getElementById('btn3').textContent = i18next.t('mesh');
                     document.getElementById('btn5').textContent = i18next.t('about');
                 }
@@ -176,12 +174,12 @@
                     switch (viewerType) {
                         case 'mesh':
                             return 'mesh';
+                        case 'visualisation':
+                            return 'visualisation';
                         case 'topography':
-                            return 'topography';
-                        case 'orthophoto':
-                            return 'orthophoto';
+                            return 'visualisation';
                         default:
-                            return 'mesh'; //default
+                            return 'mesh'; 
                     }
                 }
             }
@@ -276,30 +274,15 @@
             let src;
             let newPath;
             switch (viewerType) {
-                case 'orthophoto':
-                    src = `/modules/iiif/iiif.html${queryString}`;
-                    newPath = `/?q=${qValue}/orthophoto`;
-                    buttonNum = 1;
-                    break;
-                case 'topography':
+                case 'visualisation':
                     src = `/modules/iiif/iiifSequence.html${queryString}`;
-                    newPath = `/?q=${qValue}/topography`;
-                    buttonNum = 2;
+                    newPath = `/?q=${qValue}/visualisation`;
+                    buttonNum = 1;
                     break;
                 case 'mesh':
                     src = `/modules/3dhop/3dhop.html${queryString}`;
                     newPath = `/?q=${qValue}/mesh`;
                     buttonNum = 3;
-                    break;
-                case 'metadata-compact':
-                    src = `/projects/shfa/metadata/metadata.html${queryString}`;
-                    newPath = `/?q=${qValue}`;
-                    buttonNum = 5;
-                    break;
-                default:
-                    src = `/modules/iiif/iiif.html${queryString}`;
-                    newPath = `/?q=${qValue}/orthophoto`;
-                    buttonNum = 1;
                     break;
             }
 

@@ -11,6 +11,7 @@
   "spatialcontext": "Spatial context",
   "language": "Språk",
   "room": "Rum",
-  "tags": "Taggar:",
-  "documentation": "Dokumentation"
+  "tags": "Taggar",
+  "documentation": "Dokumentation",
+  "image": "Bild"
 }

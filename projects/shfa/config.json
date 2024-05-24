@@ -17,6 +17,5 @@
   "backButton": "https://shfa.dh.gu.se/",
   "panel": "https://diana.dh.gu.se/api/shfa/visualization_groups/?text=",
   "metadata": "https://diana.dh.gu.se/api/shfa/visualization_groups/?text=",
-  "pointcloud": "",
-  "basePath": ""
+  "pointcloud": ""
 }

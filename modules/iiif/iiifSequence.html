@@ -88,7 +88,6 @@
     </div>
 
     <script>
-        //var anno;
         let urlToCopy = '';
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
@@ -115,7 +114,7 @@
             var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
 
             function getPageUrl(pageIndex) {
-                var baseImageUrl = "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif";
+                var baseImageUrl = 'PLACEHOLDER_DOWNLOAD_PATH';
                 var imageId = tileSources[pageIndex].split('/')[7];
                 return `${baseImageUrl}/${imageId}/full/full/0/default.jpg`;
             }

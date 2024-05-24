@@ -102,7 +102,8 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
       const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
       
       const htmlContent = fs.readFileSync(path.join(__dirname,  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
-      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif));
+      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif))
+                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', config.downloadPath);
 
       res.send(updatedHtmlContent);
     } else {

@@ -72,8 +72,8 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
       //Extract all IIIF image URLs from colour_images
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
-      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls));
-
+      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
+                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', config.downloadPath);
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');

@@ -217,8 +217,8 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
       const basePath = `${config.basePath}`;
       const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
       const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-      let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '');
-
+      let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
+                             .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(config.downloadPath));
       res.send(modifiedData);
     });
   } catch (error) {

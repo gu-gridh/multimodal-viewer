@@ -9,95 +9,28 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
         rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <script src="../../modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="../shared/shared_styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../../shared/shared_styles.css">
+    <link rel="stylesheet" href="../../shared/split-layout.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=2">
 
-    <script src="./libs/i18next.min.js"></script>
+    <script src="../../libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <style>
         html,
         body {
-            top:0px;
-            height:  100%!important;
+            top: 0px;
+            height: 100% !important;
             width: 100vw;
             margin: 0 !important;
             overflow: hidden !important;
             font-family: "Oswald", sans-serif !important;
             -ms-overflow-style: none;
             font-size: 108% !important;
-            background-color:grey;
+            background-color: grey;
             display: flex;
             flex-direction: column;
-        }
-
-        #main-content {
-            height: calc(100% - 80px) !important;
-            width: 100vw;
-            display: flex;
-            overflow: hidden;
-            /* background-color:green; */
-        }
-
-        #left-pane,
-        #right-pane {
-            width: 100%;
-            height: calc(100%)!important;
-            overflow:hidden;
-        }
-
-        .iframes{
-            height:calc(100%);
-        }
-
-        .ui-module-container {
-            width: 100%;
-            z-index: 1000;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
-
-        .ui-module {
-            top: 26px;
-            font-size:0.9em;
-            font-weight:300;
-            line-height:1.0;
-            position: absolute;
-            background-color: black;
-            border-radius: 8px;
-            padding: 0px 6px;
-            box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.5) !important;
-        }
-
-        .ui-module .ui-module-item {
-            padding: 5px 10px 6px 10px;
-            letter-spacing:0.5px;
-            margin: 5px;
-            color: white;
-            background-color: none;
-            float: left;
-            cursor: pointer;
-            opacity:0.7;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .ui-module .ui-module-item:hover {
-            opacity:1.0!important;
-        }
-
-        .container {
-            max-width: auto;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .content {
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: white;
         }
 
         .edit-button {
@@ -114,15 +47,7 @@
             margin-top: 20px;
         }
 
-        #footer-container {
-            position: absolute;
-            bottom: 0px;
-            width: 100%;
-            z-index: 1000;
-    
-        }
-
-        .back-button {
+        #back-button {
             position: absolute;
             height: 35px;
             width: 35px;
@@ -135,109 +60,168 @@
             margin-top: 28px;
             margin-left: 30px;
             z-index: 1000;
-            cursor:pointer;
+            cursor: pointer;
         }
 
-        .back-button:hover {
+        #back-button:hover {
             background-color: rgba(0, 0, 0, 1.0);
         }
 
-        #left-pane, #right-pane {
-            transition: width 0.5s ease-in-out; 
+        @media screen and (max-width: 1000px) {
+            #back-button {
+                margin-left: 20px;
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            #back-button {
+                display:none;
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="main-content">
-     
+
         <div id="left-pane">
             <a href="PLACEHOLDER_BACKBUTTON">
-                <div class="back-button"></div>
+                <div id="back-button"></div>
             </a>
+           
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0"></div>
+                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
                     <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
                     <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
-                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);"></div>
+                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
+                    </div>
+                    <div class="ui-module-item left compact" id="btn5"
+                        onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div>
                 </div>
             </div>
-            <div id="left-pane">
-                <iframe id="left-Iframe" class="iframes" src="/iiif/iiif.html?q=PLACEHOLDER_QUERY"
-                style="width:100%; border:none;"></iframe>
-            </div>
+            <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
+
         </div>
         <div id="right-pane">
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item right" id="btn5" onclick="changeRightViewer('metadata');moduleSwitcherRight(5);" style="opacity:1.0"></div>
-                    <div class="ui-module-item right" id="btn6" onclick="changeRightViewer('pointcloud');moduleSwitcherRight(6);"></div>
+                    <div class="ui-module-item right" id="btn6"
+                        onclick="changeRightViewer('metadata');moduleSwitcherRight(6);" style="opacity:1.0"></div>
+                    <div class="ui-module-item right" id="btn7"
+                        onclick="changeRightViewer('pointcloud');moduleSwitcherRight(7);"></div>
                 </div>
             </div>
-            <div id="right-pane">
-                <iframe id="right-Iframe" class="iframes" src="/projects/etruscan/metadata/metadata.html" style="width:100%; border:none;"></iframe>
-            </div>
+            <iframe id="right-Iframe" class="iframes" src="/projects/etruscan/metadata/metadata.html"
+                style="width:100%; border:none;"></iframe>
         </div>
         <div id="footer-container"></div>
     </div>
-   
-    <script>
-        $(document).ready(function() {
-            const savedLang = localStorage.getItem('i18nextLang') || 'en';
-    
-            $("#footer-container").load("/projects/etruscan/footer.html");
 
-            i18next
-                .use(i18nextHttpBackend)
-                .init({
-                    lng: savedLang,
-                    fallbackLng: 'en',
-                    backend: {
-                        loadPath: '/locales/{{lng}}/translation.json',
-                    },
-                }, function(err, t) {
-                    if (err) return console.error('i18next initialization error:', err);
-                    
-                    applyTranslations();
-    
-                    window.addEventListener('message', function(event) {
-                        if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                            i18next.changeLanguage(event.data.lang, function(err, t) {
-                                if (err) return console.log('Something went wrong loading', err);
-                                applyTranslations();
-                            });
-                        }
-                    }, false);
-                });
-    
+    <script>
+        $(document).ready(function () {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewerType = determineInitialViewer(urlParams);
+        changeLeftViewer(viewerType);
+
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
+        $("#footer-container").load("/projects/etruscan/footer.html");
+
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/locales/{{lng}}/translation.json',
+                },
+            }, function (err, t) {
+                if (err) return console.error('i18next initialization error:', err);
+
+                applyTranslations();
+
+                window.addEventListener('message', function (event) {
+                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                        i18next.changeLanguage(event.data.lang, function (err, t) {
+                            if (err) return console.log('Something went wrong loading', err);
+                            applyTranslations();
+                        });
+                    }
+                }, false);
+            });
+
             function applyTranslations() {
-                if (typeof i18next.t === 'function') 
-                {
-                    document.getElementById('btn1').textContent = i18next.t('inscriptions');
+                if (typeof i18next.t === 'function') {
+                    document.getElementById('btn1').textContent = i18next.t('Orthophoto');
                     document.getElementById('btn2').textContent = i18next.t('topography');
                     document.getElementById('btn3').textContent = i18next.t('mesh');
                     document.getElementById('btn4').textContent = i18next.t('rti');
-                    document.getElementById('btn5').textContent = i18next.t('metadata');
-                    document.getElementById('btn6').textContent = i18next.t('spatialcontext');
+                    document.getElementById('btn5').textContent = i18next.t('about');
+                    document.getElementById('btn6').textContent = i18next.t('about');
+                    document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
             }
+
+            changeRightViewer('metadata');
+
+            //hide specific elements in the left iframe
+            // $("#left-Iframe").on("load", function () {
+            //     //access the iframe's document
+            //     var iframeDoc = $(this).contents();
+            //     //hide the element with the class `full-screen-option`
+            //     iframeDoc.find(".full-screen-option").css("display", "none");
+            //     iframeDoc.find(".annotate-option").css("display", "none");
+            // });
         });
+
+        function determineInitialViewer(params) {
+            const qValue = params.get('q');
+            //check if phi is present in the URL
+            const hasPhi = params.has('phi');
+
+            if (hasPhi) {
+                return 'mesh';
+            }
+            
+            if (qValue) {
+                const segments = qValue.split('/');
+                if (segments.length > 1) {
+                    const viewerType = segments[1];
+                    //match the viewerType to the expected strings
+                    switch (viewerType) {
+                        case 'mesh':
+                            return 'mesh';
+                        case 'topography':
+                            return 'topography';
+                        case 'rti':
+                            return 'rti';
+                        case 'orthophoto':
+                            return 'orthophoto';
+                        default:
+                            return 'orthophoto'; //default
+                    }
+                }
+            }
+        }
 
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = rightPane.querySelector('.ui-module-container');
+            var backButton = document.getElementById('back-button');
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
-                uiModuleContainer.style.display = 'flex'; 
+                uiModuleContainer.style.display = 'flex';
+                backButton.style.display = 'block';
 
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
-                uiModuleContainer.style.display = 'none'; 
-
+                uiModuleContainer.style.display = 'none';
+                backButton.style.display = 'none';
             }
         }
 
@@ -245,21 +229,29 @@
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
-
+            var backButton = document.getElementById('back-button');
             if (leftPane.style.width  === '1px') {
                 leftPane.style.width = '50%';
                 rightPane.style.width = '50%';
                 uiModuleContainer.style.display = 'flex';
+                backButton.style.display = 'block';
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '99%';
                 uiModuleContainer.style.display = 'none';
+                backButton.style.display = 'none';
             }
         }
+
+        $(window).resize(function () {
+            if ($('#right-pane').css('display') === 'none') {
+                // here i would very much like to be able to hide all FullPage-buttons  
+            }
+        });
     </script>
 
     <script>
-       window.addEventListener('message', function(event) {
+        window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 updateMetadataContent(event.data.value);
             }
@@ -286,21 +278,57 @@
                 console.error('Cannot access iframe document');
             }
         }
-
+        
         function changeLeftViewer(viewerType) {
-            var iframe = document.getElementById('left-Iframe');
-            var currentUrl = new URL(iframe.src);
+            const iframe = document.getElementById('left-Iframe');
+            const queryString = window.location.search;
+            const params = new URLSearchParams(queryString);
 
-            if (viewerType === 'inscription') {
-                iframe.src = '/iiif/iiif.html?q=PLACEHOLDER_QUERY';
-            } else if (viewerType === 'topography') {
-                iframe.src = '/iiif/iiifSequence.html?q=PLACEHOLDER_QUERY';
+            let qValue = params.get('q');
+            if (qValue.includes('/')) {
+                qValue = qValue.split('/')[0];
             }
-            else if (viewerType === 'mesh') {
-                iframe.src = '/3dhop/3dhop.html?q=PLACEHOLDER_QUERY';
+
+            let src;
+            let newPath;
+            switch (viewerType) {
+                case 'orthophoto':
+                    src = `/modules/iiif/iiif.html${queryString}`;
+                    newPath = `/?q=${qValue}/orthophoto`;
+                    buttonNum = 1;
+                    break;
+                case 'topography':
+                    src = `/modules/iiif/iiifSequence.html${queryString}`;
+                    newPath = `/?q=${qValue}/topography`;
+                    buttonNum = 2;
+                    break;
+                case 'mesh':
+                    src = `/modules/3dhop/3dhop.html${queryString}`;
+                    newPath = `/?q=${qValue}/mesh`;
+                    buttonNum = 3;
+                    break;
+                case 'rti':
+                    src = `/modules/openlime/openlime.html${queryString}`;
+                    newPath = `/?q=${qValue}/rti`;
+                    buttonNum = 4;
+                    break;
+                case 'metadata-compact':
+                    src = `/projects/etruscan/metadata/metadata.html${queryString}`;
+                    newPath = `/?q=${qValue}`;
+                    buttonNum = 5;
+                    break;
+                default:
+                    src = `/modules/iiif/iiif.html${queryString}`;
+                    newPath = `/?q=${qValue}/orthophoto`;
+                    buttonNum = 1;
+                    break;
             }
-            else if (viewerType === 'rti') {
-                iframe.src = '/openlime/openlime.html?q=PLACEHOLDER_QUERY';
+
+            if (iframe) {
+                iframe.src = src;
+                moduleSwitcherLeft(buttonNum);
+                //update browser URL
+                window.history.pushState({}, '', newPath);
             }
         }
 
@@ -309,15 +337,9 @@
             if (viewerType === 'metadata') {
                 iframe.src = `/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             } else if (viewerType === 'pointcloud') {
-                iframe.src = '/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                iframe.src = '/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
-
-        $(document).ready(function () {
-            // Automatically trigger the metadata viewer to load.
-            changeRightViewer('metadata');
-        });
-
 
         function moduleSwitcherLeft(num) {
             $('.left').css('opacity', '0.6');

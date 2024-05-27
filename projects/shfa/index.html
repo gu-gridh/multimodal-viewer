@@ -284,6 +284,11 @@
                     newPath = `/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
+                case 'metadata-compact':
+                    src = `/projects/shfa/metadata/metadata.html${queryString}`;
+                    newPath = `/?q=${qValue}`;
+                    buttonNum = 5;
+                    break;
             }
 
             if (iframe) {

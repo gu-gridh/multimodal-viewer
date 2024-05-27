@@ -29,6 +29,18 @@
 	#Prev, #Next {
     	display: none; /*initially hide buttons*/
 	}
+	.specular_off{
+		background:url(../../shared/interface/specular_off.png);
+		max-height:23px;
+		top:2px;
+	}
+
+	.specular_on{
+		background:url(../../shared/interface/specular_on.png);
+		max-height:23px;
+		top:2px;
+		z-index:100;
+	}
 </style>
 
 <body>
@@ -60,7 +72,7 @@
 						<div class="guide-instructions-item-icon"
 							style="background-image:url(../../shared/interface/colour_on.png)"></div>
 						<div class="guide-instructions-item-label">
-							<p>Color tool.</p> Switches on and off the 3D model's color information.
+							<p>Color toggle.</p> Switches on or off the 3D model's color information.
 							With the colors off and the light in the right direction, details will appear in higher
 							contrast.
 						</div>
@@ -68,9 +80,17 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
+							style="background-image:url(../../shared/interface/specular_on.png)"></div>
+						<div class="guide-instructions-item-label">
+							<p>Specular toggle.</p> Switches on or off the 3D model's specular reflection. Switch off for a more neutral appearance.
+						</div>
+					</div>
+
+					<div class="guide-instructions-item">
+						<div class="guide-instructions-item-icon"
 							style="background-image:url(../../shared/interface/light_on.png)"></div>
 						<div class="guide-instructions-item-label">
-							<p>Light tool.</p> Switches on and off the light controls. When activated, click and drag
+							<p>Light tool.</p> Switches on or off the light controls. When activated, click and drag
 							to enhance details. Deactivate the light controls to rotate the 3D model.
 						</div>
 					</div>
@@ -79,7 +99,7 @@
 						<div class="guide-instructions-item-icon"
 							style="background-image:url(../../shared/interface/distance_on.svg)"></div>
 						<div class="guide-instructions-item-label">
-							<p>Measure tool.</p> Switches on and off the ruler. When activated, click on two places to
+							<p>Measure tool.</p> Switches on or off the ruler. When activated, click on two places to
 							measure the distance between them.
 						</div>
 					</div>
@@ -151,7 +171,10 @@
 						style="position:absolute; visibility:hidden; " />
 					<img id="color_m" title="Enable Solid Color" src="../../shared/interface/colour_on.png" />
 
-
+					<!--SPECULAR-->
+					<img id="specular" class="specular_off specular_on" title="Toggle Specular Light" onclick="toggleSpecular()"
+					src="../../shared/interface/empty.svg"/>
+					
 					<!--LIGHT-->
 					<img id="light_on_m" title="Disable Light Control" src="../../shared/interface/light_on.png"
 						style="position:absolute; visibility:hidden;  " />
@@ -215,6 +238,7 @@
 </body>
 
 <script type="text/javascript">
+	var specular = true;
 	var currentPage = 1;
 	var totalPages = 2; 
 	var presenter = null;
@@ -380,6 +404,8 @@
 		else if (action == 'color' || action == 'color_on') { presenter.toggleInstanceSolidColor(HOP_ALL, true); colorSwitch(); }
 		else if (action == 'color_m' || action == 'color_on_m') { presenter.toggleInstanceSolidColor(HOP_ALL, true); colorSwitch(); }
 		//--COLOR--
+	
+		//--SPECULAR--
 		//--MEASURE--
 		else if (action == 'measure' || action == 'measure_on') { presenter.enableMeasurementTool(!presenter.isMeasurementToolEnabled()); measureSwitch(); }
 		else if (action == 'measure_m' || action == 'measure_on_m') { presenter.enableMeasurementTool(!presenter.isMeasurementToolEnabled()); measureSwitch(); }
@@ -423,6 +449,25 @@
 
 	function togglePane() {
 		window.parent.postMessage({ type: 'togglePane' }, '*');
+	}
+
+	function toggleSpecular() {
+		var element = document.getElementById("specular");
+		element.classList.toggle("specular_on");
+		if (specular){
+		for (inst in presenter._scene.modelInstances) {
+			presenter._scene.modelInstances[inst].specularColor = [0.0, 0.0, 0.0, 256.0];
+		}
+		specular=false;
+		presenter.repaint();
+	}
+	else {
+		for (inst in presenter._scene.modelInstances) {
+			presenter._scene.modelInstances[inst].specularColor = [0.1, 0.1, 0.1, 256.0];
+		}
+		specular=true;
+		presenter.repaint();
+	}
 	}
 
 	$(document).ready(function () {

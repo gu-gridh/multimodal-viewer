@@ -4,7 +4,7 @@
 <head>
     <title>IIIF Image Viewer</title>
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
-    rel="stylesheet" />
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="metadata.css">
@@ -12,82 +12,125 @@
     <script src="../../../libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
-    rel="stylesheet" />
+        rel="stylesheet" />
 </head>
 <style>
-#languageButton {
-    background: #646464;
-    font-family: "Barlow Condensed", sans-serif !important;
-    color: #fff;
-    font-size: 120%;
-}
+    #languageButton {
+        background: #646464;
+        font-family: "Barlow Condensed", sans-serif !important;
+        color: #fff;
+        font-size: 120%;
+    }
 
-#languageButton:hover {
-    background: #505a64;
-}
+    #languageButton:hover {
+        background: #505a64;
+    }
 
-.container {
-    background: rgb(55, 55, 55)
-}
+    .container {
+        background: rgb(55, 55, 55)
+    }
 
-.metadata-panel-title {
-    font-size: 1.8em;
-    text-align: left;
-    color: #fff;
-    font-weight: 400;
-    font-family: "Barlow Condensed", sans-serif !important;
-}
+    .metadata-panel-title {
+        font-size: 1.8em;
+        text-align: left;
+        color: #fff;
+        font-weight: 400;
+        font-family: "Barlow Condensed", sans-serif !important;
+    }
 
-.metadata-container {
-    font-family: "Barlow Condensed", sans-serif !important;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-bottom: 15px;
-}
+    .general-text {
+        font-size: 120%;
+        text-align: left;
+        color: #fff;
+        font-weight: 300;
+        font-family: "Barlow Condensed", sans-serif !important;
+        margin-bottom: 15px;
+    }
 
-.metadata-item-container-font {
-    font-family: "Barlow Condensed", sans-serif !important;
-}
+    .metadata-container {
+        font-family: "Barlow Condensed", sans-serif !important;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin-bottom: 15px;
+    }
 
-.metadata-item-container {
-    display: flex;
-    align-items: center;  
-    width: 32%;  
-    margin-bottom: 10px;  
-    margin-right: 1%;  
-}
+    .metadata-item-container-font {
+        font-family: "Barlow Condensed", sans-serif !important;
+    }
 
-.tag-label {
-    width: 120px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 120%;
-    flex: 1; 
-    white-space: wrap;  
-    padding-right: 5px;  
-}
+    .metadata-container > .metadata-item-container {
+        flex: 1 1 45%
+    }
 
-.tag-label-header {
-    font-family: "Barlow Condensed", sans-serif !important;
-    width: 120px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 160%;
-    flex: 1; 
-    white-space: wrap;  
-    padding-right: 5px;  
-}
+    .metadata-container-3col > .metadata-item-container {
+        flex: 1 1 1 25%
+    }
 
-.info-label {
-    width: 120px;
-    font-weight: 400;
-    font-size: 120%;
-    flex: 2; 
-    text-align: left;  
-    white-space: wrap;
-    color: rgb(200, 225, 250) !important;
-}
+    .metadata-container-1col > .metadata-item-container {
+        flex: 1 100%
+    }
+
+    .metadata-item-container-1col {
+        display: block;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 1%;
+    }
+    .metadata-item-container-3col {
+        display: block;
+        align-items: center;
+        width: 30%;
+        margin-bottom: 10px;
+        margin-right: 1%;
+    }
+    .metadata-item-container {
+        display: block;
+        align-items: center;
+        width: 50%;
+        margin-bottom: 10px;
+        margin-right: 1%;
+    }
+
+    .tag-label {
+        /* width: 120px; */
+        color: #fff;
+        font-weight: 600;
+        font-size: 120%;
+        flex: 1;
+        white-space: wrap;
+        padding-right: 5px;
+    }
+
+    .tag-label-header {
+        font-family: "Barlow Condensed", sans-serif !important;
+        /* width: 120px; */
+        color: #fff;
+        font-weight: 600;
+        font-size: 160%;
+        flex: 1;
+        white-space: wrap;
+        padding-right: 5px;
+    }
+
+    .info-label {
+        /* width: 120px; */
+        font-weight: 400;
+        font-size: 120%;
+        flex: 2;
+        text-align: left;
+        white-space: wrap;
+        color: rgb(200, 225, 250) !important;
+    }
+
+    /* [name=df-field]{
+        display: none;
+    }
+
+    [name=sfm-field]{
+        display: none;
+    } */
 </style>
 
 <body>
@@ -95,9 +138,38 @@
         function updateTranslations(t, lang) {
             document.getElementById('keywords_sv').style.display = lang === 'sv' ? 'block' : 'none';
             document.getElementById('keywords_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('weather_sv').style.display = lang === 'sv' ? 'block' : 'none';
+            document.getElementById('weather_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('geology_sv').style.display = lang === 'sv' ? 'block' : 'none';
+            document.getElementById('geology_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('method_sv').style.display = lang === 'sv' ? 'block' : 'none';
+            document.getElementById('method_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('reference_sv').style.display = lang === 'sv' ? 'block' : 'none';
+            document.getElementById('reference_en').style.display = lang === 'en' ? 'block' : 'none';
             document.getElementById('lang1').textContent = t('tags');
             document.getElementById('lang2').textContent = t('image');
             document.getElementById('lang3').textContent = t('mesh');
+            document.getElementById('lang4').textContent = t('reference');
+            document.getElementById('lang5').textContent = t('quality');
+            document.getElementById('weather').textContent = t('weather');
+            document.getElementById('geology').textContent = t('geology');
+            document.getElementById('creator').textContent = t('creator');
+            document.getElementById('date').textContent = t('date');
+            document.getElementById('institution').textContent = t('institution');
+            document.getElementById('method').textContent = t('method');
+            document.getElementById('dimensions').textContent = t('dimensions');
+            document.getElementById('vertices').textContent = t('vertices');
+            document.getElementById('faces').textContent = t('faces');
+            document.getElementById('photos').textContent = t('photos');
+            document.getElementById('camera').textContent = t('camera');
+            document.getElementById('lens').textContent = t('lens');
+            document.getElementById('35mm').textContent = t('35mm');
+            document.getElementById('tvt-date').textContent = t('date');
+            document.getElementById('tvt-creator').textContent = t('creator');
+            document.getElementById('df-date').textContent = t('date');
+            document.getElementById('df-creator').textContent = t('creator');
+            document.getElementById('tvt-type').textContent = t('image-type');
+            document.getElementById('df-type').textContent = t('image-type');
         }
 
         function setButtonLabel(language) {
@@ -123,7 +195,15 @@
             changeLanguage(currentLanguage);
         }
 
+        function hideFields() {
+            if (document.getElementById('method_sv').textContent === 'Laserscanning')
+            {document.getElementsByName('sfm-field').style.display = 'none'}
+            else {document.getElementsByName('sfm-field').style.display = 'visible'}
+
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+            
             const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
 
             i18next.use(i18nextHttpBackend).init({
@@ -139,6 +219,7 @@
                 }
                 setButtonLabel(savedLang);
                 updateTranslations(t, savedLang);
+                hideFields();
             });
         });
     </script>
@@ -155,111 +236,159 @@
 
                 <div class="metadata-panel-title">
                     <div style="display:inline;"></div> PLACEHOLDER_TITLE
+                    | PLACEHOLDER_SITE
                 </div>
-
+                
                 <div class="tag-label-header" id="lang3" style="margin-bottom: 15px;"></div>
 
-                <div class="metadata-container">
 
-                    <div class="metadata-item-container">
+                <div class="metadata-container">
+                <!-- <div class="metadata-item-container">
                         <div class="tag-label">Site:</div>
                         <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
-                    </div>
-
+                    </div> -->
                     <div class="metadata-item-container">
-                        <div class="tag-label">Date:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_DATE</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Mesh creator:</div>
+                        <div class="tag-label" id="creator"></div>
                         <div class="theme-color-text info-label">PLACEHOLDER_CREATOR</div>
                     </div>
 
                     <div class="metadata-item-container">
-                        <div class="tag-label">Institution:</div>
+                        <div class="tag-label" id="institution"></div>
                         <div class="theme-color-text info-label">PLACEHOLDER_INSTITUTION</div>
                     </div>
 
                     <div class="metadata-item-container">
-                        <div class="tag-label">Dating:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_DATINGS</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Geology:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_GEOLOGY</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Vertices:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_VERTICES</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Faces:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_FACES</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Photos:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_PHOTOS</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Dimensions:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_DIMENSIONS</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Method:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_METHOD</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Weather:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_WEATHER</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Camera lens:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_LENS</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Camera Model:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_MODEL</div>
-                    </div>
-                </div>
-
-                <div class="tag-label-header" id="lang2" style="margin-bottom: 15px;"></div>
-
-                <div class="metadata-container">
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Site:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
-                    </div>
-
-                    <div class="metadata-item-container">
-                        <div class="tag-label">Date:</div>
+                        <div class="tag-label" id="date"></div>
                         <div class="theme-color-text info-label">PLACEHOLDER_DATE</div>
                     </div>
 
                     <div class="metadata-item-container">
-                        <div class="tag-label">Creator:</div>
-                        <div class="theme-color-text info-label">PLACEHOLDER_CREATOR</div>
+                        <div class="tag-label" id="weather"></div>
+                        <div class="theme-color-text info-label" id="weather_sv">PLACEHOLDER_WEATHER_SV</div>
+                        <div class="theme-color-text info-label" id="weather_en" style="display: none;">PLACEHOLDER_WEATHER_EN</div>
                     </div>
 
+                    <div class="metadata-item-container">
+                        <div class="tag-label" id="geology"></div>
+                        <div class="theme-color-text info-label" id="geology_sv">PLACEHOLDER_GEOLOGY_SV</div>
+                        <div class="theme-color-text info-label" id="geology_en" style="display: none;">PLACEHOLDER_GEOLOGY_EN</div>
+                    </div>
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label" id="method"></div>
+                        <div class="theme-color-text info-label" id="method_sv">PLACEHOLDER_METHOD_SV</div>
+                        <div class="theme-color-text info-label" id="method_en" style="display: none;">PLACEHOLDER_METHOD_EN</div>
+                    </div>
+
+                <!-- <div class="metadata-item-container">
+                        <div class="tag-label">Dating:</div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DATINGS</div>
+                    </div> -->
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label" id="dimensions"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DIMENSIONS</div>
+                    </div>
+
+                    <div class="metadata-item-container" name="sfm-field" style="display:none">
+                        <div class="tag-label" id="photos"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_PHOTOS</div>
+                    </div>
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label" id="vertices"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_VERTICES</div>
+                    </div>
+
+                    <div class="metadata-item-container">
+                        <div class="tag-label" id="faces"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_NUM_FACES</div>
+                    </div>
+
+                    <div class="metadata-item-container" name="sfm-field" style="display:none">
+                        <div class="tag-label" id="camera"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_MODEL</div>
+                    </div>
+
+                    <div class="metadata-item-container" name="sfm-field" style="display:none">
+                        <div class="tag-label" id="lens"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_CAMERA_LENS</div>
+                    </div>
+
+                    <div class="metadata-item-container" name="sfm-field" style="display:none">
+                        <div class="tag-label" id="35mm"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_35MM</div>
+                    </div>
+            </div>
+            
+            <div class="tag-label-header" id="lang2" style="margin-bottom: 15px;"></div>
+
+            <div class="metadata-container">
+
+                <!-- <div class="metadata-item-container">
+                    <div class="tag-label">Site:</div>
+                    <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
+                </div> -->
+
+                <div class="metadata-item-container-3col">
+                    <div class="tag-label" id="tvt-type"></div>
+                    <div class="theme-color-text info-label">TVT Visualisation</div>
                 </div>
 
-                <div class="metadata-item-container-font" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
-                    <div class="tag-label-header" id="lang1" style="margin-bottom: 15px;"></div>
-                    <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
-                    <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN</div>
+                <div class="metadata-item-container-3col">
+                    <div class="tag-label" id="tvt-creator"></div>
+                    <div class="theme-color-text info-label">PLACEHOLDER_TVT_CREATOR</div>
+                </div>
+                
+                <div class="metadata-item-container-3col">
+                    <div class="tag-label" id="tvt-date"></div>
+                    <div class="theme-color-text info-label">PLACEHOLDER_TVT_DATE</div>
+                </div>
+
+                <div class="metadata-item-container-3col" name="df-field" style="display:none">
+                    <div class="tag-label" id="df-type"></div>
+                    <div class="theme-color-text info-label">Digital Frottage</div>
+                </div>
+
+                <div class="metadata-item-container-3col" name="df-field" style="display:none">
+                    <div class="tag-label" id="df-creator"></div>
+                    <div class="theme-color-text info-label">PLACEHOLDER_DF_CREATOR</div>
+                </div>
+                
+                <div class="metadata-item-container-3col" name="df-field" style="display:none">
+                    <div class="tag-label" id="df-date"></div>
+                    <div class="theme-color-text info-label">PLACEHOLDER_DF_DATE</div>
+                </div>
+
+                
+
+                
+
+            </div>
+
+            <div class="metadata-item-container-font"
+                style="display: flex; flex-direction: column; margin-bottom: 1rem;">
+                <div class="tag-label-header" id="lang1" style="margin-bottom: 15px;"></div>
+                <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
+                <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN
+                </div>
+            </div>
+            <div class="tag-label-header" id="lang4" style="margin-bottom: 15px;"></div>
+            <div class="metadata-container">
+                <div class="metadata-item-container-1col">
+                    <div class="general-text" id="reference_sv">PLACEHOLDER_REFERENCE_SV</div>
+                    <div class="general-text" id="reference_en" style="display: none;">PLACEHOLDER_REFERENCE_EN</div>
+                </div>
+            </div>
+            <div class="tag-label-header" id="lang5" name="quality-field" style="display: none; margin-bottom: 15px;"></div>
+            <div class="metadata-container" name="quality-field" style="display: none;">
+                <div class="metadata-item-container-1col">
+                    <div class="general-text" id="quality_sv">The mesh quality was measured using MeshLab's <em>Per Face Quality according to Triangle shape and aspect ratio</em> filter with the <em>Mean ratio of triangle</em> metric. The face quality was then mapped to the vertices.</div>
+                    <div class="general-text" id="quality_en" style="display: none;">The mesh quality was measured using MeshLab's <em>Per Face Quality according to Triangle shape and aspect ratio</em> filter with the <em>Mean ratio of triangle</em> metric. The face quality was then mapped to the vertices.</div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 
 </html>

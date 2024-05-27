@@ -13,5 +13,22 @@
   "room": "Room",
   "tags": "Tags",
   "documentation": "Documentation",
-  "image": "Image"
+  "image": "Image",
+  "visualisation": "Visualisation",
+  "creator": "Creator",
+  "weather": "Weather",
+  "geology": "Bedrock Geology",
+  "date": "Date",
+  "institution": "Institution",
+  "method": "Method",
+  "dimensions": "Dimensions (in metres)",
+  "vertices": "Number of Vertices",
+  "faces": "Number of Faces",
+  "photos": "Number of Photos",
+  "camera": "Camera",
+  "lens": "Lens",
+  "35mm": "35mm Equivalent",
+  "image-type": "Visualisation Type",
+  "reference": "Reference",
+  "quality": "Mesh Quality"
 }

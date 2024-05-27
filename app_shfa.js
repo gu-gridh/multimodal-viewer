@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
-const dotenv = require('dotenv'); 
+const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
@@ -11,10 +11,10 @@ const projectName = process.env.PROJECT || 'default';
 const configPath = path.join(__dirname, 'projects', projectName, 'config.json');
 let config;
 try {
-    config = require(configPath);
+  config = require(configPath);
 } catch (error) {
-    console.error(`Failed to load config for project ${projectName}:`, error);
-    process.exit(1);
+  console.error(`Failed to load config for project ${projectName}:`, error);
+  process.exit(1);
 }
 
 // app.get('/modules/openlime/openlime.html', async (req, res) => {
@@ -36,7 +36,7 @@ try {
 //       const dropdownHtml = rtiImages.map(rti => 
 //         `<option value="${rti.url}">RTI ${rti.id}</option>`
 //       ).join('');
-      
+
 //       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
 //       modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', 
 //         `<select id="rtiImageDropdown" onchange="updateRTIImage(this.value)">
@@ -73,7 +73,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
-                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', config.downloadPath);
+        .replace('PLACEHOLDER_DOWNLOAD_PATH', config.downloadPath);
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');
@@ -91,91 +91,159 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
 
   if (!queryName) {
-      return res.status(400).send('Query parameter is missing');
+    return res.status(400).send('Query parameter is missing');
   }
 
   const apiUrl = `${config.metadata}${queryName}&depth=3`;
 
   try {
-      const apiResponse = await axios.get(apiUrl);
-      if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
-          return res.status(404).send('Data not found');
-      }
+    const apiResponse = await axios.get(apiUrl);
+    if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
+      return res.status(404).send('Data not found');
+    }
 
-      const metadata = apiResponse.data.results[0];
-      if (!metadata) {
-          return res.status(404).send('Data not found or malformed');
-      }
+    const metadata = apiResponse.data.results[0];
+    if (!metadata) {
+      return res.status(404).send('Data not found or malformed');
+    }
 
-      const shfaData = metadata.shfa_3d_data ? metadata.shfa_3d_data[0] : {};
-      const site = shfaData.site || {};
-      const institution = shfaData.institution || {};
-      const geology = shfaData.geology || {};
-      const creators = shfaData.creators || [];
-      const datings = shfaData.datings || [];
-      const three_d_mesh = shfaData.three_d_mesh || {};
-      const image = shfaData.image || {};
+    const shfaData = metadata.shfa_3d_data ? metadata.shfa_3d_data[0] : {};
+    const site = shfaData.site || {};
+    const institution = shfaData.institution || {};
+    const geology = shfaData.geology || {};
+    const creators = shfaData.creators || [];
+    const datings = shfaData.datings || [];
+    const three_d_mesh = shfaData.three_d_mesh || {};
+    const image = shfaData.image || {};
 
-      //group keywords by category
-      const categories = {};
-      if (shfaData.keywords) {  //check if keywords exist before iterating
-          shfaData.keywords.forEach(keyword => {
-              const categorySV = keyword.category || 'Uncategorized';
-              const categoryEN = keyword.category_translation || 'Uncategorized';
-              if (!categories[categorySV]) {
-                  categories[categorySV] = { sv: [], en: [], categoryEN, categorySV };
-              }
-              categories[categorySV].sv.push(keyword.text);
-              categories[categorySV].en.push(keyword.english_translation);
-          });
-      }
+    const date = new Date();
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    let acc_date = date.toLocaleString("en-GB", options);
 
-      //convert grouped keywords to HTML with inline styles
-      const formatKeywords = (categories, lang) => {
-          return Object.entries(categories).map(([category, keywords]) => {
-              const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
-              const keywordList = keywords[lang].join(', ');
-              return `<div style="margin-bottom: 15px;">
+    const referenceSV = `${creators?.map(creator => creator?.name).join(', ')}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på`
+    const referenceEN = `${creators?.map(creator => creator?.name).join(', ')}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at`
+
+    const imgMetadata = metadata.colour_images.map(image => image.subtype.english_translation);
+    const tvtVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('|'))
+    const dfVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('Digital Frottage'))
+
+    const tvtCreator = metadata.colour_images[tvtVis].author.name
+    const tvtYear = metadata.colour_images[tvtVis].year
+    let dfCreator = 'Unknown'
+    let dfYear = 'Unknown'
+    if (dfVis != -1) {
+    dfCreator = metadata.colour_images[dfVis].author.name
+    dfYear = metadata.colour_images[dfVis].year
+    }
+    
+    // if (metadata.colour_images) {
+    //   metadata.colour_images.forEach(image => {
+    //     const imgTypeSV = image.subtype.text;
+    //     const imgTypeEN = image.subtype.english_translation;
+    //     const imgCreator = image.author.name;
+    //     const imgDate = image.year;
+    //   });
+    // }
+
+    let displaySfmFields = 'name="sfm-field" style="display:none"'
+    if (three_d_mesh.method?.text !== 'Laserscanning') { displaySfmFields = 'name="sfm-field" style="display:visible"'}
+
+    let displayDfFields = 'name="df-field" style="display:none"'
+    if (imgMetadata.includes('Digital Frottage')) {displayDfFields = 'name="df-field" style="display:visible"'}
+
+    let displayQualityFields = 'name="quality-field" style="display: none'
+    if (three_d_mesh.quality_url !== null) {displayQualityFields = 'name="quality-field" style="display: visible'}
+
+    //group keywords by category
+    const categories = {};
+    if (shfaData.keywords) {  //check if keywords exist before iterating
+      shfaData.keywords.forEach(keyword => {
+        const categorySV = keyword.category || 'Uncategorized';
+        const categoryEN = keyword.category_translation || 'Uncategorized';
+        if (!categories[categorySV]) {
+          categories[categorySV] = { sv: [], en: [], categoryEN, categorySV };
+        }
+        categories[categorySV].sv.push(keyword.text);
+        categories[categorySV].en.push(keyword.english_translation);
+      });
+    };
+    if (shfaData.datings) {
+      shfaData.datings.forEach(dating => {
+        const categorySV = 'Datering';
+        const categoryEN = 'Dating';
+        if (!categories[categorySV]) {
+          categories[categorySV] = { sv: [], en: [], categoryEN, categorySV }
+        }
+        categories[categorySV].sv.push(dating.text);
+        categories[categorySV].en.push(dating.english_translation)
+      });
+    }
+
+    //convert grouped keywords to HTML with inline styles
+    const formatKeywords = (categories, lang) => {
+      return Object.entries(categories).map(([category, keywords]) => {
+        const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
+        const keywordList = keywords[lang].join(', ');
+        return `<div style="margin-bottom: 15px;">
                           <span style="color: #fff; font-weight: 600; font-size: 120%;">${categoryLabel}:</span> <span style="display: inline; color: rgb(200, 225, 250) !important; font-weight: 400; font-size: 120%;">${keywordList}</span>
                       </div>`;
-          }).join('');
-      };
+      }).join('');
+    };
 
-      const keywordTextsSV = formatKeywords(categories, 'sv');
-      const keywordTextsEN = formatKeywords(categories, 'en');
+    const keywordTextsSV = formatKeywords(categories, 'sv');
+    const keywordTextsEN = formatKeywords(categories, 'en');
 
-      const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
+    const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
 
-      fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
-          if (err) {
-              console.error('Error reading the file:', err);
-              return res.status(500).send('Internal Server Error');
-          }
+    fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
 
-          //replacing placeholders
-          let modifiedHtml = htmlData
-            .replace(/PLACEHOLDER_TITLE/g, site?.raa_id || 'Unknown')
-            .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
-            .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
-            .replace(/PLACEHOLDER_SITE/g, site?.raa_id || 'Unknown')
-            .replace(/PLACEHOLDER_DATE/g, shfaData?.date || 'Unknown')
-            .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator?.name).join(', ') || 'Unknown')
-            .replace(/PLACEHOLDER_INSTITUTION/g, institution?.name || 'Unknown')
-            .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating?.text).join(', ') || 'Unknown')
-            .replace(/PLACEHOLDER_GEOLOGY/g, geology?.type || 'Unknown')
-            .replace(/PLACEHOLDER_NUM_VERTICES/g, three_d_mesh?.num_vertices || 'Unknown')
-            .replace(/PLACEHOLDER_NUM_FACES/g, three_d_mesh?.num_faces || 'Unknown')
-            .replace(/PLACEHOLDER_NUM_PHOTOS/g, three_d_mesh?.num_photos || 'Unknown')
-            .replace(/PLACEHOLDER_DIMENSIONS/g, three_d_mesh.dimensions ? three_d_mesh.dimensions.join(', ') : 'Unknown')
-            .replace(/PLACEHOLDER_METHOD/g, three_d_mesh.method?.text || 'Unknown')
-            .replace(/PLACEHOLDER_WEATHER/g, three_d_mesh.weather?.map(w => w?.text).join(', ') || 'Unknown')
-            .replace(/PLACEHOLDER_CAMERA_LENS/g, image.camera_lens?.name || 'Unknown')
-            .replace(/PLACEHOLDER_CAMERA_MODEL/g, image.camera_model?.name || 'Unknown');
-          res.send(modifiedHtml);
-      });
+      //replacing placeholders
+      let modifiedHtml = htmlData
+        .replace(/PLACEHOLDER_TITLE/g, site?.lamning_id || site?.raa_id || site?.placename || 'Unknown')
+        .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
+        .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
+        .replace(/PLACEHOLDER_SITE/g, site?.raa_id || site?.lamning_id || site?.placename || 'Unknown')
+        .replace(/PLACEHOLDER_DATE/g, shfaData?.date || 'Unknown')
+        .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator?.name).join(', ') || 'Unknown')
+        .replace(/PLACEHOLDER_INSTITUTION/g, institution?.name || 'Unknown')
+        // .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating?.text).join(', ') || 'Unknown')
+        .replace(/PLACEHOLDER_GEOLOGY_SV/g, geology?.type || 'Unknown')
+        .replace(/PLACEHOLDER_GEOLOGY_EN/g, geology?.type_translation || 'Unknown')
+        .replace(/PLACEHOLDER_NUM_VERTICES/g, three_d_mesh?.num_vertices || 'Unknown')
+        .replace(/PLACEHOLDER_NUM_FACES/g, three_d_mesh?.num_faces || 'Unknown')
+        .replace(/PLACEHOLDER_NUM_PHOTOS/g, three_d_mesh?.num_photos || 'Unknown')
+        .replace(/PLACEHOLDER_DIMENSIONS/g, three_d_mesh.dimensions ? three_d_mesh.dimensions.join(', ') : 'Unknown')
+        .replace(/PLACEHOLDER_METHOD_SV/g, three_d_mesh.method?.text || 'Unknown')
+        .replace(/PLACEHOLDER_METHOD_EN/g, three_d_mesh.method?.english_translation || 'Unknown')
+        .replace(/PLACEHOLDER_WEATHER_SV/g, three_d_mesh.weather?.map(w => w?.text).join(', ') || 'Unknown')
+        .replace(/PLACEHOLDER_WEATHER_EN/g, three_d_mesh.weather?.map(w => w?.english_translation).join(', ') || 'Unknown')
+        .replace(/PLACEHOLDER_CAMERA_LENS/g, image.camera_lens?.name || 'Unknown')
+        .replace(/PLACEHOLDER_CAMERA_MODEL/g, image.camera_model?.name || 'Unknown')
+        .replace(/PLACEHOLDER_35MM/g, image?.mm35_equivalent || 'Unknown')
+        .replace(/name="sfm-field" style="display:none"/g, displaySfmFields)
+        .replace(/name="df-field" style="display:none"/g, displayDfFields)
+        .replace(/name="quality-field" style="display: none/g, displayQualityFields)
+        .replace(/PLACEHOLDER_TVT_CREATOR/g, tvtCreator)
+        .replace(/PLACEHOLDER_TVT_DATE/g, tvtYear)
+        .replace(/PLACEHOLDER_DF_CREATOR/g, dfCreator || 'Unknown')
+        .replace(/PLACEHOLDER_DF_DATE/g, dfYear || 'Unknown')
+        .replace(/PLACEHOLDER_REFERENCE_SV/g, referenceSV)
+        .replace(/PLACEHOLDER_REFERENCE_EN/g, referenceEN);
+
+
+      res.send(modifiedHtml);
+    });
   } catch (error) {
-      console.error('Error fetching data from API:', error);
-      res.status(500).send('Internal Server Error');
+    console.error('Error fetching data from API:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
@@ -184,51 +252,51 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
-      return res.status(400).send('Query parameter is missing');
+    return res.status(400).send('Query parameter is missing');
   }
 
   const apiUrl = `${config.panel}${queryName}&depth=2`;
 
   try {
-      const apiResponse = await axios.get(apiUrl);
-      if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
-          return res.status(404).send('Data not found');
+    const apiResponse = await axios.get(apiUrl);
+    if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
+      return res.status(404).send('Data not found');
+    }
+
+    const shfaData = apiResponse.data.results[0].shfa_3d_data;
+    if (!shfaData || !shfaData.length) {
+      return res.status(404).send('No shfa_3d_data found');
+    }
+
+    const modelData = shfaData[0];
+    if (!modelData.three_d_mesh || !modelData.three_d_mesh.mesh_url) {
+      return res.status(404).send('No three_d_mesh or mesh_url found');
+    }
+
+    const meshUrl = modelData.three_d_mesh.mesh_url;
+    const qualityUrl = modelData.three_d_mesh.quality_url || '';
+
+    fs.readFile(path.join(__dirname, 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
       }
 
-      const shfaData = apiResponse.data.results[0].shfa_3d_data;
-      if (!shfaData || !shfaData.length) {
-          return res.status(404).send('No shfa_3d_data found');
-      }
+      let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
+        .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(qualityUrl))
+        .replace(/PLACEHOLDER_STARTPHI/g, 0.0)
+        .replace(/PLACEHOLDER_STARTTHETA/g, 0.0)
+        .replace(/PLACEHOLDER_STARTDISTANCE/g, 1.5)
+        .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
+        .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
+        .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
+        .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
 
-      const modelData = shfaData[0];
-      if (!modelData.three_d_mesh || !modelData.three_d_mesh.mesh_url) {
-          return res.status(404).send('No three_d_mesh or mesh_url found');
-      }
-
-      const meshUrl = modelData.three_d_mesh.mesh_url;
-      const qualityUrl = modelData.three_d_mesh.quality_url || '';
-
-      fs.readFile(path.join(__dirname, 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
-          if (err) {
-              console.error('Error reading the file:', err);
-              return res.status(500).send('Internal Server Error');
-          }
-
-          let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
-                                  .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(qualityUrl))
-                                  .replace(/PLACEHOLDER_STARTPHI/g, 0.0)
-                                  .replace(/PLACEHOLDER_STARTTHETA/g, 0.0)
-                                  .replace(/PLACEHOLDER_STARTDISTANCE/g, 1.5)
-                                  .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
-                                  .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
-                                  .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-                                  .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
-
-          res.send(modifiedData);
-      });
+      res.send(modifiedData);
+    });
   } catch (error) {
-      console.error('Error fetching data from API:', error);
-      return res.status(500).send('Internal Server Error');
+    console.error('Error fetching data from API:', error);
+    return res.status(500).send('Internal Server Error');
   }
 });
 
@@ -257,10 +325,10 @@ app.get('*', (req, res) => {
       console.error('Error reading the file:', err);
       return res.status(500).send('Internal Server Error');
     }
-    
+
     let modifiedData = data
-    .replace(/PLACEHOLDER_QUERY/g, queryName)
-    .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+      .replace(/PLACEHOLDER_QUERY/g, queryName)
+      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
     res.send(modifiedData);
   });
 });

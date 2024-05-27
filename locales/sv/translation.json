@@ -13,5 +13,22 @@
   "room": "Rum",
   "tags": "Taggar",
   "documentation": "Dokumentation",
-  "image": "Bild"
+  "image": "Bild",
+  "visualisation": "Visualisering",
+  "creator": "Upphovsperson",
+  "weather": "Väder",
+  "geology": "Berggrundsgeologi",
+  "date": "Datum",
+  "institution": "Institution",
+  "method": "Metod",
+  "dimensions": "Dimensioner (i meter)",
+  "vertices": "Antal Hörn",
+  "faces": "Antal Polygoner",
+  "photos": "Antal Bilder",
+  "camera": "Kamera",
+  "lens": "Kameralins",
+  "35mm": "35mm Ekvivalent",
+  "image-type": "Bildtyp",
+  "reference": "Referens",
+  "quality": "Mesh Quality"
 }

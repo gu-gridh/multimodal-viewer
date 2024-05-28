@@ -115,6 +115,17 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
     const datings = shfaData.datings || [];
     const three_d_mesh = shfaData.three_d_mesh || {};
     const image = shfaData.image || {};
+    const isInternational = shfaData.site.internationl_site
+    var title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`
+
+    if (!isInternational && !site?.raa_id) {
+      title = `${site?.lamning_id || site?.raa_id}  |  ${site?.placename}`
+    }
+    if (!isInternational && site?.lamning_id && site?.raa_id) { 
+      title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`
+    }
+    else { title = site?.placename
+     };
 
     const date = new Date();
     const options = {
@@ -123,9 +134,11 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
       day: "numeric",
     };
     let acc_date = date.toLocaleString("en-GB", options);
+    const formattedPeopleSV = new Intl.ListFormat("sv", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
+    const formattedPeopleEN = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
 
-    const referenceSV = `${creators?.map(creator => creator?.name).join(', ')}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på`
-    const referenceEN = `${creators?.map(creator => creator?.name).join(', ')}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at`
+    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på`
+    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at`
 
     const imgMetadata = metadata.colour_images.map(image => image.subtype.english_translation);
     const tvtVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('|'))
@@ -207,7 +220,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
 
       //replacing placeholders
       let modifiedHtml = htmlData
-        .replace(/PLACEHOLDER_TITLE/g, site?.lamning_id || site?.raa_id || site?.placename || 'Unknown')
+        .replace(/PLACEHOLDER_TITLE/g, title)
         .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
         .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
         .replace(/PLACEHOLDER_SITE/g, site?.raa_id || site?.lamning_id || site?.placename || 'Unknown')

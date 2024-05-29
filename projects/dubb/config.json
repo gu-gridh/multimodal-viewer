@@ -13,6 +13,7 @@
     }
   },
   "appFile": "app_dubb.js",
+  "project": "Dubb",
   "displayAnnotations": false,
   "backButton": "",
   "panel": "https://diana.dh.gu.se/api/mediaarchive/objectpointcloud/?title=",

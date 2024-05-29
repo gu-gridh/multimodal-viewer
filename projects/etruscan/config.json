@@ -13,6 +13,7 @@
     }
   },
   "appFile": "app.js",
+  "project": "Etruscan",
   "displayAnnotations": false,
   "backButton": "https://ddd71807bd5.dh.gu.se",
   "panel": "https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=",

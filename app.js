@@ -103,7 +103,8 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
       const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
       const htmlContent = fs.readFileSync(path.join(__dirname,  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif))
-                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg));
+                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
+                                          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
       res.send(updatedHtmlContent);
     } else {
       console.log('No attached topography images found.');

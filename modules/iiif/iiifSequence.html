@@ -107,24 +107,47 @@
             return state ? JSON.parse(state) : null;
         }
 
-        window.onload = function () {
+        window.onload = function() {
             var isInitialLoad = true;
             var savedState = getSavedViewerState();
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
             var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
-            var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
-            var downloadSources = JSON.parse(downloadSourceString);
+            var temp = PLACEHOLDER_PROJECT;
+            var creator = 'PLACEHOLDER_CREATORS';
+            var locationIds = 'PLACEHOLDER_LOCATION_ID';
+            var imgIds = 'PLACEHOLDER_IMAGE_IDS';
+
+            function isPlaceholder(value) {
+                return value.includes('PLACEHOLDER');
+            }
+
+            //Parse JSON data or use defaults
+            try {
+                var tileSources = isPlaceholder(tileSourcesString) ? [] : JSON.parse(tileSourcesString);
+                var downloadSources = isPlaceholder(downloadSourceString) ? [] : JSON.parse(downloadSourceString);
+                var creators = isPlaceholder(creator) ? [["Unknown Creator"]] : JSON.parse(creator);
+                var locationIdArray = isPlaceholder(locationIds) ? ["Unknown Location"] : JSON.parse(locationIds);
+                var imgIdArray = isPlaceholder(imgIds) ? [0] : JSON.parse(imgIds);
+            } catch (error) {
+                console.error("Error parsing JSON data:", error);
+                return;
+            }
 
             document.getElementById('download').addEventListener('click', function(event) {
                 event.preventDefault();
                 const pageIndex = viewer.currentPage();
                 const imageUrl = downloadSources[pageIndex];
+                const creatorName = creators[0][0]; 
+                const locationId = locationIdArray[0]; 
+                const imgId = imgIdArray[pageIndex]; 
 
                 fetch(imageUrl)
                     .then(response => response.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        const filename = `image_${pageIndex + 1}.jpg`;
+                        let filename = temp.toLowerCase() === "shfa" ?
+                            `${creatorName}_${locationId}_SHFAid${imgId}.png` :
+                            `image_${pageIndex + 1}.jpg`;
                         const a = document.createElement('a');
                         a.style.display = 'none';
                         a.href = url;
@@ -134,7 +157,9 @@
                         window.URL.revokeObjectURL(url);
                         document.body.removeChild(a);
                     })
-                    .catch(() => console.error("Could not download the image"));
+                    .catch(error => {
+                        console.error("Could not download the image", error);
+                    });
             });
 
             var viewer = OpenSeadragon({

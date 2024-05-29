@@ -70,11 +70,18 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
     if (modelData.length > 0 && modelData[0].colour_images) {
 
       //Extract all IIIF image URLs from colour_images
+      const creators = modelData[0].shfa_3d_data.map(data => data.creators.map(creator => creator.name));
+      const locationID = modelData[0].shfa_3d_data.map(data => data.site.lamning_id || data.site.raa_id || data.site.placename);
+      const imageIDs = modelData[0].colour_images.map(image => image.id);
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const downloadableFiles = modelData[0].colour_images.map(image => image.file);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
-                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles));
+                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
+                                          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
+                                          .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
+                                          .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
+                                          .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs));
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');

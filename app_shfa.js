@@ -67,7 +67,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
     const modelData = apiResponse.data.results;
 
     //check for the presence of colour_images
-    if (modelData.length > 0 && modelData[0].colour_images) {
+    if (modelData.length > 0 && modelData[0].colour_images && modelData[0].shfa_3d_data) {
 
       //Extract all IIIF image URLs from colour_images
       const creators = modelData[0].shfa_3d_data.map(data => data.creators.map(creator => creator.name));

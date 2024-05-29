@@ -137,7 +137,7 @@
                 event.preventDefault();
                 const pageIndex = viewer.currentPage();
                 const imageUrl = downloadSources[pageIndex];
-                const creatorName = creators[0][0]; 
+                const creatorName = creators[0][0].replace(/,\s*/g, '_'); //replace commas with underscores
                 const locationId = locationIdArray[0]; 
                 const imgId = imgIdArray[pageIndex]; 
 

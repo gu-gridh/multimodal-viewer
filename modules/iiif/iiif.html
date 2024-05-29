@@ -94,22 +94,36 @@
             return state ? JSON.parse(state) : null;
         }
 
-        function updateDownloadLink() {
-            var downloadLink = document.getElementById("download");
-            var baseImageUrl = 'PLACEHOLDER_DOWNLOAD_PATH';
-            var placeholderUrl = 'PLACEHOLDER_IIIF_IMAGE_URL';
-            var imageId = placeholderUrl.replace(baseImageUrl + "/", "").split("/")[0];
-            var newDownloadUrl = baseImageUrl + "/" + imageId + "/full/full/0/default.jpg";
-            downloadLink.href = newDownloadUrl;
-        }
-
         //notify index.html that the panel button has been clicked
         function togglePane() {
             window.parent.postMessage({ type: 'togglePane' }, '*');
         }
 
         window.onload = function () {
+            var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
+            var downloadSources = JSON.parse(downloadSourceString);
             var savedState = getSavedViewerState();
+
+            document.getElementById('download').addEventListener('click', function(event) {
+                event.preventDefault();
+                const imageUrl = downloadSources;
+
+                fetch(imageUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const filename = `image.jpg`;
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(() => console.error("Could not download the image"));
+            });
 
             var viewer = OpenSeadragon({
                 id: "openseadragon",
@@ -151,7 +165,6 @@
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }
-                updateDownloadLink();
             });
 
             viewer.addHandler('viewport-change', function () {

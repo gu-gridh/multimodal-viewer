@@ -111,18 +111,31 @@
             var isInitialLoad = true;
             var savedState = getSavedViewerState();
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
+            var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
             var tileSources = JSON.parse(tileSourcesString); // Convert the JSON string back to an array
+            var downloadSources = JSON.parse(downloadSourceString);
 
-            function getPageUrl(pageIndex) {
-                var baseImageUrl = 'PLACEHOLDER_DOWNLOAD_PATH';
-                var imageId = tileSources[pageIndex].split('/')[7];
-                return `${baseImageUrl}/${imageId}/full/full/0/default.jpg`;
-            }
+            document.getElementById('download').addEventListener('click', function(event) {
+                event.preventDefault();
+                const pageIndex = viewer.currentPage();
+                const imageUrl = downloadSources[pageIndex];
 
-            function updateDownloadLink(pageIndex) {
-                var downloadLink = document.getElementById("download");
-                downloadLink.href = getPageUrl(pageIndex);
-            }
+                fetch(imageUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const filename = `image_${pageIndex + 1}.jpg`;
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(() => console.error("Could not download the image"));
+            });
 
             var viewer = OpenSeadragon({
                 id: "openseadragon",
@@ -167,7 +180,6 @@
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                     document.getElementById("currentpage").innerHTML = "1 of " + tileSources.length;
-                    updateDownloadLink(0);
                     isInitialLoad = false;
                 }
             });
@@ -179,7 +191,6 @@
             viewer.addHandler("page", function (data) {
                 var pageIndex = data.page;
                 document.getElementById("currentpage").innerHTML = (pageIndex + 1) + " of " + tileSources.length;
-                updateDownloadLink(pageIndex);
             });
         };
 

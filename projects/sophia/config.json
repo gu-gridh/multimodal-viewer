@@ -19,5 +19,5 @@
   "metadata": "https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=",
   "pointcloud": "https://data.dh.gu.se/saintsophia/pointcloud/cloud.js",
   "basePath": "https://img.dh.gu.se/saintsophia/static/",
-  "downloadPath": "https://img.dh.gu.se/saintsophia/static/inscriptions/iiif"
+  "downloadPath": "https://data.dh.gu.se/saintsophia/static/"
 }

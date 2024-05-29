@@ -98,13 +98,12 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
 
     if (modelData.length > 0 && modelData[0].properties.attached_topography) {
       const basePathIiif = `${config.basePath}`;
-
+      const basePathDownload = `${config.downloadPath}`;
       const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-      
+      const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
       const htmlContent = fs.readFileSync(path.join(__dirname,  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif))
-                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', config.downloadPath);
-
+                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg));
       res.send(updatedHtmlContent);
     } else {
       console.log('No attached topography images found.');
@@ -213,12 +212,14 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
       }
-
       const basePath = `${config.basePath}`;
+      const basePathDownload = `${config.downloadPath}`;
       const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
+      const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
       const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
+      const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
       let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-                             .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(config.downloadPath));
+                             .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath));
       res.send(modifiedData);
     });
   } catch (error) {

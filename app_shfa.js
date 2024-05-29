@@ -59,7 +59,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
   const apiUrl = `${config.panel}${queryName}&depth=2`;
   try {
     const apiResponse = await axios.get(apiUrl);
-
+    
     if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
       return res.status(404).send('Data not found');
     }
@@ -71,9 +71,10 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
 
       //Extract all IIIF image URLs from colour_images
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
+      const downloadableFiles = modelData[0].colour_images.map(image => image.file);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
-        .replace('PLACEHOLDER_DOWNLOAD_PATH', config.downloadPath);
+                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles));
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');

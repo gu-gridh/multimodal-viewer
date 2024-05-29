@@ -207,21 +207,26 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const modelData = apiResponse.data.features;
 
-    fs.readFile(path.join(__dirname, 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-      const basePath = `${config.basePath}`;
-      const basePathDownload = `${config.downloadPath}`;
-      const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
-      const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
-      const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-      const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
-      let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-                             .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath));
-      res.send(modifiedData);
-    });
+    if (modelData.length > 0 && modelData[0].properties.attached_photograph) {
+      fs.readFile(path.join(__dirname, 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
+        if (err) {
+          console.error('Error reading the file:', err);
+          return res.status(500).send('Internal Server Error');
+        }
+        const basePath = `${config.basePath}`;
+        const basePathDownload = `${config.downloadPath}`;
+        const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
+        const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
+        const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
+        const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
+        let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
+                               .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath));
+        res.send(modifiedData);
+      });
+    } else {
+      console.log('No attached topography images found.');
+      res.send('No attached topography images found.');
+    }
   } catch (error) {
     console.error('Error fetching data from API:', error);
     return res.status(500).send('Internal Server Error');

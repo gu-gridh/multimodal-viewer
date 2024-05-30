@@ -23,38 +23,72 @@
             overflow: hidden !important;
             font-family: "Barlow Condensed", sans-serif !important;
             font-weight: 200;
-          
             background-color: rgb(50, 50, 50);
             align-items: center;
             flex-direction: column;
             justify-content: center;
         }
 
+        @media screen and (max-width: 850px) {
+            html,
+        body { 
+            padding-top:0px;
+            display: block;
+            overflow: auto !important;
+           
+        }
+    }
+
         #main-content {
             color: white;
-            width: auto;
+            width:750px;
             height: auto;
             text-align: center;
             padding: 30px;
             font-size: 1.2em !important;
             user-select:none;
             -webkit-user-select:none;
+          
+        }
+
+        @media screen and (max-width: 850px) {
+            #main-content {
+           margin-top:50px;
+           padding-bottom:30px;
+           float:left;
+           width:auto;
+        }
         }
 
         #links {
             display: flex;
             flex-direction: row;
-            width: 100%;
             justify-content: center;
-            column-gap: 50px;
+            width: 100%;
+     
+            column-gap:50px;
             user-select: none;
             -webkit-user-select:none;
+        }
+
+        @media screen and (max-width: 850px) {
+            #links {
+                padding-top:50px;
+                display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height:100%;
+            width: auto;
+
+        }
         }
 
 
         .link-sphere {
             width: 300px;
             height: 300px;
+            margin-top:30px;
             border-radius: 50%;
             background-color: grey;
             transition: all .2s ease-in-out;
@@ -72,6 +106,14 @@
             text-align:center;
             padding-top:20px;
             font-size:2em;
+        }
+
+        @media screen and (max-width: 850px) {
+            .title{
+                float:left;
+            padding-top:10px;
+            font-size:2em;
+        }
         }
 
         .entre{
@@ -98,45 +140,14 @@
             font-family: "Barlow Condensed", sans-serif;
         }
 
-        .GRIDHLogo {
-            float: right;
-            margin-top: 30px;
-            width: auto;
-            height: auto;
-            text-align: left;
-            font-weight: 100;
-            font-style: normal;
-            font-size: 30px;
-            line-height: 0.8;
-            padding: 0px 60px 5px 30px;
-            vertical-align: middle;
+        @media screen and (max-width: 850px) {
+            #footer-container {
+            display: none;
+           
+        }
         }
 
-        .PartnerLogo {
-            float: right;
-            margin-top: 30px;
-            width: auto;
-            height: auto;
-            text-align: left;
-            font-weight: 100;
-            font-style: normal;
-            font-size: 30px;
-            line-height: 0.8;
-            padding: 0px 30px 5px 30px;
-            vertical-align: middle;
-            border-width: 0px 0.5px 0px 0px;
-            border-color: white;
-            border-style: solid;
-        }
-
-
-        .link {
-            color: white;
-        }
-
-        .link:hover {
-            opacity: 0.8;
-        }
+        
     </style>
 
 
@@ -161,7 +172,7 @@
     
 
     <div id="main-content">
-        Skanningarna av entrén och salen utfördes av Kulturförvaltningen vid Västra Götalandsregionen i samarbete med <br>Göteborgs Forskningsinfrastruktur för Digital Humaniora (GRIDH) vid Göteborgs Universitet.
+        Skanningarna av entrén och salen utfördes av Kulturförvaltningen vid Västra Götalandsregionen i samarbete med Göteborgs Forskningsinfrastruktur för Digital Humaniora (GRIDH) vid Göteborgs Universitet.
 
     </div>
     <div id="footer-container"></div>

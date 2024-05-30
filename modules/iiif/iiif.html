@@ -104,6 +104,13 @@
             var downloadSources = JSON.parse(downloadSourceString);
             var savedState = getSavedViewerState();
 
+            //for restoring the zoom and pan from the URL
+            const hash = window.location.hash.substring(1);
+            const hashParams = new URLSearchParams(hash);
+            const zoom = parseFloat(hashParams.get('zoom'));
+            const x = parseFloat(hashParams.get('x'));
+            const y = parseFloat(hashParams.get('y'));
+
             document.getElementById('download').addEventListener('click', function(event) {
                 event.preventDefault();
                 const imageUrl = downloadSources;
@@ -161,7 +168,10 @@
             viewer.bookmarkUrl();
 
             viewer.addHandler('open', function () {
-                if (savedState) {
+                if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
+                    viewer.viewport.zoomTo(zoom);
+                    viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
+                } else if (savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }

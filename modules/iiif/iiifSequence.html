@@ -117,6 +117,13 @@
             var locationIds = 'PLACEHOLDER_LOCATION_ID';
             var imgIds = 'PLACEHOLDER_IMAGE_IDS';
 
+            //for restoring the zoom and pan from the URL
+            const hash = window.location.hash.substring(1);
+            const hashParams = new URLSearchParams(hash);
+            const zoom = parseFloat(hashParams.get('zoom'));
+            const x = parseFloat(hashParams.get('x'));
+            const y = parseFloat(hashParams.get('y'));
+
             function isPlaceholder(value) {
                 return value.includes('PLACEHOLDER');
             }
@@ -201,12 +208,15 @@
             viewer.bookmarkUrl();
 
             viewer.addHandler('open', function () {
-                if (isInitialLoad && savedState) {
+                if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
+                    viewer.viewport.zoomTo(zoom);
+                    viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
+                } else if (isInitialLoad && savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                     document.getElementById("currentpage").innerHTML = "1 of " + tileSources.length;
-                    isInitialLoad = false;
                 }
+                isInitialLoad = false;
             });
 
             viewer.addHandler('viewport-change', function () {

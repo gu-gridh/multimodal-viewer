@@ -265,6 +265,8 @@
             const iframe = document.getElementById('left-Iframe');
             const queryString = window.location.search;
             const params = new URLSearchParams(queryString);
+            const currentUrl = new URL(window.location.href);
+            const hashFragment = currentUrl.hash;
 
             let qValue = params.get('q');
             if (qValue.includes('/')) {
@@ -275,8 +277,8 @@
             let newPath;
             switch (viewerType) {
                 case 'visualisation':
-                    src = `/modules/iiif/iiifSequence.html${queryString}`;
-                    newPath = `/?q=${qValue}/visualisation`;
+                    src = `/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
+                    newPath = `/?q=${qValue}/visualisation${hashFragment}`;
                     buttonNum = 1;
                     break;
                 case 'mesh':

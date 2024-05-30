@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <title>Per Dubbshuset</title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <style>
+        html,
+        body {
+            display: flex;
+            height: 100% !important;
+            width: 100%;
+            margin: 0 !important;
+            overflow: hidden !important;
+            font-family: "Barlow Condensed", sans-serif !important;
+            font-weight: 200;
+          
+            background-color: rgb(50, 50, 50);
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #main-content {
+            color: white;
+            width: auto;
+            height: auto;
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2em !important;
+            user-select:none;
+            -webkit-user-select:none;
+        }
+
+        #links {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: center;
+            column-gap: 50px;
+            user-select: none;
+            -webkit-user-select:none;
+        }
+
+
+        .link-sphere {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: grey;
+            transition: all .2s ease-in-out;
+            cursor:pointer;
+        
+        }
+
+        .link-sphere:hover {
+            transform:scale(1.05);
+        }
+
+        .title{
+            color:white;
+            width:100%;
+            text-align:center;
+            padding-top:20px;
+            font-size:2em;
+        }
+
+        .entre{
+           background-image:url(projects/dubb/entre.jpg); 
+           background-size: cover;
+        }
+        .sal{
+           background-image:url(projects/dubb/sal.jpg);
+           background-size: cover;
+        }
+
+
+        .footer {
+            display: block;
+            background-color: #222;
+            color: white;
+            line-height: 1;
+            height: 80px;
+            width: calc(100%);
+            font-size: 12px;
+            position: absolute;
+            z-index: 3000;
+            bottom: 0px;
+            font-family: "Barlow Condensed", sans-serif;
+        }
+
+        .GRIDHLogo {
+            float: right;
+            margin-top: 30px;
+            width: auto;
+            height: auto;
+            text-align: left;
+            font-weight: 100;
+            font-style: normal;
+            font-size: 30px;
+            line-height: 0.8;
+            padding: 0px 60px 5px 30px;
+            vertical-align: middle;
+        }
+
+        .PartnerLogo {
+            float: right;
+            margin-top: 30px;
+            width: auto;
+            height: auto;
+            text-align: left;
+            font-weight: 100;
+            font-style: normal;
+            font-size: 30px;
+            line-height: 0.8;
+            padding: 0px 30px 5px 30px;
+            vertical-align: middle;
+            border-width: 0px 0.5px 0px 0px;
+            border-color: white;
+            border-style: solid;
+        }
+
+
+        .link {
+            color: white;
+        }
+
+        .link:hover {
+            opacity: 0.8;
+        }
+    </style>
+
+
+</head>
+
+<body>
+ 
+    <div id="links">
+        <a href="/?q=Dubbentr%C3%A9"> 
+            <div>
+                <div class="link-sphere entre"></div>
+                <div class="title">Entrén</div>
+            </div>
+        </a>
+        <a href="/?q=Dubbsalen">
+            <div>
+                <div class="link-sphere sal"></div>
+                <div class="title">Salen</div>
+            </div>
+        </a>
+    </div>
+    
+
+    <div id="main-content">
+        Skanningarna av entrén och salen utfördes av kulturförvaltningen i samarbete med GRIDH.
+
+    </div>
+    <footer class="footer">
+        <a href="https://dh.gu.se/">
+            <div class="link GRIDHLogo" id="">GU / GRIDH</div>
+        </a>
+
+        <a href="https://www.vgregion.se/kulturforvaltningen">
+            <div class="link PartnerLogo" id="">Kulturförvaltningen</div>
+        </a>
+    </footer>
+
+</body>
+
+</html>

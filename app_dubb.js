@@ -17,6 +17,28 @@ try {
     process.exit(1);
 }
 
+app.get('/', (req, res) => {
+  const queryName = req.query.q;
+  
+  if (queryName) {
+    const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
+    fs.readFile(indexPath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      
+      let modifiedData = data
+      .replace(/PLACEHOLDER_QUERY/g, queryName)
+      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+      res.send(modifiedData);
+    });
+  } else {
+    const homePath = path.join(__dirname, 'projects', projectName, 'home.html');
+    res.sendFile(homePath);
+  }
+});
+
 
 app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;

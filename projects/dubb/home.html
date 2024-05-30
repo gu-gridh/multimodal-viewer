@@ -11,6 +11,8 @@
         rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
+    <script type="text/javascript" src="../../libs/jquery.js"></script>
+
     <style>
         html,
         body {
@@ -82,7 +84,7 @@
         }
 
 
-        .footer {
+        #footer-container {
             display: block;
             background-color: #222;
             color: white;
@@ -159,19 +161,18 @@
     
 
     <div id="main-content">
-        Skanningarna av entrén och salen utfördes av kulturförvaltningen i samarbete med GRIDH.
+        Skanningarna av entrén och salen utfördes av kulturförvaltningen i samarbete med <br>Göteborgs Forskningsinfrastruktur för Digital Humaniora (GRIDH) vid Göteborgs Universitet.
 
     </div>
-    <footer class="footer">
-        <a href="https://dh.gu.se/">
-            <div class="link GRIDHLogo" id="">GU / GRIDH</div>
-        </a>
+    <div id="footer-container"></div>
 
-        <a href="https://www.vgregion.se/kulturforvaltningen">
-            <div class="link PartnerLogo" id="">Kulturförvaltningen</div>
-        </a>
-    </footer>
+    <script>
+            $("#footer-container").load("/projects/dubb/footer.html");
+    </script>
 
 </body>
+
+
+
 
 </html>

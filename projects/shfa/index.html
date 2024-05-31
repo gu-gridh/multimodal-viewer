@@ -278,17 +278,17 @@
             switch (viewerType) {
                 case 'visualisation':
                     src = `/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
-                    newPath = `/?q=${qValue}/visualisation${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/visualisation${hashFragment}`;
                     buttonNum = 1;
                     break;
                 case 'mesh':
                     src = `/modules/3dhop/3dhop.html${queryString}`;
-                    newPath = `/?q=${qValue}/mesh`;
+                    newPath = `/viewer/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
                 case 'metadata-compact':
                     src = `/projects/shfa/metadata/metadata.html${queryString}`;
-                    newPath = `/?q=${qValue}`;
+                    newPath = `/viewer/?q=${qValue}`;
                     buttonNum = 5;
                     break;
             }

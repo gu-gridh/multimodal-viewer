@@ -63,6 +63,8 @@
         <a id="download" target="_blank">
             <div id="" class="download-button compact" title="Download image"></div>
         </a>
+        <div id="download-popup" style="display: none;">Download started</div>
+        
         <div id="trackball_position" class="share-button compact" title="Copy link to view"
 				onclick="logPosition();">
 				<div id="share-label">Link copied</div>
@@ -114,7 +116,6 @@
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;  
 
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
-            console.log('prevBaseQuery:', prevBaseQuery, 'currentBaseQuery:', currentBaseQuery);
             if (prevBaseQuery !== currentBaseQuery) {
                 sessionStorage.clear();  //clear sessionStorage if the base query part has changed
                 sessionStorage.setItem('lastBaseQuery', currentBaseQuery);  
@@ -125,6 +126,15 @@
             document.getElementById('download').addEventListener('click', function(event) {
                 event.preventDefault();
                 const imageUrl = downloadSources;
+
+                const popup = document.getElementById('download-popup');
+                popup.style.display = 'block';
+                popup.classList.add('download-popup-animation'); 
+
+                setTimeout(function() {
+                    popup.classList.remove('download-popup-animation');
+                    popup.style.display = 'none';
+                }, 3000);
 
                 fetch(imageUrl)
                     .then(response => response.blob())

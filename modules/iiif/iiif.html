@@ -86,11 +86,11 @@
                 zoom: zoomLevel,
                 center: { x: centerPoint.x, y: centerPoint.y }
             };
-            localStorage.setItem('viewerState', JSON.stringify(state));
+            sessionStorage.setItem('viewerState', JSON.stringify(state));
         }
 
         function getSavedViewerState() {
-            var state = localStorage.getItem('viewerState');
+            var state = sessionStorage.getItem('viewerState');
             return state ? JSON.parse(state) : null;
         }
 
@@ -102,7 +102,6 @@
         window.onload = function () {
             var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
             var downloadSources = JSON.parse(downloadSourceString);
-            var savedState = getSavedViewerState();
 
             //for restoring the zoom and pan from the URL
             const hash = window.location.hash.substring(1);
@@ -110,6 +109,18 @@
             const zoom = parseFloat(hashParams.get('zoom'));
             const x = parseFloat(hashParams.get('x'));
             const y = parseFloat(hashParams.get('y'));
+
+            const currentQuery = new URLSearchParams(window.location.search).get('q');
+            const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;  
+
+            const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
+            console.log('prevBaseQuery:', prevBaseQuery, 'currentBaseQuery:', currentBaseQuery);
+            if (prevBaseQuery !== currentBaseQuery) {
+                sessionStorage.clear();  //clear sessionStorage if the base query part has changed
+                sessionStorage.setItem('lastBaseQuery', currentBaseQuery);  
+            }
+
+            var savedState = getSavedViewerState();
 
             document.getElementById('download').addEventListener('click', function(event) {
                 event.preventDefault();

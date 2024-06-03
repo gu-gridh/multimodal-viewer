@@ -10,12 +10,12 @@
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <script src="../../modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="../../shared/shared_styles.css">
-    <link rel="stylesheet" href="../../shared/split-layout.css">
+    <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/split-layout.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=2">
 
-    <script src="../../libs/i18next.min.js"></script>
+    <script src="/viewer/libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <style>
         html,
@@ -93,7 +93,7 @@
         <div id="mono-pane">
             <div class="ui-module-container">
             </div>
-            <iframe id="right-Iframe" class="iframes" src="/projects/sophia/metadata/metadata.html"
+            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe> 
         </div>
         <div id="footer-container"></div>
@@ -101,7 +101,7 @@
 
     <script>
         $(document).ready(function () {
-            $("#footer-container").load("/projects/dubb/footer.html");
+            $("#footer-container").load("/viewer/projects/dubb/footer.html");
                 changeRightViewer('pointcloud');
         });
 
@@ -116,9 +116,11 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = `/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframe.src = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                console.log(iframe.src)
             } else if (viewerType === 'pointcloud') {
-                iframe.src = '/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                console.log(iframe.src)
             }
         }
 

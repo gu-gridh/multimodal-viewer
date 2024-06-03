@@ -9,7 +9,7 @@ dotenv.config({ path: './.env.local' });
 const projectName = process.env.PROJECT || 'default';
 
 //path to the configuration file for the specified project
-const configPath = path.join(__dirname, 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 
 let config;
 try {

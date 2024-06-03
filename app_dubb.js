@@ -8,7 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-const configPath = path.join(__dirname, 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
 try {
     config = require(configPath);
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   const queryName = req.query.q;
   
   if (queryName) {
-    const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
+    const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
     fs.readFile(indexPath, 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
@@ -34,23 +34,24 @@ app.get('/', (req, res) => {
       res.send(modifiedData);
     });
   } else {
-    const homePath = path.join(__dirname, 'projects', projectName, 'home.html');
+    const homePath = path.join(__dirname, 'viewer', 'projects', projectName, 'home.html');
     res.sendFile(homePath);
   }
 });
 
 
-app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
+app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   const apiUrl = `${config.panel}${queryName}`;
+
   try {
     const apiResponse = await axios.get(apiUrl);
     const position = apiResponse.data.results[0]?.camera_position;
     const direction = apiResponse.data.results[0]?.look_at;
     const urlPublic = apiResponse.data.results[0]?.url_public; 
 
-    fs.readFile(path.join(__dirname, 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -71,14 +72,14 @@ app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
-app.use('/modules/3dhop', express.static(path.join(__dirname, 'modules', '3dhop')));
-app.use('/modules/pointcloud', express.static(path.join(__dirname, 'modules', 'pointcloud')));
-app.use('/modules/openlime', express.static(path.join(__dirname, 'modules', 'openlime')));
-app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));
-app.use('/shared', express.static(path.join(__dirname, 'shared')));
-app.use('/projects', express.static(path.join(__dirname, 'projects')));
-app.use('/locales', express.static(path.join(__dirname, 'locales')));
-app.use('/libs', express.static(path.join(__dirname, 'libs')));
+app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer', 'modules', '3dhop')));
+app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
+app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer', 'modules', 'openlime')));
+app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
+app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
+app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
+app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locales')));
+app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
 // Fallback route, serve index.html
 app.get('*', (req, res) => {
@@ -89,7 +90,7 @@ app.get('*', (req, res) => {
     return res.sendFile(indexPath);
   }
 
-  const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
+  const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
 
   fs.readFile(indexPath, 'utf8', (err, data) => {
     if (err) {

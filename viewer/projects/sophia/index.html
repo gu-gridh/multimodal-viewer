@@ -3,19 +3,19 @@
 
 <head>
 
-    <title>SHFA Multimodal tool</title>
+    <title>Sophia Multimodal tool</title>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <script src="../../modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="../../shared/shared_styles.css">
-    <link rel="stylesheet" href="../../shared/split-layout.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/split-layout.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=2">
 
-    <script src="../../libs/i18next.min.js"></script>
+    <script src="/viewer/libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <style>
         html,
@@ -53,7 +53,7 @@
             width: 35px;
             border-radius: 50%;
             background-color: rgba(0, 0, 0, 0.8);
-            background-image: url(../shared/interface/back.png);
+            background-image: url(/viewer/shared/interface/back.png);
             background-size: 15px;
             background-position: center;
             background-repeat: no-repeat;
@@ -69,13 +69,13 @@
 
         @media screen and (max-width: 1000px) {
             #back-button {
-                margin-left: 10px;
+                margin-left: 20px;
             }
         }
 
         @media screen and (max-width: 500px) {
             #back-button {
-               display:none;
+                display:none;
             }
         }
     </style>
@@ -88,25 +88,31 @@
             <a href="PLACEHOLDER_BACKBUTTON">
                 <div id="back-button"></div>
             </a>
+           
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);" style="opacity:1.0;"></div>
-                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('visualisation');moduleSwitcherLeft(1);"></div>
-                    <div class="ui-module-item left compact" id="btn5" onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div></div>
+                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
+                    <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
+                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
+                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
+                    </div>
+                    <div class="ui-module-item left compact" id="btn5"
+                        onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div>
+                </div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
 
         </div>
         <div id="right-pane">
-            <!-- <div class="ui-module-container">
+            <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn6"
                         onclick="changeRightViewer('metadata');moduleSwitcherRight(6);" style="opacity:1.0"></div>
                     <div class="ui-module-item right" id="btn7"
                         onclick="changeRightViewer('pointcloud');moduleSwitcherRight(7);"></div>
                 </div>
-            </div> -->
-            <iframe id="right-Iframe" class="iframes" src="/projects/shfa/metadata/metadata.html"
+            </div>
+            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe>
         </div>
         <div id="footer-container"></div>
@@ -119,42 +125,55 @@
         const viewerType = determineInitialViewer(urlParams);
         changeLeftViewer(viewerType);
 
-        const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-        $("#footer-container").load("/projects/shfa/footer.html");
+        $("#footer-container").load("/viewer/projects/sophia/footer.html");
 
-            i18next
-                .use(i18nextHttpBackend)
-                .init({
-                    lng: savedLang,
-                    fallbackLng: 'en',
-                    backend: {
-                        loadPath: '/locales/{{lng}}/translation.json',
-                    },
-                }, function (err, t) {
-                    if (err) return console.error('i18next initialization error:', err);
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/viewer/locales/{{lng}}/translation.json',
+                },
+            }, function (err, t) {
+                if (err) return console.error('i18next initialization error:', err);
 
-                    applyTranslations();
+                applyTranslations();
 
-                    window.addEventListener('message', function (event) {
-                        if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                            i18next.changeLanguage(event.data.lang, function (err, t) {
-                                if (err) return console.log('Something went wrong loading', err);
-                                applyTranslations();
-                            });
-                        }
-                    }, false);
-                });
+                window.addEventListener('message', function (event) {
+                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                        i18next.changeLanguage(event.data.lang, function (err, t) {
+                            if (err) return console.log('Something went wrong loading', err);
+                            applyTranslations();
+                        });
+                    }
+                }, false);
+            });
 
             function applyTranslations() {
                 if (typeof i18next.t === 'function') {
-                    document.getElementById('btn1').textContent = 'Visualisation'
+                    document.getElementById('btn1').textContent = i18next.t('Orthophoto');
+                    document.getElementById('btn2').textContent = i18next.t('topography');
                     document.getElementById('btn3').textContent = i18next.t('mesh');
+                    document.getElementById('btn4').textContent = i18next.t('rti');
                     document.getElementById('btn5').textContent = i18next.t('about');
+                    document.getElementById('btn6').textContent = i18next.t('about');
+                    document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
             }
 
             changeRightViewer('metadata');
+
+            //hide specific elements in the left iframe
+            // $("#left-Iframe").on("load", function () {
+            //     //access the iframe's document
+            //     var iframeDoc = $(this).contents();
+            //     //hide the element with the class `full-screen-option`
+            //     iframeDoc.find(".full-screen-option").css("display", "none");
+            //     iframeDoc.find(".annotate-option").css("display", "none");
+            // });
         });
 
         function determineInitialViewer(params) {
@@ -174,16 +193,17 @@
                     switch (viewerType) {
                         case 'mesh':
                             return 'mesh';
-                        case 'visualisation':
-                            return 'visualisation';
                         case 'topography':
-                            return 'visualisation';
+                            return 'topography';
+                        case 'rti':
+                            return 'rti';
+                        case 'orthophoto':
+                            return 'orthophoto';
                         default:
-                            return 'mesh'; 
+                            return 'orthophoto'; //default
                     }
                 }
             }
-            return 'mesh'; 
         }
 
         function toggleRightPane() {
@@ -202,7 +222,6 @@
                 leftPane.style.width = '100%';
                 uiModuleContainer.style.display = 'none';
                 backButton.style.display = 'none';
-             
             }
         }
 
@@ -223,12 +242,11 @@
                 backButton.style.display = 'none';
             }
         }
-     
+
         $(window).resize(function () {
             if ($('#right-pane').css('display') === 'none') {
                 // here i would very much like to be able to hide all FullPage-buttons  
-        }
-            
+            }
         });
     </script>
 
@@ -260,13 +278,13 @@
                 console.error('Cannot access iframe document');
             }
         }
-
+        
         function changeLeftViewer(viewerType) {
             const iframe = document.getElementById('left-Iframe');
             const queryString = window.location.search;
             const params = new URLSearchParams(queryString);
             const currentUrl = new URL(window.location.href);
-            const hashFragment = currentUrl.hash;
+            const hashFragment = currentUrl.hash
 
             let qValue = params.get('q');
             if (qValue.includes('/')) {
@@ -276,20 +294,35 @@
             let src;
             let newPath;
             switch (viewerType) {
-                case 'visualisation':
-                    src = `/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
-                    newPath = `/?q=${qValue}/visualisation${hashFragment}`;
+                case 'orthophoto':
+                    src = `/viewer/modules/iiif/iiif.html${queryString}${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/orthophoto${hashFragment}`;
                     buttonNum = 1;
                     break;
+                case 'topography':
+                    src = `/viewer/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/topography${hashFragment}`;
+                    buttonNum = 2;
+                    break;
                 case 'mesh':
-                    src = `/modules/3dhop/3dhop.html${queryString}`;
-                    newPath = `/?q=${qValue}/mesh`;
+                    src = `/viewer/modules/3dhop/3dhop.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
+                case 'rti':
+                    src = `/viewer/modules/openlime/openlime.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/rti`;
+                    buttonNum = 4;
+                    break;
                 case 'metadata-compact':
-                    src = `/projects/shfa/metadata/metadata.html${queryString}`;
-                    newPath = `/?q=${qValue}`;
+                    src = `/viewer/projects/sophia/metadata/metadata.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}`;
                     buttonNum = 5;
+                    break;
+                default:
+                    src = `/viewer/modules/iiif/iiif.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/orthophoto`;
+                    buttonNum = 1;
                     break;
             }
 
@@ -304,9 +337,9 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = `/projects/shfa/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframe.src = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             } else if (viewerType === 'pointcloud') {
-                iframe.src = '/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
 

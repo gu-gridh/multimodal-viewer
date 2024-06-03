@@ -8,7 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-const configPath = path.join(__dirname, 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
 try {
     config = require(configPath);
@@ -17,7 +17,7 @@ try {
     process.exit(1);
 }
 
-app.get('/modules/openlime/openlime.html', async (req, res) => {
+app.get('/viewer/modules/openlime/openlime.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   // Fetch RTI image data from the API
@@ -26,7 +26,7 @@ app.get('/modules/openlime/openlime.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
 
-    fs.readFile(path.join(__dirname, 'modules', 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -50,7 +50,7 @@ app.get('/modules/openlime/openlime.html', async (req, res) => {
   }
 });
 
-app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
+app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   const apiUrl = `${config.panel}${queryName}`;
@@ -59,7 +59,7 @@ app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
     const position = apiResponse.data.features[0]?.properties.spatial_position;
     const direction = apiResponse.data.features[0]?.properties.spatial_direction;
     
-    fs.readFile(path.join(__dirname, 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -80,7 +80,7 @@ app.get('/modules/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
-app.get('/modules/iiif/iiifSequence.html', async (req, res) => {  
+app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {  
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -101,7 +101,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
       const basePathDownload = `${config.downloadPath}`;
       const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
       const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
-      const htmlContent = fs.readFileSync(path.join(__dirname,  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
+      const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer',  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif))
                                           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
                                           .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
@@ -116,7 +116,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
   }
 });
 
-app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
+app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res) => {
   const { projectName } = req.params;
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
@@ -136,7 +136,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
       return res.status(404).send('Data not found or malformed');
     }
 
-    const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
+    const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
     fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
       if (err) {
@@ -160,7 +160,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
   }
 });
 
-app.get('/modules/3dhop/3dhop.html', async (req, res) => {
+app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -172,7 +172,7 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const modelData = apiResponse.data.features;
 
-    fs.readFile(path.join(__dirname, 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -196,7 +196,7 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
   }
 });
 
-app.get('/modules/iiif/iiif.html', async (req, res) => { 
+app.get('/viewer/modules/iiif/iiif.html', async (req, res) => { 
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -209,7 +209,7 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
     const modelData = apiResponse.data.features;
 
     if (modelData.length > 0 && modelData[0].properties.attached_photograph) {
-      fs.readFile(path.join(__dirname, 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
+      fs.readFile(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
         if (err) {
           console.error('Error reading the file:', err);
           return res.status(500).send('Internal Server Error');
@@ -234,14 +234,14 @@ app.get('/modules/iiif/iiif.html', async (req, res) => {
   }
 });
 
-app.use('/modules/3dhop', express.static(path.join(__dirname, 'modules', '3dhop')));
-app.use('/modules/pointcloud', express.static(path.join(__dirname, 'modules', 'pointcloud')));
-app.use('/modules/openlime', express.static(path.join(__dirname, 'modules', 'openlime')));
-app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));
-app.use('/shared', express.static(path.join(__dirname, 'shared')));
-app.use('/projects', express.static(path.join(__dirname, 'projects')));
-app.use('/locales', express.static(path.join(__dirname, 'locales')));
-app.use('/libs', express.static(path.join(__dirname, 'libs')));
+app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer', 'modules', '3dhop')));
+app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
+app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer', 'modules', 'openlime')));
+app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
+app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
+app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
+app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locales')));
+app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
 // Fallback route, serve index.html
 app.get('*', (req, res) => {
@@ -252,7 +252,7 @@ app.get('*', (req, res) => {
     return res.sendFile(indexPath);
   }
 
-  const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
+  const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
 
   fs.readFile(indexPath, 'utf8', (err, data) => {
     if (err) {

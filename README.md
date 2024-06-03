@@ -16,14 +16,14 @@ define a .env.local variable with PROJECT=etruscan/shfa/sophia + npm start:
 
 PROJECT=sophia npm start  
 PROJECT=shfa npm start  
-PROJECT=etruscan npm start
+PROJECT=etruscan npm start  
 PROJECT=dubb npm start  
 
 ## Usage
 
 Sample URLs for testing:  
-http://localhost:8095/?q=118-02/orthophoto  
-http://localhost:8095/?q=120-20/orthophoto  
+http://localhost:8095/viewer/?q=118-02/orthophoto for sophia    
+http://localhost:8095/viewer/?q=Tanum_1_1-2019_06_13/orthophoto for shfa    
 
 ## Installation
 

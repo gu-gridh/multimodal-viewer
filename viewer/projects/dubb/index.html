@@ -53,7 +53,7 @@
             width: 35px;
             border-radius: 50%;
             background-color: rgba(0, 0, 0, 0.8);
-            background-image: url(../shared/interface/back.png);
+            background-image: url(/viewer/shared/interface/back.png);
             background-size: 15px;
             background-position: center;
             background-repeat: no-repeat;
@@ -93,7 +93,7 @@
         <div id="mono-pane">
             <div class="ui-module-container">
             </div>
-            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
+            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/dubb/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe> 
         </div>
         <div id="footer-container"></div>
@@ -116,7 +116,7 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframe.src = `/viewer/projects/dubb/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             } else if (viewerType === 'pointcloud') {
                 iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }

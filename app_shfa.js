@@ -8,7 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-const configPath = path.join(__dirname, 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
 try {
   config = require(configPath);
@@ -50,7 +50,7 @@ try {
 //   }
 // });
 
-app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
+app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -75,7 +75,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
       const imageIDs = modelData[0].colour_images.map(image => image.id);
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const downloadableFiles = modelData[0].colour_images.map(image => image.file);
-      const htmlContent = fs.readFileSync(path.join(__dirname, 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
+      const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
                                           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
                                           .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
@@ -93,7 +93,7 @@ app.get('/modules/iiif/iiifSequence.html', async (req, res) => {
   }
 });
 
-app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
+app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res) => {
   const { projectName } = req.params;
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
@@ -218,7 +218,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
     const keywordTextsSV = formatKeywords(categories, 'sv');
     const keywordTextsEN = formatKeywords(categories, 'en');
 
-    const metadataPath = path.join(__dirname, 'projects', projectName, 'metadata', 'metadata.html');
+    const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
     fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
       if (err) {
@@ -269,7 +269,7 @@ app.get('/projects/:projectName/metadata/metadata.html', async (req, res) => {
 });
 
 // 3dhop Route
-app.get('/modules/3dhop/3dhop.html', async (req, res) => {
+app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -297,7 +297,7 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
     const meshUrl = modelData.three_d_mesh.mesh_url;
     const qualityUrl = modelData.three_d_mesh.quality_url || '';
 
-    fs.readFile(path.join(__dirname, 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -321,14 +321,14 @@ app.get('/modules/3dhop/3dhop.html', async (req, res) => {
   }
 });
 
-app.use('/modules/3dhop', express.static(path.join(__dirname, 'modules', '3dhop')));
-app.use('/modules/pointcloud', express.static(path.join(__dirname, 'modules', 'pointcloud')));
-app.use('/modules/openlime', express.static(path.join(__dirname, 'modules', 'openlime')));
-app.use('/modules/iiif', express.static(path.join(__dirname, 'modules', 'iiif')));
-app.use('/shared', express.static(path.join(__dirname, 'shared')));
-app.use('/projects', express.static(path.join(__dirname, 'projects')));
-app.use('/locales', express.static(path.join(__dirname, 'locales')));
-app.use('/libs', express.static(path.join(__dirname, 'libs')));
+app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer',  'modules', '3dhop')));
+app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer',  'modules', 'pointcloud')));
+app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer',  'modules', 'openlime')));
+app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer',  'modules', 'iiif')));
+app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer',  'shared')));
+app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer',  'projects')));
+app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer',  'locales')));
+app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
 // Fallback route, serve index.html
 app.get('*', (req, res) => {
@@ -339,7 +339,7 @@ app.get('*', (req, res) => {
     return res.sendFile(indexPath);
   }
 
-  const indexPath = path.join(__dirname, 'projects', projectName, 'index.html');
+  const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
 
   fs.readFile(indexPath, 'utf8', (err, data) => {
     if (err) {

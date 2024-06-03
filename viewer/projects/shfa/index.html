@@ -10,12 +10,12 @@
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <script src="../../modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="../../shared/shared_styles.css">
-    <link rel="stylesheet" href="../../shared/split-layout.css">
+    <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/split-layout.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <script src="../../libs/i18next.min.js"></script>
+    <script src="/viewer/libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <style>
         html,
@@ -53,7 +53,7 @@
             width: 35px;
             border-radius: 50%;
             background-color: rgba(0, 0, 0, 0.8);
-            background-image: url(../shared/interface/back.png);
+            background-image: url(/viewer/shared/interface/back.png);
             background-size: 15px;
             background-position: center;
             background-repeat: no-repeat;
@@ -106,7 +106,7 @@
                         onclick="changeRightViewer('pointcloud');moduleSwitcherRight(7);"></div>
                 </div>
             </div> -->
-            <iframe id="right-Iframe" class="iframes" src="/projects/shfa/metadata/metadata.html"
+            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/shfa/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe>
         </div>
         <div id="footer-container"></div>
@@ -121,7 +121,7 @@
 
         const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
 
-        $("#footer-container").load("/projects/shfa/footer.html");
+        $("#footer-container").load("/viewer/projects/shfa/footer.html");
 
             i18next
                 .use(i18nextHttpBackend)
@@ -129,7 +129,7 @@
                     lng: savedLang,
                     fallbackLng: 'en',
                     backend: {
-                        loadPath: '/locales/{{lng}}/translation.json',
+                        loadPath: '/viewer/locales/{{lng}}/translation.json',
                     },
                 }, function (err, t) {
                     if (err) return console.error('i18next initialization error:', err);
@@ -277,18 +277,18 @@
             let newPath;
             switch (viewerType) {
                 case 'visualisation':
-                    src = `/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
-                    newPath = `/?q=${qValue}/visualisation${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/visualisation${hashFragment}`;
                     buttonNum = 1;
                     break;
                 case 'mesh':
-                    src = `/modules/3dhop/3dhop.html${queryString}`;
-                    newPath = `/?q=${qValue}/mesh`;
+                    src = `/viewer/modules/3dhop/3dhop.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
                 case 'metadata-compact':
-                    src = `/projects/shfa/metadata/metadata.html${queryString}`;
-                    newPath = `/?q=${qValue}`;
+                    src = `/viewer/projects/shfa/metadata/metadata.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}`;
                     buttonNum = 5;
                     break;
             }
@@ -304,9 +304,9 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = `/projects/shfa/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframe.src = `/viewer/projects/shfa/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             } else if (viewerType === 'pointcloud') {
-                iframe.src = '/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
 

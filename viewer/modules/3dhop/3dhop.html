@@ -8,11 +8,11 @@
 		rel="stylesheet">
 	<!--STYLESHEET-->
 	<link type="text/css" rel="stylesheet" href="css/mesh.css" />
-	<link rel="stylesheet" href="/shared/shared_styles.css">
+	<link rel="stylesheet" href="/viewer/shared/shared_styles.css">
 	<!--SPIDERGL-->
 	<script type="text/javascript" src="js/spidergl.js"></script>
 	<!--JQUERY-->
-	<script type="text/javascript" src="../../libs/jquery.js"></script>
+	<script type="text/javascript" src="/viewer/libs/jquery.js"></script>
 	<!--PRESENTER-->
 	<script type="text/javascript" src="js/presenter.js"></script>
 	<!--3D MODELS LOADING AND RENDERING-->
@@ -30,13 +30,13 @@
     	display: none; /*initially hide buttons*/
 	}
 	.specular_off{
-		background:url(../../shared/interface/specular_off.png);
+		background:url(/viewer/shared/interface/specular_off.png);
 		max-height:23px;
 		top:2px;
 	}
 
 	.specular_on{
-		background:url(../../shared/interface/specular_on.png);
+		background:url(/viewer/shared/interface/specular_on.png);
 		max-height:23px;
 		top:2px;
 		z-index:100;
@@ -62,7 +62,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(../../shared/interface/frame.png)"></div>
+							style="background-image:url(/viewer/shared/interface/frame.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p>Frame object.</p> Changes the view to the original position.
 						</div>
@@ -70,7 +70,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(../../shared/interface/colour_on.png)"></div>
+							style="background-image:url(/viewer/shared/interface/colour_on.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p>Color toggle.</p> Switches on or off the 3D model's color information.
 							With the colors off and the light in the right direction, details will appear in higher
@@ -80,7 +80,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(../../shared/interface/specular_on.png)"></div>
+							style="background-image:url(/viewer/shared/interface/specular_on.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p>Specular toggle.</p> Switches on or off the 3D model's specular reflection. Switch off for a more neutral appearance.
 						</div>
@@ -88,7 +88,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(../../shared/interface/light_on.png)"></div>
+							style="background-image:url(/viewer/shared/interface/light_on.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p>Light tool.</p> Switches on or off the light controls. When activated, click and drag
 							to enhance details. Deactivate the light controls to rotate the 3D model.
@@ -97,7 +97,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(../../shared/interface/distance_on.svg)"></div>
+							style="background-image:url(/viewer/shared/interface/distance_on.svg)"></div>
 						<div class="guide-instructions-item-label">
 							<p>Measure tool.</p> Switches on or off the ruler. When activated, click on two places to
 							measure the distance between them.
@@ -106,7 +106,7 @@
 
 					<div class="guide-instructions-item full-screen-option">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(../../shared/interface/expand.svg)"></div>
+							style="background-image:url(/viewer/shared/interface/expand.svg)"></div>
 						<div class="guide-instructions-item-label">
 							<p>Full screen.</p> Activates full screen mode.
 						</div>
@@ -160,36 +160,36 @@
 			<div id="toolbar_m" class="toolbar-bottom">
 
 				<div id="toolbar">
-					<img id="home_m" title="Home" src="../../shared/interface/frame.png" />
+					<img id="home_m" title="Home" src="/viewer/shared/interface/frame.png" />
 
 					<!--ZOOM-->
-					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom In" src="../../shared/interface/plus_big.png" />
-					<img id="zoomout" class="narrow-toolbar-icon" title="Zoom Out" src="../../shared/interface/minus_big.png" />
+					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom In" src="/viewer/shared/interface/plus_big.png" />
+					<img id="zoomout" class="narrow-toolbar-icon" title="Zoom Out" src="/viewer/shared/interface/minus_big.png" />
 
 					<!--COLOR-->
-					<img id="color_on_m" title="Disable Solid Color" src="../../shared/interface/colour_off.png"
+					<img id="color_on_m" title="Disable Solid Color" src="/viewer/shared/interface/colour_off.png"
 						style="position:absolute; visibility:hidden; " />
-					<img id="color_m" title="Enable Solid Color" src="../../shared/interface/colour_on.png" />
+					<img id="color_m" title="Enable Solid Color" src="/viewer/shared/interface/colour_on.png" />
 
 					<!--SPECULAR-->
 					<img id="specular" class="specular_off specular_on" title="Toggle Specular Light" onclick="toggleSpecular()"
-					src="../../shared/interface/empty.svg"/>
+					src="/viewer/shared/interface/empty.svg"/>
 					
 					<!--LIGHT-->
-					<img id="light_on_m" title="Disable Light Control" src="../../shared/interface/light_on.png"
+					<img id="light_on_m" title="Disable Light Control" src="/viewer/shared/interface/light_on.png"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="light_m" title="Enable Light Control" src="../../shared/interface/light.png" />
+					<img id="light_m" title="Enable Light Control" src="/viewer/shared/interface/light.png" />
 
 
 					<!--MEASURE-->
-					<img id="measure_on_m" title="Disable Measure Tool" src="../../shared/interface/distance_on.svg"
+					<img id="measure_on_m" title="Disable Measure Tool" src="/viewer/shared/interface/distance_on.svg"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="measure_m" title="Enable Measure Tool" src="../../shared/interface/distance_off.svg" />
+					<img id="measure_m" title="Enable Measure Tool" src="/viewer/shared/interface/distance_off.svg" />
 
 
 					<!--FULLSCREEN-->
 					<img id="full1" class="full-page full-screen-option" title="Full Screen"
-						src="../../shared/interface/expand.svg" style="position:relative;" onclick="togglePane()" />
+						src="/viewer/shared/interface/expand.svg" style="position:relative;" onclick="togglePane()" />
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
@@ -472,7 +472,7 @@
 
 	$(document).ready(function () {
 		// Sidebar loading moved here
-		$("#sidebar").load("/modules/3dhop/sidebar.html", function () {
+		$("#sidebar").load("/viewer/modules/3dhop/sidebar.html", function () {
 			init3dhop();
 			setup3dhop();
 		});

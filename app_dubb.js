@@ -44,10 +44,8 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   const apiUrl = `${config.panel}${queryName}`;
-  console.log('0')
 
   try {
-    console.log('1')
     const apiResponse = await axios.get(apiUrl);
     const position = apiResponse.data.results[0]?.camera_position;
     const direction = apiResponse.data.results[0]?.look_at;
@@ -67,7 +65,6 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DISPLAY_ANNOTATIONS'/g, config.displayAnnotations);
       res.send(modifiedData);
-      console.log(modifiedData)
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);

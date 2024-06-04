@@ -349,7 +349,7 @@
 		if (presenter && presenter.getTrackballPosition) {
 			const position = presenter.getTrackballPosition();
 			const currentUrl = new URL(window.location.href);
-
+		
 			const queryParams = new URLSearchParams(currentUrl.search);
 			let query = queryParams.get('q') || '';
 
@@ -367,7 +367,7 @@
 			queryParams.set('panZ', position[4].toFixed(12));
 			queryParams.set('zoom', position[5].toFixed(2));
 
-			const newUrl = `${currentUrl.origin}/?${queryParams.toString()}`;
+			const newUrl = `${currentUrl.origin}/viewer/?${queryParams.toString()}`;
 
 			navigator.clipboard.writeText(newUrl)
 				.then(() => console.log('URL copied to clipboard'))

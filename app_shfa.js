@@ -59,7 +59,7 @@ app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {
   const apiUrl = `${config.panel}${queryName}&depth=2`;
   try {
     const apiResponse = await axios.get(apiUrl);
-    
+
     if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
       return res.status(404).send('Data not found');
     }
@@ -77,11 +77,11 @@ app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {
       const downloadableFiles = modelData[0].colour_images.map(image => image.file);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
       let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
-                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
-                                          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
-                                          .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
-                                          .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
-                                          .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs));
+        .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
+        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
+        .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
+        .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
+        .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs));
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');
@@ -129,11 +129,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     if (!isInternational && !site?.raa_id) {
       title = `${site?.lamning_id || site?.raa_id}  |  ${site?.placename}`
     }
-    if (!isInternational && site?.lamning_id && site?.raa_id) { 
+    if (!isInternational && site?.lamning_id && site?.raa_id) {
       title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`
     }
-    else { title = site?.placename
-     };
+    else {
+      title = site?.placename
+    };
 
     const date = new Date();
     const options = {
@@ -145,8 +146,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const formattedPeopleSV = new Intl.ListFormat("sv", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
     const formattedPeopleEN = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
 
-    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på`
-    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date.substr(0,4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at`
+    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?${queryName}/mesh`
+    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?${queryName}/mesh`
 
     const imgMetadata = metadata.colour_images.map(image => image.subtype.english_translation);
     const tvtVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('|'))
@@ -157,10 +158,10 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     let dfCreator = 'Unknown'
     let dfYear = 'Unknown'
     if (dfVis != -1) {
-    dfCreator = metadata.colour_images[dfVis].author.name
-    dfYear = metadata.colour_images[dfVis].year
+      dfCreator = metadata.colour_images[dfVis].author.name
+      dfYear = metadata.colour_images[dfVis].year
     }
-    
+
     // if (metadata.colour_images) {
     //   metadata.colour_images.forEach(image => {
     //     const imgTypeSV = image.subtype.text;
@@ -171,13 +172,13 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     // }
 
     let displaySfmFields = 'name="sfm-field" style="display:none"'
-    if (three_d_mesh.method?.text !== 'Laserscanning') { displaySfmFields = 'name="sfm-field" style="display:visible"'}
+    if (three_d_mesh.method?.text !== 'Laserscanning') { displaySfmFields = 'name="sfm-field" style="display:visible"' }
 
     let displayDfFields = 'name="df-field" style="display:none"'
-    if (imgMetadata.includes('Digital Frottage')) {displayDfFields = 'name="df-field" style="display:visible"'}
+    if (imgMetadata.includes('Digital Frottage')) { displayDfFields = 'name="df-field" style="display:visible"' }
 
     let displayQualityFields = 'name="quality-field" style="display: none'
-    if (three_d_mesh.quality_url !== null) {displayQualityFields = 'name="quality-field" style="display: visible'}
+    if (three_d_mesh.quality_url !== null) { displayQualityFields = 'name="quality-field" style="display: visible' }
 
     //group keywords by category
     const categories = {};
@@ -321,13 +322,13 @@ app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
   }
 });
 
-app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer',  'modules', '3dhop')));
-app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer',  'modules', 'pointcloud')));
-app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer',  'modules', 'openlime')));
-app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer',  'modules', 'iiif')));
-app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer',  'shared')));
-app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer',  'projects')));
-app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer',  'locales')));
+app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer', 'modules', '3dhop')));
+app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
+app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer', 'modules', 'openlime')));
+app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
+app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
+app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
+app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locales')));
 app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
 // Fallback route, serve index.html

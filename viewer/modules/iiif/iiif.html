@@ -181,7 +181,7 @@
                 const suffix = 'orthophoto'; 
                 const newQuery = prefix + '/' + suffix;
                 const fragment = url.hash;
-                const newPath = '/?q=' + newQuery;
+                const newPath = '/viewer/?q=' + newQuery;
                 const newUrl = url.origin + newPath + fragment;
                 urlToCopy = newUrl;
             });

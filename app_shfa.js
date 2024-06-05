@@ -146,8 +146,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const formattedPeopleSV = new Intl.ListFormat("sv", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
     const formattedPeopleEN = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
 
-    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?${queryName}/mesh`
-    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?${queryName}/mesh`
+    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`
+    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`
 
     const imgMetadata = metadata.colour_images.map(image => image.subtype.english_translation);
     const tvtVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('|'))
@@ -233,7 +233,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
         .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
         .replace(/PLACEHOLDER_SITE/g, site?.raa_id || site?.lamning_id || site?.placename || 'Unknown')
-        .replace(/PLACEHOLDER_DATE/g, shfaData?.date || 'Unknown')
+        .replace(/PLACEHOLDER_DATE/g, shfaData?.date.substr(0, 7) || 'Unknown')
         .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator?.name).join(', ') || 'Unknown')
         .replace(/PLACEHOLDER_INSTITUTION/g, institution?.name || 'Unknown')
         // .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating?.text).join(', ') || 'Unknown')

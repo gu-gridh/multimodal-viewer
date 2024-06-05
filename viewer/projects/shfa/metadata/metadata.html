@@ -20,7 +20,7 @@
         font-family: "Barlow Condensed", sans-serif !important;
         color: #fff;
         font-size: 110%;
-        padding:5px 10px;
+        padding: 5px 10px;
     }
 
     #languageButton:hover {
@@ -56,19 +56,23 @@
         margin-bottom: 15px;
     }
 
+    #metadata-main {
+        width: 60%;
+    }
+
     .metadata-item-container-font {
         font-family: "Barlow Condensed", sans-serif !important;
     }
 
-    .metadata-container > .metadata-item-container {
+    .metadata-container>.metadata-item-container {
         flex: 1 1 45%
     }
 
-    .metadata-container-3col > .metadata-item-container {
+    .metadata-container-3col>.metadata-item-container {
         flex: 1 1 1 25%
     }
 
-    .metadata-container-1col > .metadata-item-container {
+    .metadata-container-1col>.metadata-item-container {
         flex: 1 100%
     }
 
@@ -79,6 +83,7 @@
         margin-bottom: 10px;
         margin-right: 1%;
     }
+
     .metadata-item-container-3col {
         display: block;
         align-items: center;
@@ -86,6 +91,7 @@
         margin-bottom: 10px;
         margin-right: 1%;
     }
+
     .metadata-item-container {
         display: block;
         align-items: center;
@@ -197,14 +203,13 @@
         }
 
         function hideFields() {
-            if (document.getElementById('method_sv').textContent === 'Laserscanning')
-            {document.getElementsByName('sfm-field').style.display = 'none'}
-            else {document.getElementsByName('sfm-field').style.display = 'visible'}
+            if (document.getElementById('method_sv').textContent === 'Laserscanning') { document.getElementsByName('sfm-field').style.display = 'none' }
+            else { document.getElementsByName('sfm-field').style.display = 'visible' }
 
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            
+
             const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
 
             i18next.use(i18nextHttpBackend).init({
@@ -238,12 +243,12 @@
                 <div class="metadata-panel-title">
                     <div style="display:inline;"></div> PLACEHOLDER_TITLE
                 </div>
-                
+
                 <div class="tag-label-header" id="lang3" style="margin-bottom: 15px;"></div>
 
 
-                <div class="metadata-container">
-                <!-- <div class="metadata-item-container">
+                <div class="metadata-container" id="metadata-main">
+                    <!-- <div class="metadata-item-container">
                         <div class="tag-label">Site:</div>
                         <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
                     </div> -->
@@ -265,22 +270,25 @@
                     <div class="metadata-item-container">
                         <div class="tag-label" id="weather"></div>
                         <div class="theme-color-text info-label" id="weather_sv">PLACEHOLDER_WEATHER_SV</div>
-                        <div class="theme-color-text info-label" id="weather_en" style="display: none;">PLACEHOLDER_WEATHER_EN</div>
+                        <div class="theme-color-text info-label" id="weather_en" style="display: none;">
+                            PLACEHOLDER_WEATHER_EN</div>
                     </div>
 
                     <div class="metadata-item-container">
                         <div class="tag-label" id="geology"></div>
                         <div class="theme-color-text info-label" id="geology_sv">PLACEHOLDER_GEOLOGY_SV</div>
-                        <div class="theme-color-text info-label" id="geology_en" style="display: none;">PLACEHOLDER_GEOLOGY_EN</div>
+                        <div class="theme-color-text info-label" id="geology_en" style="display: none;">
+                            PLACEHOLDER_GEOLOGY_EN</div>
                     </div>
 
                     <div class="metadata-item-container">
                         <div class="tag-label" id="method"></div>
                         <div class="theme-color-text info-label" id="method_sv">PLACEHOLDER_METHOD_SV</div>
-                        <div class="theme-color-text info-label" id="method_en" style="display: none;">PLACEHOLDER_METHOD_EN</div>
+                        <div class="theme-color-text info-label" id="method_en" style="display: none;">
+                            PLACEHOLDER_METHOD_EN</div>
                     </div>
 
-                <!-- <div class="metadata-item-container">
+                    <!-- <div class="metadata-item-container">
                         <div class="tag-label">Dating:</div>
                         <div class="theme-color-text info-label">PLACEHOLDER_DATINGS</div>
                     </div> -->
@@ -319,76 +327,83 @@
                         <div class="tag-label" id="35mm"></div>
                         <div class="theme-color-text info-label">PLACEHOLDER_35MM</div>
                     </div>
-            </div>
-            
-            <div class="tag-label-header" id="lang2" style="margin-bottom: 15px;"></div>
+                </div>
 
-            <div class="metadata-container">
+                <div class="tag-label-header" id="lang2" style="margin-bottom: 15px;"></div>
 
-                <!-- <div class="metadata-item-container">
+                <div class="metadata-container">
+
+                    <!-- <div class="metadata-item-container">
                     <div class="tag-label">Site:</div>
                     <div class="theme-color-text info-label">PLACEHOLDER_SITE</div>
                 </div> -->
 
-                <div class="metadata-item-container-3col">
-                    <div class="tag-label" id="tvt-type"></div>
-                    <div class="theme-color-text info-label">TVT Visualisation</div>
+                    <div class="metadata-item-container-3col">
+                        <div class="tag-label" id="tvt-type"></div>
+                        <div class="theme-color-text info-label">TVT Visualisation</div>
+                    </div>
+
+                    <div class="metadata-item-container-3col">
+                        <div class="tag-label" id="tvt-creator"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_TVT_CREATOR</div>
+                    </div>
+
+                    <div class="metadata-item-container-3col">
+                        <div class="tag-label" id="tvt-date"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_TVT_DATE</div>
+                    </div>
+
+                    <div class="metadata-item-container-3col" name="df-field" style="display:none">
+                        <div class="tag-label" id="df-type"></div>
+                        <div class="theme-color-text info-label">Digital Frottage</div>
+                    </div>
+
+                    <div class="metadata-item-container-3col" name="df-field" style="display:none">
+                        <div class="tag-label" id="df-creator"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DF_CREATOR</div>
+                    </div>
+
+                    <div class="metadata-item-container-3col" name="df-field" style="display:none">
+                        <div class="tag-label" id="df-date"></div>
+                        <div class="theme-color-text info-label">PLACEHOLDER_DF_DATE</div>
+                    </div>
+
+
+
+
+
                 </div>
 
-                <div class="metadata-item-container-3col">
-                    <div class="tag-label" id="tvt-creator"></div>
-                    <div class="theme-color-text info-label">PLACEHOLDER_TVT_CREATOR</div>
+                <div class="metadata-item-container-font"
+                    style="display: flex; flex-direction: column; margin-bottom: 1rem;">
+                    <div class="tag-label-header" id="lang1" style="margin-bottom: 15px;"></div>
+                    <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
+                    <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN
+                    </div>
                 </div>
-                
-                <div class="metadata-item-container-3col">
-                    <div class="tag-label" id="tvt-date"></div>
-                    <div class="theme-color-text info-label">PLACEHOLDER_TVT_DATE</div>
+                <div class="tag-label-header" id="lang4" style="margin-bottom: 15px;"></div>
+                <div class="metadata-container">
+                    <div class="metadata-item-container-1col">
+                        <div class="general-text" id="reference_sv">PLACEHOLDER_REFERENCE_SV</div>
+                        <div class="general-text" id="reference_en" style="display: none;">PLACEHOLDER_REFERENCE_EN
+                        </div>
+                    </div>
                 </div>
-
-                <div class="metadata-item-container-3col" name="df-field" style="display:none">
-                    <div class="tag-label" id="df-type"></div>
-                    <div class="theme-color-text info-label">Digital Frottage</div>
-                </div>
-
-                <div class="metadata-item-container-3col" name="df-field" style="display:none">
-                    <div class="tag-label" id="df-creator"></div>
-                    <div class="theme-color-text info-label">PLACEHOLDER_DF_CREATOR</div>
-                </div>
-                
-                <div class="metadata-item-container-3col" name="df-field" style="display:none">
-                    <div class="tag-label" id="df-date"></div>
-                    <div class="theme-color-text info-label">PLACEHOLDER_DF_DATE</div>
-                </div>
-
-                
-
-                
-
-            </div>
-
-            <div class="metadata-item-container-font"
-                style="display: flex; flex-direction: column; margin-bottom: 1rem;">
-                <div class="tag-label-header" id="lang1" style="margin-bottom: 15px;"></div>
-                <div class="theme-color-text tag" id="keywords_sv">PLACEHOLDER_KEYWORDS_SV</div>
-                <div class="theme-color-text tag" id="keywords_en" style="display: none;">PLACEHOLDER_KEYWORDS_EN
-                </div>
-            </div>
-            <div class="tag-label-header" id="lang4" style="margin-bottom: 15px;"></div>
-            <div class="metadata-container">
-                <div class="metadata-item-container-1col">
-                    <div class="general-text" id="reference_sv">PLACEHOLDER_REFERENCE_SV</div>
-                    <div class="general-text" id="reference_en" style="display: none;">PLACEHOLDER_REFERENCE_EN</div>
-                </div>
-            </div>
-            <div class="tag-label-header" id="lang5" name="quality-field" style="display: none; margin-bottom: 15px;"></div>
-            <div class="metadata-container" name="quality-field" style="display: none;">
-                <div class="metadata-item-container-1col">
-                    <div class="general-text" id="quality_sv">The mesh quality was measured using MeshLab's <em>Per Face Quality according to Triangle shape and aspect ratio</em> filter with the <em>Mean ratio of triangle</em> metric. The face quality was then mapped to the vertices.</div>
-                    <div class="general-text" id="quality_en" style="display: none;">The mesh quality was measured using MeshLab's <em>Per Face Quality according to Triangle shape and aspect ratio</em> filter with the <em>Mean ratio of triangle</em> metric. The face quality was then mapped to the vertices.</div>
+                <div class="tag-label-header" id="lang5" name="quality-field"
+                    style="display: none; margin-bottom: 15px;"></div>
+                <div class="metadata-container" name="quality-field" style="display: none;">
+                    <div class="metadata-item-container-1col">
+                        <div class="general-text" id="quality_sv">The mesh quality was measured using MeshLab's <em>Per
+                                Face Quality according to Triangle shape and aspect ratio</em> filter with the <em>Mean
+                                ratio of triangle</em> metric. The face quality was then mapped to the vertices.</div>
+                        <div class="general-text" id="quality_en" style="display: none;">The mesh quality was measured
+                            using MeshLab's <em>Per Face Quality according to Triangle shape and aspect ratio</em>
+                            filter with the <em>Mean ratio of triangle</em> metric. The face quality was then mapped to
+                            the vertices.</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>

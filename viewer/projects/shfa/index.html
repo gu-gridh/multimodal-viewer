@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" type="image/svg+xml" href="/viewer/projects/shfa/shfa_logo_downscale.svg" />
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
@@ -75,7 +76,7 @@
 
         @media screen and (max-width: 500px) {
             #back-button {
-               display:none;
+                display: none;
             }
         }
     </style>
@@ -90,9 +91,13 @@
             </a>
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);" style="opacity:1.0;"></div>
-                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('visualisation');moduleSwitcherLeft(1);"></div>
-                    <div class="ui-module-item left compact" id="btn5" onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div></div>
+                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"
+                        style="opacity:1.0;"></div>
+                    <div class="ui-module-item left orthophoto" id="btn1"
+                        onclick="changeLeftViewer('visualisation');moduleSwitcherLeft(1);"></div>
+                    <div class="ui-module-item left compact" id="btn5"
+                        onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div>
+                </div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
 
@@ -115,13 +120,13 @@
     <script>
         $(document).ready(function () {
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const viewerType = determineInitialViewer(urlParams);
-        changeLeftViewer(viewerType);
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewerType = determineInitialViewer(urlParams);
+            changeLeftViewer(viewerType);
 
-        const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
+            const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
 
-        $("#footer-container").load("/viewer/projects/shfa/footer.html");
+            $("#footer-container").load("/viewer/projects/shfa/footer.html");
 
             i18next
                 .use(i18nextHttpBackend)
@@ -165,7 +170,7 @@
             if (hasPhi) {
                 return 'mesh';
             }
-            
+
             if (qValue) {
                 const segments = qValue.split('/');
                 if (segments.length > 1) {
@@ -179,11 +184,11 @@
                         case 'topography':
                             return 'visualisation';
                         default:
-                            return 'mesh'; 
+                            return 'mesh';
                     }
                 }
             }
-            return 'mesh'; 
+            return 'mesh';
         }
 
         function toggleRightPane() {
@@ -202,7 +207,7 @@
                 leftPane.style.width = '100%';
                 uiModuleContainer.style.display = 'none';
                 backButton.style.display = 'none';
-             
+
             }
         }
 
@@ -211,7 +216,7 @@
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
             var backButton = document.getElementById('back-button');
-            if (leftPane.style.width  === '1px') {
+            if (leftPane.style.width === '1px') {
                 leftPane.style.width = '50%';
                 rightPane.style.width = '50%';
                 uiModuleContainer.style.display = 'flex';
@@ -223,12 +228,12 @@
                 backButton.style.display = 'none';
             }
         }
-     
+
         $(window).resize(function () {
             if ($('#right-pane').css('display') === 'none') {
                 // here i would very much like to be able to hide all FullPage-buttons  
-        }
-            
+            }
+
         });
     </script>
 

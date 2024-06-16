@@ -247,3 +247,14 @@ body {
 	width: 100%;
 	padding-bottom: 0px;
 }
+
+.metadata-divider{
+	border-width:1px 0 0 0;
+	border-color:grey;
+	border-style:dotted;
+	width: 100%;
+	height:1px;
+	margin-bottom:20px;
+	margin-top:10px;
+	margin-left:-5px;
+}

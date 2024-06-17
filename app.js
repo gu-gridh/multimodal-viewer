@@ -34,7 +34,7 @@ app.get('/viewer/modules/openlime/openlime.html', async (req, res) => {
       const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
 
       const dropdownHtml = rtiImages.map(rti => 
-        `<option value="${rti.url}">RTI ${rti.id}</option>`
+        `<option value="${rti.url}">${rti.title}</option>`
       ).join('');
       
       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);

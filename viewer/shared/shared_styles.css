@@ -98,7 +98,8 @@ body {
 
 
 
-/* A common download button for all media categories */
+
+/* Common share and download buttons for all media categories */
 
 .download-button {
     pointer-events: auto;
@@ -126,7 +127,6 @@ body {
     transform: scale(1.07);
 }
 
-/* A common share button for all media categories */
 
 .share-button {
     pointer-events: auto;
@@ -199,7 +199,6 @@ body {
         transform: scale(0.0);
     }
 }
-
 
 .deactivated{
     opacity:0.5;

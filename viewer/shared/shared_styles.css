@@ -153,10 +153,8 @@ body {
     transform: scale(1.07);
 }
 
-#download-popup {
+.label-popup {
     position: absolute;
-    bottom: 9px; 
-    left: 77px; 
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 5px 10px;
@@ -168,7 +166,18 @@ body {
     font-size:0.8em;
 }
 
-.download-popup-animation {
+#download-label {
+    bottom: 9px; 
+    left: 77px; 
+}
+
+#share-label{
+    margin-left:45px;
+    margin-top:7px;
+    min-width:65px;
+}
+
+.popup-animation {
     animation: download-popup-animate 3s normal forwards ease-in-out;
 }
 
@@ -191,51 +200,6 @@ body {
     }
 }
 
-#share-label{
-    font-family: "Oswald", sans-serif !important;
-    position:absolute;
-    border-radius:6px;
-    padding:5px;
-    text-align:center;
-    background-color: rgb(0, 0, 0, 0.8) !important;
-    margin-left:45px;
-    margin-top:7px;
-    min-width:80px;
-    color:white;
-    font-size:0.8em;
-    pointer-events:none;
-    user-select: none;
-    -webkit-user-select: none;
-    opacity:0.0;
-
-}
-
-.share-animation{
-    animation: share-popup 3s normal forwards ease-in-out;
-}
-
-@keyframes share-popup {
-    from {
-        opacity: 0;
-        transform: scale(0.3, 0.3);
-    }
-    15% {
-        opacity: 1;
-        transform: scale(1.0, 1.0);
-    }
-  
-    80% {
-        transform: scale(1.0, 1.0);
-        opacity: 1;
-    }
-    99% {
-        transform: scale(0.0, 0.0);
-    }
-    to {
-        opacity: 0;
-        display:none;
-    }
-}
 
 .deactivated{
     opacity:0.5;

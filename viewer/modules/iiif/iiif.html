@@ -63,11 +63,11 @@
         <a id="download" target="_blank">
             <div id="" class="download-button compact" title="Download image"></div>
         </a>
-        <div id="download-popup" style="display: none;">Download started</div>
+        <div id="download-label" class="label-popup" style="display: none;">Download started</div>
         
         <div id="trackball_position" class="share-button compact" title="Copy link to view"
 				onclick="logPosition();">
-				<div id="share-label">Link copied</div>
+				<div id="share-label" class="label-popup">Link copied</div>
 			</div>
 
         <div class="guide-button compact" title="User Guide"
@@ -127,12 +127,12 @@
                 event.preventDefault();
                 const imageUrl = downloadSources;
 
-                const popup = document.getElementById('download-popup');
+                const popup = document.getElementById('download-label');
                 popup.style.display = 'block';
-                popup.classList.add('download-popup-animation'); 
+                popup.classList.add('popup-animation'); 
 
                 setTimeout(function() {
-                    popup.classList.remove('download-popup-animation');
+                    popup.classList.remove('popup-animation');
                     popup.style.display = 'none';
                 }, 3000);
 
@@ -263,8 +263,8 @@
         };
 
         function logPosition() {
-            $('#share-label').addClass('share-animation').delay(3000).queue(function () {
-                $('#share-label').removeClass('share-animation').dequeue();
+            $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
+                $('#share-label').removeClass('popup-animation').dequeue();
             });
 
             if (urlToCopy) {

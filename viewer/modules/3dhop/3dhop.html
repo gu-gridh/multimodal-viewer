@@ -208,7 +208,7 @@
 
 			<div id="trackball_position" class="share-button compact" title="Copy link to view"
 				onclick="logTrackballPosition();">
-				<div id="share-label">Link copied</div>
+				<div id="share-label" class="label-popup">Link copied</div>
 			</div>
 
 		</div>
@@ -342,8 +342,8 @@
 	}
 
 	function logTrackballPosition() {
-		$('#share-label').addClass('share-animation').delay(3000).queue(function () {
-			$('#share-label').removeClass('share-animation').dequeue();
+		$('#share-label').addClass('popup-animation').delay(3000).queue(function () {
+			$('#share-label').removeClass('popup-animation').dequeue();
 		});
 
 		if (presenter && presenter.getTrackballPosition) {

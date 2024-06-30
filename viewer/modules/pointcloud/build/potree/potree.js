@@ -89669,9 +89669,9 @@ ENDSEC
 				}
 
 				// GRIDH: Some logic to hide far away annotations using their alpha value and pointer events.
-				// If we set display to none they bug out 
+				// If display is set to none they bug out 
 		
-				if (distance < 3) {
+				if (distance < 4) {
 					element.css("backgroundColor", "rgba(180,50,50,0.5");
 					element.css("pointerEvents", "auto");
 				}

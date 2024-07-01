@@ -203,13 +203,15 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         categories[categorySV].sv.push(dating.text);
         categories[categorySV].en.push(dating.english_translation)
       });
-    }
+    };
 
     //convert grouped keywords to HTML with inline styles
     const formatKeywords = (categories, lang) => {
-      return Object.entries(categories).map(([category, keywords]) => {
+      const sortedCategories = lang === 'sv' ? Object.values(categories).sort((a, b) => a.categorySV.localeCompare(b.categorySV)) : Object.values(categories).sort((a, b) => a.categoryEN.localeCompare(b.categoryEN));
+
+      return Object.entries(sortedCategories).map(([category, keywords]) => {
         const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
-        const keywordList = keywords[lang].join(', ');
+        const keywordList = keywords[lang].sort((a, b) => { return a.localeCompare(b) }).join(', ');
         return `<div style="margin-bottom: 15px;">
                           <span style="color: #fff; font-weight: 600; font-size: 120%;">${categoryLabel}:</span> <span style="display: inline; color: rgb(200, 225, 250) !important; font-weight: 400; font-size: 120%;">${keywordList}</span>
                       </div>`;

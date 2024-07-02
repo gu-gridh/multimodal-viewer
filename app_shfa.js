@@ -124,6 +124,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const three_d_mesh = shfaData.three_d_mesh || {};
     const image = shfaData.image || {};
     const isInternational = shfaData.site.internationl_site
+    const meshDate = shfaData.date.substr(0, 7) ?? 'Unknown'
     var title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`
 
     if (!isInternational && !site?.raa_id) {
@@ -235,7 +236,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         .replace(/PLACEHOLDER_KEYWORDS_SV/g, keywordTextsSV)
         .replace(/PLACEHOLDER_KEYWORDS_EN/g, keywordTextsEN)
         .replace(/PLACEHOLDER_SITE/g, site?.raa_id || site?.lamning_id || site?.placename || 'Unknown')
-        .replace(/PLACEHOLDER_DATE/g, shfaData?.date.substr(0, 7) || 'Unknown')
+        .replace(/PLACEHOLDER_DATE/g, meshDate)
         .replace(/PLACEHOLDER_CREATOR/g, creators.map(creator => creator?.name).join(', ') || 'Unknown')
         .replace(/PLACEHOLDER_INSTITUTION/g, institution?.name || 'Unknown')
         // .replace(/PLACEHOLDER_DATINGS/g, datings.map(dating => dating?.text).join(', ') || 'Unknown')

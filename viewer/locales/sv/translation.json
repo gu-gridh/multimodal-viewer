@@ -22,7 +22,7 @@
   "institution": "Institution",
   "method": "Metod",
   "dimensions": "Dimensioner (i meter)",
-  "vertices": "Antal Vertices",
+  "vertices": "Antal Nodpunkterna",
   "faces": "Antal Polygoner",
   "photos": "Antal Bilder",
   "camera": "Kamera",

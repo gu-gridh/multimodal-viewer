@@ -89672,17 +89672,21 @@ ENDSEC
 				// If display is set to none they bug out 
 				
 
-				if (distance < 4) {
+				if (distance < 3) {
 					element.css("backgroundColor", "rgba(180,50,50,0.7");
 					element.css("pointerEvents", "auto");
 				}
-				if (distance > 4) {
+				if (distance > 3) {
 					element.css("backgroundColor", "rgba(180,50,50,0.3");
+					element.css("pointerEvents", "auto");
+				}
+				if (distance > 4) {
+					element.css("backgroundColor", "rgba(180,50,50,0.2");
 					element.css("pointerEvents", "auto");
 				}
 
 				if (distance > 5) {
-					element.css("backgroundColor", "rgba(180,50,50,0.1");
+					element.css("backgroundColor", "rgba(180,50,50,0.05");
 					element.css("pointerEvents", "none");
 				}
 				if (distance > 6) {

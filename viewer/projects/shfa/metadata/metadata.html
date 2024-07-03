@@ -169,6 +169,8 @@
             document.getElementById('method_en').style.display = lang === 'en' ? 'block' : 'none';
             document.getElementById('reference_sv').style.display = lang === 'sv' ? 'block' : 'none';
             document.getElementById('reference_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('quality_sv').style.display = lang === 'sv' ? 'block' : 'none';
+            document.getElementById('quality_en').style.display = lang === 'en' ? 'block' : 'none';
             document.getElementById('lang1').textContent = t('tags');
             document.getElementById('lang2').textContent = t('image');
             document.getElementById('lang3').textContent = t('mesh');
@@ -418,7 +420,8 @@
 
                 <div class="metadata-container" name="quality-field" style="display: none;">
                     <div class="metadata-item-container-1col">
-                        <div class="general-text" id="quality_sv">Meshkvaliteten utvärderades med MeshLabs <em>Per
+                        <div class="general-text" id="quality_sv" style="display: none;">Meshkvaliteten utvärderades med
+                            MeshLabs <em>Per
                                 Face Quality according to Triangle shape and aspect ratio</em> filter med <em>Mean
                                 ratio of triangle</em> metrik. Polygonkvaliteten överfördes sedan till nodpunkterna.
                         </div>

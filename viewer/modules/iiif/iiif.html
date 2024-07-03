@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
-        rel="stylesheet" />
+
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
     <script
         src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
@@ -24,7 +24,7 @@
         <div id="annotationsJson" style="white-space: pre;"></div> -->
 
     <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;">
-        <div id="instructions" style="bottom:20px; width:255px; display:none;">
+        <div id="instructions" style="bottom:20px; width:240px; display:none;">
             <div class="instruction-closer" onclick="$('#instructions').hide();"></div>
             Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.
         </div>
@@ -38,6 +38,11 @@
             <button id="saveNo">Redo the selection</button>
         </div>
     </div>
+
+
+    <div class="interface-area-top">
+    <div id="clear-annotations">Hide annotations</div>
+</div>
 
     <div class="interface-area">
         <div class="toolbar-bottom">
@@ -56,10 +61,10 @@
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
 
-           <div class="NavButton annotate-button compact annotate" style="width:60px; line-height:2.0"
+           <div class="NavButton annotate-button compact annotate" style="width:55px; line-height:2.0"
                 onclick="$('#instructions').show();">Annotate</div> 
 
-            <div id="clear-annotations" class="NavButton"></div>
+          
 
         </div>
         <a id="download" target="_blank">

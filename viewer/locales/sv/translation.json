@@ -30,5 +30,12 @@
   "35mm": "35mm Ekvivalent",
   "image-type": "Bildtyp",
   "reference": "Referens",
-  "quality": "Mesh Quality"
+  "quality": "Mesh Kvalitet",
+  "help-text": "Dubbelklicka för att fokusera. Klicka och dra för att rotera.<br>Högerklicka och dra för att panorera. Skrolla för att zooma in och ut.<br>Om möjligt, använd pilarna högst upp för att navigera mellan olika modeller.",
+  "frame-object": "<p>Centrera objekt.</p> Återställer vyn till den ursprunglig positionen.",
+  "colour-toggle": "<p>Färgkontroll.</p> Slår på eller av färginformationen för 3D-modellen. Med färgerna avstängda och ljuset i rätt riktning framträder detaljer med högre kontrast.",
+  "specular-toggle": "<p>Reflektionskontroll.</p> Slår på eller av spegelreflektionen på 3D-modellen. Stäng av för en mer neutral framtoning.",
+  "light-tool": "<p>Ljuskontroll.</p> Slår på eller av ljuskontrollerna. När ljuskontrollen är aktiverad, klicka och dra för att framhäva detaljer. Avaktivera ljuskontrollen för att rotera 3D-modellen.",
+  "measure-tool": "<p>Mätverktyg.</p> Aktiverar eller inaktiverar linjalen. När verktyget är aktiverat, klicka på två punkter för att mäta avståndet mellan dem.",
+  "full-screen": "<p>Helskärmsläge.</p> Aktiverar helskärmsvisning."
 }

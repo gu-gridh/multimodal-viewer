@@ -59,6 +59,8 @@
            <div class="NavButton annotate-button compact annotate" style="width:60px; line-height:2.0"
                 onclick="$('#instructions').show();">Annotate</div> 
 
+            <div id="clear-annotations" class="NavButton"></div>
+
         </div>
         <a id="download" target="_blank">
             <div id="" class="download-button compact" title="Download image"></div>
@@ -259,7 +261,13 @@
                 //send a message to the parent window (index.html) with the annotation data
                 window.parent.postMessage(annotationData, "*");
             });
-          
+
+            document.getElementById('clear-annotations').onclick = function () {
+                const annotations = anno.getAnnotations();
+                annotations.forEach(annotation => {
+                    anno.removeAnnotation(annotation.id);
+                });
+            };
         };
 
         function logPosition() {

@@ -23,7 +23,7 @@ PROJECT=dubb npm start
 
 Sample URLs for testing:  
 http://localhost:8095/viewer/?q=118-02/orthophoto for sophia    
-http://localhost:8095/viewer/?q=Tanum_1_1-2019_06_13/orthophoto for shfa    
+http://localhost:8097/viewer/?q=Tanum_1_1-2019_06_13/orthophoto for shfa    
 
 ## Installation
 

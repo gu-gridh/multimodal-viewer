@@ -38,6 +38,16 @@ body {
 	  cursor:pointer;
 	}
 
+	#clear-annotations {
+		background: url(../../shared/close.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		width: 30px;
+		overflow: hidden;
+		cursor:pointer;
+	  }
+
 	#Download {
 		background: url(../../shared/interface/downloadbuttonwhite.png);
 		background-size: 100%;

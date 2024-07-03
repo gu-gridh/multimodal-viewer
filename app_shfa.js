@@ -123,54 +123,64 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const datings = shfaData.datings || [];
     const three_d_mesh = shfaData.three_d_mesh || {};
     const image = shfaData.image || {};
-    const isInternational = shfaData.site.internationl_site
-    const meshDate = shfaData.date.substr(0, 7) ?? 'Unknown'
-    var title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`
+    const isInternational = shfaData.site?.internationl_site;
+    const meshDate = shfaData.date ? shfaData.date.substr(0, 7) : 'Unknown';
 
+    let title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`;
     if (!isInternational && !site?.raa_id) {
-      title = `${site?.lamning_id || site?.raa_id}  |  ${site?.placename}`
+      title = `${site?.lamning_id || site?.raa_id}  |  ${site?.placename}`;
     }
     if (!isInternational && site?.lamning_id && site?.raa_id) {
-      title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`
+      title = `${site?.lamning_id || site?.raa_id}  |  ${site?.raa_id || site?.placename}`;
+    } else {
+      title = site?.placename;
     }
-    else {
-      title = site?.placename
-    };
 
     const date = new Date();
     const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     };
-    let acc_date = date.toLocaleString("en-GB", options);
-    const formattedPeopleSV = new Intl.ListFormat("sv", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
-    const formattedPeopleEN = new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" }).format(creators?.map(creator => creator?.name))
+    let acc_date = date.toLocaleString('en-GB', options);
 
-    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`
-    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date.substr(0, 4) || 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`
-
-    const imgMetadata = metadata.colour_images.map(image => image.subtype.english_translation);
-    const tvtVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('|'))
-    const dfVis = imgMetadata.findIndex((imgMetadata) => imgMetadata.includes('Digital Frottage'))
-
-    const tvtCreator = metadata.colour_images[tvtVis].author.name
-    const tvtYear = metadata.colour_images[tvtVis].year
-    let dfCreator = 'Unknown'
-    let dfYear = 'Unknown'
-    if (dfVis != -1) {
-      dfCreator = metadata.colour_images[dfVis].author.name
-      dfYear = metadata.colour_images[dfVis].year
+    let formattedPeopleSV = 'Unknown';
+    let formattedPeopleEN = 'Unknown';
+    try {
+      formattedPeopleSV = new Intl.ListFormat('sv', { style: 'long', type: 'conjunction' }).format(creators.map(creator => creator?.name));
+      formattedPeopleEN = new Intl.ListFormat('en-GB', { style: 'long', type: 'conjunction' }).format(creators.map(creator => creator?.name));
+    } catch (error) {
+      console.error('Error formatting creators:', error);
     }
 
-    // if (metadata.colour_images) {
-    //   metadata.colour_images.forEach(image => {
-    //     const imgTypeSV = image.subtype.text;
-    //     const imgTypeEN = image.subtype.english_translation;
-    //     const imgCreator = image.author.name;
-    //     const imgDate = image.year;
-    //   });
-    // }
+    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date ? shfaData.date.substr(0, 4) : 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`;
+    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date ? shfaData.date.substr(0, 4) : 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`;
+
+    const imgMetadata = metadata.colour_images.map(image => image.subtype?.english_translation);
+    const tvtVis = imgMetadata.findIndex((img) => img.includes('|'));
+    const dfVis = imgMetadata.findIndex((img) => img.includes('Digital Frottage'));
+
+    let tvtCreator = 'Unknown';
+    let tvtYear = 'Unknown';
+    if (tvtVis != -1) {
+      try {
+        tvtCreator = metadata.colour_images[tvtVis].author.name;
+        tvtYear = metadata.colour_images[tvtVis].year;
+      } catch (error) {
+        console.error('Error processing TVT image data:', error);
+      }
+    }
+
+    let dfCreator = 'Unknown';
+    let dfYear = 'Unknown';
+    if (dfVis != -1) {
+      try {
+        dfCreator = metadata.colour_images[dfVis].author.name;
+        dfYear = metadata.colour_images[dfVis].year;
+      } catch (error) {
+        console.error('Error processing DF image data:', error);
+      }
+    }
 
     let displaySfmFields = 'name="sfm-field" style="display:none"'
     if (three_d_mesh.method?.text !== 'Laserscanning') { displaySfmFields = 'name="sfm-field" style="display:visible"' }
@@ -250,8 +260,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         .replace(/PLACEHOLDER_METHOD_EN/g, three_d_mesh.method?.english_translation || 'Unknown')
         .replace(/PLACEHOLDER_WEATHER_SV/g, three_d_mesh.weather?.map(w => w?.text).join(', ') || 'Unknown')
         .replace(/PLACEHOLDER_WEATHER_EN/g, three_d_mesh.weather?.map(w => w?.english_translation).join(', ') || 'Unknown')
-        .replace(/PLACEHOLDER_CAMERA_LENS/g, image.camera_lens?.name || 'Unknown')
-        .replace(/PLACEHOLDER_CAMERA_MODEL/g, image.camera_model?.name || 'Unknown')
+        .replace(/PLACEHOLDER_CAMERA_LENS/g, image?.camera_lens?.name || 'Unknown')
+        .replace(/PLACEHOLDER_CAMERA_MODEL/g, image?.camera_model?.name || 'Unknown')
         .replace(/PLACEHOLDER_35MM/g, image?.mm35_equivalent || 'Unknown')
         .replace(/name="sfm-field" style="display:none"/g, displaySfmFields)
         .replace(/name="df-field" style="display:none"/g, displayDfFields)

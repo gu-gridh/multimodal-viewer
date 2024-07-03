@@ -265,6 +265,13 @@ h2 {
     margin-top: 10px;
 }
 
+.button-icon-wide {
+    width: 55px !important;
+    height: 25px !important;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
 .button-icon:hover {
     opacity: 1.0;
 }

@@ -39,13 +39,23 @@ body {
 	}
 
 	#clear-annotations {
-		background: url(../../shared/close.png);
-		background-size: 100%;
-		background-repeat: no-repeat;
-		background-position: center;
-		width: 30px;
+		pointer-events:auto;
+		font-weight:200;
+		width: auto;
 		overflow: hidden;
 		cursor:pointer;
+		display: flex;
+		justify-content: center; 
+		align-items: center; 
+		background-color: rgba(0, 0, 0, 0.7);
+		border-radius: 8px;
+		padding:5px 12px;
+		margin-top:-2px;
+		color:white;
+	  }
+
+	  #clear-annotations:hover {
+		background-color: rgba(0, 0, 0, 1.0);
 	  }
 
 	#Download {
@@ -114,8 +124,9 @@ body {
 
 	.annotate-button{
 		font-family: "Oswald", sans-serif !important;
-		padding-top:3px;
-		font-size:0.95em;
+		margin-top:5px;
+		margin-left:5px;
+		font-size:1.15em;
 		font-weight:200;
 	}
 

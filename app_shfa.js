@@ -164,7 +164,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     let tvtYear = 'Unknown';
     if (tvtVis != -1) {
       try {
-        tvtCreator = metadata.colour_images[tvtVis].author.name;
+        tvtCreator = metadata.colour_images[tvtVis].people.map(creator => creator?.name).join('<br>');
         tvtYear = metadata.colour_images[tvtVis].year;
       } catch (error) {
         console.error('Error processing TVT image data:', error);
@@ -175,7 +175,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     let dfYear = 'Unknown';
     if (dfVis != -1) {
       try {
-        dfCreator = metadata.colour_images[dfVis].author.name;
+        dfCreator = metadata.colour_images[dfVis].people.map(creator => creator?.name).join('<br>');
         dfYear = metadata.colour_images[dfVis].year;
       } catch (error) {
         console.error('Error processing DF image data:', error);

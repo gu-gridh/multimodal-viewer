@@ -12,5 +12,7 @@
   "language": "Мова",
   "room": "Кімната",
   "tags": "Теги",
-  "documentation": "Документація"
+  "documentation": "Документація",
+  "showannotations": "показати анотації",
+  "hideannotations": "приховати анотації"
 }

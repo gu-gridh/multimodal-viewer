@@ -268,10 +268,19 @@
             });
 
             document.getElementById('clear-annotations').onclick = function () {
-                const annotations = anno.getAnnotations();
-                annotations.forEach(annotation => {
-                    anno.removeAnnotation(annotation.id);
-                });
+                const button = document.getElementById('clear-annotations');
+                if (button.textContent === 'Hide annotations') {
+                    //hide annotations
+                    const annotations = anno.getAnnotations();
+                    annotations.forEach(annotation => {
+                        anno.removeAnnotation(annotation.id);
+                    });
+                    button.textContent = 'Show annotations';
+                } else {
+                    //show annotations
+                    anno.loadAnnotations('annotations.w3c.json');
+                    button.textContent = 'Hide annotations';
+                }
             };
         };
 

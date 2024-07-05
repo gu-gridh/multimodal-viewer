@@ -144,6 +144,8 @@
 
                 window.addEventListener('message', function (event) {
                     if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                        const iiifIframe = document.getElementById('left-Iframe');
+                        iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                         i18next.changeLanguage(event.data.lang, function (err, t) {
                             if (err) return console.log('Something went wrong loading', err);
                             applyTranslations();

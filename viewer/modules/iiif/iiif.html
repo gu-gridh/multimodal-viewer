@@ -6,13 +6,12 @@
     <link rel="stylesheet" href="iiif.css">
     <link rel="stylesheet" href="annotorious.css">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
-
-        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <script src="/viewer/libs/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="/viewer/libs/jquery.js"></script>
     <script src="openseadragon-bookmark-url.js"></script>
 </head>
@@ -20,8 +19,6 @@
 <body>
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
-    <!-- <button onclick="viewAnnotations()">View Annotations</button>
-        <div id="annotationsJson" style="white-space: pre;"></div> -->
 
     <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;">
         <div id="instructions" style="bottom:20px; width:240px; display:none;">
@@ -39,18 +36,15 @@
         </div>
     </div>
 
-
     <div class="interface-area-top">
-    <div id="clear-annotations">Hide annotations</div>
-</div>
+        <div id="clear-annotations"></div>
+    </div>
 
     <div class="interface-area">
         <div class="toolbar-bottom">
-
             <a id="home" href="#home">
                 <div id="Home" class="NavButton"></div>
             </a>
-
             <a id="zoom-in" href="#zoom-in">
                 <div id="ZoomIn" class="NavButton"></div>
             </a>
@@ -60,34 +54,26 @@
             <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
-
-           <div class="NavButton annotate-button compact annotate" style="width:55px; line-height:2.0"
-                onclick="$('#instructions').show();">Annotate</div> 
-
-          
-
+            <div class="NavButton annotate-button compact annotate" style="width:55px; line-height:2.0" onclick="$('#instructions').show();">Annotate</div>
         </div>
         <a id="download" target="_blank">
             <div id="" class="download-button compact" title="Download image"></div>
         </a>
         <div id="download-label" class="label-popup" style="display: none;">Download started</div>
-        
-        <div id="trackball_position" class="share-button compact" title="Copy link to view"
-				onclick="logPosition();">
-				<div id="share-label" class="label-popup">Link copied</div>
-			</div>
-
-        <div class="guide-button compact" title="User Guide"
-            onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
-            ?</div>
+        <div id="trackball_position" class="share-button compact" title="Copy link to view" onclick="logPosition();">
+            <div id="share-label" class="label-popup">Link copied</div>
+        </div>
+        <div class="guide-button compact" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
     </div>
 
     <script>
         var anno;
         let urlToCopy = '';
+        let annotationsVisible = true;  //track the visibility state of annotations
+        
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
-
+        
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
@@ -101,6 +87,68 @@
         function getSavedViewerState() {
             var state = sessionStorage.getItem('viewerState');
             return state ? JSON.parse(state) : null;
+        }
+
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/viewer/locales/{{lng}}/translation.json',
+                },
+            }, function (err, t) {
+                if (err) return console.error('i18next initialization error:', err);
+
+                applyTranslations();
+
+                window.addEventListener('message', function(event) {
+                    if (event.data.type === 'languageChange') {
+                        const newLang = event.data.lang;
+                        i18next.changeLanguage(newLang, function(err) {
+                            if (err) {
+                                console.error('Error changing language:', err);
+                            } else {
+                                applyTranslations();
+                            }
+                        });
+                    }
+                });
+            });
+
+        function applyTranslations() {
+            if (typeof i18next.t === 'function') {
+                const clearAnnotationsButton = document.getElementById('clear-annotations');
+                if (annotationsVisible) {
+                    clearAnnotationsButton.textContent = i18next.t('hideannotations');
+                } else {
+                    clearAnnotationsButton.textContent = i18next.t('showannotations');
+                }
+            }
+        }
+
+        function toggleAnnotations() {
+            const button = document.getElementById('clear-annotations');
+            if (annotationsVisible) {
+                //hide annotations
+                const annotations = anno.getAnnotations();
+                annotations.forEach(annotation => {
+                    anno.removeAnnotation(annotation.id);
+                });
+                annotationsVisible = false;
+                button.textContent = i18next.t('showannotations');
+            } else {
+                //show annotations
+                anno.loadAnnotations('annotations.w3c.json');
+                annotationsVisible = true;
+                button.textContent = i18next.t('hideannotations');
+            }
+        }
+
+        document.getElementById('clear-annotations').onclick = function () {
+            toggleAnnotations();
         }
 
         //notify index.html that the panel button has been clicked
@@ -266,13 +314,6 @@
                 //send a message to the parent window (index.html) with the annotation data
                 window.parent.postMessage(annotationData, "*");
             });
-
-            document.getElementById('clear-annotations').onclick = function () {
-                const annotations = anno.getAnnotations();
-                annotations.forEach(annotation => {
-                    anno.removeAnnotation(annotation.id);
-                });
-            };
         };
 
         function logPosition() {
@@ -289,44 +330,26 @@
             }
         }
 
-        // function viewAnnotations() {
-        //     var annotations = anno.getAnnotations();
-        //     var annotationsJson = JSON.stringify(annotations, null, 2); // Pretty print the JSON
-
-        //     console.log(annotationsJson); // Log to console
-
-        //     // Alternatively, display in an element on the page
-        //     document.getElementById('annotationsJson').textContent = annotationsJson;
-        // }
-
     </script>
 
-
-
-    <div id="guide"
-        onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
+    <div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
         <div class="guide-content">
-            <!-- <h1>User Guide: <br>Spatial Context</h1> -->
             <div class="guide-instructions">
                 <div class="guide-instructions-intro">
-
                     Scroll to zoom in and out. Click and drag to pan the view. <br>
-
                 </div>
 
                 <div id="guide-instructions-tools">
                     <h2>Tools</h2>
                     <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon"
-                            style="background-image:url(../../shared/interface/frame.png)"></div>
+                        <div class="guide-instructions-item-icon" style="background-image:url(../../shared/interface/frame.png)"></div>
                         <div class="guide-instructions-item-label">
                             <p>Frame object.</p> Changes the view to the original position.
                         </div>
                     </div>
 
                     <div class="guide-instructions-item full-screen-option">
-                        <div class="guide-instructions-item-icon"
-                            style="background-image:url(../../shared/interface/expand.svg)"></div>
+                        <div class="guide-instructions-item-icon" style="background-image:url(../../shared/interface/expand.svg)"></div>
                         <div class="guide-instructions-item-label">
                             <p>Full screen.</p> Activates full screen mode. 
                         </div>
@@ -335,12 +358,9 @@
                     <div class="guide-instructions-item annotate-option">
                         <div class="guide-instructions-item-icon" style="background-image:url()"></div>
                         <div class="guide-instructions-item-label">
-                            <p>Annotate.</p> Annotate the image by holding shift-key
-                            while clicking and dragging a rectangle around the desired area.
+                            <p>Annotate.</p> Annotate the image by holding shift-key while clicking and dragging a rectangle around the desired area.
                         </div>
                     </div>
-
-
                     <div class="guide-closer">Close</div>
                 </div>
             </div>

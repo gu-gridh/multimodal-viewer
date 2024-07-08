@@ -208,14 +208,14 @@
                     return;
                 }
                 window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
-                localStorage.setItem('i18nextLangSHFA', lang);
+                localStorage.setItem('i18nextLang', lang);
                 setButtonLabel(lang);
                 updateTranslations(t, lang);
             });
         }
 
         function toggleLanguage() {
-            let currentLanguage = localStorage.getItem('i18nextLangSHFA') || 'en';
+            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';
             currentLanguage = currentLanguage === 'en' ? 'sv' : 'en';
             changeLanguage(currentLanguage);
         }
@@ -228,7 +228,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
 
-            const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
             i18next.use(i18nextHttpBackend).init({
                 lng: savedLang,

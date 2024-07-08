@@ -15,6 +15,8 @@
         src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="../../libs/jquery.js"></script>
     <script src="openseadragon-bookmark-url.js"></script>
+    <script src="/viewer/libs/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
 </head>
 
 <style>
@@ -92,6 +94,47 @@
         let urlToCopy = '';
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
+
+        // <-- Language Control -->
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/viewer/locales/{{lng}}/translation.json',
+                },
+            }, function (err, t) {
+                if (err) return console.error('i18next initialization error:', err);
+
+                applyTranslations();
+
+                window.addEventListener('message', function(event) {
+                    if (event.data.type === 'languageChange') {
+                        const newLang = event.data.lang;
+                        i18next.changeLanguage(newLang, function(err) {
+                            if (err) {
+                                console.error('Error changing language:', err);
+                            } else {
+                                applyTranslations();
+                            }
+                        });
+                    }
+                });
+            });
+
+        function applyTranslations() {
+            if (typeof i18next.t === 'function') {
+                    document.getElementById('1').innerHTML = i18next.t('help-text-sequence');
+                    document.getElementById('2').textContent = i18next.t('tools')
+                    document.getElementById('3').innerHTML = i18next.t('frame-object')
+                    document.getElementById('4').innerHTML = i18next.t('full-screen')
+                    document.getElementById('5').textContent = i18next.t('close')
+                }
+        }
+        // <-- Language Control -->
 
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
@@ -273,32 +316,26 @@
     <div class="guide-content">
         <!-- <h1>User Guide: <br>Spatial Context</h1> -->
         <div class="guide-instructions">
-            <div class="guide-instructions-intro">
-                
-                Scroll to zoom in and out. Click and drag to pan the view. <br>
-                If available, use the arrows at the top to browse between different analytical layers.
-                
+            <div class="guide-instructions-intro" id="1">
             </div>
 
             <div id="guide-instructions-tools">
-                <h2>Tools</h2>
+                <h2 id="2">Tools</h2>
                 <div class="guide-instructions-item">
                     <div class="guide-instructions-item-icon"
                         style="background-image:url(../../shared/interface/frame.png)"></div>
-                    <div class="guide-instructions-item-label">
-                        <p>Frame object.</p> Changes the view to the original position.
+                    <div class="guide-instructions-item-label" id="3">
                     </div>
                 </div>
 
                 <div class="guide-instructions-item full-screen-option">
                     <div class="guide-instructions-item-icon"
                         style="background-image:url(../../shared/interface/expand.svg)"></div>
-                    <div class="guide-instructions-item-label">
-                        <p>Full screen.</p> Activates full screen mode.
+                    <div class="guide-instructions-item-label" id="4">
                     </div>
                 </div>
 
-                <div class="guide-closer">Close</div>
+                <div class="guide-closer" id="5"></div>
             </div>
         </div>
     </div>

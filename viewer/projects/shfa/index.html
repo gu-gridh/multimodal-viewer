@@ -124,7 +124,7 @@
             const viewerType = determineInitialViewer(urlParams);
             changeLeftViewer(viewerType);
 
-            const savedLang = localStorage.getItem('i18nextLangSHFA') || 'en';
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
             $("#footer-container").load("/viewer/projects/shfa/footer.html");
 
@@ -143,6 +143,8 @@
 
                     window.addEventListener('message', function (event) {
                         if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                            const iiifIframe = document.getElementById('left-Iframe');
+                            iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                             i18next.changeLanguage(event.data.lang, function (err, t) {
                                 if (err) return console.log('Something went wrong loading', err);
                                 applyTranslations();
@@ -153,7 +155,7 @@
 
             function applyTranslations() {
                 if (typeof i18next.t === 'function') {
-                    document.getElementById('btn1').textContent = 'Visualisation'
+                    document.getElementById('btn1').textContent = i18next.t('visualisation')
                     document.getElementById('btn3').textContent = i18next.t('mesh');
                     document.getElementById('btn5').textContent = i18next.t('about');
                 }

@@ -141,7 +141,7 @@
                 button.textContent = i18next.t('showannotations');
             } else {
                 // show annotations
-                anno.loadAnnotations('annotations.w3c.json');
+                anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH');
                 annotationsVisible = true;
                 button.textContent = i18next.t('hideannotations');
             }
@@ -297,7 +297,7 @@
             });
     
             // Load annotations in W3C WebAnnotation format
-            anno.loadAnnotations('annotations.w3c.json');
+            anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH');
     
             // Attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {

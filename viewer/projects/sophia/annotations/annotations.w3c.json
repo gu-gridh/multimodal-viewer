@@ -1,0 +1,42 @@
+[
+    {
+        "@context": "http://www.w3.org/ns/anno.jsonld",
+        "type": "Annotation",
+        "body": [
+          {
+            "type": "TextualBody",
+            "value": "Test SHFA Annotation 1",
+            "purpose": "commenting"
+          }
+        ],
+        "target": {
+          "source": "https://img.dh.gu.se/diana/static/shfa/iiif/f0d9f217-defd-48ff-a24f-6ccfd9f14be3.tif",
+          "selector": {
+            "type": "FragmentSelector",
+            "conformsTo": "http://www.w3.org/TR/media-frags/",
+            "value": "xywh=pixel:519.1285400390625,1435.9532470703125,894.7603759765625,496.2691650390625"
+          }
+        },
+        "id": "#90e12559-d6b3-4a18-9a47-5ba68c3f735a"
+      },
+      {
+        "@context": "http://www.w3.org/ns/anno.jsonld",
+        "type": "Annotation",
+        "body": [
+          {
+            "type": "TextualBody",
+            "value": "Test SHFA Annotation 2",
+            "purpose": "commenting"
+          }
+        ],
+        "target": {
+          "source": "https://img.dh.gu.se/diana/static/shfa/iiif/f0d9f217-defd-48ff-a24f-6ccfd9f14be3.tif",
+          "selector": {
+            "type": "FragmentSelector",
+            "conformsTo": "http://www.w3.org/TR/media-frags/",
+            "value": "xywh=pixel:502.77783203125,556.666748046875,1213.333251953125,511.1109619140625"
+          }
+        },
+        "id": "#6a79a718-2607-4526-9752-7b4c33c9af35"
+      }
+]

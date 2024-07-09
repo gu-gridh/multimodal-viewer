@@ -69,11 +69,11 @@
     <script>
         var anno;
         let urlToCopy = '';
-        let annotationsVisible = true;  //track the visibility state of annotations
-        
+        let annotationsVisible = true; // track the visibility state of annotations
+    
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
-        
+    
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
@@ -83,14 +83,14 @@
             };
             sessionStorage.setItem('viewerState', JSON.stringify(state));
         }
-
+    
         function getSavedViewerState() {
             var state = sessionStorage.getItem('viewerState');
             return state ? JSON.parse(state) : null;
         }
-
+    
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
-
+    
         i18next
             .use(i18nextHttpBackend)
             .init({
@@ -101,13 +101,13 @@
                 },
             }, function (err, t) {
                 if (err) return console.error('i18next initialization error:', err);
-
+    
                 applyTranslations();
-
-                window.addEventListener('message', function(event) {
+    
+                window.addEventListener('message', function (event) {
                     if (event.data.type === 'languageChange') {
                         const newLang = event.data.lang;
-                        i18next.changeLanguage(newLang, function(err) {
+                        i18next.changeLanguage(newLang, function (err) {
                             if (err) {
                                 console.error('Error changing language:', err);
                             } else {
@@ -117,7 +117,7 @@
                     }
                 });
             });
-
+    
         function applyTranslations() {
             if (typeof i18next.t === 'function') {
                 const clearAnnotationsButton = document.getElementById('clear-annotations');
@@ -128,11 +128,11 @@
                 }
             }
         }
-
+    
         function toggleAnnotations() {
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
-                //hide annotations
+                // hide annotations
                 const annotations = anno.getAnnotations();
                 annotations.forEach(annotation => {
                     anno.removeAnnotation(annotation.id);
@@ -140,57 +140,57 @@
                 annotationsVisible = false;
                 button.textContent = i18next.t('showannotations');
             } else {
-                //show annotations
+                // show annotations
                 anno.loadAnnotations('annotations.w3c.json');
                 annotationsVisible = true;
                 button.textContent = i18next.t('hideannotations');
             }
         }
-
+    
         document.getElementById('clear-annotations').onclick = function () {
             toggleAnnotations();
         }
-
-        //notify index.html that the panel button has been clicked
+    
+        // notify index.html that the panel button has been clicked
         function togglePane() {
             window.parent.postMessage({ type: 'togglePane' }, '*');
         }
-
+    
         window.onload = function () {
             var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
             var downloadSources = JSON.parse(downloadSourceString);
-
-            //for restoring the zoom and pan from the URL
+    
+            // for restoring the zoom and pan from the URL
             const hash = window.location.hash.substring(1);
             const hashParams = new URLSearchParams(hash);
             const zoom = parseFloat(hashParams.get('zoom'));
             const x = parseFloat(hashParams.get('x'));
             const y = parseFloat(hashParams.get('y'));
-
+    
             const currentQuery = new URLSearchParams(window.location.search).get('q');
-            const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;  
-
+            const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
+    
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
             if (prevBaseQuery !== currentBaseQuery) {
-                sessionStorage.clear();  //clear sessionStorage if the base query part has changed
-                sessionStorage.setItem('lastBaseQuery', currentBaseQuery);  
+                sessionStorage.clear(); // clear sessionStorage if the base query part has changed
+                sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
             }
-
+    
             var savedState = getSavedViewerState();
-
-            document.getElementById('download').addEventListener('click', function(event) {
+    
+            document.getElementById('download').addEventListener('click', function (event) {
                 event.preventDefault();
                 const imageUrl = downloadSources;
-
+    
                 const popup = document.getElementById('download-label');
                 popup.style.display = 'block';
-                popup.classList.add('popup-animation'); 
-
-                setTimeout(function() {
+                popup.classList.add('popup-animation');
+    
+                setTimeout(function () {
                     popup.classList.remove('popup-animation');
                     popup.style.display = 'none';
                 }, 3000);
-
+    
                 fetch(imageUrl)
                     .then(response => response.blob())
                     .then(blob => {
@@ -207,7 +207,7 @@
                     })
                     .catch(() => console.error("Could not download the image"));
             });
-
+    
             var viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
@@ -227,22 +227,22 @@
                 zoomOutButton: "zoom-out",
                 homeButton: "home",
             });
-
-            viewer.addHandler('bookmark-url-change', function(event) {
+    
+            viewer.addHandler('bookmark-url-change', function (event) {
                 const url = new URL(event.url);
                 let query = url.searchParams.get('q') || '';
                 const parts = query.split('/');
-                const prefix = parts[0]; 
-                const suffix = 'orthophoto'; 
+                const prefix = parts[0];
+                const suffix = 'orthophoto';
                 const newQuery = prefix + '/' + suffix;
                 const fragment = url.hash;
                 const newPath = '/viewer/?q=' + newQuery;
                 const newUrl = url.origin + newPath + fragment;
                 urlToCopy = newUrl;
             });
-
+    
             viewer.bookmarkUrl();
-
+    
             viewer.addHandler('open', function () {
                 if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
                     viewer.viewport.zoomTo(zoom);
@@ -252,75 +252,88 @@
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }
             });
-
+    
             viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
-
+    
             // Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {
                 // Additional configuration options
                 disableEditor: true
-
             });
+    
+            function convertToIIIFRegion(annotation, imageSize) {
+                console.log('Image Dimensions:', imageSize);
+
+                //extract viewport coordinates from the annotation
+                const fragmentSelector = annotation.target.selector.value;
+                const [vx, vy, vw, vh] = fragmentSelector.replace('xywh=pixel:', '').split(',').map(Number);
+                console.log('Viewport Coordinates:', { vx, vy, vw, vh });
+
+                // Convert viewport coordinates to image coordinates 
+                const imageX = Math.round(vx);
+                const imageY = Math.round(vy);
+                const imageWidth = Math.round(vw);
+                const imageHeight = Math.round(vh);
+
+                console.log('Image Coordinates:', { x: imageX, y: imageY, width: imageWidth, height: imageHeight });
+
+                //form the IIIF Image Region
+                const region = `${imageX},${imageY},${imageWidth},${imageHeight}`;
+                const iiifUrl = `${imageSize['@id']}/${region}/full/0/default.jpg`;
+                console.log('IIIF Image Section:', iiifUrl);
+            }
 
             anno.on('createSelection', async function (selection) {
-
-                // Tag to insert
                 selection.body = [{
                     type: 'TextualBody',
                     purpose: 'tagging',
                     value: 'MyTag'
                 }];
-
-                // Step 3: update the selection and save it
-                // Remember that .updateSelected is an async function!
-                // You need to wait until it completes before saving
+    
                 await anno.updateSelected(selection);
                 anno.saveSelected();
-
-                // Alternative:
-                // anno.updateSelected(selection, true);
             });
-
+    
             // Load annotations in W3C WebAnnotation format
             anno.loadAnnotations('annotations.w3c.json');
-
+    
             // Attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {
                 // Show the popup
                 document.getElementById('savePopup').style.display = 'block';
                 document.getElementById('instructions').style.display = 'none';
-
+    
                 // Handle Yes button click
                 document.getElementById('saveYes').onclick = function () {
-                    console.log('Annotation coordinates:', annotation.target.selector.value);
+                    convertToIIIFRegion(annotation, viewer.source);
                     document.getElementById('savePopup').style.display = 'none';
                 };
-
+    
                 // Handle No button click
                 document.getElementById('saveNo').onclick = function () {
                     anno.removeAnnotation(annotation.id);
                     document.getElementById('savePopup').style.display = 'none';
                 };
             });
-
+    
             anno.on('clickAnnotation', function (annotation, element) {
                 const annotationData = {
                     type: 'annotationClick',
                     value: annotation.body[0].value
                 };
-
-                //send a message to the parent window (index.html) with the annotation data
+    
+                 //send a message to the parent window (index.html) with the annotation data
                 window.parent.postMessage(annotationData, "*");
             });
         };
-
+    
         function logPosition() {
             $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
                 $('#share-label').removeClass('popup-animation').dequeue();
             });
-
+    
             if (urlToCopy) {
                 navigator.clipboard.writeText(urlToCopy)
                     .then(() => console.log(urlToCopy + ' copied to clipboard'))
@@ -329,7 +342,6 @@
                 console.error('No URL to copy');
             }
         }
-
     </script>
 
     <div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">

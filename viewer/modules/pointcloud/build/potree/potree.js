@@ -79584,6 +79584,14 @@ ENDSEC
 						'../../shared/interface/expand.svg',
 						'',
 						() => {
+
+							let renderArea = $('#potree_render_area');
+							let isVisible = renderArea.css('left') !== '0px';
+							
+							//close the sidebar if it's open
+							if (isVisible) {
+								renderArea.css('left', '0px');  
+							}
 							window.parent.postMessage({ type: 'togglePane2' }, '*');
 						}
 					)); 

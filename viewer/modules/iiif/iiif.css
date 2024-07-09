@@ -47,15 +47,17 @@ body {
 		display: flex;
 		justify-content: center; 
 		align-items: center; 
-		background-color: rgba(0, 0, 0, 0.7);
+		background-color: rgba(0, 0, 0, 0.85);
 		border-radius: 8px;
 		padding:5px 12px;
 		margin-top:-2px;
-		color:white;
+		color:rgb(220,220,220);
 	  }
 
 	  #clear-annotations:hover {
 		background-color: rgba(0, 0, 0, 1.0);
+		color:white;
+		transform:scale(1.02);
 	  }
 
 	#Download {

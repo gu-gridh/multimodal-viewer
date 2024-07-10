@@ -200,7 +200,7 @@
 
 			<div id="trackball_position" class="share-button compact" title="Copy link to view"
 				onclick="logTrackballPosition();">
-				<div id="share-label" class="label-popup">Link copied</div>
+				<div id="share-label" class="label-popup"></div>
 			</div>
 
 		</div>
@@ -210,8 +210,10 @@
 
 	<div class="ui-overlay-container" style="height:100vh; z-index:1000; pointer-events:none;">
 		<!--MEASURE-->
-		<div id="measure-box" class="output-box">Measured length
-			<hr /><span id="measure-output" class="output-text" onmousedown="event.stopPropagation()">0.0</span>
+		<div id="measure-box" class="output-box">    
+			<span id="measure-label"></span>
+			<hr />
+			<span id="measure-output" class="output-text" onmousedown="event.stopPropagation()">0.0</span>
 		</div>
 		<!--MEASURE-->
 	</div>
@@ -276,6 +278,9 @@
 				document.getElementById('8').innerHTML = i18next.t('measure-tool');
 				document.getElementById('9').innerHTML = i18next.t('full-screen');
 				document.getElementById('10').innerHTML = i18next.t('close');
+				document.getElementById('share-label').textContent = i18next.t('linkcopied');
+				document.getElementById('measure-label').innerHTML = i18next.t('measuredlength');
+				updateUI();
 			}
 	}
 	// <-- Language Control -->
@@ -354,7 +359,8 @@
 		} else {
 			totalPages = 2;
 		}
-		$('#currentpage').text(hasSecondMesh ? (currentPage + ' of ' + totalPages) : ''); //update counter text
+		var translatedOf = i18next.t('of');
+        $('#currentpage').text(hasSecondMesh ? (currentPage + ' ' + translatedOf + ' ' + totalPages) : ''); //update counter text
 	}
 
 	$('#Next').click(function() {

@@ -43,5 +43,9 @@
   "full-screen": "<p><b>Full screen.</b></p> Activates full screen mode.",
   "close": "Close",
   "showannotations": "Show annotations",
-  "hideannotations": "Hide annotations"
+  "hideannotations": "Hide annotations",
+  "linkcopied": "Link copied",
+  "downloadstarted": "Download started",
+  "measuredlength": "Measured length",
+  "of": "of"
 }

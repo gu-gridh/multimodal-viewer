@@ -41,5 +41,9 @@
   "light-tool": "<p><b>Ljuskontroll.</b></p> Slår på eller av ljuskontrollerna. När ljuskontrollen är aktiverad, klicka och dra för att framhäva detaljer. Avaktivera ljuskontrollen för att rotera 3D-modellen.",
   "measure-tool": "<p><b>Mätverktyg.</b></p> Aktiverar eller inaktiverar linjalen. När verktyget är aktiverat, klicka på två punkter för att mäta avståndet mellan dem.",
   "full-screen": "<p><b>Helskärmsläge.</b></p> Aktiverar helskärmsvisning.",
-  "close": "Stäng"
+  "close": "Stäng",
+  "linkcopied": "Länk sparad",
+  "downloadstarted": "Nedladdning påbörjad",
+  "measuredlength": "Uppmätt längd.",
+  "of": "av"
 }

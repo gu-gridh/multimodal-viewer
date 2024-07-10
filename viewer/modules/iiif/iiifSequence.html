@@ -26,7 +26,7 @@
 <body>
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
-    <!-- <button onclick="viewAnnotations()">View Annotations</button>
+        <!-- <button onclick="viewAnnotations()">View Annotations</button>
         <div id="annotationsJson" style="white-space: pre;"></div> -->
 
     <!--  <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
@@ -47,20 +47,20 @@
     </div> -->
 
     <div class="interface-area-top">
-    <div id="ToolbarHorizontal">
-
-        <a id="prev-button">
-            <div id="Prev" class="SwitchButton"></div>
-        </a>
-        <span id="currentpage"></span>
-        <a id="next-button">
-            <div id="Next" class="SwitchButton"></div>
-        </a>
+        <div id="ToolbarHorizontal">
+            
+            <a id="prev-button">
+                <div id="Prev" class="SwitchButton"></div>
+            </a>
+            <span id="currentpage"></span>
+            <a id="next-button">
+                <div id="Next" class="SwitchButton"></div>
+            </a>
+        </div>
     </div>
-</div>
 
     <div class="interface-area">
-        
+
         <div class="toolbar-bottom">
 
             <a id="home" href="#home">
@@ -81,11 +81,11 @@
             <div id="" class="download-button compact" title="Download image"></div>
         </a>
         <div id="download-label" class="label-popup" style="display: none;"></div>
-
+        
         <div id="trackball_position" class="share-button compact" title="Copy link to view"
             onclick="logPosition();">
             <div id="share-label" class="label-popup"></div>
-    </div>
+        </div>
 
         <div class="guide-button compact" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
     </div>
@@ -109,7 +109,7 @@
             }, function (err, t) {
                 if (err) return console.error('i18next initialization error:', err);
 
-                applyTranslations();
+                initializeViewer();
 
                 window.addEventListener('message', function(event) {
                     if (event.data.type === 'languageChange') {
@@ -127,16 +127,28 @@
 
         function applyTranslations() {
             if (typeof i18next.t === 'function') {
-                    document.getElementById('1').innerHTML = i18next.t('help-text-sequence');
-                    document.getElementById('2').textContent = i18next.t('tools')
-                    document.getElementById('3').innerHTML = i18next.t('frame-object')
-                    document.getElementById('4').innerHTML = i18next.t('full-screen')
-                    document.getElementById('5').textContent = i18next.t('close')
-                    document.getElementById('share-label').textContent = i18next.t('linkcopied')
-                    document.getElementById('download-label').textContent = i18next.t('downloadstarted')
-                }
+                document.getElementById('1').innerHTML = i18next.t('help-text-sequence');
+                document.getElementById('2').textContent = i18next.t('tools');
+                document.getElementById('3').innerHTML = i18next.t('frame-object');
+                document.getElementById('4').innerHTML = i18next.t('full-screen');
+                document.getElementById('5').textContent = i18next.t('close');
+                document.getElementById('share-label').textContent = i18next.t('linkcopied');
+                document.getElementById('download-label').textContent = i18next.t('downloadstarted');
+                updatePageInfo();
+            }
         }
+
+        function updatePageInfo() {
+            const pageInfo = document.getElementById('currentpage');
+            if (pageInfo && viewer) {
+                const currentPage = viewer.currentPage() + 1;
+                const totalPages = viewer.tileSources.length;
+                pageInfo.innerHTML = `${currentPage} ${i18next.t('of')} ${totalPages}`;
+            }
+        }
+
         // <-- Language Control -->
+
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
@@ -152,7 +164,7 @@
             return state ? JSON.parse(state) : null;
         }
 
-        window.onload = function() {
+        function initializeViewer() {
             var isInitialLoad = true;
             var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URLS';
             var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
@@ -161,7 +173,6 @@
             var locationIds = 'PLACEHOLDER_LOCATION_ID';
             var imgIds = 'PLACEHOLDER_IMAGE_IDS';
 
-            //for restoring the zoom and pan from the URL
             const hash = window.location.hash.substring(1);
             const hashParams = new URLSearchParams(hash);
             const zoom = parseFloat(hashParams.get('zoom'));
@@ -169,7 +180,7 @@
             const y = parseFloat(hashParams.get('y'));
 
             const currentQuery = new URLSearchParams(window.location.search).get('q');
-            const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null; 
+            const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
 
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
             if (prevBaseQuery !== currentBaseQuery) {
@@ -199,7 +210,7 @@
                 event.preventDefault();
                 const pageIndex = viewer.currentPage();
                 const imageUrl = downloadSources[pageIndex];
-                const creatorName = creators[0][0].replace(/,\s*/g, '_'); //replace commas with underscores
+                const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
                 const locationId = locationIdArray[0]; 
                 const imgId = imgIdArray[pageIndex]; 
 
@@ -233,7 +244,7 @@
                     });
             });
 
-            var viewer = OpenSeadragon({
+            viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
                 tileSources: tileSources,
@@ -260,7 +271,7 @@
                 const url = new URL(event.url);
                 let query = url.searchParams.get('q') || '';
                 const parts = query.split('/');
-                const prefix = parts[0]; 
+                const prefix = parts[0];
                 const suffix = 'topography';
                 const newQuery = prefix + '/' + suffix;
                 const fragment = url.hash;
@@ -278,9 +289,10 @@
                 } else if (isInitialLoad && savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
-                    document.getElementById("currentpage").innerHTML = "1 of " + tileSources.length;
+                    document.getElementById("currentpage").innerHTML = `1 ${i18next.t('of')} ${tileSources.length}`;
                 }
                 isInitialLoad = false;
+                applyTranslations();
             });
 
             viewer.addHandler('viewport-change', function () {
@@ -288,10 +300,9 @@
             });
 
             viewer.addHandler("page", function (data) {
-                var pageIndex = data.page;
-                document.getElementById("currentpage").innerHTML = (pageIndex + 1) + " of " + tileSources.length;
+                updatePageInfo();
             });
-        };
+        }
 
         function logPosition() {
             $('#share-label').addClass('popup-animation').delay(3000).queue(function () {

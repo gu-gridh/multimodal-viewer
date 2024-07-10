@@ -163,6 +163,7 @@ body {
     pointer-events: none; 
     opacity: 0; 
     transition: opacity 0.3s;
+    font-size:0.8em;
     white-space: nowrap;
 }
 

@@ -759,7 +759,7 @@ a:link {
     background-color: rgba(0, 0, 0, 0.8);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
     z-index: 1000;
-    width: 310px;
+    width: 260px;
     -webkit-backdrop-filter: blur(5px); 
     backdrop-filter: blur(5px);
 }
@@ -781,9 +781,14 @@ a:link {
     border-width: 0.0px;
     border-radius: 6px;
     border-color: none;
+    width:220px;
 }
 
 .popup-content button:hover {
-    background-color: rgb(80, 80, 80);
+    opacity:0.8;
 
+}
+
+#saveNo{
+    background-color:rgb(130,50,50);
 }

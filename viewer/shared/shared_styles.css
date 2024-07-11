@@ -547,7 +547,7 @@ h2 {
     left:calc(50% - 50px);
     margin-top:20px;
     position:absolute;
-    width: 45px;
+    /* width: 45px; */
     height: 20px;
     border-radius: 6px;
     color: white;

@@ -3,12 +3,9 @@
 
 <head>
     <title>OpenLime</title>
-
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="UTF-8" />
-
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-
 	<link rel="icon" type="image/png" href="">
 	<link rel="stylesheet" href="css/openlime.css"/>
 	<link rel="stylesheet" href="../../shared/shared_styles.css"/>
@@ -198,6 +195,9 @@
 			document.getElementById('7').innerHTML = i18next.t('line-tool');
 			document.getElementById('8').innerHTML = i18next.t('full-screen');
 			document.getElementById('9').innerHTML = i18next.t('openlime-help-text-2');
+			document.getElementById('entry_2').innerHTML = i18next.t('light');
+			document.getElementById('entry_3').innerHTML = i18next.t('diffuse');
+			document.getElementById('entry_4').innerHTML = i18next.t('specular');
 		}
 	}
 	// <-- Language Control -->
@@ -307,6 +307,8 @@ function updateRTIImage(url) {
         lime.camera.maxFixedZoom = 1;
         window.lime = lime;
         document.getElementById("openlime").focus();
+		setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
+
     } else {
         console.error("Not all elements were removed. Viewer update aborted.");
     }

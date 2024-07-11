@@ -264,8 +264,6 @@
             });
     
             function convertToIIIFRegion(annotation, imageSize) {
-                console.log('Image Dimensions:', imageSize);
-
                 //extract viewport coordinates from the annotation
                 const fragmentSelector = annotation.target.selector.value;
                 const [vx, vy, vw, vh] = fragmentSelector.replace('xywh=pixel:', '').split(',').map(Number);
@@ -283,6 +281,13 @@
                 const region = `${imageX},${imageY},${imageWidth},${imageHeight}`;
                 const iiifUrl = `${imageSize['@id']}/${region}/!${300},${300}/0/default.jpg`;
                 console.log('IIIF Image Section:', iiifUrl);
+
+                //copy the IIIF region URL to the clipboard
+                navigator.clipboard.writeText(region).then(() => {
+                    console.log('IIIF URL copied to clipboard:', region);
+                }).catch(err => {
+                    console.error('Failed to copy IIIF URL to clipboard:', err);
+                });
             }
 
             anno.on('createSelection', async function (selection) {

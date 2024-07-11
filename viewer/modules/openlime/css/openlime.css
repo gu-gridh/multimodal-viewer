@@ -421,7 +421,7 @@ user-select: none;
 }
 
 .openlime-layers-menu .openlime-list .openlime-entry {
-	font-size:90%;
+	font-size:75%;
 	max-width:100%;
 	padding: 5px 5px 0px 20px;
 	user-select: none;

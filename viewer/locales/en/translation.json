@@ -54,5 +54,12 @@
   "annotate-instructions-2": "Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.",
   "satisfiedwithselection": "Are you satisfied with the selection?",
   "copyposition": "Copy the position and register",
-  "redoselection": "Redo the selection"
+  "redoselection": "Redo the selection",
+  "openlime-help-text": "Browse available RTI-sets with the menu at the top. <br> Click and drag to change light direction. <br> Scroll to zoom in and out. When light controls are deactivated, click and drag to pan the image.",
+  "openlime-help-text-2": "Browse available RTI-sets with the menu at the top. <br> Click and drag to change light direction. <br> Scroll to zoom in and out. <br> When light controls are deactivated, click and drag to pan the image.",
+  "light": "Light",
+  "diffuse": "Diffuse",
+  "specular": "Specular",
+  "shaderlayers": "<p>Shader layers.</p> Switch between <p>Light, Diffuse,</p> and <p>Specular</p> layers to enhance different details.",
+  "line-tool": "<p>Line tool.</p> Activates the line tool. Click again to erase all lines."
 }

@@ -255,3 +255,35 @@ body {
 	width: 100%;
 	padding-bottom: 0px;
 }
+
+#translation-dropdown {
+	position: relative;
+	float:left;
+	min-width: 80px;
+	width:100px;
+	height:20px;
+	padding: 3px 10px 5px 10px;
+	color: white;
+	cursor: pointer;
+	z-index: 10;
+	top: 0px;
+	margin-top:10px;
+	margin-bottom:10px;
+	background-color: rgb(180,100,100);
+	border-radius: 6px;
+	border-width: 0;
+	font-family: "Oswald", sans-serif !important;
+	font-size: 15px;
+	-webkit-appearance: none;
+	user-select: none;
+	-webkit-user-select: none;
+	background-image: url("../../../shared/dropdown-arrow.png");
+	background-size: 15px;
+	background-repeat: no-repeat;
+	background-position: calc(100% - 10px) 55%;
+}
+
+#translation-dropdown:focus {
+	outline: none;
+}
+  

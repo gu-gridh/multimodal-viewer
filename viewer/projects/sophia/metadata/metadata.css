@@ -124,6 +124,16 @@ body {
 	padding-top: 0px;
 	font-size: 3.5vw;
 	font-weight: 200;
+	float:left;
+	width:50%;
+}
+
+.metadata-edit-button {
+	display: flex;
+	justify-content: right;
+	width: 50%;
+	float:right;
+	margin-top:-15px;
 }
 
 
@@ -256,7 +266,10 @@ body {
 	padding-bottom: 0px;
 }
 
-#translation-dropdown {
+
+
+
+#metadata-dropdown {
 	position: relative;
 	float:left;
 	min-width: 80px;
@@ -283,7 +296,7 @@ body {
 	background-position: calc(100% - 10px) 55%;
 }
 
-#translation-dropdown:focus {
+#metadata-dropdown:focus {
 	outline: none;
 }
   

@@ -16,12 +16,19 @@
 <body>  
     <script>
         function updateTranslations(t) {
-            document.getElementById('lang0').textContent = t('panel');
-            document.getElementById('lang1').textContent = t('inscriptions');
-            document.getElementById('lang2').textContent = t('language');
-            document.getElementById('lang3').textContent = t('room');
-            document.getElementById('lang4').textContent = t('tags');
-            document.getElementById('lang5').textContent = t('documentation');
+            document.getElementById('smd0').textContent = t('panel');
+            document.getElementById('smd1').textContent = t('inscriptions');
+            document.getElementById('smd2').textContent = t('language');
+            document.getElementById('smd3').textContent = t('room');
+            document.getElementById('smd4').textContent = t('tags');
+            document.getElementById('smd5').textContent = t('documentation');
+            document.getElementById('imd0').textContent = t('type')+":";
+            document.getElementById('imd1').textContent = t('language')+":";
+            document.getElementById('imd2').textContent = t('tags')+":";
+            document.getElementById('imd3').textContent = t('writingsystem')+":";
+            document.getElementById('imd4').textContent = t('genre')+":";
+            document.getElementById('imd5').textContent = t('editinscription');
+           
         }
     
         function setButtonLabel(language) {
@@ -86,35 +93,35 @@
             <div class="metadata-panel">
 
                 <div class="metadata-panel-title">
-                   <div id="lang0" style="display:inline;">Panel</div> PLACEHOLDER_TITLE
+                   <div id="smd0" style="display:inline;">Panel</div>PLACEHOLDER_TITLE
                 </div>
 
 
                 <div class="metadata-content">
                     <div class="metadata-item">
-                        <div class="label" id="lang1"></div>
+                        <div class="label" id="smd1"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_INSCRIPTIONS</div>
                     </div>
 
 
                     <div class="metadata-item">
-                        <div class="label" id="lang2"></div>
+                        <div class="label" id="smd2"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_LANGUAGES</div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label" id="lang3"></div>
+                        <div class="label" id="smd3"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_ROOM</div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label" id="lang4"></div>
+                        <div class="label" id="smd4"></div>
                         <div class="theme-color-text tag">PLACEHOLDER_TAGS</div>
                     </div>
                 </div>
 
                 <div class="metadata-description">
-                    <div class="metadata-title" id="lang5"></div>
+                    <div class="metadata-title" id="smd5"></div>
                     <div class="label" id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</div>
                     <div class="label" id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</div>
                 </div>                
@@ -137,7 +144,7 @@
 
                     <div class="metadata-edit-button">
                         <router-link :to="`/place/${place?.id_}`">
-                            <div class="theme-button"
+                            <div class="theme-button" id="imd5"
                                 style="padding:6px 15px; text-align:center; width:auto;  color:white; font-size:14px;">Edit Inscription
                             </div>
                         </router-link>
@@ -146,28 +153,28 @@
                     <div class="metadata-content" style="padding-top:0px;">
 
                     <div class="metadata-item">
-                        <div class="label">Type:</div>
+                        <div class="label" id="imd0">Type:</div>
                         <div class="theme-color-text tag">Text</div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label">Writing system:</div>
+                        <div class="label" id="imd3">Writing system:</div>
                         <div class="theme-color-text tag">Cyrillic</div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label">Language:</div>
+                        <div class="label" id="imd1">Language:</div>
                         <div class="theme-color-text tag">Greek</div>
                     </div>
 
 
                     <div class="metadata-item">
-                        <div class="label">Genre:</div>
+                        <div class="label" id="imd4">Genre:</div>
                         <div class="theme-color-text tag">Prayer</div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label">Tags:</div>
+                        <div class="label" id="imd2">Tags:</div>
                         <div class="theme-color-text tag">Saint</div>
                     </div>
 

@@ -33,7 +33,7 @@
   "quality": "Mesh Quality",
   "tools": "Tools",
   "help-text-iiif": "Scroll to zoom in and out. Click and drag to pan the view. <br>",
-  "help-text-short": "Double-click to focus. Click-and-drag to rotate. <br> Right-click and drag to pan. Scroll to zoom in and out",
+  "help-text-short": "Double-click to focus. Click-and-drag to rotate. <br> Right-click and drag to pan. Scroll to zoom in and out.",
   "help-text": "Double-click to focus. Click-and-drag to rotate. <br>Right-click and drag to pan. Scroll to zoom in and out.<br>If available, use the arrows at the top to browse between alternative models.",
   "help-text-sequence": "Scroll to zoom in and out. Click and drag to pan the view. <br> If available, use the arrows at the top to browse between different analytical layers.",
   "frame-object": "<p><b>Frame object.</b></p> Changes the view to the original position.",

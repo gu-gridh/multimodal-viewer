@@ -125,13 +125,13 @@ body {
 	font-size: 3.5vw;
 	font-weight: 200;
 	float:left;
-	width:50%;
+	width:calc(100% - 130px);
 }
 
 .metadata-edit-button {
 	display: flex;
 	justify-content: right;
-	width: 50%;
+	width: 130px;
 	float:right;
 	margin-top:-15px;
 }
@@ -157,7 +157,7 @@ body {
 
 .metadata-item {
 	float: left;
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 	margin-right: 35px;
 	font-size: 1.1em;
 	font-weight:200;

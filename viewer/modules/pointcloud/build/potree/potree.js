@@ -82276,6 +82276,8 @@ ENDSEC
 			this.addEventListener('drop', drop);
 			this.addEventListener('mousewheel', scroll);
 			this.addEventListener('dblclick', dblclick);
+			document.addEventListener('keydown', this.onKeyDown.bind(this));
+			document.addEventListener('keyup', this.onKeyUp.bind(this));
 		}
 
 		setScene(scene) {
@@ -82286,6 +82288,14 @@ ENDSEC
 			this.yawDelta = 0;
 			this.pitchDelta = 0;
 			this.translationDelta.set(0, 0, 0);
+		}
+
+		onKeyDown(event) {		
+			this.viewer.inputHandler.pressedKeys[event.keyCode] = true;
+		}
+	
+		onKeyUp(event) {	
+			this.viewer.inputHandler.pressedKeys[event.keyCode] = false;
 		}
 
 		zoomToLocation(mouse) {

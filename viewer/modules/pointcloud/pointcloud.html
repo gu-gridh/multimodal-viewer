@@ -7,7 +7,7 @@
 	<meta name="author" content="">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
-	rel="stylesheet" />
+		rel="stylesheet" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<title>GRIDH Point Cloud Viewer</title>
 
@@ -22,6 +22,39 @@
 </head>
 
 <style>
+	.control-buttons {
+		position: absolute;
+		bottom: calc(15vh + 100px);
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 1000;
+		display: none;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr;
+		gap: 10px;
+		align-items: center;
+		justify-items: center;
+	}
+
+	.control-buttons button {
+		background: none;
+		border: none;
+		cursor: pointer;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+	}
+
+	.control-buttons img {
+		width: 100%;
+		height: 100%;
+	}
+
+	.spacer {
+		width: 40px;
+		height: 40px;
+	}
+
 	#tools {
 		display: flex;
 		justify-content: center;
@@ -40,8 +73,13 @@
 		margin-top: 8px;
 		height: 35px;
 	}
-</style>
 
+	@media (max-width: 1050px) {
+		.control-buttons {
+			display: grid;
+		}
+	}
+</style>
 
 <body>
 	<!-- JavaScript files -->
@@ -57,7 +95,7 @@
 	<script src="./libs/jstree/jstree.js"></script>
 	<script src="./build/potree/potree.js"></script>
 	<script src="./libs/plasio/js/laslaz.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
 	<script src="/viewer/libs/i18next.min.js"></script>
 
 	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
@@ -116,6 +154,26 @@
 		<div id="potree_sidebar_container" style="background-color:var(--sidebar-bg)"> </div>
 	</div>
 
+	<div class="control-buttons">
+		<div class="spacer"></div>
+		<button id="moveForward" title="Move Forward">
+			<img src="build/potree/resources/icons/up_movement.svg" alt="Move Forward">
+		</button>
+		<div class="spacer"></div>
+		<button id="moveLeft" title="Move Left">
+			<img src="build/potree/resources/icons/left_movement.svg" alt="Move Left">
+		</button>
+		<div class="spacer"></div>
+		<button id="moveRight" title="Move Right">
+			<img src="build/potree/resources/icons/right_movement.svg" alt="Move Right">
+		</button>
+		<div class="spacer"></div>
+		<button id="moveBackward" title="Move Backward">
+			<img src="build/potree/resources/icons/down_movement.svg" alt="Move Backward">
+		</button>
+		<div class="spacer"></div>
+	</div>
+
 	<script type="module">
 		import * as THREE from "./libs/three.js/build/three.module.js";
 
@@ -168,6 +226,42 @@
 			}
 		}
 		// <-- Language Control -->
+
+		// <-- Control Buttons -->
+		const addControlButtonEventListeners = (id, key) => {
+			const button = document.getElementById(id);
+
+			const handleKeyPress = (event) => {
+				event.preventDefault();
+				simulateKeyPress(key.charCodeAt(0));
+			};
+
+			const handleKeyRelease = (event) => {
+				event.preventDefault();
+				simulateKeyRelease(key.charCodeAt(0));
+			};
+
+			button.addEventListener('mousedown', handleKeyPress);
+			button.addEventListener('mouseup', handleKeyRelease);
+			button.addEventListener('touchstart', handleKeyPress);
+			button.addEventListener('touchend', handleKeyRelease);
+		};
+
+		addControlButtonEventListeners('moveForward', 'W');
+		addControlButtonEventListeners('moveBackward', 'S');
+		addControlButtonEventListeners('moveLeft', 'A');
+		addControlButtonEventListeners('moveRight', 'D');
+
+		function simulateKeyPress(keyCode) {
+			const event = new KeyboardEvent('keydown', { keyCode: keyCode, which: keyCode });
+			document.dispatchEvent(event);
+		}
+
+		function simulateKeyRelease(keyCode) {
+			const event = new KeyboardEvent('keyup', { keyCode: keyCode, which: keyCode });
+			document.dispatchEvent(event);
+		}
+		// <-- Control Buttons -->
 
 		const displayAnnotations = 'PLACEHOLDER_DISPLAY_ANNOTATIONS';
 
@@ -290,11 +384,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
-
 </body>
 
 </html>

@@ -80635,7 +80635,7 @@ ENDSEC
 
 			this.viewer.addEventListener('point_budget_changed', (event) => {
 				$('#lblPointBudget')[0].innerHTML = Utils.addCommas(this.viewer.getPointBudget());
-				sldPointBudget.slider({ value: this.viewer.getPointBudget() });
+				// sldPointBudget.slider({ value: this.viewer.getPointBudget() });
 			});
 
 			this.viewer.addEventListener('fov_changed', (event) => {

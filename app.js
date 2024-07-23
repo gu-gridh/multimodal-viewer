@@ -222,8 +222,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
         const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
         let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-                               .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
-                               .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath));
+                               .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath)) 
+                               .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g,  JSON.stringify(`${annotationPath}${queryName}`));
         res.send(modifiedData);
       });
     } else {

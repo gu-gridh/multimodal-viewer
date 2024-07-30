@@ -216,14 +216,13 @@
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
-                uiModuleContainer.style.display = 'flex';
-                backButton.style.display = 'block';
-
+                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
+                if (backButton) backButton.style.display = 'block';
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
-                uiModuleContainer.style.display = 'none';
-                backButton.style.display = 'none';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
+                if (backButton) backButton.style.display = 'none';
             }
         }
 
@@ -232,16 +231,17 @@
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
             var backButton = document.getElementById('back-button');
-            if (leftPane.style.width  === '1px') {
+
+            if (leftPane.style.width === '1px') {
                 leftPane.style.width = '50%';
                 rightPane.style.width = '50%';
-                uiModuleContainer.style.display = 'flex';
-                backButton.style.display = 'block';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
+                if (backButton) backButton.style.display = 'block';
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '100%';
-                uiModuleContainer.style.display = 'none';
-                backButton.style.display = 'none';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
+                if (backButton) backButton.style.display = 'none';
             }
         }
 

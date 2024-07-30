@@ -339,7 +339,7 @@
             anno.on('clickAnnotation', function (annotation, element) {
                 const annotationData = {
                     type: 'annotationClick',
-                    value: annotation.body[0].value
+                    value: 'Annotation ' + annotation.id
                 };
     
                  //send a message to the parent window (index.html) with the annotation data

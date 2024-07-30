@@ -296,7 +296,7 @@
 		const displayAnnotations = 'PLACEHOLDER_DISPLAY_ANNOTATIONS';
 
 		async function loadAnnotations() {
-			const response = await fetch('annotations.json');
+			const response = await fetch('PLACEHOLDER_POINTCLOUD_ANNOTATIONS');
 			const data = await response.json();
 
 			if (Array.isArray(data.annotations)) {

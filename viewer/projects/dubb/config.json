@@ -19,5 +19,6 @@
   "panel": "https://diana.dh.gu.se/api/mediaarchive/objectpointcloud/?title=",
   "metadata": "",
   "pointcloud": "",
-  "basePath": ""
+  "basePath": "",
+  "pointcoudAnnotations": "/viewer/projects/dubb/annotations/pointcloud_annotations.json"
 }

@@ -25,7 +25,7 @@ body {
 .border {
 }
 
-/* .metadata-panel {
+/* .metadata-surface {
 	float: left;
 
 } */
@@ -104,14 +104,14 @@ body {
 	padding: 0px;
 }
 
-.metadata-panel-title {
+.metadata-surface-title {
 	font-family: "Alumni Sans Pinstripe", sans-serif !important;
 	letter-spacing: -0.0rem;
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 30px;
 	font-size: 4.8vw;
-	font-weight: 100;
+	font-weight: 600;
 }
 
 
@@ -188,7 +188,7 @@ body {
 @media screen and (min-width: 900px) {
 
 
-	.metadata-panel-title {
+	.metadata-surface-title {
 		font-size: 3.0em !important;
 	}
 
@@ -211,7 +211,7 @@ body {
 	}
 
 
-	.metadata-panel-title {
+	.metadata-surface-title {
 		font-size: 2.8em !important;
 	}
 

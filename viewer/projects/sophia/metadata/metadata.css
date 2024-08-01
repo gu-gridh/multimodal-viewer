@@ -120,10 +120,16 @@ body {
 	text-align: left;
 	padding-bottom: 20px;
 	padding-top: 0px;
-	font-size: 3.5vw;
+	font-size: 3.2vw;
 	font-weight: 200;
 	float:left;
 	width:calc(100% - 130px);
+}
+
+.metadata-inscription-title-part {
+	display:inline;
+	padding:0px;
+	margin:0px;
 }
 
 .metadata-edit-button {

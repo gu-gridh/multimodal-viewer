@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
 </head>
 
-<body>  
+<body>
     <script>
         function updateTranslations(t) {
             document.getElementById('smd0').textContent = t('panel');
@@ -22,21 +22,22 @@
             document.getElementById('smd3').textContent = t('room');
             document.getElementById('smd4').textContent = t('tags');
             document.getElementById('smd5').textContent = t('documentation');
-            document.getElementById('imd0').textContent = t('type')+":";
-            document.getElementById('imd1').textContent = t('language')+":";
-            document.getElementById('imd2').textContent = t('tags')+":";
-            document.getElementById('imd3').textContent = t('writingsystem')+":";
-            document.getElementById('imd4').textContent = t('genre')+":";
+            document.getElementById('imd0').textContent = t('type') + ":";
+            document.getElementById('imd1').textContent = t('language') + ":";
+            document.getElementById('imd2').textContent = t('tags') + ":";
+            document.getElementById('imd3').textContent = t('writingsystem') + ":";
+            document.getElementById('imd4').textContent = t('genre') + ":";
             document.getElementById('imd5').textContent = t('editinscription');
-           
+            document.getElementById('imd6').textContent = t('inscription');
+
         }
-    
+
         function setButtonLabel(language) {
             document.getElementById('languageButton').textContent = language === 'uk' ? 'In English' : 'Українською';
         }
-    
+
         function changeLanguage(lang) {
-            i18next.changeLanguage(lang, function(err, t) {
+            i18next.changeLanguage(lang, function (err, t) {
                 if (err) {
                     console.error("Error changing language:", err);
                     return;
@@ -47,9 +48,9 @@
                 updateTranslations(t);
             });
         }
-    
+
         function toggleLanguage() {
-            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';        
+            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';
             currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
             changeLanguage(currentLanguage);
             toggleVisibility(currentLanguage);
@@ -59,17 +60,17 @@
             document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
             document.getElementById('documentation_uk').style.display = lang === 'uk' ? 'block' : 'none';
         }
-    
-        document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', function () {
             const savedLang = localStorage.getItem('i18nextLang') || 'en';
-        
+
             i18next.use(i18nextHttpBackend).init({
                 lng: savedLang,
                 fallbackLng: 'en',
                 backend: {
                     loadPath: '/viewer/locales/{{lng}}/translation.json',
                 },
-            }, function(err, t) {
+            }, function (err, t) {
                 if (err) {
                     console.error("i18next initialization error:", err);
                     return;
@@ -80,20 +81,20 @@
             });
         });
     </script>
-      
-        
+
+
     <div class="container">
         <div class="border"></div>
 
         <div class="language-toggle-buttons">
             <button id="languageButton" onclick="toggleLanguage()"></button>
         </div>
-        
+
         <div class="metadata-text">
             <div class="metadata-panel">
 
                 <div class="metadata-panel-title">
-                   <div id="smd0" style="display:inline;">Surface</div> PLACEHOLDER_TITLE
+                    <div id="smd0" style="display:inline;">Surface</div> PLACEHOLDER_TITLE
                 </div>
 
 
@@ -124,33 +125,51 @@
                     <div class="metadata-title" id="smd5"></div>
                     <div class="label" id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</div>
                     <div class="label" id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</div>
-                </div>                
+                </div>
             </div>
             <div class="metadata-inscription">
 
-               
+
 
                 <div class="image-container">
-                      <!-- Insert image carousel text -->
+                    <!-- Insert image carousel text -->
                 </div>
-             
 
-                
-                 
 
-                    <div class="metadata-inscription-title" id="inscription-title">
-                        Inscription id. number
+
+
+
+                <div class="metadata-inscription-title">
+                    <div class="metadata-inscription-title-part" id="imd6">
+                        Inscription
+                    </div>
+                    <div class="metadata-inscription-title-part">
+                        PLACEHOLDER_TITLE
                     </div>
 
-                    <div class="metadata-edit-button">
-                        <router-link :to="`/place/${place?.id_}`">
-                            <div class="theme-button" id="imd5"
-                                style="padding:6px 15px; text-align:center; width:auto;  color:white; font-size:14px;">Edit Inscription
-                            </div>
-                        </router-link>
+                    <div class="metadata-inscription-title-part">:</div>
+
+                    <div class="metadata-inscription-title-part" id="inscription-title">
+                        ###
                     </div>
 
-                    <div class="metadata-content" style="padding-top:0px;">
+                    <div class="metadata-inscription-title-part" id="inscription-alt-title">
+                        
+                    </div>
+                </div>
+
+                <div class="metadata-inscription-alt-title">
+                </div>
+                <div class="metadata-edit-button">
+                    <router-link :to="`/place/${place?.id_}`">
+                        <div class="theme-button" id="imd5"
+                            style="padding:6px 15px; text-align:center; width:auto;  color:white; font-size:14px;">Edit
+                            Inscription
+                        </div>
+                    </router-link>
+                </div>
+
+                <div class="metadata-content" style="padding-top:0px;">
 
                     <div class="metadata-item">
                         <div class="label" id="imd0">Type:</div>
@@ -159,7 +178,7 @@
 
                     <div class="metadata-item">
                         <div class="label" id="imd3">Writing system:</div>
-                        <div class="theme-color-text tag"  id="writing">Cyrillic</div>
+                        <div class="theme-color-text tag" id="writing">Cyrillic</div>
                     </div>
 
                     <div class="metadata-item">
@@ -169,7 +188,7 @@
 
                     <div class="metadata-item">
                         <div class="label" id="imd4">Genre:</div>
-                        <div class="theme-color-text tag"  id="genre">Prayer</div>
+                        <div class="theme-color-text tag" id="genre">Prayer</div>
                     </div>
 
                     <div class="metadata-item">
@@ -182,45 +201,45 @@
                         <div class="label"></div>
                     </div>
                     <div class="metadata-description-text">
-                      <!-- Insert transcription text -->
+                        <!-- Insert transcription text -->
                     </div>
 
                     <div class="metadata-description">
                         <div class="metadata-title">Translation</div>
 
-                    <div id="metadata-dropdown">English</div>
-                    <div class="metadata-description-text">
-                       
-                    <!-- Insert translation text -->
+                        <div id="metadata-dropdown">English</div>
+                        <div class="metadata-description-text">
+
+                            <!-- Insert translation text -->
+                        </div>
+
+                        <div class="metadata-description">
+                            <div class="metadata-title">Description</div>
+
+                            <div id="metadata-dropdown">English</div>
+                            <div class="metadata-description-text">
+
+                                <!-- Insert translation text -->
+                            </div>
+
+                            <div class="metadata-description">
+                                <div class="metadata-title">Contributors</div>
+                                <div class="label"></div>
+                            </div>
+                            <div class="metadata-description-text">
+                                <!-- Insert contribution text -->
+                            </div>
+
+
+                        </div>
+
                     </div>
 
-                    <div class="metadata-description">
-                        <div class="metadata-title">Description</div>
 
-                    <div id="metadata-dropdown">English</div>
-                    <div class="metadata-description-text">
-                       
-                    <!-- Insert translation text -->
-                    </div>
 
-                    <div class="metadata-description">
-                        <div class="metadata-title">Contributors</div>
-                        <div class="label"></div>
-                    </div>
-                    <div class="metadata-description-text">
-                      <!-- Insert contribution text -->
-                    </div>
-
-                    
                 </div>
 
             </div>
-
-        
-
-        </div>
-
-    </div>
 </body>
 
 </html>

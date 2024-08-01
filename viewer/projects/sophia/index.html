@@ -255,7 +255,6 @@
     <script>
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
-                updateMetadataContent('Annotation ' + event.data.value, 'inscription-title'); //set title for annotation
                 fetchInscriptionData(event.data.value); //fetch rest of metadata
             }
             if (event.data.type === 'togglePane') {
@@ -282,6 +281,13 @@
                 const language = data.language && data.language.text ? data.language.text : "Unknown";
                 const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "Unknown";
                 const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => tag.text) : ["Unknown"];
+
+                //title
+                const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
+                const inscriptionTitle = data.title ? data.title : "Unknown Title";
+                const fullTitle = `${panelTitle}:${inscriptionId} (${inscriptionTitle})`;
+
+                updateMetadataContent(fullTitle, 'inscription-title');
                 updateMetadataContent(type, 'type');
                 updateMetadataContent(writing, 'writing');
                 updateMetadataContent(language, 'language');

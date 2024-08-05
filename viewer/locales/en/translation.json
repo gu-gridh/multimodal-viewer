@@ -2,6 +2,7 @@
   "panel": "Surface",
   "inscriptions": "Inscriptions",
   "inscription": "Inscription",
+  "noinscription": "No inscription selected",
   "Orthophoto": "Orthophoto",
   "topography": "Topography",
   "surfacemodel": "Surface Model",

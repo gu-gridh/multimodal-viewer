@@ -330,14 +330,14 @@
 			loadAnnotations(); // Call the function to load and display annotations
 		});
 
-		/* The link to the model. URL and name of tomb must be fetched from the backend */
+		/* The link to the model. URL and name of cloud must be fetched from the backend */
 		// const queryName = 'PLACEHOLDER_QUERY';
 		const pointCloudUrl = 'PLACEHOLDER_URL_PUBLIC';
 
 		// document.querySelector('.title').textContent = PLACEHOLDER_TITLE;
 		Potree.loadPointCloud(
 			pointCloudUrl,
-			"NameOfTomb",
+			"NameOfCloud",
 			function (e) {
 				viewer.scene.addPointCloud(e.pointcloud);
 				let material = e.pointcloud.material;

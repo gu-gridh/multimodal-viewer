@@ -70,6 +70,7 @@
         var anno;
         let urlToCopy = '';
         let annotationsVisible = true; // track the visibility state of annotations
+        let pendingAnnotationId = null;
     
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
@@ -314,9 +315,41 @@
                 anno.saveSelected();
             });
     
-            // Load annotations in W3C WebAnnotation format
-            anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH');
-    
+            window.addEventListener('message', function (event) {
+                if (event.data.type === 'openAnnotation') {
+                    const annotationId = event.data.id;
+
+                    //save annotation id until annotations have loaded
+                    pendingAnnotationId = annotationId;
+                }
+            });
+
+            anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function(annotations) {
+                if (pendingAnnotationId) {
+                    openAnnotationById(pendingAnnotationId);
+                    pendingAnnotationId = null;
+                }
+            });
+
+            function openAnnotationById(annotationId) {
+                const annotation = anno.getAnnotationById(annotationId);
+
+                if (annotation) {
+                    anno.selectAnnotation(annotationId);
+                    anno.fitBounds(annotationId);
+
+                    const annotationData = {
+                        type: 'annotationClick',
+                        value: annotationId
+                    };
+
+                    window.parent.postMessage(annotationData, "*");
+
+                } else {
+                    console.error('Annotation not found:', annotationId);
+                }
+            }
+
             // Attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {
                 // Show the popup
@@ -335,7 +368,7 @@
                     document.getElementById('savePopup').style.display = 'none';
                 };
             });
-    
+
             anno.on('clickAnnotation', function (annotation, element) {
                 const annotationData = {
                     type: 'annotationClick',

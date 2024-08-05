@@ -120,63 +120,82 @@
 
     <script>
         $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewerType = determineInitialViewer(urlParams);
+            changeLeftViewer(viewerType);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const viewerType = determineInitialViewer(urlParams);
-        changeLeftViewer(viewerType);
+            const annotationId = getAnnotationIdFromUrl(urlParams);
 
-        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+            //flag to ensure openAnnotation only fires once
+            let messageSent = false;
 
-        $("#footer-container").load("/viewer/projects/sophia/footer.html");
-
-        i18next
-            .use(i18nextHttpBackend)
-            .init({
-                lng: savedLang,
-                fallbackLng: 'en',
-                backend: {
-                    loadPath: '/viewer/locales/{{lng}}/translation.json',
-                },
-            }, function (err, t) {
-                if (err) return console.error('i18next initialization error:', err);
-
-                applyTranslations();
-
-                window.addEventListener('message', function (event) {
-                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                        const iiifIframe = document.getElementById('left-Iframe');
-                        iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
-                        i18next.changeLanguage(event.data.lang, function (err, t) {
-                            if (err) return console.log('Something went wrong loading', err);
-                            applyTranslations();
-                        });
+            //if there's an annotation ID, send it to iiif.html
+            if (annotationId) {
+                const iiifIframe = document.getElementById('left-Iframe');
+                
+                iiifIframe.onload = function () {
+                    if (!messageSent) {
+                        iiifIframe.contentWindow.postMessage({ type: 'openAnnotation', id: annotationId }, '*');
+                        messageSent = true;
                     }
-                }, false);
-            });
-
-            function applyTranslations() {
-                if (typeof i18next.t === 'function') {
-                    document.getElementById('btn1').textContent = i18next.t('Orthophoto');
-                    document.getElementById('btn2').textContent = i18next.t('topography');
-                    document.getElementById('btn3').textContent = i18next.t('mesh');
-                    document.getElementById('btn4').textContent = i18next.t('rti');
-                    document.getElementById('btn5').textContent = i18next.t('about');
-                    document.getElementById('btn6').textContent = i18next.t('about');
-                    document.getElementById('btn7').textContent = i18next.t('spatialcontext');
-                }
+                };
             }
 
-            changeRightViewer('metadata');
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
+            $("#footer-container").load("/viewer/projects/sophia/footer.html");
 
-            //hide specific elements in the left iframe
-            // $("#left-Iframe").on("load", function () {
-            //     //access the iframe's document
-            //     var iframeDoc = $(this).contents();
-            //     //hide the element with the class `full-screen-option`
-            //     iframeDoc.find(".full-screen-option").css("display", "none");
-            //     iframeDoc.find(".annotate-option").css("display", "none");
-            // });
+            i18next
+                .use(i18nextHttpBackend)
+                .init({
+                    lng: savedLang,
+                    fallbackLng: 'en',
+                    backend: {
+                        loadPath: '/viewer/locales/{{lng}}/translation.json',
+                    },
+                }, function (err, t) {
+                    if (err) return console.error('i18next initialization error:', err);
+
+                    applyTranslations();
+
+                    window.addEventListener('message', function (event) {
+                        if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                            const iiifIframe = document.getElementById('left-Iframe');
+                            iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
+                            i18next.changeLanguage(event.data.lang, function (err, t) {
+                                if (err) return console.log('Something went wrong loading', err);
+                                applyTranslations();
+                            });
+                        }
+                    }, false);
+                });
+
+                function applyTranslations() {
+                    if (typeof i18next.t === 'function') {
+                        document.getElementById('btn1').textContent = i18next.t('Orthophoto');
+                        document.getElementById('btn2').textContent = i18next.t('topography');
+                        document.getElementById('btn3').textContent = i18next.t('mesh');
+                        document.getElementById('btn4').textContent = i18next.t('rti');
+                        document.getElementById('btn5').textContent = i18next.t('about');
+                        document.getElementById('btn6').textContent = i18next.t('about');
+                        document.getElementById('btn7').textContent = i18next.t('spatialcontext');
+                    }
+                }
+
+                changeRightViewer('metadata');
         });
+
+        //retrieve annotation Id
+        function getAnnotationIdFromUrl(urlParams) {
+            const qValue = urlParams.get('q');
+            if (qValue && qValue.includes('/')) {
+                const segments = qValue.split('/');
+                //Ensure the ID is a number
+                if (segments.length > 1 && !isNaN(segments[1])) {
+                    return segments[1];
+                }
+            }
+            return null;
+        }
 
         function determineInitialViewer(params) {
             const qValue = params.get('q');
@@ -256,6 +275,7 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 fetchInscriptionData(event.data.value); //fetch rest of metadata
+                updateURLWithAnnotation(event.data.value);
             }
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
@@ -264,6 +284,23 @@
                 toggleLeftPane();
             }
         }, false);
+
+        function updateURLWithAnnotation(annotationId) {
+            //get the current URL
+            const currentUrl = new URL(window.location.href);
+            const baseAddress = currentUrl.origin + currentUrl.pathname;
+            let queryString = currentUrl.searchParams.get('q');
+            
+            if (queryString.includes('/')) {
+                //Remove any existing annotation ID
+                queryString = queryString.split('/')[0];
+            }
+
+            //Construct the new URL with the updated annotation ID
+            const newUrl = `${baseAddress}?q=${queryString}/${annotationId}${currentUrl.hash}`;
+            
+            window.history.pushState({}, '', newUrl);
+        }
 
         function fetchInscriptionData(inscriptionId) {
             const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/inscription/${inscriptionId}?depth=2`;

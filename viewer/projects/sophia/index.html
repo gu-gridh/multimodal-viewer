@@ -284,7 +284,7 @@
 
                 //title
                 const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
-                const inscriptionTitle = data.title ? data.title : "";
+                const inscriptionTitle = data.title ? `(${data.title})` : "";
                 const fullTitle = `${panelTitle}:${inscriptionId} ${inscriptionTitle}`;
 
                 updateMetadataContent(fullTitle, 'inscription-title');

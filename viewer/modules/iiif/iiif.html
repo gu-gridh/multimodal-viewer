@@ -336,8 +336,10 @@
 
                 if (annotation) {
                     anno.selectAnnotation(annotationId);
-                    anno.fitBounds(annotationId);
-
+                    anno.fitBounds(annotationId, {
+                        immediately: false,
+                        padding: 20
+                    });
                     const annotationData = {
                         type: 'annotationClick',
                         value: annotationId

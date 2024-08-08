@@ -369,7 +369,7 @@
 
             if (iframeDoc) {
                 var dropdown = iframeDoc.getElementById(elementId);
-                var translationTextsDiv;
+                var translationTextsDiv = iframeDoc.getElementById('translation-texts');
                 var translationDisplay = iframeDoc.getElementById('translation-display');
 
                 if (dropdown) {
@@ -379,31 +379,41 @@
                         translationDisplay.innerHTML = '';
                     }
 
-                    //generate HTML for the dropdown
+                    //create or clear the translation texts div
+                    if (!translationTextsDiv) {
+                        translationTextsDiv = iframeDoc.createElement('div');
+                        translationTextsDiv.id = 'translation-texts';
+                        translationTextsDiv.style.display = 'none';
+                        iframeDoc.body.appendChild(translationTextsDiv);
+                    } else {
+                        translationTextsDiv.innerHTML = '';
+                    }
+
+                    //populate the translation texts div with the new dataset
+                    for (const [language, translationText] of Object.entries(translations)) {
+                        translationTextsDiv.dataset[language.toLowerCase()] = translationText;
+                    }
+
                     let optionsHTML = Object.entries(translations).map(([language, _]) =>
                         `<option value="${language}">${language}</option>`
                     ).join('');
 
                     dropdown.innerHTML = `
-                        <select id="metadata-dropdown" onchange="var selectedLanguage = this.options[this.selectedIndex].value; document.getElementById('translation-display').innerHTML = document.getElementById('translation-texts').dataset[selectedLanguage.toLowerCase()];">
+                        <select id="metadata-dropdown" onchange="
+                            var selectedLanguage = this.options[this.selectedIndex].value; 
+                            var translationTextsDiv = document.getElementById('translation-texts');
+                            var translationText = translationTextsDiv ? translationTextsDiv.dataset[selectedLanguage.toLowerCase()] : null;
+                            document.getElementById('translation-display').innerHTML = translationText ? translationText : 'Translation not available';
+                        ">
                             ${optionsHTML}
                         </select>
                     `;
-
-                    const newTranslationDiv = iframeDoc.createElement('div');
-                    newTranslationDiv.id = 'translation-texts';
-                    newTranslationDiv.style.display = 'none';
-                    for (const [language, translationText] of Object.entries(translations)) {
-                        newTranslationDiv.dataset[language.toLowerCase()] = translationText;
-                    }
-                    iframeDoc.body.appendChild(newTranslationDiv);
 
                     //set the default display to English if available
                     if (translations.English && translationDisplay) {
                         translationDisplay.innerHTML = translations.English;
                         iframeDoc.getElementById('metadata-dropdown').value = "English"; 
                     } else if (translationDisplay) {
-                        //if no translations are available, clear the translation display
                         translationDisplay.innerHTML = "<p>No translations available</p>";
                     }
                 } else {

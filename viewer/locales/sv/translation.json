@@ -1,7 +1,7 @@
 {
   "panel": "Surface",
   "inscriptions": "Inskriptioner",
-  "Orthophoto": "Orthophoto",
+  "orthophoto": "Orthophoto",
   "topography": "Topography",
   "surfacemodel": "Surface model",
   "mesh": "Mesh",

@@ -275,6 +275,7 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 fetchInscriptionData(event.data.value); //fetch rest of metadata
+                fetchTranslationData(event.data.value); //fetch translation data
                 updateURLWithAnnotation(event.data.value);
             }
             if (event.data.type === 'togglePane') {
@@ -336,6 +337,81 @@
             .catch(error => {
                 console.error('Error fetching inscription data:', error);
             });
+        }
+
+        function fetchTranslationData(inscriptionId) {
+            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/translation/?depth=1&inscription=${inscriptionId}`;
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch translation data from API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const translations = {};
+                    data.results.forEach(entry => {
+                        if (entry.translation_language && entry.translation_language.text) {
+                            translations[entry.translation_language.text] = entry.text ? entry.text : "<p>Unknown Translation</p>";
+                        }
+                    });
+
+                    replaceTranslationContent(translations, 'translation-dropdown');
+                })
+                .catch(error => {
+                    console.error('Error fetching translation data:', error);
+                });
+        }
+
+        function replaceTranslationContent(translations, elementId) {
+            var iframe = document.getElementById('right-Iframe');
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            if (iframeDoc) {
+                var dropdown = iframeDoc.getElementById(elementId);
+                var translationTextsDiv;
+                var translationDisplay = iframeDoc.getElementById('translation-display');
+
+                if (dropdown) {
+                    //clear previous content
+                    dropdown.innerHTML = '';
+                    if (translationDisplay) {
+                        translationDisplay.innerHTML = '';
+                    }
+
+                    //generate HTML for the dropdown
+                    let optionsHTML = Object.entries(translations).map(([language, _]) =>
+                        `<option value="${language}">${language}</option>`
+                    ).join('');
+
+                    dropdown.innerHTML = `
+                        <select id="metadata-dropdown" onchange="var selectedLanguage = this.options[this.selectedIndex].value; document.getElementById('translation-display').innerHTML = document.getElementById('translation-texts').dataset[selectedLanguage.toLowerCase()];">
+                            ${optionsHTML}
+                        </select>
+                    `;
+
+                    const newTranslationDiv = iframeDoc.createElement('div');
+                    newTranslationDiv.id = 'translation-texts';
+                    newTranslationDiv.style.display = 'none';
+                    for (const [language, translationText] of Object.entries(translations)) {
+                        newTranslationDiv.dataset[language.toLowerCase()] = translationText;
+                    }
+                    iframeDoc.body.appendChild(newTranslationDiv);
+
+                    //set the default display to English if available
+                    if (translations.English && translationDisplay) {
+                        translationDisplay.innerHTML = translations.English;
+                        iframeDoc.getElementById('metadata-dropdown').value = "English"; 
+                    } else if (translationDisplay) {
+                        //if no translations are available, clear the translation display
+                        translationDisplay.innerHTML = "<p>No translations available</p>";
+                    }
+                } else {
+                    console.error('Dropdown element not found:', elementId);
+                }
+            } else {
+                console.error('Cannot access iframe document');
+            }
         }
 
         function updateMetadataContent(newContent, elementId) {

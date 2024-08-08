@@ -543,6 +543,11 @@ h2 {
     /* font-weight:700; */
   }
 
+  #transcription p {
+    margin: 0;
+    padding: 5px 0 0 10px;
+  }
+
   .guide-closer {
     left:calc(50% - 50px);
     margin-top:20px;

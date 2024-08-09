@@ -93,5 +93,6 @@
   "hebrew": "Єврейська",
   "arabic": "Арабська",
   "glagolitic": "Глаголична",
-  "cyrillic": "Кирилиця"
+  "cyrillic": "Кирилиця",
+  "translationnotavailable": "Переклад недоступний"
 }

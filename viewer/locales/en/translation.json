@@ -93,5 +93,6 @@
   "hebrew": "Hebrew",
   "arabic": "Arabic",
   "glagolitic": "Glagolitic",
-  "cyrillic": "Cyrillic"
+  "cyrillic": "Cyrillic",
+  "translationnotavailable": "Translation not available"
 }

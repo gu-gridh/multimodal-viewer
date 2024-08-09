@@ -34,7 +34,12 @@
             document.getElementById('imd9').textContent = t('description');
             document.getElementById('imd10').textContent = t('translation');
             document.getElementById('imd11').textContent = t('contributors');
+            var translationDisplay = document.getElementById('translation-display');
 
+            //check if the current text content is translation not available
+            if (translationDisplay && (translationDisplay.textContent.trim() === 'Translation not available' || translationDisplay.textContent.trim() === 'Переклад недоступний')) {
+                translationDisplay.textContent = t('translationnotavailable');
+            }
         }
 
         function setButtonLabel(language) {

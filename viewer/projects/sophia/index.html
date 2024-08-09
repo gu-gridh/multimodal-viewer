@@ -426,7 +426,7 @@
                             var selectedLanguage = this.options[this.selectedIndex].value; 
                             var translationTextsDiv = document.getElementById('translation-texts');
                             var translationText = translationTextsDiv ? translationTextsDiv.dataset[selectedLanguage.toLowerCase()] : null;
-                            document.getElementById('translation-display').innerHTML = translationText ? translationText : 'Translation not available';
+                            document.getElementById('translation-display').innerHTML = translationText ? translationText : '<p>Translation not available</p>';
                         ">
                             ${optionsHTML}
                         </select>
@@ -439,7 +439,7 @@
                         translationDisplay.innerHTML = translations.English;
                         iframeDoc.getElementById('metadata-dropdown').value = "English"; 
                     } else if (translationDisplay) {
-                        translationDisplay.innerHTML = savedLang === 'uk' ? 'Переклад недоступний' : '<p>Translation not available</p>';
+                        translationDisplay.innerHTML = savedLang === 'uk' ? '<p>Переклад недоступний</p>' : '<p>Translation not available</p>';
                     }
                 } else {
                     console.error('Dropdown element not found:', elementId);

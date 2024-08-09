@@ -94,5 +94,5 @@
   "arabic": "Arabic",
   "glagolitic": "Glagolitic",
   "cyrillic": "Cyrillic",
-  "translationnotavailable": "Translation not available"
+  "translationnotavailable": "<p>Translation not available</p>"
 }

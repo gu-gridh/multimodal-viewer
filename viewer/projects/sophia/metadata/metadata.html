@@ -38,7 +38,7 @@
 
             //check if the current text content is translation not available
             if (translationDisplay && (translationDisplay.textContent.trim() === 'Translation not available' || translationDisplay.textContent.trim() === 'Переклад недоступний')) {
-                translationDisplay.textContent = t('translationnotavailable');
+                translationDisplay.innerHTML = t('translationnotavailable');
             }
         }
 

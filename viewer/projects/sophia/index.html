@@ -339,7 +339,7 @@
             })
             .then(data => {
                 const type = data.type_of_inscription && data.type_of_inscription.text ? data.type_of_inscription.text : "Unknown";
-                const transcription = data.transcription ? data.transcription : "<p>Unknown</p>";
+                const transcription = data.transcription ? data.transcription : "<p>Transcription not available</p>";
                 const writing = data.writing_system && data.writing_system.text ? data.writing_system.text : "Unknown";
                 const language = data.language && data.language.text ? data.language.text : "Unknown";
                 const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "Unknown";

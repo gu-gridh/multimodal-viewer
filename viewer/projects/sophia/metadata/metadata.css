@@ -172,6 +172,25 @@ body {
 	font-size: 1.3em;
 	line-height:1.2;
 	margin-bottom:0px;
+	width:auto;
+	float:left;
+	height:30px;
+}
+
+.metadata-description-text {
+	font-weight: 200;
+	font-size: 1.1em;
+	line-height:1.2;
+	margin-top:30px;
+	margin-bottom:20px;
+	width:100%;
+	display:block;
+}
+
+.metadata-description-text p {
+	padding:2px!important;
+	display:block!important;
+	width:100%!important;
 }
 
 .metadata-content .preview {
@@ -276,20 +295,20 @@ body {
 #metadata-dropdown {
 	position: relative;
 	float:left;
-	min-width: 80px;
-	width:100px;
-	padding: 3px 10px 5px 10px;
+	min-width: 90px;
+	width:calc(auto + 200px);
+	padding: 2px 8px 3px 8px;
 	color: white;
 	cursor: pointer;
 	z-index: 10;
-	top: 0px;
-	margin-top:10px;
-	margin-bottom:5px;
+	top: 2px;
+	margin-bottom:0px;
+	margin-left:10px;
 	background-color: rgb(180,100,100);
 	border-radius: 6px;
 	border-width: 0;
 	font-family: "Oswald", sans-serif !important;
-	font-size: 15px;
+	font-size: 13px;
 	-webkit-appearance: none;
 	user-select: none;
 	-webkit-user-select: none;
@@ -297,6 +316,7 @@ body {
 	background-size: 15px;
 	background-repeat: no-repeat;
 	background-position: calc(100% - 10px) 55%;
+	display:inline;
 }
 
 #metadata-dropdown:focus {

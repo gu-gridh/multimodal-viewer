@@ -167,24 +167,28 @@ body {
 	font-weight:200;
 }
 
+.metadata-title-row{
+	margin-bottom:0px;
+	width:100%;
+	display:flex;
+	flex-direction: row;
+}
+
 .metadata-description .metadata-title {
 	font-weight: 200;
 	font-size: 1.3em;
 	line-height:1.2;
 	margin-bottom:0px;
 	width:auto;
-	float:left;
-	height:30px;
 }
 
 .metadata-description-text {
 	font-weight: 200;
 	font-size: 1.1em;
 	line-height:1.2;
-	margin-top:30px;
-	margin-bottom:20px;
+margin-top:5px;
+margin-bottom:10px;
 	width:100%;
-	display:block;
 }
 
 .metadata-description-text p {
@@ -294,7 +298,6 @@ body {
 
 #metadata-dropdown {
 	position: relative;
-	float:left;
 	min-width: 90px;
 	width:calc(auto + 200px);
 	padding: 2px 8px 3px 8px;
@@ -316,7 +319,6 @@ body {
 	background-size: 15px;
 	background-repeat: no-repeat;
 	background-position: calc(100% - 10px) 55%;
-	display:inline;
 }
 
 #metadata-dropdown:focus {

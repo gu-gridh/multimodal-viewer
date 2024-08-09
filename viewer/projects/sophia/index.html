@@ -432,12 +432,14 @@
                         </select>
                     `;
 
-                    //set the default display to English if available
+                    //set the default display to Uk or English if available
+                    const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
                     if (translations.English && translationDisplay) {
                         translationDisplay.innerHTML = translations.English;
                         iframeDoc.getElementById('metadata-dropdown').value = "English"; 
                     } else if (translationDisplay) {
-                        translationDisplay.innerHTML = "<p>Translation not available</p>";
+                        translationDisplay.innerHTML = savedLang === 'uk' ? 'Переклад недоступний' : '<p>Translation not available</p>';
                     }
                 } else {
                     console.error('Dropdown element not found:', elementId);

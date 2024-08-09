@@ -120,6 +120,7 @@
 
     <script>
         let shouldShowUIModuleContainer = true;
+        let currentAnnotationId = null;
 
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -162,6 +163,7 @@
                     window.addEventListener('message', function (event) {
                         if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
                             const iiifIframe = document.getElementById('left-Iframe');
+                            fetchTranslationData(currentAnnotationId); //fetch translation data when language changes
                             iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                             i18next.changeLanguage(event.data.lang, function (err, t) {
                                 if (err) return console.log('Something went wrong loading', err);
@@ -292,14 +294,13 @@
                 // here i would very much like to be able to hide all FullPage-buttons  
             }
         });
-    </script>
 
-    <script>
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
-                fetchInscriptionData(event.data.value); //fetch rest of metadata
-                fetchTranslationData(event.data.value); //fetch translation data
-                updateURLWithAnnotation(event.data.value);
+                currentAnnotationId = event.data.value;
+                fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
+                fetchTranslationData(currentAnnotationId); //fetch translation data
+                updateURLWithAnnotation(currentAnnotationId);
             }
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
@@ -364,6 +365,9 @@
 
         function fetchTranslationData(inscriptionId) {
             const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/translation/?depth=1&inscription=${inscriptionId}`;
+            
+            const currentLang = localStorage.getItem('i18nextLang') || 'en';
+
             fetch(apiUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -374,11 +378,12 @@
                 .then(data => {
                     const translations = {};
                     data.results.forEach(entry => {
-                        if (entry.translation_language && entry.translation_language.text) {
-                            translations[entry.translation_language.text] = entry.text ? entry.text : "<p>Unknown Translation</p>";
+                        const languageKey = currentLang === 'uk' ? entry.translation_language?.text_ukr : entry.translation_language?.text;
+                        const translationText = entry.text;
+                        if (languageKey) {
+                            translations[languageKey] = translationText ? translationText : "<p>Unknown Translation</p>";
                         }
                     });
-
                     replaceTranslationContent(translations, 'translation-dropdown');
                 })
                 .catch(error => {
@@ -435,10 +440,14 @@
                     //set the default display to Uk or English if available
                     const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-                    if (translations.English && translationDisplay) {
+                    if (translations.English && translationDisplay ) {
                         translationDisplay.innerHTML = translations.English;
                         iframeDoc.getElementById('metadata-dropdown').value = "English"; 
-                    } else if (translationDisplay) {
+                    } else if (translations.Aнглійська && translationDisplay ) {
+                        translationDisplay.innerHTML = translations.Aнглійська;
+                        iframeDoc.getElementById('metadata-dropdown').value = "Aнглійська"; 
+                    }
+                    else if (translationDisplay) {
                         translationDisplay.innerHTML = savedLang === 'uk' ? '<p>Переклад недоступний</p>' : '<p>Translation not available</p>';
                     }
                 } else {

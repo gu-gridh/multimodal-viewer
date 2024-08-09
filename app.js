@@ -249,6 +249,7 @@ app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 // Fallback route, serve index.html
 app.get('*', (req, res) => {
   const queryName = req.query.q;
+  const queryId = queryName ? queryName.split('/')[0] : '';
 
   if (!queryName) {
     const indexPath = path.join(__dirname, 'index.html');
@@ -262,9 +263,10 @@ app.get('*', (req, res) => {
       console.error('Error reading the file:', err);
       return res.status(500).send('Internal Server Error');
     }
-    
+
     let modifiedData = data
     .replace(/PLACEHOLDER_QUERY/g, queryName)
+    .replace(/PLACEHOLDER_ID/g, queryId)
     .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
     res.send(modifiedData);
   });

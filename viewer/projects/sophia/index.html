@@ -119,11 +119,13 @@
     </div>
 
     <script>
+        let shouldShowUIModuleContainer = true;
+
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
             const viewerType = determineInitialViewer(urlParams);
             changeLeftViewer(viewerType);
-
+            fetchPanelInfo();
             const annotationId = getAnnotationIdFromUrl(urlParams);
 
             //flag to ensure openAnnotation only fires once
@@ -184,6 +186,25 @@
                 changeRightViewer('metadata');
         });
 
+        function fetchPanelInfo() {
+            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=PLACEHOLDER_ID`;
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.features && data.features.length > 0) {
+                        const spatialPosition = data.features[0].properties.spatial_position;
+                        if (!spatialPosition || spatialPosition.length === 0) {
+                            //hide the UI module container
+                            shouldShowUIModuleContainer = false;
+                            document.querySelector('#right-pane .ui-module-container').style.display = 'none';
+                        }
+                    } else {
+                        console.error('No features found in response');
+                    }
+                })
+                .catch(error => console.error('error fetching spatial position data:', error));
+        }
+
         //retrieve annotation Id
         function getAnnotationIdFromUrl(urlParams) {
             const qValue = urlParams.get('q');
@@ -235,7 +256,9 @@
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
+                if (shouldShowUIModuleContainer && uiModuleContainer) {
+                    uiModuleContainer.style.display = 'flex';
+                }
                 if (backButton) backButton.style.display = 'block';
             } else {
                 rightPane.style.width = '0px';

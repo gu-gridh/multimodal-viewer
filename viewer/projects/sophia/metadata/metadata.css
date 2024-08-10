@@ -15,7 +15,7 @@ body {
 .container {
 	height: calc(100vh - 80px) !important;
 	width: 100%;
-	padding: 60px 60px 20px 60px !important;
+	padding: 30px 60px 20px 60px !important;
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
@@ -228,10 +228,7 @@ margin-bottom:10px;
 }
 
 @media screen and (max-width: 850px) {
-	.container {
-		height: auto !important;
-		padding: 90px 60px 40px 60px !important;
-	}
+
 
 
 	.metadata-surface-title {
@@ -244,6 +241,13 @@ margin-bottom:10px;
 
 	}
 
+}
+
+@media screen and (max-width: 600px) {
+	.container {
+		height: auto !important;
+		padding: 80px 60px 40px 60px !important;
+	}
 }
 
 .metadata-description .label {

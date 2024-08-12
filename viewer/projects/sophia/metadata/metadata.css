@@ -300,7 +300,7 @@ margin-bottom:10px;
 
 
 
-#metadata-dropdown {
+#metadata-dropdown, #metadata-dropdown-2 {
 	position: relative;
 	min-width: 90px;
 	width:calc(auto + 200px);
@@ -325,7 +325,7 @@ margin-bottom:10px;
 	background-position: calc(100% - 10px) 55%;
 }
 
-#metadata-dropdown:focus {
+#metadata-dropdown:focus, #metadata-dropdown-2:focus {
 	outline: none;
 }
   

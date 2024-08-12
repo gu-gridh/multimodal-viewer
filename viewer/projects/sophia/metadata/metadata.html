@@ -36,6 +36,7 @@
             document.getElementById('imd11').textContent = t('contributors');
             var translationDisplay = document.getElementById('translation-display');
             var descriptionDisplay = document.getElementById('description-display');
+            var transcription = document.getElementById('transcription');
 
             //check if the current text content is translation not available
             if (translationDisplay && (translationDisplay.textContent.trim() === 'Translation not available' || translationDisplay.textContent.trim() === 'Переклад недоступний')) {
@@ -44,6 +45,9 @@
             //check if the current text content is description not available
             if (descriptionDisplay && (descriptionDisplay.textContent.trim() === 'Description not available' || descriptionDisplay.textContent.trim() === 'опис недоступний')) {
                 descriptionDisplay.innerHTML = t('descriptionnotavailable');
+            }
+            if (transcription && (transcription.textContent.trim() === 'Transcription not available' || transcription.textContent.trim() === 'транскрипція недоступна')) {
+                transcription.innerHTML = t('transcriptionnotavailable');
             }
         }
 

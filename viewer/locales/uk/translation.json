@@ -95,5 +95,6 @@
   "glagolitic": "Глаголична",
   "cyrillic": "Кирилиця",
   "translationnotavailable": "<p>Переклад недоступний</p>",
-  "descriptionnotavailable": "<p>опис недоступний</p>"
+  "descriptionnotavailable": "<p>опис недоступний</p>",
+  "transcriptionnotavailable": "<p>транскрипція недоступна</p>"
 }

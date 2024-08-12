@@ -95,5 +95,6 @@
   "glagolitic": "Glagolitic",
   "cyrillic": "Cyrillic",
   "translationnotavailable": "<p>Translation not available</p>",
-  "descriptionnotavailable": "<p>Description not available</p>"
+  "descriptionnotavailable": "<p>Description not available</p>",
+  "transcriptionnotavailable": "<p>Transcription not available</p>"
 }

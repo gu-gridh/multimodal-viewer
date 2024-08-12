@@ -40,12 +40,10 @@
             //check if the current text content is translation not available
             if (translationDisplay && (translationDisplay.textContent.trim() === 'Translation not available' || translationDisplay.textContent.trim() === 'Переклад недоступний')) {
                 translationDisplay.innerHTML = t('translationnotavailable');
-                console.log('0')
             }
             //check if the current text content is description not available
             if (descriptionDisplay && (descriptionDisplay.textContent.trim() === 'Description not available' || descriptionDisplay.textContent.trim() === 'опис недоступний')) {
                 descriptionDisplay.innerHTML = t('descriptionnotavailable');
-                console.log(descriptionDisplay)
             }
         }
 

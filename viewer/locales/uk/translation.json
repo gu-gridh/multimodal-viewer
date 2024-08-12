@@ -94,5 +94,6 @@
   "arabic": "Арабська",
   "glagolitic": "Глаголична",
   "cyrillic": "Кирилиця",
-  "translationnotavailable": "<p>Переклад недоступний</p>"
+  "translationnotavailable": "<p>Переклад недоступний</p>",
+  "descriptionnotavailable": "<p>опис недоступний</p>"
 }

@@ -557,6 +557,15 @@ h2 {
     clear: both;
   }
 
+  #description-display > p {
+    margin: 0;
+    padding: 5px 0 0 10px;
+  }
+
+  #description-display {
+    clear: both;
+  }
+
   .guide-closer {
     left:calc(50% - 50px);
     margin-top:20px;

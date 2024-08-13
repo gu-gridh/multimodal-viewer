@@ -219,6 +219,7 @@ color: rgb(0, 213, 250) !important;
     display: auto !important;
     overflow: hidden !important;
     opacity: inherit;
+    user-select: none;
 
 }
 
@@ -238,6 +239,7 @@ color: rgb(0, 213, 250) !important;
     transform: translate(-15px, -5px) !important;
     box-shadow: none !important;
     overflow: hidden !important;
+    user-select: none!important;
 }
 
 .annotation-expand {
@@ -247,6 +249,7 @@ color: rgb(0, 213, 250) !important;
     pointer-events: none !important;
     display: none !important;
     overflow: hidden !important;
+    user-select: none!important;
 }
 
 .annotation-action-icon {
@@ -262,6 +265,7 @@ color: rgb(0, 213, 250) !important;
     pointer-events: none !important;
     display: none !important;
     overflow: hidden !important;
+    user-select: none!important;
 
 }
 
@@ -289,12 +293,12 @@ color: rgb(0, 213, 250) !important;
     pointer-events: none !important;
     display: none !important;
     overflow: hidden !important;
+    user-select: none!important;
 }
 
 .annotation-item:hover {
     box-shadow: 0 0 0px #000000 !important;
     opacity: 1.0;
-
     color: white;
     background-color: black;
     opacity: 1.0 !important;
@@ -305,6 +309,7 @@ color: rgb(0, 213, 250) !important;
     font-weight: 200 !important;
     display: flex;
     cursor: default;
+    user-select: none!important;
 }
 
 .annotation-main {
@@ -313,6 +318,7 @@ color: rgb(0, 213, 250) !important;
     pointer-events: none !important;
     display: none !important;
     overflow: hidden !important;
+    user-select: none!important;
 }
 
 .annotation-label {
@@ -328,6 +334,7 @@ color: rgb(0, 213, 250) !important;
     white-space: nowrap;
     font-family: inherit !important;
     font-weight: inherit !important;
+    user-select: none!important;
 
 }
 
@@ -337,6 +344,7 @@ color: rgb(0, 213, 250) !important;
     pointer-events: none !important;
     display: none !important;
     overflow: hidden !important;
+    user-select: none!important;
 }
 
 .annotation-description-close {

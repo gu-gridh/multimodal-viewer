@@ -184,17 +184,22 @@ body {
 
 .metadata-description-text {
 	font-weight: 200;
-	font-size: 1.1em;
+	font-size: 1.0em;
 	line-height:1.2;
-margin-top:5px;
+margin-top:8px;
 margin-bottom:10px;
 	width:100%;
 }
 
 .metadata-description-text p {
-	padding:2px!important;
+	padding:1px!important;
 	display:block!important;
 	width:100%!important;
+}
+
+.contributors{
+color:grey;
+font-size: 0.4px!important;
 }
 
 .metadata-content .preview {

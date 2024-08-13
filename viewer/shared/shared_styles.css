@@ -550,7 +550,6 @@ h2 {
 
   #translation-display > p {
     margin: 0;
-    padding: 5px 0 0 10px;
   }
 
   #translation-display {
@@ -559,10 +558,19 @@ h2 {
 
   #description-display > p {
     margin: 0;
-    padding: 5px 0 0 10px;
   }
 
   #description-display {
+    clear: both;
+  }
+
+  #contributors > p {
+    margin: 0;
+    padding: 2px;
+    font-size: 17.6px;
+  }
+
+  #contributors {
     clear: both;
   }
 

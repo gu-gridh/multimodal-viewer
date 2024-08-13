@@ -166,7 +166,8 @@
                             if (currentAnnotationId !== null) {
                                 fetchTranslationData(currentAnnotationId); // fetch translation data when language changes
                                 fetchDescriptionData(currentAnnotationId); // fetch description data when language changes
-                                fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
+                                fetchInscriptionData(currentAnnotationId); // fetch rest of metadata
+                                fetchContributorsInfo(currentAnnotationId); // fetch contributors info
                             }
                             iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                             i18next.changeLanguage(event.data.lang, function (err, t) {
@@ -305,6 +306,7 @@
                 fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
                 fetchTranslationData(currentAnnotationId); //fetch translation data
                 fetchDescriptionData(currentAnnotationId); //fetch description data
+                fetchContributorsInfo(currentAnnotationId); //fetch contributors info
                 updateURLWithAnnotation(currentAnnotationId);
             }
             if (event.data.type === 'togglePane') {
@@ -424,6 +426,34 @@
                 .catch(error => {
                     console.error('Error fetching translation data:', error);
                 });
+        }
+
+        function fetchContributorsInfo(inscriptionId) {
+            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/inscription-contributors/?id=${inscriptionId}`;
+            
+            fetch(apiUrl)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to fetch data from API');
+                }
+            })
+            .then(data => {
+                const authors = data[0].authors_ordered;
+                let formattedAuthors = '';
+
+                if (authors && Array.isArray(authors)) {
+                    formattedAuthors = `<p>${authors.join(', ')}</p>`;
+                } else {
+                    console.log('no authors found');
+                }
+
+                updateMetadataContent(formattedAuthors, 'contributors');
+            })
+            .catch(error => {
+                console.error('Error fetching inscription data:', error);
+            });
         }
 
         function replaceTranslationContent(translations, elementId) {

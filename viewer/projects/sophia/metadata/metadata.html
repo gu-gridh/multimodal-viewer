@@ -28,8 +28,6 @@
             document.getElementById('imd3').textContent = t('writingsystem') + ":";
             document.getElementById('imd4').textContent = t('genre') + ":";
             document.getElementById('imd5').textContent = t('editinscription');
-            document.getElementById('imd6').textContent = t('inscription');
-
             document.getElementById('imd8').textContent = t('transcription');
             document.getElementById('imd9').textContent = t('description');
             document.getElementById('imd10').textContent = t('translation');
@@ -37,6 +35,14 @@
             var translationDisplay = document.getElementById('translation-display');
             var descriptionDisplay = document.getElementById('description-display');
             var transcription = document.getElementById('transcription');
+
+            const inscriptionTitleElement = document.getElementById('inscription-title');
+            const currentText = inscriptionTitleElement.textContent.trim();
+
+            //replace content only if it is no inscription selected
+            if (currentText === 'No inscription selected' || currentText === 'Напис не вибрано') {
+                inscriptionTitleElement.textContent = t('noinscription');
+            }
 
             //check if the current text content is translation not available
             if (translationDisplay && (translationDisplay.textContent.trim() === 'Translation not available' || translationDisplay.textContent.trim() === 'Переклад недоступний')) {
@@ -46,6 +52,8 @@
             if (descriptionDisplay && (descriptionDisplay.textContent.trim() === 'Description not available' || descriptionDisplay.textContent.trim() === 'опис недоступний')) {
                 descriptionDisplay.innerHTML = t('descriptionnotavailable');
             }
+
+            //check if the current text content is transcription not available
             if (transcription && (transcription.textContent.trim() === 'Transcription not available' || transcription.textContent.trim() === 'транскрипція недоступна')) {
                 transcription.innerHTML = t('transcriptionnotavailable');
             }
@@ -152,10 +160,8 @@
                 </div>
 
                 <div class="metadata-inscription-title">
-                    <div class="metadata-inscription-title-part" id="imd6">
-                        No inscription selected
-                    </div>
                     <div class="metadata-inscription-title-part" id="inscription-title">
+                        No inscription selected
                     </div>
                 </div>
 

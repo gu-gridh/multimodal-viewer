@@ -166,6 +166,7 @@
                             if (currentAnnotationId !== null) {
                                 fetchTranslationData(currentAnnotationId); // fetch translation data when language changes
                                 fetchDescriptionData(currentAnnotationId); // fetch description data when language changes
+                                fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
                             }
                             iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                             i18next.changeLanguage(event.data.lang, function (err, t) {
@@ -353,7 +354,8 @@
                 //title
                 const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
                 const inscriptionTitle = data.title ? `(${data.title})` : "";
-                const fullTitle = `${panelTitle}:${inscriptionId} ${inscriptionTitle}`;
+                const titlePrefix = currentLang === 'uk' ? 'Hапис' : 'Inscription';
+                const fullTitle = `${titlePrefix} ${panelTitle}:${inscriptionId} ${inscriptionTitle}`;
 
                 updateMetadataContent(fullTitle, 'inscription-title');
                 updateMetadataContent(transcription, 'transcription');

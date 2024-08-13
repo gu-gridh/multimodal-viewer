@@ -163,8 +163,10 @@
                     window.addEventListener('message', function (event) {
                         if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
                             const iiifIframe = document.getElementById('left-Iframe');
-                            fetchTranslationData(currentAnnotationId); //fetch translation data when language changes
-                            fetchDescriptionData(currentAnnotationId); //fetch description data when language changes
+                            if (currentAnnotationId !== null) {
+                                fetchTranslationData(currentAnnotationId); // fetch translation data when language changes
+                                fetchDescriptionData(currentAnnotationId); // fetch description data when language changes
+                            }
                             iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                             i18next.changeLanguage(event.data.lang, function (err, t) {
                                 if (err) return console.log('Something went wrong loading', err);

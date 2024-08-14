@@ -309,9 +309,11 @@
                     fetchDescriptionData(currentAnnotationId); //fetch description data
                     fetchContributorsInfo(currentAnnotationId); //fetch contributors info
                     updateURLWithAnnotation(currentAnnotationId);
+                    updateEditLinkHref(currentAnnotationId); //update href for annotation
                 } else {
                     resetMetadataInfo();
-                    updateURLWithAnnotation(null);
+                    updateURLWithAnnotation(null);  
+                    updateEditLinkHref(null); //update href for annotation
                 }
             }
             if (event.data.type === 'togglePane') {
@@ -321,6 +323,28 @@
                 toggleLeftPane();
             }
         }, false);
+
+        function updateEditLinkHref(annotationId) {
+            var iframe = document.getElementById('right-Iframe');
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            if (iframeDoc) {
+                var editLink = iframeDoc.getElementById('edit-link');
+                if (editLink) {
+                    if (annotationId) {
+                        //set the href if annotationId is valid
+                        editLink.href = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
+                    } else if (annotationId === null) {
+                        //remove the href attribute
+                        editLink.removeAttribute('href');
+                    }
+                } else {
+                    console.error('edit link element not found');
+                }
+            } else {
+                console.error('cannot access iframe document');
+            }
+        }
 
         function resetMetadataInfo() {
             const currentLang = i18next.language;

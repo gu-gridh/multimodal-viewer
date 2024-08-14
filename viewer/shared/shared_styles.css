@@ -574,6 +574,10 @@ h2 {
     clear: both;
   }
 
+  #edit-link {
+    text-decoration: none;
+  }
+
   .guide-closer {
     left:calc(50% - 50px);
     margin-top:20px;

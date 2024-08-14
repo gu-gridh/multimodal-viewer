@@ -303,11 +303,16 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 currentAnnotationId = event.data.value;
-                fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
-                fetchTranslationData(currentAnnotationId); //fetch translation data
-                fetchDescriptionData(currentAnnotationId); //fetch description data
-                fetchContributorsInfo(currentAnnotationId); //fetch contributors info
-                updateURLWithAnnotation(currentAnnotationId);
+                if (currentAnnotationId != null) {
+                    fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
+                    fetchTranslationData(currentAnnotationId); //fetch translation data
+                    fetchDescriptionData(currentAnnotationId); //fetch description data
+                    fetchContributorsInfo(currentAnnotationId); //fetch contributors info
+                    updateURLWithAnnotation(currentAnnotationId);
+                } else {
+                    resetMetadataInfo();
+                    updateURLWithAnnotation(null);
+                }
             }
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
@@ -317,20 +322,58 @@
             }
         }, false);
 
+        function resetMetadataInfo() {
+            const currentLang = i18next.language;
+            const defaultTitle = currentLang === 'uk' ? "Напис не вибрано" : "No inscription selected";
+            const defaultText = "";
+
+            updateMetadataContent(defaultTitle, 'inscription-title');
+            updateMetadataContent(defaultText, 'transcription');
+            updateMetadataContent(defaultText, 'type');
+            updateMetadataContent(defaultText, 'writing');
+            updateMetadataContent(defaultText, 'language');
+            updateMetadataContent(defaultText, 'genre');
+            updateMetadataContent(defaultText, 'tags');
+            updateMetadataContent(defaultText, 'translation-display');
+            updateMetadataContent(defaultText, 'description-display');
+            updateMetadataContent(defaultText, 'contributors');
+
+            removeDropdown('metadata-dropdown');
+            removeDropdown('metadata-dropdown-2');
+        }
+
+        function removeDropdown(dropdownId) {
+            var iframe = document.getElementById('right-Iframe');
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            if (iframeDoc) {
+                var dropdown = iframeDoc.getElementById(dropdownId);
+                if (dropdown) {
+                    dropdown.remove();
+                }
+            }
+        }
+
         function updateURLWithAnnotation(annotationId) {
             //get the current URL
             const currentUrl = new URL(window.location.href);
             const baseAddress = currentUrl.origin + currentUrl.pathname;
             let queryString = currentUrl.searchParams.get('q');
             
-            if (queryString.includes('/')) {
-                //Remove any existing annotation ID
+            if (queryString && queryString.includes('/')) {
+                // Remove any existing annotation ID
                 queryString = queryString.split('/')[0];
             }
 
-            //Construct the new URL with the updated annotation ID
-            const newUrl = `${baseAddress}?q=${queryString}/${annotationId}${currentUrl.hash}`;
-            
+            let newUrl;
+            if (annotationId) {
+                // Construct the new URL with the updated annotation ID
+                newUrl = `${baseAddress}?q=${queryString}/${annotationId}${currentUrl.hash}`;
+            } else {
+                // Construct the new URL without the annotation ID
+                newUrl = `${baseAddress}?q=${queryString}${currentUrl.hash}`;
+            }
+
             window.history.pushState({}, '', newUrl);
         }
 

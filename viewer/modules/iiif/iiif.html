@@ -71,6 +71,9 @@
         let urlToCopy = '';
         let annotationsVisible = true; // track the visibility state of annotations
         let pendingAnnotationId = null;
+        let currentAnnotationId = null;
+        let previousAnnotationId = null;
+        let annotationClicked = false;
     
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
@@ -371,14 +374,39 @@
                 };
             });
 
+            
             anno.on('clickAnnotation', function (annotation, element) {
+                annotationClicked = true;
+
+                //handle annotation click
+                previousAnnotationId = currentAnnotationId;
+                currentAnnotationId = annotation.id;
+
                 const annotationData = {
                     type: 'annotationClick',
                     value: annotation.id
                 };
-    
-                 //send a message to the parent window (index.html) with the annotation data
+
+                //send a message to the parent window (index.html) with the annotation data
+                 window.parent.postMessage(annotationData, "*");
+            });
+
+            viewer.addHandler('canvas-click', function(event) {
+                //If an annotation was clicked ignore this canvas click event
+                if (annotationClicked) {
+                    annotationClicked = false;
+                    return;
+                }
+
+                const annotationData = {
+                    type: 'annotationClick',
+                    value: null
+                };
+
+                //send a message to the parent window (index.html) with the annotation data
                 window.parent.postMessage(annotationData, "*");
+
+                currentAnnotationId = null;
             });
         };
     

@@ -22,5 +22,6 @@
   "basePath": "https://img.dh.gu.se/saintsophia/static/",
   "downloadPath": "https://data.dh.gu.se/saintsophia/static/",
   "annotationPath": "https://saintsophia.dh.gu.se/api/inscriptions/annotation/?surface=",
-  "pointcoudAnnotations": "/viewer/projects/etruscan/annotations/pointcloud_annotations.json"
+  "pointcoudAnnotations": "/viewer/projects/etruscan/annotations/pointcloud_annotations.json",
+  "inscriptionUrl": "https://saintsophia.dh.gu.se/admin/inscriptions/inscription/"
 }

@@ -364,6 +364,8 @@
                 // Handle Yes button click
                 document.getElementById('saveYes').onclick = function () {
                     convertToIIIFRegion(annotation, viewer.source);
+                    anno.removeAnnotation(annotation.id);
+                    window.open('PLACEHOLDER_INSCRIPTION_URL', '_blank');
                     document.getElementById('savePopup').style.display = 'none';
                 };
     

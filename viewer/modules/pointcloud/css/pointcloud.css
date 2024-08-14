@@ -3,6 +3,10 @@
 /* CSS - Cascading Style Sheet */
 
 
+.potree_container :focus {
+	outline: none;
+}
+
 .LODtool {
     pointer-events: auto;
     position: absolute;

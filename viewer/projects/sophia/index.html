@@ -415,10 +415,10 @@
             .then(data => {
                 const type = data.type_of_inscription && data.type_of_inscription.text ? data.type_of_inscription.text : "Unknown";
                 const transcription = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Transcription not available</p>");
-                const writing = data.writing_system && data.writing_system.text ? data.writing_system.text : "Unknown";
-                const language = data.language && data.language.text ? data.language.text : "Unknown";
-                const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "Unknown";
-                const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => tag.text).join(', ') : ["Unknown"];
+                const writing = data.writing_system && data.writing_system.text ? data.writing_system.text : "";
+                const language = data.language && data.language.text ? data.language.text : "";
+                const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
+                const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => tag.text).join(', ') : [""];
 
                 //title
                 const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";

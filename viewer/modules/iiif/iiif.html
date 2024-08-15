@@ -393,8 +393,33 @@
                  window.parent.postMessage(annotationData, "*");
             });
 
+            let isDragging = false;
+            let startX, startY;
+            const dragThreshold = 1; //drag threshold
+
+            viewer.addHandler('canvas-press', function(event) {
+                isDragging = false;
+                startX = event.position.x;
+                startY = event.position.y;
+            });
+
+            viewer.addHandler('canvas-drag', function(event) {
+                const currentX = event.position.x;
+                const currentY = event.position.y;
+                
+                //drag detection
+                if (Math.abs(currentX - startX) > dragThreshold || Math.abs(currentY - startY) > dragThreshold) {
+                    isDragging = true;
+                }
+            });
+
             viewer.addHandler('canvas-click', function(event) {
-                //If an annotation was clicked ignore this canvas click event
+                //if it was a drag do not treat it as a click
+                if (isDragging) {
+                    return;
+                }
+
+                // If an annotation was clicked ignore this canvas click event
                 if (annotationClicked) {
                     annotationClicked = false;
                     return;
@@ -410,7 +435,7 @@
 
                 currentAnnotationId = null;
             });
-        };
+        }
     
         function logPosition() {
             $('#share-label').addClass('popup-animation').delay(3000).queue(function () {

@@ -96,5 +96,7 @@
   "cyrillic": "Cyrillic",
   "translationnotavailable": "<p>Translation not available</p>",
   "descriptionnotavailable": "<p>Description not available</p>",
-  "transcriptionnotavailable": "<p>Transcription not available</p>"
+  "transcriptionnotavailable": "<p>Transcription not available</p>",
+  "date": "Date",
+  "elevation": "Elevation (cm)"
 }

@@ -32,6 +32,8 @@
             document.getElementById('imd9').textContent = t('description');
             document.getElementById('imd10').textContent = t('translation');
             document.getElementById('imd11').textContent = t('contributors');
+            document.getElementById('imd12').textContent = t('date') + ":";
+            document.getElementById('imd13').textContent = t('elevation') + ":";
             var translationDisplay = document.getElementById('translation-display');
             var descriptionDisplay = document.getElementById('description-display');
             var transcription = document.getElementById('transcription');
@@ -196,9 +198,21 @@
                     </div>
 
                     <div class="metadata-item">
+                        <div class="label" id="imd12">Date:</div>
+                        <div class="theme-color-text tag" id="date"></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd13">Elevation (cm):</div>
+                        <div class="theme-color-text tag" id="elevation"></div>
+                    </div>
+
+                    <div class="metadata-item">
                         <div class="label" id="imd2">Tags:</div>
                         <div class="theme-color-text tag" id="tags"></div>
                     </div>
+
+                 
 
                     <div class="metadata-description" style="margin-top:20px;">
                         <div class="metadata-title" id="imd8">Transcription</div>

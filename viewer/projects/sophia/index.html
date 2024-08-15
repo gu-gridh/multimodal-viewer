@@ -125,12 +125,16 @@
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
             const viewerType = determineInitialViewer(urlParams);
-            changeLeftViewer(viewerType);
-            fetchPanelInfo();
             const annotationId = getAnnotationIdFromUrl(urlParams);
 
             //flag to ensure openAnnotation only fires once
             let messageSent = false;
+
+            const rightIframe = document.getElementById('right-Iframe');
+            rightIframe.onload = function() {
+                fetchPanelInfo();
+            };
+            changeLeftViewer(viewerType);
 
             //if there's an annotation ID, send it to iiif.html
             if (annotationId) {
@@ -162,6 +166,7 @@
 
                     window.addEventListener('message', function (event) {
                         if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                            fetchPanelInfo();
                             const iiifIframe = document.getElementById('left-Iframe');
                             if (currentAnnotationId !== null) {
                                 fetchTranslationData(currentAnnotationId); // fetch translation data when language changes
@@ -194,17 +199,27 @@
         });
 
         function fetchPanelInfo() {
+            const currentLang = localStorage.getItem('i18nextLang') || 'en';
             const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=PLACEHOLDER_ID`;
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data.features && data.features.length > 0) {
                         const spatialPosition = data.features[0].properties.spatial_position;
+
                         if (!spatialPosition || spatialPosition.length === 0) {
                             //hide the UI module container
                             shouldShowUIModuleContainer = false;
                             document.querySelector('#right-pane .ui-module-container').style.display = 'none';
                         }
+
+                        //extract and process tags
+                        const tagsData = data.features[0].properties.tags;
+                        const tags = tagsData && tagsData.length > 0 
+                            ? tagsData.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') 
+                            : '';
+
+                        updateMetadataContent(tags, 'panel_tags'); 
                     } else {
                         console.error('No features found in response');
                     }
@@ -417,13 +432,13 @@
                 }
             })
             .then(data => {
-                const type = data.type_of_inscription && data.type_of_inscription.text ? data.type_of_inscription.text : "Unknown";
+                const type = data.type_of_inscription ? (currentLang === 'uk' && data.type_of_inscription.text_ukr ? data.type_of_inscription.text_ukr : data.type_of_inscription.text) : "Unknown";
                 const transcription = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Transcription not available</p>");
-                const writing = data.writing_system && data.writing_system.text ? data.writing_system.text : "";
-                const language = data.language && data.language.text ? data.language.text : "";
+                const writing = data.writing_system ? (currentLang === 'uk' && data.writing_system.text_ukr ? data.writing_system.text_ukr : data.writing_system.text) : "";
+                const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
                 const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
-                const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => tag.text).join(', ') : [""];
-
+                const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') : "";
+                
                 //title
                 const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
                 const inscriptionTitle = data.title ? `(${data.title})` : "";

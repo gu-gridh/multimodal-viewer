@@ -151,7 +151,6 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                                  .replace(/PLACEHOLDER_LANGUAGES/g, metadata.number_of_languages ?? 'Unknown')
                                  .replace(/PLACEHOLDER_DOCUMENTATION_EN/g, metadata.documentation.map(doc => doc.observation).join(' '))
                                  .replace(/PLACEHOLDER_DOCUMENTATION_UK/g, metadata.documentation.map(doc => doc.text_ukr).join(' '))
-                                 .replace(/PLACEHOLDER_TAGS/g, metadata.tags.map(tag => tag.text).join(', '));
 
       res.send(modifiedHtml);
     });

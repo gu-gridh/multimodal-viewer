@@ -303,7 +303,11 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 currentAnnotationId = event.data.value;
-                if (currentAnnotationId != null) {
+                
+                //check if the ID contains any letters
+                const invalidAnnotationPattern = /[a-zA-Z]/;
+
+                if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
                     fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
                     fetchTranslationData(currentAnnotationId); //fetch translation data
                     fetchDescriptionData(currentAnnotationId); //fetch description data

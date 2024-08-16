@@ -181,7 +181,7 @@ color: rgb(0, 213, 250) !important;
 
 /* Hide away complexities on mobile */
 
-@media screen and (max-width: 1250px) {
+@media screen and (max-width: 880px) {
     .potree_menu_toggle {
         display: none;
     }

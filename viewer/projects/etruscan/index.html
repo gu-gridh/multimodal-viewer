@@ -33,6 +33,19 @@
             flex-direction: column;
         }
 
+        #main-content {
+            display: flex;
+            height: 100%;
+        }
+
+        #left-pane {
+            flex: 0 0 25%; /* 25% of container */
+        }
+
+        #right-pane {
+            flex: 0 0 75%; /* 75% pf container */
+        }
+
         .edit-button {
             display: block;
             margin-top: 20px;
@@ -83,36 +96,11 @@
 
 <body>
     <div id="main-content">
-
         <div id="left-pane">
-            <a href="PLACEHOLDER_BACKBUTTON">
-                <div id="back-button"></div>
-            </a>
-           
-            <div class="ui-module-container">
-                <div class="ui-module">
-                    <div class="ui-module-item left orthophoto" id="btn1" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
-                    <div class="ui-module-item left" id="btn2" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
-                    <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
-                    <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
-                    </div>
-                    <div class="ui-module-item left compact" id="btn5"
-                        onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div>
-                </div>
-            </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
-
         </div>
         <div id="right-pane">
-            <div class="ui-module-container">
-                <div class="ui-module">
-                    <div class="ui-module-item right" id="btn6"
-                        onclick="changeRightViewer('metadata');moduleSwitcherRight(6);" style="opacity:1.0"></div>
-                    <div class="ui-module-item right" id="btn7"
-                        onclick="changeRightViewer('pointcloud');moduleSwitcherRight(7);"></div>
-                </div>
-            </div>
-            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/etruscan/metadata/metadata.html"
+            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
                 style="width:100%; border:none;"></iframe>
         </div>
         <div id="footer-container"></div>
@@ -120,228 +108,25 @@
 
     <script>
         $(document).ready(function () {
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const viewerType = determineInitialViewer(urlParams);
-        changeLeftViewer(viewerType);
-
-        const savedLang = localStorage.getItem('i18nextLang') || 'en';
-
-        $("#footer-container").load("/viewer/projects/etruscan/footer.html");
-
-        i18next
-            .use(i18nextHttpBackend)
-            .init({
-                lng: savedLang,
-                fallbackLng: 'en',
-                backend: {
-                    loadPath: '/viewer/locales/{{lng}}/translation.json',
-                },
-            }, function (err, t) {
-                if (err) return console.error('i18next initialization error:', err);
-
-                applyTranslations();
-
-                window.addEventListener('message', function (event) {
-                    if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                        const iiifIframe = document.getElementById('left-Iframe');
-                        iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
-                        i18next.changeLanguage(event.data.lang, function (err, t) {
-                            if (err) return console.log('Something went wrong loading', err);
-                            applyTranslations();
-                        });
-                    }
-                }, false);
-            });
-
-            function applyTranslations() {
-                if (typeof i18next.t === 'function') {
-                    document.getElementById('btn1').textContent = i18next.t('Orthophoto');
-                    document.getElementById('btn2').textContent = i18next.t('topography');
-                    document.getElementById('btn3').textContent = i18next.t('mesh');
-                    document.getElementById('btn4').textContent = i18next.t('rti');
-                    document.getElementById('btn5').textContent = i18next.t('about');
-                    document.getElementById('btn6').textContent = i18next.t('about');
-                    document.getElementById('btn7').textContent = i18next.t('spatialcontext');
-                }
-            }
-
-            changeRightViewer('metadata');
-
-            //hide specific elements in the left iframe
-            // $("#left-Iframe").on("load", function () {
-            //     //access the iframe's document
-            //     var iframeDoc = $(this).contents();
-            //     //hide the element with the class `full-screen-option`
-            //     iframeDoc.find(".full-screen-option").css("display", "none");
-            //     iframeDoc.find(".annotate-option").css("display", "none");
-            // });
-        });
-
-        function determineInitialViewer(params) {
-            const qValue = params.get('q');
-            //check if phi is present in the URL
-            const hasPhi = params.has('phi');
-
-            if (hasPhi) {
-                return 'mesh';
-            }
-            
-            if (qValue) {
-                const segments = qValue.split('/');
-                if (segments.length > 1) {
-                    const viewerType = segments[1];
-                    //match the viewerType to the expected strings
-                    switch (viewerType) {
-                        case 'mesh':
-                            return 'mesh';
-                        case 'topography':
-                            return 'topography';
-                        case 'rti':
-                            return 'rti';
-                        case 'orthophoto':
-                            return 'orthophoto';
-                        default:
-                            return 'orthophoto'; //default
-                    }
-                }
-            }
-        }
-
-        function toggleRightPane() {
-            var leftPane = document.getElementById('left-pane');
-            var rightPane = document.getElementById('right-pane');
-            var uiModuleContainer = rightPane.querySelector('.ui-module-container');
-            var backButton = document.getElementById('back-button');
-            if (rightPane.style.width === '0px') {
-                rightPane.style.width = '50%';
-                leftPane.style.width = '50%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
-                if (backButton) backButton.style.display = 'block';
-            } else {
-                rightPane.style.width = '0px';
-                leftPane.style.width = '100%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
-                if (backButton) backButton.style.display = 'none';
-            }
-        }
-
-        function toggleLeftPane() {
-            var leftPane = document.getElementById('left-pane');
-            var rightPane = document.getElementById('right-pane');
-            var uiModuleContainer = leftPane.querySelector('.ui-module-container');
-            var backButton = document.getElementById('back-button');
-            if (leftPane.style.width === '1px') {
-                leftPane.style.width = '50%';
-                rightPane.style.width = '50%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
-                if (backButton) backButton.style.display = 'block';
-            } else {
-                leftPane.style.width = '1px';
-                rightPane.style.width = '99%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
-                if (backButton) backButton.style.display = 'none';
-            }
-        }
-
-        $(window).resize(function () {
-            if ($('#right-pane').css('display') === 'none') {
-                // here i would very much like to be able to hide all FullPage-buttons  
-            }
+            $("#footer-container").load("/viewer/projects/etruscan/footer.html");
+                changeLeftViewer('metadata');
+                changeRightViewer('pointcloud');
         });
     </script>
 
     <script>
-        window.addEventListener('message', function (event) {
-            if (event.data.type === 'annotationClick') {
-                updateMetadataContent(event.data.value);
-            }
-            if (event.data.type === 'togglePane') {
-                toggleRightPane();
-            }
-            if (event.data.type === 'togglePane2') {
-                toggleLeftPane();
-            }
-        }, false);
-
-        function updateMetadataContent(newContent) {
-            var iframe = document.getElementById('right-Iframe');
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            if (iframeDoc) {
-                // target the specific element to update its content
-                var inscriptionElement = iframeDoc.getElementById('inscription-title');
-                if (inscriptionElement) {
-                    //update the inscription element with newContent
-                    inscriptionElement.innerText = newContent;
-                }
-            } else {
-                console.error('Cannot access iframe document');
-            }
-        }
-        
-        function changeLeftViewer(viewerType) {
-            const iframe = document.getElementById('left-Iframe');
-            const queryString = window.location.search;
-            const params = new URLSearchParams(queryString);
-            const currentUrl = new URL(window.location.href);
-            const hashFragment = currentUrl.hash;
-
-            let qValue = params.get('q');
-            if (qValue.includes('/')) {
-                qValue = qValue.split('/')[0];
-            }
-
-            let src;
-            let newPath;
-            switch (viewerType) {
-                case 'orthophoto':
-                    src = `/viewer/modules/iiif/iiif.html${queryString}${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/orthophoto${hashFragment}`;
-                    buttonNum = 1;
-                    break;
-                case 'topography':
-                    src = `/viewer/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/topography${hashFragment}`;
-                    buttonNum = 2;
-                    break;
-                case 'mesh':
-                    src = `/viewer/modules/3dhop/3dhop.html${queryString}`;
-                    newPath = `/viewer/?q=${qValue}/mesh`;
-                    buttonNum = 3;
-                    break;
-                case 'rti':
-                    src = `/viewer/modules/openlime/openlime.html${queryString}`;
-                    newPath = `/viewer/?q=${qValue}/rti`;
-                    buttonNum = 4;
-                    break;
-                case 'metadata-compact':
-                    src = `/viewer/projects/etruscan/metadata/metadata.html${queryString}`;
-                    newPath = `/viewer/?q=${qValue}`;
-                    buttonNum = 5;
-                    break;
-                default:
-                    src = `/viewer/modules/iiif/iiif.html${queryString}`;
-                    newPath = `/viewer/?q=${qValue}/orthophoto`;
-                    buttonNum = 1;
-                    break;
-            }
-
-            if (iframe) {
-                iframe.src = src;
-                moduleSwitcherLeft(buttonNum);
-                //update browser URL
-                window.history.pushState({}, '', newPath);
-            }
-        }
-
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
-            if (viewerType === 'metadata') {
-                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
-            } else if (viewerType === 'pointcloud') {
+            if (viewerType === 'pointcloud') {
                 iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
+        }
+
+        function changeLeftViewer(viewerType) {
+            var iframe = document.getElementById('left-Iframe');
+            if (viewerType === 'metadata') {
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+            } 
         }
 
         function moduleSwitcherLeft(num) {
@@ -354,10 +139,6 @@
         }
 
     </script>
-
-
-
-
 </body>
 
 </html>

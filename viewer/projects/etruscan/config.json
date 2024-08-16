@@ -12,16 +12,16 @@
       "minMaxTheta": [-180.0, 180.0]
     }
   },
-  "appFile": "app.js",
+  "appFile": "app_etruscan.js",
   "project": "Etruscan",
   "displayAnnotations": false,
-  "backButton": "https://71807.dh.gu.se",
-  "panel": "https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=",
-  "metadata": "https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=",
-  "pointcloud": "https://data.dh.gu.se/saintsophia/pointcloud/cloud.js",
-  "basePath": "https://img.dh.gu.se/saintsophia/static/",
-  "downloadPath": "https://data.dh.gu.se/saintsophia/static/",
-  "annotationPath": "https://saintsophia.dh.gu.se/api/inscriptions/annotation/?surface=",
+  "backButton": "",
+  "panel": "https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=",
+  "metadata": "",
+  "pointcloud": "",
+  "basePath": "",
+  "downloadPath": "",
+  "annotationPath": "",
   "pointcoudAnnotations": "/viewer/projects/etruscan/annotations/pointcloud_annotations.json",
-  "inscriptionUrl": "https://saintsophia.dh.gu.se/admin/inscriptions/inscription/"
+  "inscriptionUrl": ""
 }

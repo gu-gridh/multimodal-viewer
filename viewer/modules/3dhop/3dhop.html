@@ -20,26 +20,30 @@
 	<!--TRACKBALLS-->
 	<script type="text/javascript" src="js/trackball_turntable.js"></script>
 	<script type="text/javascript" src="js/trackball_turntable_pan.js"></script>
+
 	<!--UTILITY-->
 	<script type="text/javascript" src="js/init.js"></script>
 	<script src="/viewer/libs/i18next.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
 </head>
 <style>
-	#Prev, #Next {
-    	display: none; /*initially hide buttons*/
-	}
-	.specular_off{
-		background:url(/viewer/shared/interface/specular_off.png);
-		max-height:23px;
-		top:2px;
+	#Prev,
+	#Next {
+		display: none;
+		/*initially hide buttons*/
 	}
 
-	.specular_on{
-		background:url(/viewer/shared/interface/specular_on.png);
-		max-height:23px;
-		top:2px;
-		z-index:100;
+	.specular_off {
+		background: url(/viewer/shared/interface/specular_off.png);
+		max-height: 23px;
+		top: 2px;
+	}
+
+	.specular_on {
+		background: url(/viewer/shared/interface/specular_on.png);
+		max-height: 23px;
+		top: 2px;
+		z-index: 100;
 	}
 </style>
 
@@ -121,7 +125,7 @@
 		<div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
 
 			<!-- The draw canvas is the home of the 3d-model-->
-			<canvas id="draw-canvas" style="" />
+			<canvas id="draw-canvas" />
 
 		</div>
 
@@ -155,8 +159,10 @@
 					<img id="home_m" title="Home" src="/viewer/shared/interface/frame.png" />
 
 					<!--ZOOM-->
-					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom In" src="/viewer/shared/interface/plus_big.png" />
-					<img id="zoomout" class="narrow-toolbar-icon" title="Zoom Out" src="/viewer/shared/interface/minus_big.png" />
+					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom In"
+						src="/viewer/shared/interface/plus_big.png" />
+					<img id="zoomout" class="narrow-toolbar-icon" title="Zoom Out"
+						src="/viewer/shared/interface/minus_big.png" />
 
 					<!--COLOR-->
 					<img id="color_on_m" title="Disable Solid Color" src="/viewer/shared/interface/colour_off.png"
@@ -164,9 +170,9 @@
 					<img id="color_m" title="Enable Solid Color" src="/viewer/shared/interface/colour_on.png" />
 
 					<!--SPECULAR-->
-					<img id="specular" class="specular_off specular_on" title="Toggle Specular Light" onclick="toggleSpecular()"
-					src="/viewer/shared/interface/empty.svg"/>
-					
+					<img id="specular" class="specular_off specular_on" title="Toggle Specular Light"
+						onclick="toggleSpecular()" src="/viewer/shared/interface/empty.svg" />
+
 					<!--LIGHT-->
 					<img id="light_on_m" title="Disable Light Control" src="/viewer/shared/interface/light_on.png"
 						style="position:absolute; visibility:hidden;  " />
@@ -210,7 +216,7 @@
 
 	<div class="ui-overlay-container" style="height:100vh; z-index:1000; pointer-events:none;">
 		<!--MEASURE-->
-		<div id="measure-box" class="output-box">    
+		<div id="measure-box" class="output-box">
 			<span id="measure-label"></span>
 			<hr />
 			<span id="measure-output" class="output-text" onmousedown="event.stopPropagation()">0.0</span>
@@ -233,7 +239,7 @@
 <script type="text/javascript">
 	var specular = true;
 	var currentPage = 1;
-	var totalPages = 2; 
+	var totalPages = 2;
 	var presenter = null;
 	// document.querySelector('.title').textContent = PLACEHOLDER_TITLE; //set Title
 
@@ -252,10 +258,10 @@
 			if (err) return console.error('i18next initialization error:', err);
 
 			applyTranslations();
-			window.addEventListener('message', function(event) {
+			window.addEventListener('message', function (event) {
 				if (event.data.type === 'languageChange') {
 					const newLang = event.data.lang;
-					i18next.changeLanguage(newLang, function(err) {
+					i18next.changeLanguage(newLang, function (err) {
 						if (err) {
 							console.error('Error changing language:', err);
 						} else {
@@ -268,20 +274,20 @@
 
 	function applyTranslations() {
 		if (typeof i18next.t === 'function') {
-				document.getElementById('1').innerHTML = i18next.t('help-text');
-				document.getElementById('2').innerHTML = i18next.t('help-text-short');
-				document.getElementById('3').textContent = i18next.t('tools');
-				document.getElementById('4').innerHTML = i18next.t('frame-object');
-				document.getElementById('5').innerHTML = i18next.t('colour-toggle');
-				document.getElementById('6').innerHTML = i18next.t('specular-toggle');
-				document.getElementById('7').innerHTML = i18next.t('light-tool');
-				document.getElementById('8').innerHTML = i18next.t('measure-tool');
-				document.getElementById('9').innerHTML = i18next.t('full-screen');
-				document.getElementById('10').innerHTML = i18next.t('close');
-				document.getElementById('share-label').textContent = i18next.t('linkcopied');
-				document.getElementById('measure-label').innerHTML = i18next.t('measuredlength');
-				updateUI();
-			}
+			document.getElementById('1').innerHTML = i18next.t('help-text');
+			document.getElementById('2').innerHTML = i18next.t('help-text-short');
+			document.getElementById('3').textContent = i18next.t('tools');
+			document.getElementById('4').innerHTML = i18next.t('frame-object');
+			document.getElementById('5').innerHTML = i18next.t('colour-toggle');
+			document.getElementById('6').innerHTML = i18next.t('specular-toggle');
+			document.getElementById('7').innerHTML = i18next.t('light-tool');
+			document.getElementById('8').innerHTML = i18next.t('measure-tool');
+			document.getElementById('9').innerHTML = i18next.t('full-screen');
+			document.getElementById('10').innerHTML = i18next.t('close');
+			document.getElementById('share-label').textContent = i18next.t('linkcopied');
+			document.getElementById('measure-label').innerHTML = i18next.t('measuredlength');
+			updateUI();
+		}
 	}
 	// <-- Language Control -->
 
@@ -297,6 +303,11 @@
 				"mesh1": {
 					mesh: "mesh1",
 					color: [0.75, 0.75, 0.75],
+					transform: {
+						matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
+							/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
+							SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
+					},
 				},
 				"mesh2": {
 					mesh: "mesh2",
@@ -360,17 +371,17 @@
 			totalPages = 2;
 		}
 		var translatedOf = i18next.t('of');
-        $('#currentpage').text(hasSecondMesh ? (currentPage + ' ' + translatedOf + ' ' + totalPages) : ''); //update counter text
+		$('#currentpage').text(hasSecondMesh ? (currentPage + ' ' + translatedOf + ' ' + totalPages) : ''); //update counter text
 	}
 
-	$('#Next').click(function() {
+	$('#Next').click(function () {
 		if (currentPage < totalPages) {
 			currentPage++;
 			switchMeshVisibility();
 		}
 	});
 
-	$('#Prev').click(function() {
+	$('#Prev').click(function () {
 		if (currentPage > 1) {
 			currentPage--;
 			switchMeshVisibility();
@@ -391,13 +402,13 @@
 		if (presenter && presenter.getTrackballPosition) {
 			const position = presenter.getTrackballPosition();
 			const currentUrl = new URL(window.location.href);
-		
+
 			const queryParams = new URLSearchParams(currentUrl.search);
 			let query = queryParams.get('q') || '';
 
 			const parts = query.split('/');
-			const prefix = parts[0]; 
-			const suffix = 'mesh'; 
+			const prefix = parts[0];
+			const suffix = 'mesh';
 
 			const newQuery = prefix + '/' + suffix;
 
@@ -446,7 +457,7 @@
 		else if (action == 'color' || action == 'color_on') { presenter.toggleInstanceSolidColor(HOP_ALL, true); colorSwitch(); }
 		else if (action == 'color_m' || action == 'color_on_m') { presenter.toggleInstanceSolidColor(HOP_ALL, true); colorSwitch(); }
 		//--COLOR--
-	
+
 		//--SPECULAR--
 		//--MEASURE--
 		else if (action == 'measure' || action == 'measure_on') { presenter.enableMeasurementTool(!presenter.isMeasurementToolEnabled()); measureSwitch(); }
@@ -496,20 +507,20 @@
 	function toggleSpecular() {
 		var element = document.getElementById("specular");
 		element.classList.toggle("specular_on");
-		if (specular){
-		for (inst in presenter._scene.modelInstances) {
-			presenter._scene.modelInstances[inst].specularColor = [0.0, 0.0, 0.0, 256.0];
+		if (specular) {
+			for (inst in presenter._scene.modelInstances) {
+				presenter._scene.modelInstances[inst].specularColor = [0.0, 0.0, 0.0, 256.0];
+			}
+			specular = false;
+			presenter.repaint();
 		}
-		specular=false;
-		presenter.repaint();
-	}
-	else {
-		for (inst in presenter._scene.modelInstances) {
-			presenter._scene.modelInstances[inst].specularColor = [0.1, 0.1, 0.1, 256.0];
+		else {
+			for (inst in presenter._scene.modelInstances) {
+				presenter._scene.modelInstances[inst].specularColor = [0.1, 0.1, 0.1, 256.0];
+			}
+			specular = true;
+			presenter.repaint();
 		}
-		specular=true;
-		presenter.repaint();
-	}
 	}
 
 	$(document).ready(function () {

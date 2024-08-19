@@ -312,7 +312,12 @@
 				"mesh2": {
 					mesh: "mesh2",
 					color: [0.75, 0.75, 0.75],
-					visible: false
+					visible: false,
+					transform: {
+						matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
+							/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
+							SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
+					},
 				}
 			},
 

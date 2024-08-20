@@ -54,7 +54,7 @@ body {
 }
 
 #toolbar_m img {
-    background-size:cover; 
+    background-size:contain; 
     padding-top:8px;
 	margin-right:6px; 
 	margin-left:6px; 

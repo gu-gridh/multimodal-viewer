@@ -6,12 +6,14 @@
     <link rel="stylesheet" href="iiif.css">
     <link rel="stylesheet" href="annotorious.css">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/annotorious.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <script src="/viewer/libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="/viewer/libs/jquery.js"></script>
     <script src="openseadragon-bookmark-url.js"></script>
 </head>
@@ -40,6 +42,15 @@
         <div id="clear-annotations"></div>
     </div>
 
+    <div id="toolButtonsContainerVertical">
+        <a id="rotate-left" href="#rotate-left">
+            <div id="RotateLeft" class="toolButtonVertical"><img src="/viewer/shared/interface/rotate_left.png" /></div>
+        </a>
+        <a id="rotate-right" href="#rotate-right">
+            <div id="RotateRight" class="toolButtonVertical"><img src="/viewer/shared/interface/rotate_right.png" /></div>
+        </a>
+    </div> 
+
     <div class="interface-area">
         <div class="toolbar-bottom">
             <a id="home" href="#home">
@@ -51,10 +62,19 @@
             <a id="zoom-out" href="#zoom-out">
                 <div id="ZoomOut" class="NavButton"></div>
             </a>
+
+            <!-- <a id="rotate-left" href="#rotate-left">
+                <div id="RotateLeft" class="NavButton"></div>
+            </a>
+            <a id="rotate-right" href="#rotate-right">
+                <div id="RotateRight" class="NavButton"></div>
+            </a> -->
+
             <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
-            <div class="NavButton annotate-button compact annotate" style="width:auto; line-height:2.0" onclick="$('#instructions').show();" id="1"></div>
+            <div class="NavButton annotate-button compact annotate" style="width:auto; line-height:2.0"
+                onclick="$('#instructions').show();" id="1"></div>
         </div>
         <a id="download" target="_blank">
             <div id="" class="download-button compact" title="Download image"></div>
@@ -63,7 +83,10 @@
         <div id="trackball_position" class="share-button compact" title="Copy link to view" onclick="logPosition();">
             <div id="share-label" class="label-popup"></div>
         </div>
-        <div class="guide-button compact" title="User Guide" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
+        <div class="guide-button compact" title="User Guide"
+            onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+            ?</div>
+    
     </div>
 
     <script>
@@ -74,7 +97,7 @@
         let currentAnnotationId = null;
         let previousAnnotationId = null;
         let annotationClicked = false;
-    
+
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
@@ -89,12 +112,12 @@
             };
             sessionStorage.setItem('viewerState', JSON.stringify(state));
         }
-    
+
         function getSavedViewerState() {
             var state = sessionStorage.getItem('viewerState');
             return state ? JSON.parse(state) : null;
         }
-        
+
         i18next
             .use(i18nextHttpBackend)
             .init({
@@ -105,9 +128,9 @@
                 },
             }, function (err, t) {
                 if (err) return console.error('i18next initialization error:', err);
-    
+
                 applyTranslations();
-    
+
                 window.addEventListener('message', function (event) {
                     if (event.data.type === 'languageChange') {
                         const newLang = event.data.lang;
@@ -121,7 +144,7 @@
                     }
                 });
             });
-    
+
         function applyTranslations() {
             if (typeof i18next.t === 'function') {
                 document.getElementById('share-label').textContent = i18next.t('linkcopied');
@@ -145,7 +168,7 @@
                 }
             }
         }
-    
+
         function toggleAnnotations() {
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
@@ -163,51 +186,51 @@
                 button.textContent = i18next.t('hideannotations');
             }
         }
-    
+
         document.getElementById('clear-annotations').onclick = function () {
             toggleAnnotations();
         }
-    
+
         // notify index.html that the panel button has been clicked
         function togglePane() {
             window.parent.postMessage({ type: 'togglePane' }, '*');
         }
-    
+
         window.onload = function () {
             var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
             var downloadSources = JSON.parse(downloadSourceString);
-    
+
             // for restoring the zoom and pan from the URL
             const hash = window.location.hash.substring(1);
             const hashParams = new URLSearchParams(hash);
             const zoom = parseFloat(hashParams.get('zoom'));
             const x = parseFloat(hashParams.get('x'));
             const y = parseFloat(hashParams.get('y'));
-    
+
             const currentQuery = new URLSearchParams(window.location.search).get('q');
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
-    
+
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
             if (prevBaseQuery !== currentBaseQuery) {
                 sessionStorage.clear(); // clear sessionStorage if the base query part has changed
                 sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
             }
-    
+
             var savedState = getSavedViewerState();
-    
+
             document.getElementById('download').addEventListener('click', function (event) {
                 event.preventDefault();
                 const imageUrl = downloadSources;
-    
+
                 const popup = document.getElementById('download-label');
                 popup.style.display = 'block';
                 popup.classList.add('popup-animation');
-    
+
                 setTimeout(function () {
                     popup.classList.remove('popup-animation');
                     popup.style.display = 'none';
                 }, 3000);
-    
+
                 fetch(imageUrl)
                     .then(response => response.blob())
                     .then(blob => {
@@ -224,7 +247,7 @@
                     })
                     .catch(() => console.error("Could not download the image"));
             });
-    
+
             var viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
@@ -236,6 +259,7 @@
                 showZoomControl: true,
                 showHomeControl: true,
                 showFullPageControl: true,
+                showRotationControl: true,
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
@@ -243,8 +267,10 @@
                 zoomInButton: "zoom-in",
                 zoomOutButton: "zoom-out",
                 homeButton: "home",
+                rotateLeftButton: "rotate-left",
+                rotateRightButton: "rotate-right"
             });
-    
+
             viewer.addHandler('bookmark-url-change', function (event) {
                 const url = new URL(event.url);
                 let query = url.searchParams.get('q') || '';
@@ -257,9 +283,9 @@
                 const newUrl = url.origin + newPath + fragment;
                 urlToCopy = newUrl;
             });
-    
+
             viewer.bookmarkUrl();
-    
+
             viewer.addHandler('open', function () {
                 if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
                     viewer.viewport.zoomTo(zoom);
@@ -269,17 +295,17 @@
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
                 }
             });
-    
+
             viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
             });
-    
+
             // Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {
                 // Additional configuration options
                 disableEditor: true
             });
-    
+
             function convertToIIIFRegion(annotation, imageSize) {
                 //extract viewport coordinates from the annotation
                 const fragmentSelector = annotation.target.selector.value;
@@ -313,11 +339,11 @@
                     purpose: 'tagging',
                     value: 'MyTag'
                 }];
-    
+
                 await anno.updateSelected(selection);
                 anno.saveSelected();
             });
-    
+
             window.addEventListener('message', function (event) {
                 if (event.data.type === 'openAnnotation') {
                     const annotationId = event.data.id;
@@ -327,7 +353,7 @@
                 }
             });
 
-            anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function(annotations) {
+            anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
                 if (pendingAnnotationId) {
                     openAnnotationById(pendingAnnotationId);
                     pendingAnnotationId = null;
@@ -360,7 +386,7 @@
                 // Show the popup
                 document.getElementById('savePopup').style.display = 'block';
                 document.getElementById('instructions').style.display = 'none';
-    
+
                 // Handle Yes button click
                 document.getElementById('saveYes').onclick = function () {
                     convertToIIIFRegion(annotation, viewer.source);
@@ -368,7 +394,7 @@
                     window.open('PLACEHOLDER_INSCRIPTION_URL', '_blank');
                     document.getElementById('savePopup').style.display = 'none';
                 };
-    
+
                 // Handle No button click
                 document.getElementById('saveNo').onclick = function () {
                     anno.removeAnnotation(annotation.id);
@@ -376,7 +402,7 @@
                 };
             });
 
-            
+
             anno.on('clickAnnotation', function (annotation, element) {
                 annotationClicked = true;
 
@@ -390,30 +416,30 @@
                 };
 
                 //send a message to the parent window (index.html) with the annotation data
-                 window.parent.postMessage(annotationData, "*");
+                window.parent.postMessage(annotationData, "*");
             });
 
             let isDragging = false;
             let startX, startY;
             const dragThreshold = 1; //drag threshold
 
-            viewer.addHandler('canvas-press', function(event) {
+            viewer.addHandler('canvas-press', function (event) {
                 isDragging = false;
                 startX = event.position.x;
                 startY = event.position.y;
             });
 
-            viewer.addHandler('canvas-drag', function(event) {
+            viewer.addHandler('canvas-drag', function (event) {
                 const currentX = event.position.x;
                 const currentY = event.position.y;
-                
+
                 //drag detection
                 if (Math.abs(currentX - startX) > dragThreshold || Math.abs(currentY - startY) > dragThreshold) {
                     isDragging = true;
                 }
             });
 
-            viewer.addHandler('canvas-click', function(event) {
+            viewer.addHandler('canvas-click', function (event) {
                 //if it was a drag do not treat it as a click
                 if (isDragging) {
                     return;
@@ -436,12 +462,12 @@
                 currentAnnotationId = null;
             });
         }
-    
+
         function logPosition() {
             $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
                 $('#share-label').removeClass('popup-animation').dequeue();
             });
-    
+
             if (urlToCopy) {
                 navigator.clipboard.writeText(urlToCopy)
                     .then(() => console.log(urlToCopy + ' copied to clipboard'))
@@ -452,7 +478,8 @@
         }
     </script>
 
-    <div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
+    <div id="guide"
+        onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
         <div class="guide-content">
             <div class="guide-instructions">
                 <div class="guide-instructions-intro" id="6">
@@ -461,13 +488,15 @@
                 <div id="guide-instructions-tools">
                     <h2 id="4"></h2>
                     <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon" style="background-image:url(../../shared/interface/frame.png)"></div>
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(../../shared/interface/frame.png)"></div>
                         <div class="guide-instructions-item-label" id="2">
                         </div>
                     </div>
 
                     <div class="guide-instructions-item full-screen-option">
-                        <div class="guide-instructions-item-icon" style="background-image:url(../../shared/interface/expand.svg)"></div>
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(../../shared/interface/expand.svg)"></div>
                         <div class="guide-instructions-item-label" id="3">
                         </div>
                     </div>
@@ -486,5 +515,3 @@
 </body>
 
 </html>
-
-

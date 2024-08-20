@@ -826,3 +826,51 @@ a:link {
 #saveNo{
     background-color:rgb(130,50,50);
 }
+
+
+#toolButtonsContainerVertical {
+    position: absolute;
+    background-color: transparent;
+    top: calc(50% - 45px);
+    left: 30px;
+    z-index: 1000;
+    display: flex;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.toolButtonVertical {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width:40px;
+    height:40px;
+}
+
+.toolButtonVertical:hover {
+transform:scale(1.05);
+}
+
+
+
+.toolButtonVertical img:hover {
+    opacity: 1.0;
+}
+
+.toolButtonVertical img {
+    width: 45%;
+    height: 45%;
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+*:focus {
+    outline:none!important;
+  }

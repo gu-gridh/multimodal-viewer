@@ -2562,14 +2562,16 @@
                             this.toggleLayers();
                         },
                     },
+                 
                     rotate: {
                         title: "Rotate",
                         display: !1,
                         key: "r",
                         task: (t) => {
-                            i.rotate(250, -45);
+                            i.rotate(250, 90);
                         },
                     },
+                
                     light: {
                         title: "light",
                         display: "auto",

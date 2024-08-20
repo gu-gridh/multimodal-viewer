@@ -78,10 +78,10 @@ body {
 
 #Home {
 	background: url(../../shared/interface/frame.png);
-	background-size: cover;
+	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
-	width: 30px;
+	width: 28px;
 	height: 30px;
 	cursor: pointer;
 	overflow: hidden;
@@ -107,7 +107,36 @@ body {
 	height: 30px;
 	cursor: pointer;
 	overflow: hidden;
+
 }
+
+/* #RotateLeft {
+	background: url(../../shared/interface/rotate_left.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 22px;
+	height: 30px;
+	cursor: pointer;
+	overflow: hidden;
+	filter: brightness(0) invert(1);
+    opacity: 0.8;
+
+}
+
+#RotateRight {
+	background: url(../../shared/interface/rotate_right.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 22px;
+	height: 30px;
+	cursor: pointer;
+	overflow: hidden;
+	filter: brightness(0) invert(1);
+    opacity: 0.8;
+} */
+
 
 
 .NavButton {
@@ -124,6 +153,8 @@ body {
 	user-select: none;
 	-webkit-user-select: none;
 }
+
+
 
 .NavButton:hover {
 	opacity: 1;

@@ -59,6 +59,16 @@
         </div>
     </div>
 
+   <div id="toolButtonsContainerVertical">
+        <a id="rotate-left" href="#rotate-left">
+            <div id="RotateLeft" class="toolButtonVertical"><img src="/viewer/shared/interface/rotate_left.png" /></div>
+        </a>
+        <a id="rotate-right" href="#rotate-right">
+            <div id="RotateRight" class="toolButtonVertical"><img src="/viewer/shared/interface/rotate_right.png" /></div>
+        </a>
+    </div> 
+
+
     <div class="interface-area">
 
         <div class="toolbar-bottom">
@@ -73,6 +83,13 @@
             <a id="zoom-out" href="#zoom-out">
                 <div id="ZoomOut" class="NavButton"></div>
             </a>
+
+        <!--     <a id="rotate-left" href="#rotate-left">
+                <div id="RotateLeft" class="NavButton"></div>
+            </a>
+            <a id="rotate-right" href="#rotate-right">
+                <div id="RotateRight" class="NavButton"></div>
+            </a> -->
             <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
@@ -255,6 +272,7 @@
                 showZoomControl: true,
                 showHomeControl: true,
                 showFullPageControl: true,
+                showRotationControl: true,
                 showNavigator: true,
                 preserveViewport: true,
                 navigatorAutoFade: true,
@@ -265,6 +283,8 @@
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 homeButton: "home",
+                rotateLeftButton: "rotate-left",
+                rotateRightButton: "rotate-right",
             });
 
             viewer.addHandler('bookmark-url-change', function(event) {

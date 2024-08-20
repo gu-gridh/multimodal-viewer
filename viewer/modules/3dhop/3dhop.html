@@ -346,8 +346,16 @@
 			presenter.repaint();
 		}
 
-		document.getElementById('rotateLeft').onclick = function () { rotateMesh(90); };
-		document.getElementById('rotateRight').onclick = function () { rotateMesh(-90); };
+	// Rotation in 90 degrees step when double-clicking
+		document.getElementById('rotateLeft').ondblclick = function () { rotateMesh(90); };
+		document.getElementById('rotateRight').ondblclick = function () { rotateMesh(-90); }; 
+
+	// Smooth rotation when keeping the mouse pressed down
+		var interval;
+		document.getElementById('rotateLeft').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(1); }, 20);}
+		document.getElementById('rotateLeft').onmouseup = function () {  clearInterval(interval_);}
+		document.getElementById('rotateRight').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(-1); }, 20);}
+		document.getElementById('rotateRight').onmouseup = function () {  clearInterval(interval_);} 
 	});
 
 	function applyTranslations() {

@@ -45,6 +45,41 @@
 		top: 2px;
 		z-index: 100;
 	}
+
+	#rotateButtonsContainer {
+		position: absolute;
+		background-color: black;
+		border-radius: 8px;
+		padding: 6px 6px;
+		top: 26px;
+		right: 30px;
+		z-index: 1000;
+		display: flex;
+		gap: 5px;
+		box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.5) !important;
+	}
+
+	.rotateButton {
+		background-color: transparent;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.rotateButton img {
+		width: 28px;
+		height: 28px;
+		filter: brightness(0) invert(1);
+		opacity: 0.6;
+	}
+
+	.rotateButton img:hover {
+		opacity: 1.0;
+	}
+
 </style>
 
 <body>
@@ -151,10 +186,17 @@
 			</div>
 		</div>
 
+		<div id="rotateButtonsContainer">
+			<button id="rotateLeft" class="rotateButton">
+				<img src="/viewer/shared/interface/rotate_left.svg" alt="Rotate counter-clockwise" />
+			</button>
+			<button id="rotateRight" class="rotateButton">
+				<img src="/viewer/shared/interface/rotate_right.svg" alt="Rotate clockwise" />
+			</button>
+		</div>		
+
 		<div class="interface-area">
-
 			<div id="toolbar_m" class="toolbar-bottom">
-
 				<div id="toolbar">
 					<img id="home_m" title="Home" src="/viewer/shared/interface/frame.png" />
 
@@ -241,7 +283,7 @@
 	var currentPage = 1;
 	var totalPages = 2;
 	var presenter = null;
-	// document.querySelector('.title').textContent = PLACEHOLDER_TITLE; //set Title
+	var rotationAngle = 0; //current rotation angle
 
 	// <-- Language Control -->
 	const savedLang = localStorage.getItem('i18nextLang') || 'en';
@@ -271,6 +313,30 @@
 				}
 			});
 		});
+
+	document.addEventListener("DOMContentLoaded", function () {
+		function rotateMesh(degrees) {
+			rotationAngle += degrees;
+
+			var radianAngle = sglDegToRad(rotationAngle);
+			var rotationMatrix = SglMat4.rotationAngleAxis(radianAngle, [0.0, 0.0, 1.0]);
+
+			presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(
+				SglMat4.translation([0.0, 0.0, 0.0]),
+				rotationMatrix
+			);
+
+			presenter._scene.modelInstances['mesh2'].transform.matrix = SglMat4.mul(
+				SglMat4.translation([0.0, 0.0, 0.0]),
+				rotationMatrix
+			);
+
+			presenter.repaint();
+		}
+
+		document.getElementById('rotateLeft').onclick = function() { rotateMesh(90); };
+		document.getElementById('rotateRight').onclick = function() { rotateMesh(-90); };
+	});
 
 	function applyTranslations() {
 		if (typeof i18next.t === 'function') {
@@ -303,21 +369,21 @@
 				"mesh1": {
 					mesh: "mesh1",
 					color: [0.75, 0.75, 0.75],
-					transform: {
-						matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
-							/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
-							SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
-					},
+					// transform: {
+					// 	matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
+					// 		/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
+					// 		SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
+					// },
 				},
 				"mesh2": {
 					mesh: "mesh2",
 					color: [0.75, 0.75, 0.75],
 					visible: false,
-					transform: {
-						matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
-							/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
-							SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
-					},
+					// transform: {
+					// 	matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
+					// 		/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
+					// 		SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
+					// },
 				}
 			},
 

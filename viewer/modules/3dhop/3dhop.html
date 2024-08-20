@@ -258,10 +258,10 @@
 
 		</div>
 		<div id="toolButtonsContainerVertical">
-			<button id="rotateLeft" class="toolButtonVertical" title="Rotate counter-clockwise">
+			<button id="rotateLeft" class="toolButtonVertical" title="Press to rotate counter-clockwise. Double-click to rotate 90 degrees.">
 				<img src="/viewer/shared/interface/rotate_left.svg"  />
 			</button>
-			<button id="rotateRight" class="toolButtonVertical" title="Rotate clockwise" >
+			<button id="rotateRight" class="toolButtonVertical" title="Press to rotate clockwise. Double-click to rotate 90 degrees." >
 				<img src="/viewer/shared/interface/rotate_right.svg" />
 			</button>
 		</div>
@@ -352,9 +352,9 @@
 
 	// Smooth rotation when keeping the mouse pressed down
 		var interval;
-		document.getElementById('rotateLeft').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(1); }, 20);}
+		document.getElementById('rotateLeft').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(1); }, 30);}
 		document.getElementById('rotateLeft').onmouseup = function () {  clearInterval(interval_);}
-		document.getElementById('rotateRight').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(-1); }, 20);}
+		document.getElementById('rotateRight').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(-1); }, 30);}
 		document.getElementById('rotateRight').onmouseup = function () {  clearInterval(interval_);} 
 	});
 
@@ -389,6 +389,7 @@
 				"mesh1": {
 					mesh: "mesh1",
 					color: [0.75, 0.75, 0.75],
+					tags: ["meshes"],
 					// transform: {
 					// 	matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
 					// 		/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
@@ -399,6 +400,7 @@
 					mesh: "mesh2",
 					color: [0.75, 0.75, 0.75],
 					visible: false,
+					tags: ["meshes"],
 					// transform: {
 					// 	matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
 					// 		/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
@@ -524,8 +526,12 @@
 	// Most of the functions have mobile variations, otherwise the buttons break
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
-		if (action == 'home') presenter.animateToTrackballPosition([PLACEHOLDER_TRACKBALLSTART]);
-		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
+		if (action == 'home') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
+		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART), 
+		presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]),SglMat4.rotationAngleAxis(0, [0, 0, 1])),
+		presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]),SglMat4.rotationAngleAxis(0, [0, 0, 1])), 
+		rotationAngle = 0;
+		
 		//--FULLSCREEN--
 		else if (action == 'full' || action == 'full_on') fullscreenSwitch();
 		//--FULLSCREEN--

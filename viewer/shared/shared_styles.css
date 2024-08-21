@@ -101,56 +101,50 @@ body {
 
 /* Common share and download buttons for all media categories */
 
-.download-button {
-    pointer-events: auto;
-    background: url(interface/downloadbutton.png);
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-position: center;
+.round-button{
     width: 40px;
     height: 40px;
     cursor: pointer;
     overflow: hidden;
     position: absolute;
-    bottom: 3px;
     Left: 30px;
     background-color: rgb(0, 0, 0, 0.8) !important;
     border-radius: 50%;
     user-select: none;
     -webkit-user-select: none;
- 
 }
 
-.download-button:hover {
+.round-button:hover {
     background-color: rgb(0, 0, 0, 1.0) !important;
     cursor: pointer;
     transform: scale(1.07);
 }
-
+.download-button {
+    pointer-events: auto;
+    background: url(https://data.dh.gu.se/ui-icons/download_white.png);
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    bottom: 3px;
+}
 
 .share-button {
     pointer-events: auto;
-    background: url(interface/ios-share.svg);
+    background: url(https://data.dh.gu.se/ui-icons/share_white.svg);
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    position: absolute;
-    bottom: 50px;
-    Left: 30px;
-    background-color: rgb(0, 0, 0, 0.8) !important;
-    border-radius: 50%;
-    user-select: none;
-    -webkit-user-select: none;
-    transition: all 0.2s ease-in-out;
+    bottom: 50px; 
 }
 
-.share-button:hover {
-    background-color: rgb(0, 0, 0, 1.0) !important;
-    cursor: pointer;
-    transform: scale(1.07);
+.annotate-button {
+    pointer-events: auto;
+    background: url(https://data.dh.gu.se/ui-icons/pen_white.png);
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    bottom: 100px;
+
 }
 
 .label-popup {
@@ -359,11 +353,11 @@ h2 {
 }
 
 #Prev {
-    background-image: url(../shared/interface/prev.png);
+    background-image: url(https://data.dh.gu.se/ui-icons/arrow_prev_white.png);
 }
 
 #Next {
-    background-image: url(../shared/interface/next.png);
+    background-image: url(https://data.dh.gu.se/ui-icons/arrow_next_white.png);
     margin-left: 10px;
 }
 
@@ -831,7 +825,7 @@ a:link {
 #toolButtonsContainerVertical {
     position: absolute;
     background-color: transparent;
-    top: calc(50% - 45px);
+    top: calc(80px);
     left: 30px;
     z-index: 1000;
     display: flex;

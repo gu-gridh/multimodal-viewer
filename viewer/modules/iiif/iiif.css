@@ -32,7 +32,7 @@ body {
 
 
 #FullPage {
-	background: url(../../shared/interface/expand.svg);
+	background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -65,7 +65,7 @@ body {
 }
 
 #Download {
-	background: url(../../shared/interface/downloadbuttonwhite.png);
+	background: url(https://data.dh.gu.se/ui-icons/download_white.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -77,7 +77,7 @@ body {
 }
 
 #Home {
-	background: url(../../shared/interface/frame.png);
+	background: url(https://data.dh.gu.se/ui-icons/frame_white.png);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -88,7 +88,7 @@ body {
 }
 
 #ZoomIn {
-	background: url(../../shared/interface/plus_big.png);
+	background: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -99,7 +99,7 @@ body {
 }
 
 #ZoomOut {
-	background: url(../../shared/interface/minus_big.png);
+	background: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -161,10 +161,3 @@ body {
 	cursor: pointer;
 }
 
-.annotate-button {
-	font-family: "Oswald", sans-serif !important;
-	margin-top: 5px;
-	margin-left: 5px;
-	font-size: 1.15em;
-	font-weight: 200;
-}

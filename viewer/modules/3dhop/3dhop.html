@@ -34,13 +34,13 @@
 	}
 
 	.specular_off {
-		background: url(/viewer/shared/interface/specular_off.png);
+		background: url(https://data.dh.gu.se/ui-icons/specular_off.png);
 		max-height: 23px;
 		top: 2px;
 	}
 
 	.specular_on {
-		background: url(/viewer/shared/interface/specular_on.png);
+		background: url(https://data.dh.gu.se/ui-icons/specular_on.png);
 		max-height: 23px;
 		top: 2px;
 		z-index: 100;
@@ -65,7 +65,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(/viewer/shared/interface/frame.png)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p id="4"></p>
 						</div>
@@ -73,7 +73,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(/viewer/shared/interface/colour_on.png)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/colour_on.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p id="5"></p>
 						</div>
@@ -81,7 +81,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(/viewer/shared/interface/specular_on.png)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/specular_on.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p id="6"></p>
 						</div>
@@ -89,7 +89,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(/viewer/shared/interface/light_on.png)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/light_on.png)"></div>
 						<div class="guide-instructions-item-label">
 							<p id="7"></p>
 						</div>
@@ -105,7 +105,7 @@
 
 					<div class="guide-instructions-item full-screen-option">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(/viewer/shared/interface/expand.svg)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
 						<div class="guide-instructions-item-label">
 							<p id="9"></p>
 						</div>
@@ -158,27 +158,27 @@
 		<div class="interface-area">
 			<div id="toolbar_m" class="toolbar-bottom">
 				<div id="toolbar">
-					<img id="home_m" title="Home" src="/viewer/shared/interface/frame.png" style="width:28px; height:28px; padding-top::4px!important;"/>
+					<img id="home_m" title="Home" src="https://data.dh.gu.se/ui-icons/frame_white.png" style="width:28px; height:28px; padding-top::4px!important;"/>
 
 					<!--ZOOM-->
 					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom In"
-						src="/viewer/shared/interface/plus_big.png" />
+						src="https://data.dh.gu.se/ui-icons/zoomin_big_white.png" />
 					<img id="zoomout" class="narrow-toolbar-icon" title="Zoom Out"
-						src="/viewer/shared/interface/minus_big.png" />
+						src="https://data.dh.gu.se/ui-icons/zoomout_big_white.png" />
 
 					<!--COLOR-->
-					<img id="color_on_m" title="Disable Solid Color" src="/viewer/shared/interface/colour_off.png"
+					<img id="color_on_m" title="Disable Solid Color" src="https://data.dh.gu.se/ui-icons/colour_off.png"
 						style="position:absolute; visibility:hidden; " />
-					<img id="color_m" title="Enable Solid Color" src="/viewer/shared/interface/colour_on.png" />
+					<img id="color_m" title="Enable Solid Color" src="https://data.dh.gu.se/ui-icons/colour_on.png" />
 
 					<!--SPECULAR-->
 					<img id="specular" class="specular_off specular_on" title="Toggle Specular Light"
-						onclick="toggleSpecular()" src="/viewer/shared/interface/empty.svg" />
+						onclick="toggleSpecular()" src="https://data.dh.gu.se/ui-icons/specular_empty.svg" />
 
 					<!--LIGHT-->
-					<img id="light_on_m" title="Disable Light Control" src="/viewer/shared/interface/light_on.png"
+					<img id="light_on_m" title="Disable Light Control" src="https://data.dh.gu.se/ui-icons/light_on.png"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="light_m" title="Enable Light Control" src="/viewer/shared/interface/light.png" />
+					<img id="light_m" title="Enable Light Control" src="https://data.dh.gu.se/ui-icons/light.png" />
 
 
 					<!--MEASURE-->
@@ -189,7 +189,7 @@
 
 					<!--FULLSCREEN-->
 					<img id="full1" class="full-page full-screen-option" title="Full Screen"
-						src="/viewer/shared/interface/expand.svg" style="position:relative;" onclick="togglePane()" />
+						src="https://data.dh.gu.se/ui-icons/expand_white.svg" style="position:relative;" onclick="togglePane()" />
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
@@ -203,10 +203,10 @@
 				onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
 				?</div>
 			<a id="download" target="_blank">
-				<div id="" class="download-button compact deactivated" title="Download image"></div>
+				<div id="" class="round-button download-button compact deactivated" title="Download image"></div>
 			</a>
 
-			<div id="trackball_position" class="share-button compact" title="Copy link to view"
+			<div id="trackball_position" class="round-button share-button compact" title="Copy link to view"
 				onclick="logTrackballPosition();">
 				<div id="share-label" class="label-popup"></div>
 			</div>
@@ -215,11 +215,11 @@
 
 		</div>
 		<div id="toolButtonsContainerVertical">
-			<button id="rotateLeft" class="toolButtonVertical" title="Press to rotate counter-clockwise. Double-click to rotate 90 degrees counter-clockwise.">
-				<img src="/viewer/shared/interface/rotate_left.png"  />
+			<button id="rotateLeft" class="toolButtonVertical compact" title="Press to rotate counter-clockwise. Double-click to rotate 90 degrees counter-clockwise.">
+				<img src="https://data.dh.gu.se/ui-icons/rotate_left_white.png"  />
 			</button>
-			<button id="rotateRight" class="toolButtonVertical" title="Press to rotate clockwise. Double-click to rotate 90 degrees clockwise." >
-				<img src="/viewer/shared/interface/rotate_right.png" />
+			<button id="rotateRight" class="toolButtonVertical compact" title="Press to rotate clockwise. Double-click to rotate 90 degrees clockwise." >
+				<img src="https://data.dh.gu.se/ui-icons/rotate_right_white.png" />
 			</button>
 		</div>
 

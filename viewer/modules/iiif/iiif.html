@@ -44,10 +44,10 @@
 
     <div id="toolButtonsContainerVertical">
         <a id="rotate-left" href="#rotate-left">
-            <div id="RotateLeft" class="toolButtonVertical"><img src="/viewer/shared/interface/rotate_left.png" /></div>
+            <div id="RotateLeft" class="toolButtonVertical compact"><img src="https://data.dh.gu.se/ui-icons/rotate_left_white.png" /></div>
         </a>
         <a id="rotate-right" href="#rotate-right">
-            <div id="RotateRight" class="toolButtonVertical"><img src="/viewer/shared/interface/rotate_right.png" /></div>
+            <div id="RotateRight" class="toolButtonVertical compact"><img src="https://data.dh.gu.se/ui-icons/rotate_right_white.png" /></div>
         </a>
     </div> 
 
@@ -73,14 +73,16 @@
             <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
-            <div class="NavButton annotate-button compact annotate" style="width:auto; line-height:2.0"
-                onclick="$('#instructions').show();" id="1"></div>
         </div>
+
+        <div class="round-button annotate-button compact annotate" style="line-height:2.0"
+                onclick="$('#instructions').show();" title="Annotate"></div>
+
         <a id="download" target="_blank">
-            <div id="" class="download-button compact" title="Download image"></div>
+            <div id="" class="round-button download-button compact" title="Download image"></div>
         </a>
         <div id="download-label" class="label-popup" style="display: none;"></div>
-        <div id="trackball_position" class="share-button compact" title="Copy link to view" onclick="logPosition();">
+        <div id="trackball_position" class="round-button share-button compact" title="Copy link to view" onclick="logPosition();">
             <div id="share-label" class="label-popup"></div>
         </div>
         <div class="guide-button compact" title="User Guide"
@@ -149,7 +151,7 @@
             if (typeof i18next.t === 'function') {
                 document.getElementById('share-label').textContent = i18next.t('linkcopied');
                 document.getElementById('download-label').textContent = i18next.t('downloadstarted');
-                document.getElementById('1').textContent = i18next.t('annotate');
+                // document.getElementById('1').textContent = i18next.t('annotate');
                 document.getElementById('2').innerHTML = i18next.t('frame-object');
                 document.getElementById('3').innerHTML = i18next.t('full-screen');
                 document.getElementById('4').textContent = i18next.t('tools');
@@ -489,20 +491,20 @@
                     <h2 id="4"></h2>
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
-                            style="background-image:url(../../shared/interface/frame.png)"></div>
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
                         <div class="guide-instructions-item-label" id="2">
                         </div>
                     </div>
 
                     <div class="guide-instructions-item full-screen-option">
                         <div class="guide-instructions-item-icon"
-                            style="background-image:url(../../shared/interface/expand.svg)"></div>
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="3">
                         </div>
                     </div>
 
                     <div class="guide-instructions-item annotate-option">
-                        <div class="guide-instructions-item-icon" style="background-image:url()"></div>
+                        <div class="guide-instructions-item-icon" style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
                         <div class="guide-instructions-item-label" id="7">
                         </div>
                     </div>

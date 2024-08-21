@@ -149,7 +149,7 @@
        transform="translate(4.8700496)">
       <image
         width="50" height="50"
-        xlink:href="../../shared/interface/plus_big.png"
+        xlink:href="https://data.dh.gu.se/ui-icons/zoomin_big_white.png"
         />
     </g>
     <g
@@ -158,7 +158,7 @@
        transform="translate(3.6568246)">
         <image
         width="50" height="50"
-        xlink:href="../../shared/interface/minus_big.png"
+        xlink:href="https://data.dh.gu.se/ui-icons/zoomout_big_white.png"
         />
     </g>
     <g
@@ -166,7 +166,7 @@
        class="openlime-button openlime-fullscreen">
         <image
         width="50" height="50"
-        xlink:href="../../shared/interface/expand.svg"
+        xlink:href="https://data.dh.gu.se/ui-icons/expand_white.svg"
         />
       </g>
       <g

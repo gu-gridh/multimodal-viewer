@@ -79581,7 +79581,7 @@ ENDSEC
 
 					// FULLSCREEN
 					elToolbar.append(this.createToolIconExpanded(
-						'../../shared/interface/expand.svg',
+						'https://data.dh.gu.se/ui-icons/expand_white.svg',
 						'',
 						() => {
 

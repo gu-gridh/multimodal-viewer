@@ -62,7 +62,7 @@
   "of": "of",
   "annotate": "Annotate",
   "annotate-instructions": "<p>Annotate.</p> Annotate the image by holding shift-key while clicking and dragging a rectangle around the desired area.",
-  "annotate-instructions-2": "Hold shift and click-and-drag to mark <br> the inscription you wish to annotate.",
+  "annotate-instructions-2": "Hold shift and click-and-drag to mark <br> the section you wish to annotate.",
   "satisfiedwithselection": "Are you satisfied with the selection?",
   "copyposition": "Copy the position and register",
   "redoselection": "Redo the selection",

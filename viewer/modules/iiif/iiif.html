@@ -287,6 +287,16 @@
                 urlToCopy = newUrl;
             });
 
+            //hide annotations when rotating
+            viewer.addHandler('rotate', function() {
+                anno.setVisible(false);
+            });
+
+            //show annotations after rotation
+            viewer.addHandler('animation-finish', function() {
+                anno.setVisible(true);
+            });
+
             viewer.bookmarkUrl();
 
             viewer.addHandler('open', function () {

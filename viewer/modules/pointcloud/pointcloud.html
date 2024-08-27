@@ -181,7 +181,48 @@
 		style="position: relative; width: 100%; height: calc(100%); left: 0px; top: 0px; bottom:200px;">
 
 		<!--  specify the bakground-color -->
-		<div id="potree_render_area" style="background-color:var(--viewer-bg)"></div>
+		<div id="potree_render_area" style="background-color:var(--viewer-bg)">
+			<!-- Here we have a floating div with instructions on how to navigate -->
+
+	<div class="ui-overlay-container" style="position:absolute; bottom:20px; ">
+		<div id="instructions" class="" style="width:350px; padding:15px 10px;">
+			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
+			<div id="1"></div>
+		</div>
+	</div>
+
+
+	<div class="interface-area">
+		<div class="toolbar-bottom" style="width:350px;">
+			<div id="tools"></div>
+			<div id="quality">
+
+				<selectgroup id="splat_quality_options" style="width:100px;">
+					<option id="splat_quality_options_standard left" value="standard">LQ</option>
+					<option id="splat_quality_options_hq right" value="hq">HQ</option>
+				</selectgroup>
+
+			</div>
+		</div>
+		<div class="guide-button compact" title="User Guide"
+			onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+			?</div>
+	</div>
+
+	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:55px; z-index:1000; color:white;">
+		<div class="LODtool" id="point-sliders" style="width:330px;">
+			<div style="width:calc(50% - 10px); float:left; padding-right:10px;">
+				<span id="2"></span> <span id="lblPointSize"></span>
+				<div id="sldPointSize"></div>
+			</div>
+			<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
+				<span id="3"></span> <span id="lblPointBudget"></span>
+				<div id="sldPointBudget"></div>
+			</div>
+		</div>
+	</div>
+	
+		</div>
 		<div id="potree_sidebar_container" style="background-color:var(--sidebar-bg)"> </div>
 	</div>
 
@@ -376,45 +417,7 @@
 		<div id="orientation" class="orientation"></div>
 	</div> -->
 
-	<!-- Here we have a floating div with instructions on how to navigate -->
-
-	<div class="ui-overlay-container" style="position:absolute; bottom:20px; ">
-		<div id="instructions" class="" style="width:350px; padding:15px 10px;">
-			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
-			<div id="1"></div>
-		</div>
-	</div>
-
-
-	<div class="interface-area">
-		<div class="toolbar-bottom" style="width:350px;">
-			<div id="tools"></div>
-			<div id="quality">
-
-				<selectgroup id="splat_quality_options" style="width:100px;">
-					<option id="splat_quality_options_standard left" value="standard">LQ</option>
-					<option id="splat_quality_options_hq right" value="hq">HQ</option>
-				</selectgroup>
-
-			</div>
-		</div>
-		<div class="guide-button compact" title="User Guide"
-			onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
-			?</div>
-	</div>
-
-	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:55px; z-index:1000; color:white;">
-		<div class="LODtool" id="point-sliders" style="width:330px;">
-			<div style="width:calc(50% - 10px); float:left; padding-right:10px;">
-				<span id="2"></span> <span id="lblPointSize"></span>
-				<div id="sldPointSize"></div>
-			</div>
-			<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
-				<span id="3"></span> <span id="lblPointBudget"></span>
-				<div id="sldPointBudget"></div>
-			</div>
-		</div>
-	</div>
+	
 </body>
 
 </html>

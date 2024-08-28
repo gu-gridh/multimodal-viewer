@@ -105,9 +105,8 @@ body {
     width: 40px;
     height: 40px;
     cursor: pointer;
-    overflow: hidden;
     position: absolute;
-    Left: 30px;
+    left: 30px;
     background-color: rgb(0, 0, 0, 0.8) !important;
     border-radius: 50%;
     user-select: none;

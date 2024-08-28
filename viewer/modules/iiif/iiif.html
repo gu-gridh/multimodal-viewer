@@ -55,13 +55,13 @@
     <div class="interface-area">
         <div class="toolbar-bottom">
             <a id="home" href="#home">
-                <div id="Home" class="NavButton"></div>
+                <div id="Home" title="Reset the view" class="NavButton"></div>
             </a>
             <a id="zoom-in" href="#zoom-in">
-                <div id="ZoomIn" class="NavButton"></div>
+                <div id="ZoomIn" title="Zoom in the view" class="NavButton"></div>
             </a>
             <a id="zoom-out" href="#zoom-out">
-                <div id="ZoomOut" class="NavButton"></div>
+                <div id="ZoomOut" title="Zoom out the view" class="NavButton"></div>
             </a>
 
             <!-- <a id="rotate-left" href="#rotate-left">
@@ -71,13 +71,13 @@
                 <div id="RotateRight" class="NavButton"></div>
             </a> -->
 
-            <a id="full-page1" class="full-screen-option" href="#full-page" onclick="togglePane()">
+            <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
         </div>
 
         <div class="round-button annotate-button compact annotate" style="line-height:2.0"
-                onclick="$('#instructions').show();" title="Annotate"></div>
+                onclick="$('#instructions').show();" title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
 
         <a id="download" target="_blank">
             <div id="" class="round-button download-button compact" title="Download image"></div>

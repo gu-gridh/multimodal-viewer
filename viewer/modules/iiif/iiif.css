@@ -88,7 +88,7 @@ body {
 }
 
 #ZoomIn {
-	background: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
+	background: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -99,7 +99,7 @@ body {
 }
 
 #ZoomOut {
-	background: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
+	background: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: center;

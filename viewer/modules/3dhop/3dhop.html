@@ -284,7 +284,6 @@
 			});
 		});
 
-	document.addEventListener("DOMContentLoaded", function () {
 		function rotateMesh(degrees) {
 			rotationAngle += degrees;
 
@@ -304,16 +303,24 @@
 			presenter.repaint();
 		}
 
-	// Rotation in 90 degrees step when double-clicking
+	document.addEventListener("DOMContentLoaded", function () {
+		// Rotation in 90 degrees step when double-clicking
 		document.getElementById('rotateLeft').ondblclick = function () { rotateMesh(90); };
 		document.getElementById('rotateRight').ondblclick = function () { rotateMesh(-90); }; 
 
-	// Smooth rotation when keeping the mouse pressed down
-		var interval;
-		document.getElementById('rotateLeft').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(1); }, 30);}
-		document.getElementById('rotateLeft').onmouseup = function () {  clearInterval(interval_);}
-		document.getElementById('rotateRight').onmousedown = function () { interval_ = setInterval(function(){ rotateMesh(-1); }, 30);}
-		document.getElementById('rotateRight').onmouseup = function () {  clearInterval(interval_);} 
+		// Smooth rotation when keeping the mouse pressed down
+		var rotationInterval;
+
+		document.getElementById('rotateLeft').onmousedown = function () { 
+			rotationInterval = setInterval(function() { rotateMesh(1); }, 30); 
+		};
+		document.getElementById('rotateRight').onmousedown = function () { 
+			rotationInterval = setInterval(function() { rotateMesh(-1); }, 30); 
+		};
+
+		document.onmouseup = function () { 
+			clearInterval(rotationInterval); 
+		};
 	});
 
 	function applyTranslations() {
@@ -391,11 +398,16 @@
 		const panY = parseFloat(urlParams.get('panY'));
 		const panZ = parseFloat(urlParams.get('panZ'));
 		const zoom = parseFloat(urlParams.get('zoom'));
+		const rotation = parseFloat(urlParams.get('rotation'));
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
 			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
 		} else {
 			console.error('Invalid parameters for trackball animation');
+		}
+
+		if (!isNaN(rotation)) {
+			rotateMesh(rotation); //apply the rotation to the mesh
 		}
 
 		for (inst in presenter._scene.modelInstances) {
@@ -470,6 +482,7 @@
 			queryParams.set('panY', position[3].toFixed(12));
 			queryParams.set('panZ', position[4].toFixed(12));
 			queryParams.set('zoom', position[5].toFixed(2));
+			queryParams.set('rotation', rotationAngle.toFixed(2)); //store the rotation
 
 			const newUrl = `${currentUrl.origin}/viewer/?${queryParams.toString()}`;
 

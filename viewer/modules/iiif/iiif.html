@@ -339,10 +339,10 @@
                 console.log('IIIF Image Section:', iiifUrl);
 
                 //copy the IIIF region URL to the clipboard
-                navigator.clipboard.writeText(iiifUrl).then(() => {
-                    console.log('IIIF URL copied to clipboard:', region);
+                navigator.clipboard.writeText(region).then(() => {
+                    console.log('IIIF region copied to clipboard:', region);
                 }).catch(err => {
-                    console.error('Failed to copy IIIF URL to clipboard:', err);
+                    console.error('Failed to copy IIIF region to clipboard:', err);
                 });
             }
 

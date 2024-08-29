@@ -100,6 +100,7 @@
         let currentAnnotationId = null;
         let previousAnnotationId = null;
         let annotationClicked = false;
+        let currentRotation = 0; //current rotation
 
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
@@ -203,12 +204,16 @@
             var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
             var downloadSources = JSON.parse(downloadSourceString);
 
-            // for restoring the zoom and pan from the URL
+            // for restoring the zoom and pan and rotation from the URL
             const hash = window.location.hash.substring(1);
             const hashParams = new URLSearchParams(hash);
             const zoom = parseFloat(hashParams.get('zoom'));
             const x = parseFloat(hashParams.get('x'));
             const y = parseFloat(hashParams.get('y'));
+            let rotation = parseFloat(hashParams.get('rotation')) || 0;
+
+            //normalize rotation
+            rotation = ((rotation % 360) + 360) % 360; 
 
             const currentQuery = new URLSearchParams(window.location.search).get('q');
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
@@ -289,6 +294,7 @@
 
             //hide annotations when rotating
             viewer.addHandler('rotate', function() {
+                currentRotation = viewer.viewport.getRotation();
                 anno.setVisible(false);
             });
 
@@ -303,9 +309,13 @@
                 if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
                     viewer.viewport.zoomTo(zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
+                    viewer.viewport.setRotation(rotation); 
+                    currentRotation = rotation;
                 } else if (savedState) {
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
+                    // viewer.viewport.setRotation(rotation); TODO
+                    // currentRotation = savedState.rotation || 0;
                 }
             });
 
@@ -477,18 +487,32 @@
         }
 
         function logPosition() {
-            $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
-                $('#share-label').removeClass('popup-animation').dequeue();
-            });
+    $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
+        $('#share-label').removeClass('popup-animation').dequeue();
+    });
 
-            if (urlToCopy) {
-                navigator.clipboard.writeText(urlToCopy)
-                    .then(() => console.log(urlToCopy + ' copied to clipboard'))
-                    .catch(err => console.error('Could not copy URL:', err));
-            } else {
-                console.error('No URL to copy');
-            }
-        }
+    if (urlToCopy) {
+        const url = new URL(urlToCopy);
+        const rotationParam = `rotation=${currentRotation}`;
+
+        //remove any existing rotation parameters
+        let hashFragment = url.hash.substring(1);
+        let hashParams = new URLSearchParams(hashFragment);
+        hashParams.delete('rotation');
+
+        //add the new rotation parameter
+        hashParams.append('rotation', currentRotation);
+
+        //reconstruct the URL
+        urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
+
+        navigator.clipboard.writeText(urlToCopy)
+            .then(() => console.log(urlToCopy + ' copied to clipboard'))
+            .catch(err => console.error('Could not copy URL:', err));
+    } else {
+        console.error('No URL to copy');
+    }
+}
     </script>
 
     <div id="guide"

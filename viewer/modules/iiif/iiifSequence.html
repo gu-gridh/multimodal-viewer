@@ -112,6 +112,7 @@
         let urlToCopy = '';
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
+        let currentRotation = 0; //current rotation
 
         // <-- Language Control -->
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
@@ -172,7 +173,8 @@
             var centerPoint = viewer.viewport.getCenter();
             var state = {
                 zoom: zoomLevel,
-                center: { x: centerPoint.x, y: centerPoint.y }
+                center: { x: centerPoint.x, y: centerPoint.y },
+                rotation: currentRotation
             };
             sessionStorage.setItem('viewerState', JSON.stringify(state));
         }
@@ -196,6 +198,7 @@
             const zoom = parseFloat(hashParams.get('zoom'));
             const x = parseFloat(hashParams.get('x'));
             const y = parseFloat(hashParams.get('y'));
+            let rotation = parseFloat(hashParams.get('rotation')) || 0;
 
             const currentQuery = new URLSearchParams(window.location.search).get('q');
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
@@ -303,14 +306,27 @@
 
             viewer.bookmarkUrl();
 
+            viewer.addHandler('rotate', function() {
+                currentRotation = viewer.viewport.getRotation();
+            });
+
             viewer.addHandler('open', function () {
-                if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
-                    viewer.viewport.zoomTo(zoom);
-                    viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
-                } else if (isInitialLoad && savedState) {
+                if (isInitialLoad && savedState ) {
+                    //console.log('setting state based savedstate');
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
+                    viewer.viewport.setRotation(savedState.rotation, true); 
+                    currentRotation = savedState.rotation || 0;
                     document.getElementById("currentpage").innerHTML = `1 ${i18next.t('of')} ${tileSources.length}`;
+                }
+                else if (isInitialLoad && !isNaN(zoom) && !isNaN(x) && !isNaN(y) && !isNaN(rotation)) {
+                    //console.log('setting state based on url');
+                    viewer.viewport.zoomTo(zoom);
+                    viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
+                    viewer.viewport.setRotation(rotation, true); 
+                    currentRotation = rotation;
+                } else {
+                    //console.log('not setting saved state or hash state');
                 }
                 isInitialLoad = false;
                 applyTranslations();
@@ -331,6 +347,20 @@
             });
 
             if (urlToCopy) {
+                const url = new URL(urlToCopy);
+                const rotationParam = `rotation=${currentRotation}`;
+
+                //remove any existing rotation parameters
+                let hashFragment = url.hash.substring(1);
+                let hashParams = new URLSearchParams(hashFragment);
+                hashParams.delete('rotation');
+
+                //add the new rotation parameter
+                hashParams.append('rotation', currentRotation);
+
+                //reconstruct the URL
+                urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
+
                 navigator.clipboard.writeText(urlToCopy)
                     .then(() => console.log(urlToCopy + ' copied to clipboard'))
                     .catch(err => console.error('Could not copy URL:', err));

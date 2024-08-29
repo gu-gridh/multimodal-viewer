@@ -112,7 +112,8 @@
             var centerPoint = viewer.viewport.getCenter();
             var state = {
                 zoom: zoomLevel,
-                center: { x: centerPoint.x, y: centerPoint.y }
+                center: { x: centerPoint.x, y: centerPoint.y },
+                rotation: currentRotation
             };
             sessionStorage.setItem('viewerState', JSON.stringify(state));
         }
@@ -292,6 +293,8 @@
                 urlToCopy = newUrl;
             });
 
+            viewer.bookmarkUrl();
+
             //hide annotations when rotating
             viewer.addHandler('rotate', function() {
                 currentRotation = viewer.viewport.getRotation();
@@ -303,19 +306,19 @@
                 anno.setVisible(true);
             });
 
-            viewer.bookmarkUrl();
-
             viewer.addHandler('open', function () {
-                if (!isNaN(zoom) && !isNaN(x) && !isNaN(y)) {
+                if (!isNaN(zoom) && !isNaN(x) && !isNaN(y) && !isNaN(rotation)) {
+                    //console.log('setting position based on url')
                     viewer.viewport.zoomTo(zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
-                    viewer.viewport.setRotation(rotation); 
+                    viewer.viewport.setRotation(rotation, true); 
                     currentRotation = rotation;
                 } else if (savedState) {
+                    //console.log('setting position based on savedstate')
                     viewer.viewport.zoomTo(savedState.zoom);
                     viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
-                    // viewer.viewport.setRotation(rotation); TODO
-                    // currentRotation = savedState.rotation || 0;
+                    viewer.viewport.setRotation(savedState.rotation, true); 
+                    currentRotation = savedState.rotation || 0;
                 }
             });
 
@@ -487,32 +490,32 @@
         }
 
         function logPosition() {
-    $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
-        $('#share-label').removeClass('popup-animation').dequeue();
-    });
+            $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
+                $('#share-label').removeClass('popup-animation').dequeue();
+            });
 
-    if (urlToCopy) {
-        const url = new URL(urlToCopy);
-        const rotationParam = `rotation=${currentRotation}`;
+            if (urlToCopy) {
+                const url = new URL(urlToCopy);
+                const rotationParam = `rotation=${currentRotation}`;
 
-        //remove any existing rotation parameters
-        let hashFragment = url.hash.substring(1);
-        let hashParams = new URLSearchParams(hashFragment);
-        hashParams.delete('rotation');
+                //remove any existing rotation parameters
+                let hashFragment = url.hash.substring(1);
+                let hashParams = new URLSearchParams(hashFragment);
+                hashParams.delete('rotation');
 
-        //add the new rotation parameter
-        hashParams.append('rotation', currentRotation);
+                //add the new rotation parameter
+                hashParams.append('rotation', currentRotation);
 
-        //reconstruct the URL
-        urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
+                //reconstruct the URL
+                urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
 
-        navigator.clipboard.writeText(urlToCopy)
-            .then(() => console.log(urlToCopy + ' copied to clipboard'))
-            .catch(err => console.error('Could not copy URL:', err));
-    } else {
-        console.error('No URL to copy');
-    }
-}
+                navigator.clipboard.writeText(urlToCopy)
+                    .then(() => console.log(urlToCopy + ' copied to clipboard'))
+                    .catch(err => console.error('Could not copy URL:', err));
+            } else {
+                console.error('No URL to copy');
+            }
+        }
     </script>
 
     <div id="guide"

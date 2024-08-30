@@ -2830,8 +2830,18 @@ Presenter.prototype = {
 
 			var action = SGL_TRACKBALL_SCALE;
 
-			if (wheelDelta >= 0.3 || wheelDelta <= -0.3) { var factor = wheelDelta > 0.0 ? (0.90) : (1.10); }
-			else { var factor = wheelDelta > 0.0 ? (0.985) : (1.015); }
+			if (wheelDelta >= 0.3 || wheelDelta <= -0.3) {
+				var factor = wheelDelta > 0.0 ? (0.90) : (1.10);
+				if (e && e.shiftKey) {
+					var factor = wheelDelta > 0.0 ? (0.98) : (1.02);
+				}
+			}
+			else {
+				var factor = wheelDelta > 0.0 ? (0.985) : (1.015);
+				if (e && e.shiftKey) {
+					var factor = wheelDelta > 0.0 ? (0.998) : (1.002);
+				}
+			}
 
 
 			var testMatrix = this.trackball._matrix.slice();

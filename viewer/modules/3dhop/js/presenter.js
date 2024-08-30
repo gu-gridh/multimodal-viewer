@@ -2830,6 +2830,8 @@ Presenter.prototype = {
 
 			var action = SGL_TRACKBALL_SCALE;
 
+			// GRIDH: makes sure the zoom speed is the same on mousewheel and on trackpad 
+			// and adds possibility to hold shift and scroll to zoom in and out slower
 			if (wheelDelta >= 0.3 || wheelDelta <= -0.3) {
 				var factor = wheelDelta > 0.0 ? (0.90) : (1.10);
 				if (e && e.shiftKey) {

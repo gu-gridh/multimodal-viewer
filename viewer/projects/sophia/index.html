@@ -97,7 +97,8 @@
                     <div class="ui-module-item left" id="btn4" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
                     <div class="ui-module-item left compact" id="btn5"
-                        onclick="changeLeftViewer('metadata-compact');moduleSwitcherLeft(5);"></div>
+                        onclick="changeLeftViewer('metadata-compact'); moduleSwitcherLeft(5);">
+                    </div>
                 </div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
@@ -107,9 +108,10 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn6"
-                        onclick="changeRightViewer('metadata');moduleSwitcherRight(6);" style="opacity:1.0"></div>
+                        onclick="if (isFullscreenMode) { resetPanels(); } changeRightViewer('metadata'); moduleSwitcherRight(6);" style="opacity:1.0"></div>
+
                     <div class="ui-module-item right" id="btn7"
-                        onclick="changeRightViewer('pointcloud');moduleSwitcherRight(7);"></div>
+                        onclick="changeRightViewer('pointcloud'); moduleSwitcherRight(7);"></div>
                 </div>
             </div>
             <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
@@ -121,6 +123,7 @@
     <script>
         let shouldShowUIModuleContainer = true;
         let currentAnnotationId = null;
+        let isFullscreenMode = false;
 
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -301,11 +304,13 @@
                 rightPane.style.width = '50%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
                 if (backButton) backButton.style.display = 'block';
+                isFullscreenMode = false; 
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '100%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'none';
                 if (backButton) backButton.style.display = 'none';
+                isFullscreenMode = true;
             }
         }
 
@@ -692,6 +697,28 @@
             } else {
                 console.error('Cannot access iframe document');
             }
+        }
+
+        function resetPanels() {
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                const leftUIModuleContainer = leftPane.querySelector('.ui-module-container');
+                const rightUIModuleContainer = rightPane.querySelector('.ui-module-container');
+                const backButton = document.getElementById('back-button');
+
+                leftPane.style.width = '50%';
+                rightPane.style.width = '50%';
+
+                if (leftUIModuleContainer) {
+                    leftUIModuleContainer.style.display = 'flex';
+                }
+                if (rightUIModuleContainer) {
+                    rightUIModuleContainer.style.display = 'flex';
+                }
+
+                if (backButton) {
+                    backButton.style.display = 'block';
+                }
         }
         
         function changeLeftViewer(viewerType) {

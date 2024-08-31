@@ -73,7 +73,7 @@
             background-repeat: no-repeat;
             margin-top: 28px;
             margin-left: 40px;
-            z-index: 10000;
+            z-index: 1000;
             cursor: pointer;
             opacity: 1.0;
         }
@@ -89,29 +89,11 @@
 
             }
 
-            .compact {
-                display: block!important;
-            }
-
-            #left-pane {
-                display: none!important;
-            }
-
-
-            #right-pane {
-                display: block;
-                width:100%;
-            }
-
             #back-button {
                 display: block!important;
             background-image: url(https://data.dh.gu.se/ui-icons/arrow_back_white_circle.png);
          
         }
-
-            #footer-container {
-                display: none;
-            }
         }
     </style>
 </head>
@@ -120,17 +102,27 @@
     <a href="PLACEHOLDER_BACKBUTTON">
         <div id="back-button" title="Go back"></div>
     </a>
+    
 
-    <div id="main-content">
-      
-        <div id="left-pane">
-           
+    <div id="main-content" class="single-module">
+        <div id="left-pane">    
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
         </div>
+
         <div id="right-pane">
-            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
-                style="width:100%; border:none;"></iframe>
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <div class="ui-module-item right" id="btn6" title="Explore the metadata"
+                        onclick="changeRightViewer('metadata'); moduleSwitcherRight(6);">About</div>
+
+                    <div class="ui-module-item right" id="btn7" title="Explore the spatial context"
+                        onclick="changeRightViewer('pointcloud'); moduleSwitcherRight(7);" style="opacity:1.0">Pointcloud</div>
+                </div>
+            </div>
+
+            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/pointcloud.html" style="width:100%; border:none;"></iframe>
         </div>
+
         <div id="footer-container"></div>
     </div>
 
@@ -140,12 +132,13 @@
             changeLeftViewer('metadata');
             changeRightViewer('pointcloud');
         });
-    </script>
+ 
 
-    <script>
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
-            if (viewerType === 'pointcloud') {
+            if (viewerType === 'metadata') {
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+            } else if (viewerType === 'pointcloud') {
                 iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
         }
@@ -157,7 +150,7 @@
             }
         }
 
-        function moduleSwitcherLeft(num) {
+        function moduleSwitcherRight(num) {
             $('.left').css('opacity', '0.6');
             $('#btn' + num).css('opacity', '1.0',);
         }

@@ -30,6 +30,10 @@
     justify-content: center;
 }
 
+.single-module .ui-module-container{
+    display:none;
+}
+
 .ui-module {
     top: 26px;
     font-size:0.9em;
@@ -105,8 +109,8 @@
 
     #main-content {
         height: calc(100% - 0px) !important;
-      
     }
+
     .compact{
         display:block;
     }
@@ -115,11 +119,26 @@
         display:none;
     }
 
+    .single-module #right-pane {
+        display: block;
+        width:100%;
+    }
+
+    .single-module #left-pane {
+        display: none!important;
+    }
+
+
     #footer-container{
         display:none;
     }
 
-  
+    .single-module .ui-module-container{
+        display:flex;
+        width:100vw;
+        background-color:green;
+    }
+
     
 }
 

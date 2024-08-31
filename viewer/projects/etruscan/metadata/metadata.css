@@ -9,13 +9,13 @@ body {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden !important;
-	background-color: rgb(228, 225, 223);
+	background-color: rgb(232, 228, 217);
 }
 
 .container {
 	height: calc(100vh - 80px) !important;
 	width: 100%;
-	padding: 60px 60px 20px 60px !important;
+	padding: 80px 40px 20px 40px !important;
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;

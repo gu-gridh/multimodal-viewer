@@ -96,6 +96,12 @@
     padding:12px 10px 12px 10px; 
 }
 
+#clipping_tools{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 
 
 .LODtool .ui-slider-horizontal {

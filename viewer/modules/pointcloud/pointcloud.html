@@ -9,7 +9,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
 		rel="stylesheet" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<title>GRIDH Point Cloud Viewer</title>
+	<title>GRIDH Pointcloud Viewer</title>
 
 	<!-- CSS files -->
 	<link rel="stylesheet" type="text/css" href="build/potree/potree.css">
@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="libs/openlayers3/ol.css">
 	<link rel="stylesheet" type="text/css" href="libs/spectrum/spectrum.css">
 	<link rel="stylesheet" type="text/css" href="libs/jstree/themes/mixed/style.css">
+
 	<link rel="stylesheet" href="/viewer/shared/shared_styles.css">
 	<link rel="stylesheet" href="/viewer/shared/guide.css">
 	<link rel="stylesheet" href="/viewer/modules/pointcloud/css/pointcloud.css">
@@ -26,7 +27,7 @@
 	.control-buttons {
 		position: absolute;
 		top: 30px;
-		right:30px;
+		right: 30px;
 		z-index: 1000;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
@@ -34,12 +35,12 @@
 		gap: 0px;
 		align-items: center;
 		justify-items: center;
-		border-radius:50%;
-		border-color:white;
-		border-width:0.5px 0px 0px 0px;
-		border-style:solid;
-		padding:10px;
-		background-color:rgba(0,0,0,0.35);
+		border-radius: 50%;
+		border-color: white;
+		border-width: 0.5px 0px 0px 0px;
+		border-style: solid;
+		padding: 10px;
+		background-color: rgba(0, 0, 0, 0.35);
 		transform: rotateX(0deg);
 	}
 
@@ -50,12 +51,12 @@
 		width: 23px;
 		height: 23px;
 		padding: 0;
-		opacity:0.6;
+		opacity: 0.6;
 		user-select: none;
 	}
 
 	.control-buttons button:hover {
-	opacity:1.0;
+		opacity: 1.0;
 	}
 
 	/* .control-buttons:has(> #moveRight:hover){
@@ -85,9 +86,7 @@
 	}
 
 	@media (max-width: 400px) {
-		.control-buttons {
-		
-		}
+		.control-buttons {}
 	}
 
 	#tools {
@@ -108,7 +107,6 @@
 		margin-top: 8px;
 		height: 35px;
 	}
-
 </style>
 
 <body>
@@ -133,11 +131,13 @@
 	<!-- INCLUDE SETTINGS HERE -->
 
 
+	<!-- User guide -->
 	<div id="guide"
 		onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');"
 		style="">
 		<div class="guide-content">
-			<!-- <h1>User Guide: <br>Spatial Context</h1> -->
+
+
 			<div class="guide-instructions">
 				<div class="guide-instructions-intro" id="8">
 				</div>
@@ -177,55 +177,70 @@
 		</div>
 	</div>
 
+	<!--  The module -->
+
 	<div class="potree_container"
 		style="position: relative; width: 100%; height: calc(100%); left: 0px; top: 0px; bottom:200px;">
 
-		<!--  specify the bakground-color -->
+		<!--  specify the background-color -->
 		<div id="potree_render_area" style="background-color:var(--viewer-bg)">
-			<!-- Here we have a floating div with instructions on how to navigate -->
 
-	<div class="ui-overlay-container" style="position:absolute; bottom:20px; ">
-		<div id="instructions" class="" style="width:350px; padding:15px 10px;">
-			<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
-			<div id="1"></div>
-		</div>
-	</div>
-
-
-	<div class="interface-area">
-		<div class="toolbar-bottom" style="width:350px;">
-			<div id="tools"></div>
-			<div id="quality">
-
-				<selectgroup id="splat_quality_options" style="width:100px;">
-					<option id="splat_quality_options_standard left" value="standard">LQ</option>
-					<option id="splat_quality_options_hq right" value="hq">HQ</option>
-				</selectgroup>
-
+			<!-- instructions on how to navigate -->
+			<div class="ui-overlay-container" style="position:absolute; bottom:20px; ">
+				<div id="instructions" class="" style="width:350px; padding:15px 10px;">
+					<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;">
+					</div>
+					<div id="1"></div>
+				</div>
 			</div>
-		</div>
-		<div class="guide-button compact" title="User Guide"
-			onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
-			?</div>
-	</div>
 
-	<div class="ui-overlay-container" style="position:absolute; height:50px; bottom:55px; z-index:1000; color:white;">
-		<div class="LODtool" id="point-sliders" style="width:330px;">
-			<div style="width:calc(50% - 10px); float:left; padding-right:10px;">
-				<span id="2"></span> <span id="lblPointSize"></span>
-				<div id="sldPointSize"></div>
+			<!--  Orentation tools -->
+			<div class="orientation-widget"><div id="orientation"></div></div>
+
+			<!-- LOD tools -->
+			<div class="ui-overlay-container"
+				style="position:absolute; height:50px; bottom:55px; z-index:1000; color:white;">
+				<div class="LODtool" id="point-sliders" style="width:330px;">
+					<div style="width:calc(50% - 10px); float:left; padding-right:10px;">
+						<span id="2"></span> <span id="lblPointSize"></span>
+						<div id="sldPointSize"></div>
+					</div>
+					<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
+						<span id="3"></span> <span id="lblPointBudget"></span>
+						<div id="sldPointBudget"></div>
+					</div>
+				</div>
 			</div>
-			<div style="width:calc(50% - 10px); float:left; padding-left:10px;">
-				<span id="3"></span> <span id="lblPointBudget"></span>
-				<div id="sldPointBudget"></div>
+
+
+			<!-- The controls -->
+			<div class="interface-area">
+					
+			
+				<div class="toolbar-bottom" style="width:350px;">
+					<div id="tools"></div>
+					<div id="quality">
+
+						<selectgroup id="splat_quality_options" style="width:100px;">
+							<option id="splat_quality_options_standard left" value="standard">LQ</option>
+							<option id="splat_quality_options_hq right" value="hq">HQ</option>
+						</selectgroup>
+
+					</div>
+				</div>
+				<div class="guide-button compact" title="User Guide"
+					onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+					?</div>
 			</div>
-		</div>
-	</div>
-	
+
+
+			<!--  The sudebar -->
 		</div>
 		<div id="potree_sidebar_container" style="background-color:var(--sidebar-bg)"> </div>
 	</div>
 
+
+	<!--  Navigation cntrols -->
 	<div class="control-buttons">
 		<div class="spacer"></div>
 		<button id="moveForward" title="Move Forward">
@@ -413,11 +428,9 @@
 
 
 
-	<!-- <div class="ui-overlay-container" style="position:absolute; height:300px; top:25px; z-index:1000;">
-		<div id="orientation" class="orientation"></div>
-	</div> -->
 
-	
+
+
 </body>
 
 </html>

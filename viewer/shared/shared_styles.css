@@ -439,13 +439,12 @@ h2 {
 
 /* a flex-box style to keep things centered */
 .ui-overlay-container {
-    display: flex;
     width: 100%;
+    display: flex;
     justify-content: center;
     position: absolute;
     bottom: 60px;
     pointer-events: none;
-
 }
 
 /* This one describes the look of the UI-element with the navigation instructions */

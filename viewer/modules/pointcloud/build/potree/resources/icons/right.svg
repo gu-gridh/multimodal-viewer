@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 27.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1"
-	 id="svg3797" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:svg="http://www.w3.org/2000/svg" inkscape:export-filename="D:\dev\workspaces\potree\develop\resources\icons\area.png" inkscape:export-xdpi="90" inkscape:export-ydpi="90" inkscape:version="0.92.2 (5c3e80d, 2017-08-06)" sodipodi:docname="right.svg"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32"
-	 style="enable-background:new 0 0 32 32;" xml:space="preserve">
+	 id="svg3797" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px"
+	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;stroke:#000000;stroke-width:2;}
 	.st1{fill:#44A24A;fill-opacity:0;stroke:#000000;}
 	.st2{fill:#E73100;fill-opacity:0;}
-	.st3{fill:#FFFFFF;fill-opacity:0.3137;}
-	.st4{fill:#FFFFFF;}
-	.st5{fill:#FFFFFF;fill-opacity:0.3137;stroke:#000000;}
+	.st3{fill:none;stroke:#BFBFBF;}
+	.st4{opacity:0.33;fill:#FFFFFF;}
+	.st5{opacity:0.3;fill:#FFFFFF;}
+	.st6{fill:#FFFFFF;}
 </style>
 <sodipodi:namedview  bordercolor="#666666" borderopacity="1.0" id="base" inkscape:current-layer="layer1" inkscape:cx="25.12024" inkscape:cy="14.265029" inkscape:document-units="px" inkscape:grid-bbox="true" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="1377" inkscape:window-maximized="1" inkscape:window-width="2560" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:zoom="11.313709" pagecolor="#ffffff" showgrid="true">
 	<inkscape:grid  id="grid3805" type="xygrid"></inkscape:grid>
@@ -19,11 +20,11 @@
 	<path id="path891" inkscape:connector-curvature="0" class="st0" d="M12,5v15l-6,7l6-7h15"/>
 	<path id="path843" inkscape:connector-curvature="0" class="st1" d="M12,5v15h15V5H12z"/>
 	<path id="path835" inkscape:connector-curvature="0" class="st2" d="M12,5l-6,7v15l6-7V5z"/>
-	<path id="path879" inkscape:connector-curvature="0" class="st3" d="M12,5l-6,7h15l6-7H12z"/>
-	<path id="path881" inkscape:connector-curvature="0" class="st4" d="M27,5l-6,7v15l6-7V5z"/>
-	<path id="path840" inkscape:connector-curvature="0" class="st5" d="M6,12v15h15V12H6z"/>
-	<path id="path885" inkscape:connector-curvature="0" class="st0" d="M6,27V12l6-7h15v15l-6,7H6z"/>
-	<path id="path887" inkscape:connector-curvature="0" class="st0" d="M6,12h15l6-7"/>
-	<path id="path889" inkscape:connector-curvature="0" class="st0" d="M21,12v15"/>
+	<path id="path885" inkscape:connector-curvature="0" class="st3" d="M6,27V12l6-7h15v15l-6,7H6z"/>
+	<path id="path887" inkscape:connector-curvature="0" class="st3" d="M6,12h15l6-7"/>
+	<path id="path889" inkscape:connector-curvature="0" class="st3" d="M21,12v15"/>
 </g>
+<rect x="6.5" y="12.4" class="st4" width="14.1" height="14.2"/>
+<polygon class="st5" points="20.8,11.6 7.1,11.6 12.3,5.5 26,5.5 "/>
+<polygon class="st6" points="26.5,20.1 21.5,25.8 21.5,12.2 26.5,6.4 "/>
 </svg>

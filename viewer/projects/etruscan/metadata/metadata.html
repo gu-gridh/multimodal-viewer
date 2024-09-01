@@ -2,32 +2,38 @@
 <html>
 
 <head>
-    <title>IIIF Image Viewer</title>
+    <title>Metadata</title>
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="metadata.css">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+
     <script src="/viewer/libs/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
+
+
     <style>
-        .metadata-panel-title {
+        .metadata-title {
             font-family: 'Teko', sans-serif !important;
             padding-top: 0px;
+            font-size: 2.5em !important;
+            padding-bottom: 10px;
         }
 
-        .container {
-          
-        }
+        .metadata-container {}
 
-        .metadata-content, 
-        .metadata-description .label, 
+        .metadata-content,
+        .metadata-description .label,
         .metadata-description p {
             font-family: "Barlow Condensed", sans-serif !important;
-       
+
         }
 
         .metadata-content {
@@ -39,57 +45,154 @@
         .metadata-description p {
             margin: 0;
             font-weight: 300;
-            max-width:500px;
+            max-width: 500px;
         }
 
-        .points {
+        .metadata-content .label {
+            display:inline;
+        }
+
+        .metadata-content .data {
             color: rgb(180, 100, 100);
+            font-weight: 600;
+            display:inline;
         }
 
-        h2 {
+        .metadata-description .label {
             font-size: 1.5em;
             font-weight: inherit;
             letter-spacing: 0.5px;
             margin-bottom: 5px;
-            padding-top: 0;
+            padding-top: 30px;
+            font-weight: 500;
         }
     </style>
 </head>
 
 <body>
     <script>
+        function updateTranslations(t) {
+            document.getElementById('metalabel1').textContent = t('type') + ":";
+            document.getElementById('metalabel2').textContent = t('creator') + ":";
+            document.getElementById('metalabel3').textContent = t('date') + ":";
+            document.getElementById('metalabel4').textContent = t('points1') + ":";
+            document.getElementById('metalabel5').textContent = t('points2') + ":";
+            document.getElementById('metalabel6').textContent = t('description');
+            document.getElementById('metalabel7').textContent = t('download');
+        }
+
+        function setButtonLabel(language) {
+            document.getElementById('languageButton').textContent = language === 'it' ? 'In English' : 'In Italiano';
+        }
+
+        function changeLanguage(lang) {
+            i18next.changeLanguage(lang, function (err, t) {
+                if (err) {
+                    console.error("Error changing language:", err);
+                    return;
+                }
+                window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
+                localStorage.setItem('i18nextLang', lang);
+                setButtonLabel(lang);
+                updateTranslations(t);
+            });
+        }
+
+        function toggleLanguage() {
+            let currentLanguage = localStorage.getItem('i18nextLang') || 'en';
+            currentLanguage = currentLanguage === 'en' ? 'it' : 'en';
+            changeLanguage(currentLanguage);
+            toggleVisibility(currentLanguage);
+        }
+
+        function toggleVisibility(lang) {
+            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
+            document.getElementById('documentation_it').style.display = lang === 'it' ? 'block' : 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
-            localStorage.setItem('i18nextLang', 'en');
+            const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
+            i18next.use(i18nextHttpBackend).init({
+                lng: savedLang,
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/viewer/locales/{{lng}}/translation.json',
+                },
+            }, function (err, t) {
+                if (err) {
+                    console.error("i18next initialization error:", err);
+                    return;
+                }
+                setButtonLabel(savedLang);
+                updateTranslations(t);
+                toggleVisibility(savedLang);
+            });
         });
+
     </script>
 
-    <div class="container">
-        <div class="border"></div>
+    <div class="metadata-container">
 
-        <div class="metadata-text">
-            <div class="metadata-panel">
+        <div class="language-toggle-buttons">
+            <button id="languageButton" title="Change language" onclick="toggleLanguage()"></button>
+        </div>
 
-                <div class="metadata-panel-title">
-                    <div style="display:inline;"></div>PLACEHOLDER_TITLE
-                </div>
+        <div class="metadata-title">
+            PLACEHOLDER_TITLE
+        </div>
 
-                <div class="metadata-content">
-                    <div class="label">Points (optimized): <span class="points">PLACEHOLDER_POINTS_OPTIMIZED</span></div>
-                </div>
+        <div class="metadata-content">
+            <div class="label">Dataset:</div> <span class="data">CTSG-2015</span>
+        </div>
 
-                <div class="metadata-content">
-                    <div class="label">Points (high quality): <span class="points">PLACEHOLDER_POINTS_FULL</span></div>
-                </div>
+        <div class="metadata-content">
+            <div class="label" id="metalabel1">Type:</div><span class="data">{{ object.type_of_image[0].text }}</span> 
+        </div>
 
-                <div class="metadata-description">
-                    <div class="label"><h2>Description</h2><p>PLACEHOLDER_DESCRIPTION</p></div>
-                </div>
+        <div v-if="object.author?.firstname">
+            <div class="metadata-content">
+                <div class="label" id="metalabel2">Creator:</div><span class="data">{{ object.author.lastname }}, {{
+                        object.author.firstname }}</span>
+            </div>
+        </div>
 
+
+        <div v-if="object.date">
+            <div class="metadata-content">
+                <div class="label" id="metalabel3">Date:</div> <span class="data">{{ object.date }}</span>
+            </div>
+        </div>
+
+        <div v-if="object.points">
+            <div class="metadata-content">
+                <div class="label" id="metalabel4">Points (optimized):</div> <span
+                        class="data">PLACEHOLDER_POINTS_OPTIMIZED</span>
+                
             </div>
 
+            <div class="metadata-content">
+                <div class="label" id="metalabel5">Points (high quality):</div> <span
+                        class="data">PLACEHOLDER_POINTS_FULL</span>
+           
+            </div>
+        </div>
+
+        <div class="metadata-description">
+            <div class="label" id="metalabel6">Description</div>
+            <div>
+                <p>PLACEHOLDER_DESCRIPTION</p>
+            </div>
+        </div>
+
+        <div class="theme-button theme-download-button" style="margin-top:20px;"
+            @click="downloadImage(object.file, `${object.title}.tif`)" id="metalabel7">
+            Download
         </div>
 
     </div>
+
 </body>
+
 
 </html>

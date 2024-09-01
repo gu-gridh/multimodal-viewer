@@ -45,5 +45,8 @@
   "linkcopied": "Länk sparad",
   "downloadstarted": "Nedladdning påbörjad",
   "measuredlength": "Uppmätt längd",
-  "of": "av"
+  "of": "av",
+  "download": "Download",
+  "points1": "Points (optimized)",
+  "points2": "Points (high quality)"
 }

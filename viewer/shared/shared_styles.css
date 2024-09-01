@@ -59,25 +59,37 @@ body {
 }
 
 .theme-color-text {
-    color: var(--color-4) !important;
+    color: var(--color-4);
 }
 
 .theme-color-background {
-    background-color: var(--color-4) !important;
+    background-color: var(--color-4);
 }
 
 .theme-button {
     background-color: var(--color-4);
     border-radius: 5px;
     padding: 5px 10px;
-    margin-top: 20px;
-    width: 150px;
+    width: auto;
     color: var(--font-color);
     cursor: pointer;
 }
 
 .theme-button:hover {
     background-color: var(--color-5);
+}
+
+.theme-download-button {
+    pointer-events: auto;
+    background: url(https://data.dh.gu.se/ui-icons/download_white_circle.png);
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: 8px;
+    padding-left:40px;
+    background-color: var(--color-4);
+    width:auto;
+    height:25px;
+    max-width: 400px;
 }
 
 
@@ -95,6 +107,7 @@ body {
     background-color:rgba(0,0,0,0.8);
     position:absolute;
 }
+
 
 
 

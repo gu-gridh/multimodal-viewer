@@ -65,6 +65,11 @@
     height: 42px;
 }
 
+#toolsExtra{
+      margin-top:0px;  
+      padding:6px 10px 08px 10px; 
+}
+
 #toolsExtra .button-icon {
     height: 35px!important;
     width: 35px!important;
@@ -85,6 +90,10 @@
     height: 35px!important;
     width: 35px!important;
     margin-top:-2px;
+}
+
+.clippings{
+    padding:12px 10px 12px 10px; 
 }
 
 
@@ -165,12 +174,12 @@ color: rgb(0, 213, 250) !important;
     width:100%;
     display:flex;
     flex-direction:row;
-    justify-content:center;
-    position:absolute; 
-    height:30px; 
-    bottom:150px; 
+    justify-content:left;
+    position:relative; 
+    height:30px;  
     z-index:1000;
     pointer-events:none;
+    user-select:none;
 }
 
 #orientation {
@@ -178,17 +187,8 @@ color: rgb(0, 213, 250) !important;
 	flex-direction: row; 
 	justify-content: space-between; 
 	pointer-events:auto; 
-	width:220px; 
 	height:28px; 
-	border-radius:8px; 
-	background-color:rgba(0,0,0,0.8); 
 	padding:6px 10px 08px 10px; 
-    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3);
-    border-style: solid;
-    border-color: grey;
-    border-width:0.5px 0px 0px 0px;
-    -webkit-backdrop-filter: blur(3px); 
-    backdrop-filter: blur(3px); 
 }
 
 	#orientation img{
@@ -196,6 +196,20 @@ color: rgb(0, 213, 250) !important;
 		height: 30px!important;
 		margin:0px!important;
 	}
+
+    .side-widget {
+        border-radius:8px; 
+        background-color:rgba(0,0,0,0.8); 
+        box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3);
+        border-style: solid;
+        border-color: grey;
+        border-width:0.5px 0px 0px 0px;
+        -webkit-backdrop-filter: blur(3px); 
+        backdrop-filter: blur(3px); 
+        width:calc(100% - 60px); 
+    }
+
+  
 
 .potree_menu_toggle {
     display: block;

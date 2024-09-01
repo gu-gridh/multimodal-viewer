@@ -1,87 +1,79 @@
 <style>
-.tool-button-container{
+	.tool-button-container {}
 
-}
+	.tool-icon-expanded {
+		display: block;
+		width: 300px;
+		float: left;
+		padding: 5px;
+		margin-left: -5px;
+	}
 
-.tool-icon-expanded{
-	display:block;
-	width:300px;
-	float:left;
-	padding:5px;
-	margin-left:-5px;
-}
+	.tool-icon-image {
+		float: left;
+	}
 
-.tool-icon-image{
-	float:left;
-}
+	.tool-icon-image:hover {}
 
-.tool-icon-image:hover{
-
-}
-
-.tool-icon-label{
-	float:left;
-	padding-left:15px;
-}
-
-
-
-
+	.tool-icon-label {
+		float: left;
+		padding-left: 15px;
+	}
 </style>
 <script>
 	async function fetchTitleAndUpdate() {
 		try {
 			const qValue = getQueryParameter('q');
 			const response = await fetch(``);
-			
+
 			if (response.ok) {
-			const data = await response.json();
-			const title = data.results[0].title; 
-			const points_optimized = data.results[0].points_optimized;
-			const points_full_resolution = data.results[0].points_full_resolution;
-			const description = data.results[0].description;
-			const urlOptimized = data.results[0].url_optimized;
+				const data = await response.json();
+				const title = data.results[0].title;
+				const points_optimized = data.results[0].points_optimized;
+				const points_full_resolution = data.results[0].points_full_resolution;
+				const description = data.results[0].description;
+				const urlOptimized = data.results[0].url_optimized;
 
-			if (urlOptimized) {
-				const downloadButton = document.getElementById("download-button");
-				downloadButton.classList.add("theme-button");
-				downloadButton.style.display = 'block'; // show the download button
-				downloadButton.setAttribute('href', urlOptimized);
-				downloadButton.setAttribute('download', '');
-			} else {
-				// Hide the button
-				const downloadButton = document.getElementById("download-button");
-				downloadButton.style.display = 'none';
-				console.error('url_optimized is null or undefined.');
-			}
+				if (urlOptimized) {
+					const downloadButton = document.getElementById("download-button");
+					downloadButton.classList.add("theme-button");
+					downloadButton.style.display = 'block'; // show the download button
+					downloadButton.setAttribute('href', urlOptimized);
+					downloadButton.setAttribute('download', '');
+				} else {
+					// Hide the button
+					const downloadButton = document.getElementById("download-button");
+					downloadButton.style.display = 'none';
+					console.error('url_optimized is null or undefined.');
+				}
 
-			// Update the title
-			if (document.getElementById("backend-info")) {
-				document.getElementById("backend-info").textContent = title;
-			} else {
-				console.error('Element with id "backend-info" not found.');
-			}
-			
-			// Update points optimized
-			if (document.getElementById("points-optimized-info")) {
-				document.getElementById("points-optimized-info").textContent = points_optimized;
-			} else {
-				console.error('Element with id "triangles-optimized-info" not found.');
-			}
+				// Update the title
+				if (document.getElementById("backend-info")) {
+					document.getElementById("backend-info").textContent = title;
+				} else {
+					console.error('Element with id "backend-info" not found.');
+				}
 
-			// Update points full resolution
-			if (document.getElementById("points-full-res-info")) {
-				document.getElementById("points-full-res-info").textContent = points_full_resolution;
-			} else {
-				console.error('Element with id "triangles-full-res-info" not found.');
-			}
+				// Update points optimized
+				if (document.getElementById("points-optimized-info")) {
+					document.getElementById("points-optimized-info").textContent = points_optimized;
+				} else {
+					console.error('Element with id "triangles-optimized-info" not found.');
+				}
 
-			// Update description
-			if (document.getElementById("description")) {
-				document.getElementById("description").innerHTML = description;
-			} else {
-				console.error('Element with id "triangles-full-res-info" not found.');
-			}
+				// Update points full resolution
+				if (document.getElementById("points-full-res-info")) {
+					document.getElementById("points-full-res-info").textContent = points_full_resolution;
+				} else {
+					console.error('Element with id "triangles-full-res-info" not found.');
+				}
+
+				// Update description
+				if (document.getElementById("description")) {
+					document.getElementById("description").innerHTML = description;
+				} else {
+					console.error('Element with id "triangles-full-res-info" not found.');
+				}
 
 			} else {
 				console.error('Failed to fetch data:', response.status, response.statusText);
@@ -178,30 +170,30 @@
 			</div>
 			<div id="the_looks" style="display:none;">
 				<ul class="pv-menu-list" style="line-height:1.8;">
-				
+
 					<li>
 						<!-- <selectgroup id="splat_quality_options">
 							<option id="splat_quality_options_standard" value="standard">Standard</option>
 							<option id="splat_quality_options_hq" value="hq">High</option>
 						</selectgroup> -->
-					<!-- <li><span>Node size:</span> <span id="lblMinNodeSize"></span>
+						<!-- <li><span>Node size:</span> <span id="lblMinNodeSize"></span>
 						<div id="sldMinNodeSize"></div>
 					</li> -->
 
-					<!-- <li>
+						<!-- <li>
 						<span>Point Size:</span> <span id="lblPointSize"></span>
 						<div id="sldPointSize"></div>
 					</li> -->
-		
 
-					<!-- <li><span>Max points:</span> <span id="lblPointBudget"></span>
+
+						<!-- <li><span>Max points:</span> <span id="lblPointBudget"></span>
 						<div id="sldPointBudget"></div>
 					</li> -->
 
-				
-					<!-- <li><span data-i18n="appearance.edl_opacity"></span>: <span id="lblEDLOpacity"></span><div id="sldEDLOpacity"></div></li> -->
 
-					<!-- <div class="divider"><span>Background</span></div>
+						<!-- <li><span data-i18n="appearance.edl_opacity"></span>: <span id="lblEDLOpacity"></span><div id="sldEDLOpacity"></div></li> -->
+
+						<!-- <div class="divider"><span>Background</span></div>
 
 				<li>
 					<selectgroup id="background_options">
@@ -213,9 +205,9 @@
 					</selectgroup>
 				</li> -->
 
-					<!-- <div class="divider"><span>Other</span></div> -->
+						<!-- <div class="divider"><span>Other</span></div> -->
 
-					<!-- <li><label><input id="show_bounding_box" type="checkbox" /><span data-i18n="appearance.box"></span></label></li>
+						<!-- <li><label><input id="show_bounding_box" type="checkbox" /><span data-i18n="appearance.box"></span></label></li>
 				<li><label><input id="set_freeze" type="checkbox" /><span data-i18n="appearance.freeze"></span></label></li> -->
 				</ul>
 
@@ -226,30 +218,37 @@
 
 
 			<div id="the_tools" style="display:block;">
-				
+
 				<div class="pv-menu-list" style="line-height:1.8;">
 
 					<h2 style="width:100%;">Camera Settings</h2>
-					
+
 					<div id="navigation"></div>
-				
+
 					<li><span>Field of view:</span> <span id="lblFOV"></span>
 						<div id="sldFOV"></div>
 					</li>
 
 					<h2>Eye-Dome-Lighting</h2>
 
-					<li><label><input type="checkbox" id="chkEDLEnabled" style="display:none;"/></label></li>
+					<li><label><input type="checkbox" id="chkEDLEnabled" style="display:none;" /></label></li>
 					<li><span>Radius:</span> <span id="lblEDLRadius"></span>
 						<div id="sldEDLRadius"></div>
 					</li>
 					<li><span>Strength:</span> <span id="lblEDLStrength"></span>
 						<div id="sldEDLStrength"></div>
 					</li>
-					
+
+					<!--  Orentation tools -->
+					<h2>Orientation</h2>
+					<div class="orientation-widget">
+						<div id="orientation" class="side-widget"></div>
+					</div>
+
+
 					<h2 style="width:100%;">Measurement</h2>
-					
-					<div id="toolsExtra" style="width:100%; float:left;"></div>
+
+					<div id="toolsExtra" class="side-widget" style="float:left;"></div>
 
 					<!-- 	<li>
 				<selectgroup id="measurement_options_show">
@@ -260,79 +259,80 @@
 
 					<h2 style="width:100%;">Clipping</h2>
 
-					<li id="clipping_tools"></li>
+					<div class="side-widget clippings">
+						<li id="clipping_tools"></li>
 
-					<li>
-						<selectgroup id="cliptask_options">
-							<option id="cliptask_options_none" value="NONE">None</option>
-							<option id="cliptask_options_highlight" value="HIGHLIGHT">Highlight</option>
-							<option id="cliptask_options_show_inside" value="SHOW_INSIDE">Inside</option>
-							<option id="cliptask_options_show_outside" value="SHOW_OUTSIDE">Outside</option>
-						</selectgroup>
-					</li>
+						<li>
+							<selectgroup id="cliptask_options" style="line-height: 40px;">
+								<option id="cliptask_options_none" value="NONE">None</option>
+								<option id="cliptask_options_highlight" value="HIGHLIGHT">Highlight</option>
+								<option id="cliptask_options_show_inside" value="SHOW_INSIDE">Inside</option>
+								<option id="cliptask_options_show_outside" value="SHOW_OUTSIDE">Outside</option>
+							</selectgroup>
+						</li>
 
-					<!-- <li>
+
+						<!-- <li>
 				<selectgroup id="clipmethod_options">
 					<option id="clipmethod_options_any" value="INSIDE_ANY">Inside Any</option>
 					<option id="clipmethod_options_all" value="INSIDE_ALL">Inside All</option>
 				</selectgroup>
-			</li> 
-
-			
-
-					 <li><span data-i18n="appearance.move_speed">Move speed</span>: <span id="lblMoveSpeed"></span><div id="sldMoveSpeed"></div></li> 
+			</li> -->
+					</div>
+					<!-- <li><span data-i18n="appearance.move_speed">Move speed</span>: <span id="lblMoveSpeed"></span><div id="sldMoveSpeed"></div></li> 
 				</div>-->
-		
-
-				<!-- SCENE -->
-				<h3 id="menu_scene" style="display:none;"><span data-i18n="tb.scene_opt"></span></h3>
-
-				<div class="pv-menu-list" style="padding-bottom:50px; margin-top:-20px;">
-					<h2>Properties</h2>
-
-					<div id="scene_object_properties"></div>
-
-					<div id="scene_export"></div>
-
-					<div class="divider"><span>Objects</span></div>
-
-					<div id="scene_objects"></div>
 
 
-				</div>
+					<!-- SCENE -->
+					<h3 id="menu_scene" style="display:none;"><span data-i18n="tb.scene_opt"></span></h3>
 
-				<!-- Classification -->
-				<!-- <h3 id="menu_filters""><span data-i18n="tb.filters_opt"></span></h3>
+					<div class="pv-menu-list" style="padding-bottom:50px; margin-top:-20px;">
+						<h2>Properties</h2>
+
+						<div id="scene_object_properties"></div>
+
+						<div id="scene_export"></div>
+
+						<div class="divider"><span>Objects</span></div>
+
+						<div id="scene_objects"></div>
+
+
+					</div>
+
+					<!-- Classification -->
+					<!-- <h3 id="menu_filters""><span data-i18n="tb.filters_opt"></span></h3>
 		<div>
 
 			<div class="divider"><span>Classification</span></div>
 
 			<ul id="classificationList" class="pv-menu-list"></ul> -->
 
-				<!-- <div class="divider"><span>Returns</span></div> -->
+					<!-- <div class="divider"><span>Returns</span></div> -->
 
-				<div id="return_filter_panel" style="display:none;">
-					<ul class="pv-menu-list">
+					<div id="return_filter_panel" style="display:none;">
+						<ul class="pv-menu-list">
 
-						<li><span data-i18n="filters.return_number"></span>: <span id="lblReturnNumber"></span>
-							<div id="sldReturnNumber"></div>
-						</li>
-						<li><span data-i18n="filters.number_of_returns"></span>: <span id="lblNumberOfReturns"></span>
-							<div id="sldNumberOfReturns"></div>
-						</li>
+							<li><span data-i18n="filters.return_number"></span>: <span id="lblReturnNumber"></span>
+								<div id="sldReturnNumber"></div>
+							</li>
+							<li><span data-i18n="filters.number_of_returns"></span>: <span
+									id="lblNumberOfReturns"></span>
+								<div id="sldNumberOfReturns"></div>
+							</li>
 
-					</ul>
-				</div>
+						</ul>
+					</div>
 
-				<!-- <div class="divider"><span>Point Source ID</span></div> -->
+					<!-- <div class="divider"><span>Point Source ID</span></div> -->
 
-				<div style="display:none">
-					<ul class="pv-menu-list" id="pointsourceid_filter_panel">
+					<div style="display:none">
+						<ul class="pv-menu-list" id="pointsourceid_filter_panel">
 
-					</ul>
-				</div>
+						</ul>
+					</div>
 
-				<!-- <div class="divider"><span>GPS Time</span></div>
+					<!-- <div class="divider"><span>GPS Time</span></div>
 
 			<div id="gpstime_filter_panel">
 
@@ -352,67 +352,71 @@
 				</ul>
 
 			</div> -->
+				</div>
 			</div>
-		</div>
 
-		<!-- ABOUT -->
+			<!-- ABOUT -->
 
-		<div id="the_abouts" style="display:none">
-			<div class="pv-menu-list" style="line-height:1.8;">
-				<h2>Metadata</h2>
+			<div id="the_abouts" style="display:none">
+				<div class="pv-menu-list" style="line-height:1.8;">
+					<h2>Metadata</h2>
 
-			<div class="flex-container" style="
+					<div class="flex-container" style="
 				display: flex;
 				margin-bottom: 10px;
 				gap: 5px;
 			">
-				Title: <li id="backend-info" class="metadata">Title.</li>
-			</div>
-			<div class="flex-container" style="
+						Title: <li id="backend-info" class="metadata">Title.</li>
+					</div>
+					<div class="flex-container" style="
 				display: flex;
 				margin-bottom: 10px;
 				gap: 5px;
 			">
-				Points (optimised): <li id="points-optimized-info" class="metadata">Triangular data optimized.</li>
-			</div>
-			<div class="flex-container" style="
+						Points (optimised): <li id="points-optimized-info" class="metadata">Triangular data optimized.
+						</li>
+					</div>
+					<div class="flex-container" style="
 				display: flex;
 				margin-bottom: 10px;
 				gap: 5px;
 			">
-				Points (high quality): <li id="points-full-res-info" class="metadata">Triangular data full resolution.</li>
-			</div>
-			<div class="flex-container" style="
+						Points (high quality): <li id="points-full-res-info" class="metadata">Triangular data full
+							resolution.</li>
+					</div>
+					<div class="flex-container" style="
 				display: flex;
 				margin-bottom: 10px;
 				flex-direction: column;
 			">
-				<li id="description" class="description">Description.</li>
+						<li id="description" class="description">Description.</li>
+					</div>
+
+					<a id="download-button" style="display: none;">Download Optimized Mesh</a>
+
+					<h2>The viewer</h2>
+					<li style="line-height:1.2;">The Point Cloud Visualisation Tool is built with <a
+							href="http://potree.org" target="_blank">Potree</a>, a viewer for large point cloud / LIDAR
+						data sets, developed at the
+						Vienna University of Technology.
+						<a href="https://github.com/potree/potree" target="_blank">(github)</a>
+					</li>
+					<li><b>Author: </b><a href="mailto:mschuetz@potree.org">Markus Sch&uuml;tz</a></li>
+					<li><b>License: </b><a target="_blank"
+							href="https://github.com/potree/potree/blob/develop/LICENSE/">FreeBSD (2-clause BSD)</a>
+					</li>
+					<li><b>Dependency Licenses:</b> <a target="_blank"
+							href="https://github.com/potree/potree/tree/develop/libs/">See github</a></li>
+
+
+				</div>
 			</div>
-			
-			<a id="download-button" style="display: none;">Download Optimized Mesh</a>
 
-				<h2>The viewer</h2>
-				<li style="line-height:1.2;">The Point Cloud Visualisation Tool is built with <a href="http://potree.org"
-						target="_blank">Potree</a>, a viewer for large point cloud / LIDAR data sets, developed at the
-					Vienna University of Technology.
-					<a href="https://github.com/potree/potree" target="_blank">(github)</a>
-				</li>
-				<li><b>Author: </b><a href="mailto:mschuetz@potree.org">Markus Sch&uuml;tz</a></li>
-				<li><b>License: </b><a target="_blank"
-						href="https://github.com/potree/potree/blob/develop/LICENSE/">FreeBSD (2-clause BSD)</a></li>
-				<li><b>Dependency Licenses:</b> <a target="_blank"
-						href="https://github.com/potree/potree/tree/develop/libs/">See github</a></li>
-
-
-			</div>
 		</div>
 
-	</div>
+		<div>
 
-	<div>
-
+		</div>
 	</div>
-</div>
 
 </div>

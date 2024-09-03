@@ -156,7 +156,17 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     bottom: 100px;
+}
 
+.expand-button {
+    pointer-events: auto;
+    background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    bottom: 3px;
+    width: 38px;
+    height: 38px;
 }
 
 .label-popup {
@@ -307,6 +317,7 @@ h2 {
     position: absolute;
     top: 80px;
     pointer-events: none;
+    user-select:none;
 }
 
 .toolbar-bottom {

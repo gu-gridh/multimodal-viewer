@@ -141,9 +141,17 @@
 					src="skins/augmented-reality.svg" /></a></div> -->
 
 
-		<!-- The mobile toolbar has fewer tools due to complexity issues. 
-		Perhaps these should also go into their own docuemnt to keep this document more focuses-->
+		<!-- The mobile toolbar has fewer tools due to complexity issues.-->
+
+		
+		    <!-- This button is only visible if the back-button is missing (to balance things up) -->
+			<a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
+				<div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
+				</a>
+
 		<div class="interface-area-top">
+			
+
 			<div id="ToolbarHorizontal">
 				<div id="Prev" class="SwitchButton"
 					onclick="presenter.setInstanceVisibilityByName('mesh1', true, true); presenter.setInstanceVisibilityByName('mesh2', false, false);">

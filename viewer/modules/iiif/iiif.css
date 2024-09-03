@@ -56,12 +56,14 @@ body {
 	padding: 5px 12px;
 	margin-top: -2px;
 	color: rgb(220, 220, 220);
+	user-select: none;
 }
 
 #clear-annotations:hover {
 	background-color: rgba(0, 0, 0, 1.0);
 	color: white;
 	transform: scale(1.02);
+	user-select: none;
 }
 
 #Download {

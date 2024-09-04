@@ -138,6 +138,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     bottom: 3px;
+    z-index: 1000;
 }
 
 .share-button {

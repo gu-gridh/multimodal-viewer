@@ -72,13 +72,22 @@
 <body>
     <script>
         function updateTranslations(t) {
-            document.getElementById('metalabel1').textContent = t('type') + ":";
-            document.getElementById('metalabel2').textContent = t('creator') + ":";
-            document.getElementById('metalabel3').textContent = t('date') + ":";
-            document.getElementById('metalabel4').textContent = t('points1') + ":";
-            document.getElementById('metalabel5').textContent = t('points2') + ":";
-            document.getElementById('metalabel6').textContent = t('description');
-            document.getElementById('metalabel7').textContent = t('download');
+            const elements = [
+                { id: 'metalabel1', key: 'type' },
+                { id: 'metalabel2', key: 'creator' },
+                { id: 'metalabel3', key: 'date' },
+                { id: 'metalabel4', key: 'points1' },
+                { id: 'metalabel5', key: 'points2' },
+                { id: 'metalabel6', key: 'description' },
+                { id: 'metalabel7', key: 'download' },
+            ];
+
+            elements.forEach(function (element) {
+                const domElement = document.getElementById(element.id);
+                if (domElement) {
+                    domElement.textContent = t(element.key) + (element.id !== 'metalabel6' && element.id !== 'metalabel7' ? ":" : "");
+                }
+            });
         }
 
         function setButtonLabel(language) {
@@ -106,8 +115,16 @@
         }
 
         function toggleVisibility(lang) {
-            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
-            document.getElementById('documentation_it').style.display = lang === 'it' ? 'block' : 'none';
+            const docEn = document.getElementById('documentation_en');
+            const docIt = document.getElementById('documentation_it');
+
+            if (docEn) {
+                docEn.style.display = lang === 'en' ? 'block' : 'none';
+            }
+
+            if (docIt) {
+                docIt.style.display = lang === 'it' ? 'block' : 'none';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -184,7 +201,7 @@
             </div>
         </div>
 
-        <div class="theme-button theme-download-button" style="margin-top:20px;"
+        <div class="theme-button theme-download-button" style="margin-top:20px; width: 60px"
             @click="downloadImage(object.file, `${object.title}.tif`)" id="metalabel7">
             Download
         </div>

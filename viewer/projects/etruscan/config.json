@@ -19,8 +19,8 @@
   "panel": "https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=",
   "metadata": "",
   "pointcloud": "",
-  "basePath": "",
-  "downloadPath": "",
+  "basePath": "https://img.dh.gu.se/etruscantombs/static/",
+  "downloadPath": "https://data.dh.gu.se/etruscantombs/static/",
   "annotationPath": "",
   "pointcoudAnnotations": "/viewer/projects/etruscan/annotations/pointcloud_annotations.json",
   "inscriptionUrl": ""

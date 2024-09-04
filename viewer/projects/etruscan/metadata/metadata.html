@@ -143,24 +143,23 @@
         </div>
 
         <div class="metadata-content">
-            <div class="label">Dataset:</div> <span class="data">CTSG-2015</span>
+            <div class="label">Dataset: </div> <span class="data">CTSG-2015</span>
         </div>
 
         <div class="metadata-content">
-            <div class="label" id="metalabel1">Type:</div><span class="data">{{ object.type_of_image[0].text }}</span> 
+            <div class="label" id="metalabel1">Type:</div> <span class="data">PLACEHOLDER_TYPE</span>
         </div>
 
         <div v-if="object.author?.firstname">
             <div class="metadata-content">
-                <div class="label" id="metalabel2">Creator:</div><span class="data">{{ object.author.lastname }}, {{
-                        object.author.firstname }}</span>
+                <div class="label" id="metalabel2">Creator:</div> <span class="data">PLACEHOLDER_CREATOR</span>
             </div>
         </div>
 
 
         <div v-if="object.date">
             <div class="metadata-content">
-                <div class="label" id="metalabel3">Date:</div> <span class="data">{{ object.date }}</span>
+                <div class="label" id="metalabel3">Date:</div> <span class="data">PLACEHOLDER_DATE</span>
             </div>
         </div>
 

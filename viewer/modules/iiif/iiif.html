@@ -352,13 +352,22 @@
 
                 console.log('Image Coordinates:', { x: imageX, y: imageY, width: imageWidth, height: imageHeight });
 
+                const imgWidth = imageSize.width;
+                const imgHeight = imageSize.height;
+                const xPercentage = (imageX / imgWidth) * 100;
+                const yPercentage = (imageY / imgHeight) * 100;
+                const widthPercentage = (imageWidth / imgWidth) * 100;
+                const heightPercentage = (imageHeight / imgHeight) * 100;
+                //console.log(`"value": "xywh=percent:${xPercentage.toFixed(2)},${yPercentage.toFixed(2)},${widthPercentage.toFixed(2)},${heightPercentage.toFixed(2)}"`);
+
                 //form the IIIF Image Region
                 const region = `${imageX},${imageY},${imageWidth},${imageHeight}`;
-                const iiifUrl = `${imageSize['@id']}/${region}/!${300},${700}/0/default.jpg`;
+                const percentageRegion = `pct:${xPercentage.toFixed(2)},${yPercentage.toFixed(2)},${widthPercentage.toFixed(2)},${heightPercentage.toFixed(2)}`;
+                const iiifUrl = `${imageSize['@id']}/${percentageRegion}/!${300},${700}/0/default.jpg`;
                 console.log('IIIF Image Section:', iiifUrl);
 
                 //copy the IIIF region URL to the clipboard
-                navigator.clipboard.writeText(region).then(() => {
+                navigator.clipboard.writeText(percentageRegion).then(() => {
                     console.log('IIIF region copied to clipboard:', region);
                 }).catch(err => {
                     console.error('Failed to copy IIIF region to clipboard:', err);

@@ -15,6 +15,7 @@
   "appFile": "app_etruscan.js",
   "project": "Etruscan",
   "displayAnnotations": false,
+  "displayInscriptions": false,
   "backButton": "",
   "panel": "https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=",
   "metadata": "",

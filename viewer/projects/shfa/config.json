@@ -15,6 +15,7 @@
   "appFile": "app_shfa.js",
   "project": "SHFA",
   "displayAnnotations": false,
+  "displayInscriptions": false,
   "backButton": "https://shfa.dh.gu.se/",
   "panel": "https://diana.dh.gu.se/api/shfa/visualization_groups/?text=",
   "metadata": "https://diana.dh.gu.se/api/shfa/visualization_groups/?text=",

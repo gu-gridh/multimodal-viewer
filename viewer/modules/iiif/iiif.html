@@ -39,10 +39,9 @@
         </div>
     </div>
 
-    <div class="interface-area-top">
+    <div class="interface-area-top" style="display: 'PLACEHOLDER_DISPLAY_INSCRIPTIONS';">
         <div id="clear-annotations"></div>
-    </div>
-
+    </div>    
   
     <!-- This button is only visible if the back-button is missing (to balance things up) -->
     <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
@@ -83,7 +82,7 @@
             </a>
         </div>
 
-        <div class="round-button annotate-button compact annotate" style="line-height:2.0"
+        <div class="round-button annotate-button compact annotate" style="line-height:2.0; display: 'PLACEHOLDER_DISPLAY_INSCRIPTIONS';"
                 onclick="$('#instructions').show();" title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
 
         <a id="download" target="_blank">
@@ -367,7 +366,9 @@
             }
 
             anno.on('createSelection', async function (selection) {
-                selection.body = [{
+                const displayInscriptions = 'PLACEHOLDER_INSCRIPTIONS';
+                if (displayInscriptions) {
+                    selection.body = [{
                     type: 'TextualBody',
                     purpose: 'tagging',
                     value: 'MyTag'
@@ -375,6 +376,7 @@
 
                 await anno.updateSelected(selection);
                 anno.saveSelected();
+                }
             });
 
             window.addEventListener('message', function (event) {
@@ -548,7 +550,7 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option">
+                    <div class="guide-instructions-item annotate-option" style="display: 'PLACEHOLDER_DISPLAY_INSCRIPTIONS';">
                         <div class="guide-instructions-item-icon" style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
                         <div class="guide-instructions-item-label" id="7">
                         </div>

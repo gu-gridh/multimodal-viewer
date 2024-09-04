@@ -163,7 +163,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
         let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
                                .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath)) 
-                               .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`));
+                               .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
+                               .replace(/'PLACEHOLDER_INSCRIPTIONS'/g, config.displayInscriptions)
+                               .replace(/'PLACEHOLDER_DISPLAY_INSCRIPTIONS'/g, config.displayInscriptions ? 'flex' : 'none');
         res.send(modifiedData);
       });
     } else {

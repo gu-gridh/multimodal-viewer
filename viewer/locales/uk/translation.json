@@ -61,7 +61,7 @@
   "measuredlength": "Виміряна довжина",
   "of": "з",
   "annotate": "Aнотувати",
-  "annotate-instructions": "<p>Анотація.</p> Анотуйте зображення, утримуючи клавішу Shift, натискаючи та перетягуючи прямокутник навколо бажаної області.",
+  "annotate-instructions": "<b>Анотація.</b> Анотуйте зображення, утримуючи клавішу Shift, натискаючи та перетягуючи прямокутник навколо бажаної області.",
   "annotate-instructions-2": "Утримуйте клавішу Shift і клацніть і перетягніть, щоб позначити <br> розділ, який ви хочете додати.",
   "satisfiedwithselection": "Ви задоволені вибором?",
   "copyposition": "Скопіювати позицію та зареєструвати",
@@ -101,5 +101,6 @@
   "elevation": "Висота (см)",
   "download": "Download",
   "points1": "Points (optimized)",
-  "points2": "Points (high quality)"
+  "points2": "Points (high quality)",
+    "annotationstoggle": "<b>Перемикач анотацій.</b> Вмикає та вимикає анотації."
 }

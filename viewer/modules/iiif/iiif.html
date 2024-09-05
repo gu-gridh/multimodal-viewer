@@ -30,6 +30,20 @@
         </div>
     </div>
 
+
+    <div class="interface-area-top">
+        <div id="ToolbarHorizontal">
+            
+            <a id="prev-button">
+                <div id="Prev" title="Previous image"class="SwitchButton"></div>
+            </a>
+            <span id="currentpage"></span>
+            <a id="next-button">
+                <div id="Next" title="Next image" class="SwitchButton"></div>
+            </a>
+        </div>
+    </div>
+
     <!--confirm annotation-->
     <div id="savePopup" class="popup">
         <div class="popup-content">
@@ -38,10 +52,10 @@
             <button id="saveNo"></button>
         </div>
     </div>
-
+<!-- 
     <div class="interface-area-top" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
-        <div id="clear-annotations"></div>
-    </div>    
+      
+    </div>     -->
   
     <!-- This button is only visible if the back-button is missing (to balance things up) -->
     <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
@@ -81,6 +95,8 @@
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
         </div>
+
+        <div id="clear-annotations" class="round-button clear-annotation-button compact" title="Toggle annotation visibility"></div>
 
         <div class="round-button annotate-button compact annotate" style="line-height:2.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
                 onclick="$('#instructions').show();" title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
@@ -169,14 +185,15 @@
                 document.getElementById('7').innerHTML = i18next.t('annotate-instructions');
                 document.getElementById('8').innerHTML = i18next.t('satisfiedwithselection');
                 document.getElementById('9').innerHTML = i18next.t('annotate-instructions-2');
+                document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('redoselection');
-                const clearAnnotationsButton = document.getElementById('clear-annotations');
-                if (annotationsVisible) {
-                    clearAnnotationsButton.textContent = i18next.t('hideannotations');
-                } else {
-                    clearAnnotationsButton.textContent = i18next.t('showannotations');
-                }
+                // const clearAnnotationsButton = document.getElementById('clear-annotations');
+                // if (annotationsVisible) {
+                //     clearAnnotationsButton.textContent = i18next.t('hideannotations');
+                // } else {
+                //     clearAnnotationsButton.textContent = i18next.t('showannotations');
+                // }
             }
         }
 
@@ -189,12 +206,12 @@
                     anno.removeAnnotation(annotation.id);
                 });
                 annotationsVisible = false;
-                button.textContent = i18next.t('showannotations');
+                button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
                 // show annotations
                 anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH');
                 annotationsVisible = true;
-                button.textContent = i18next.t('hideannotations');
+                button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)";
             }
         }
 
@@ -278,6 +295,9 @@
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
+                sequenceMode: true,
+                nextButton: "next-button",
+                previousButton: "prev-button",
                 fullPageButton: "full-page",
                 zoomInButton: "zoom-in",
                 zoomOutButton: "zoom-out",
@@ -537,7 +557,7 @@
     </script>
 
     <div id="guide"
-        onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)');">
+        onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)'); $('#instructions').css('transform', 'scale(1.0)');">
         <div class="guide-content">
             <div class="guide-instructions">
                 <div class="guide-instructions-intro" id="6">
@@ -556,6 +576,12 @@
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="3">
+                        </div>
+                    </div>
+
+                    <div class="guide-instructions-item annotate-option" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
+                        <div class="guide-instructions-item-icon" style="background-image:url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)"></div>
+                        <div class="guide-instructions-item-label" id="10">
                         </div>
                     </div>
 

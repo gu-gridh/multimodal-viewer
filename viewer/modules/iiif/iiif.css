@@ -42,30 +42,6 @@ body {
 	cursor: pointer;
 }
 
-#clear-annotations {
-	pointer-events: auto;
-	font-weight: 200;
-	width: auto;
-	overflow: hidden;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: rgba(0, 0, 0, 0.85);
-	border-radius: 8px;
-	padding: 5px 12px;
-	margin-top: -2px;
-	color: rgb(220, 220, 220);
-	user-select: none;
-}
-
-#clear-annotations:hover {
-	background-color: rgba(0, 0, 0, 1.0);
-	color: white;
-	transform: scale(1.02);
-	user-select: none;
-}
-
 #Download {
 	background: url(https://data.dh.gu.se/ui-icons/download_white.png);
 	background-size: 100%;
@@ -111,35 +87,6 @@ body {
 	overflow: hidden;
 
 }
-
-/* #RotateLeft {
-	background: url(../../shared/interface/rotate_left.png);
-	background-size: 100%;
-	background-repeat: no-repeat;
-	background-position: center;
-	width: 22px;
-	height: 30px;
-	cursor: pointer;
-	overflow: hidden;
-	filter: brightness(0) invert(1);
-    opacity: 0.8;
-
-}
-
-#RotateRight {
-	background: url(../../shared/interface/rotate_right.png);
-	background-size: 100%;
-	background-repeat: no-repeat;
-	background-position: center;
-	width: 22px;
-	height: 30px;
-	cursor: pointer;
-	overflow: hidden;
-	filter: brightness(0) invert(1);
-    opacity: 0.8;
-} */
-
-
 
 .NavButton {
 	pointer-events: auto;

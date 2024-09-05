@@ -100,5 +100,6 @@
   "elevation": "Elevation (cm)",
   "download": "Scarica",
   "points1": "Punti (ottimizzati)",
-  "points2": "Punti (alta qualità)"
+  "points2": "Punti (alta qualità)",
+  "annotationstoggle": "<b>Interruttore annotazioni.</b> Attiva e disattiva le annotazioni."
 }

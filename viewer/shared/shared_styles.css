@@ -150,6 +150,15 @@ body {
     bottom: 50px; 
 }
 
+.clear-annotation-button {
+    pointer-events: auto;
+    background: url(https://data.dh.gu.se/ui-icons/annotations_active_white.png);
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    bottom: 150px;
+}
+
 .annotate-button {
     pointer-events: auto;
     background: url(https://data.dh.gu.se/ui-icons/pen_white.png);

@@ -225,8 +225,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
                                .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath)) 
                                .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g,  JSON.stringify(`${annotationPath}${queryName}`))
                                .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
-                               .replace(/'PLACEHOLDER_INSCRIPTIONS'/g, config.displayInscriptions)
-                               .replace(/'PLACEHOLDER_DISPLAY_INSCRIPTIONS'/g, config.displayInscriptions ? 'flex' : 'none');
+                               .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
+                               .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none');
         res.send(modifiedData);
       });
     } else {

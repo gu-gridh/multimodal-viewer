@@ -84,22 +84,16 @@
                 <div id="ZoomOut" title="Zoom out the view" class="NavButton"></div>
             </a>
 
-            <!-- <a id="rotate-left" href="#rotate-left">
-                <div id="RotateLeft" class="NavButton"></div>
-            </a>
-            <a id="rotate-right" href="#rotate-right">
-                <div id="RotateRight" class="NavButton"></div>
-            </a> -->
+            <div id="clear-annotations" class="clear-annotation-button NavButton" title="Toggle annotation visibility"></div>
+
+            <div class="annotate-button NavButton" style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
+                    onclick="$('#instructions').show();" title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
+    
 
             <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
         </div>
-
-        <div id="clear-annotations" class="round-button clear-annotation-button compact" title="Toggle annotation visibility"></div>
-
-        <div class="round-button annotate-button compact annotate" style="line-height:2.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
-                onclick="$('#instructions').show();" title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
 
         <a id="download" target="_blank">
             <div id="" class="round-button download-button compact" title="Download image"></div>
@@ -572,12 +566,6 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item full-screen-option">
-                        <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
-                        <div class="guide-instructions-item-label" id="3">
-                        </div>
-                    </div>
 
                     <div class="guide-instructions-item annotate-option" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
                         <div class="guide-instructions-item-icon" style="background-image:url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)"></div>
@@ -590,6 +578,14 @@
                         <div class="guide-instructions-item-label" id="7">
                         </div>
                     </div>
+
+                    <div class="guide-instructions-item full-screen-option">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
+                        <div class="guide-instructions-item-label" id="3">
+                        </div>
+                    </div>
+                    
                     <div class="guide-closer" id="5"></div>
                 </div>
             </div>

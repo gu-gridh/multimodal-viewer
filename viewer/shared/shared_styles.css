@@ -153,19 +153,21 @@ body {
 .clear-annotation-button {
     pointer-events: auto;
     background: url(https://data.dh.gu.se/ui-icons/annotations_active_white.png);
-    background-size: 60%;
+    background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
     bottom: 150px;
+    margin-top:5px;
 }
 
 .annotate-button {
     pointer-events: auto;
     background: url(https://data.dh.gu.se/ui-icons/pen_white.png);
-    background-size: 60%;
+    background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
     bottom: 100px;
+    margin-top:5px;
 }
 
 .expand-button {

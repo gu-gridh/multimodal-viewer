@@ -282,8 +282,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   }
 });
 
-// 3dhop Route
-app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
+// mesh Route
+app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -311,7 +311,7 @@ app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
     const meshUrl = modelData.three_d_mesh.mesh_url;
     const qualityUrl = modelData.three_d_mesh.quality_url || '';
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -335,7 +335,7 @@ app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
   }
 });
 
-app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer', 'modules', '3dhop')));
+app.use('/viewer/modules/mesh', express.static(path.join(__dirname, 'viewer', 'modules', 'mesh')));
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
 app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer', 'modules', 'openlime')));
 app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));

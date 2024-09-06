@@ -17,7 +17,7 @@ try {
     process.exit(1);
 }
 
-app.get('/viewer/modules/openlime/openlime.html', async (req, res) => {
+app.get('/viewer/modules/rti/rti.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   // Fetch RTI image data from the API
@@ -26,7 +26,7 @@ app.get('/viewer/modules/openlime/openlime.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'rti', 'rti.html'), 'utf8', (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -160,7 +160,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   }
 });
 
-app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
+app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -172,7 +172,7 @@ app.get('/viewer/modules/3dhop/3dhop.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const modelData = apiResponse.data.features;
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', '3dhop', '3dhop.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
@@ -239,9 +239,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 });
 
-app.use('/viewer/modules/3dhop', express.static(path.join(__dirname, 'viewer', 'modules', '3dhop')));
+app.use('/viewer/modules/mesh', express.static(path.join(__dirname, 'viewer', 'modules', 'mesh')));
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
-app.use('/viewer/modules/openlime', express.static(path.join(__dirname, 'viewer', 'modules', 'openlime')));
+app.use('/viewer/modules/rti', express.static(path.join(__dirname, 'viewer', 'modules', 'rti')));
 app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
 app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
 app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));

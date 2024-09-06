@@ -24,7 +24,7 @@
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
 
     <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;">
-        <div id="instructions" style="bottom:20px; width:240px; display:none;">
+        <div id="instructions" style="bottom:20px; width:260px; display:none;">
             <div class="instruction-closer" onclick="$('#instructions').hide();"></div>
             <div id="9"></div>
         </div>
@@ -52,16 +52,15 @@
             <button id="saveNo"></button>
         </div>
     </div>
-<!-- 
-    <div class="interface-area-top" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
-      
-    </div>     -->
   
-    <!-- This button is only visible if the back-button is missing (to balance things up) -->
+  
+ <!-- This button is only visible if the back-button is missing (to balance things up) -->
     <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
     <div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
     </a>
 
+
+ <!-- rotation buttons -->
 
     <div id="toolButtonsContainerVertical">
         <a id="rotate-left" href="#rotate-left">
@@ -73,6 +72,8 @@
     </div> 
 
     <div class="interface-area">
+
+<!-- Toolbar -->
         <div class="toolbar-bottom">
             <a id="home" href="#home">
                 <div id="Home" title="Reset the view" class="NavButton"></div>
@@ -95,10 +96,13 @@
             </a>
         </div>
 
+
+     <!-- Sidebuttons -->
         <a id="download" target="_blank">
             <div id="" class="round-button download-button compact" title="Download image"></div>
         </a>
         <div id="download-label" class="label-popup" style="display: none;"></div>
+        
         <div id="trackball_position" class="round-button share-button compact" title="Copy link to view" onclick="logPosition();">
             <div id="share-label" class="label-popup"></div>
         </div>
@@ -289,7 +293,7 @@
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
-                sequenceMode: true,
+                sequenceMode: false,
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 fullPageButton: "full-page",

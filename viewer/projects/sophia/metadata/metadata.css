@@ -333,4 +333,16 @@ font-size: 1.0em!important;
 #metadata-dropdown:focus, #metadata-dropdown-2:focus {
 	outline: none;
 }
+
+.division{
+	margin-top:10px;
+	margin-bottom:20px;
+	width:100%;
+	height:1px;
+	border-color: rgb(180,100,100);
+	border-width:1px 0 0 0;
+	border-style:dotted;
+	float:left;
+
+}
   

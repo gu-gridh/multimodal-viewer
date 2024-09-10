@@ -102,5 +102,6 @@
   "download": "Download",
   "points1": "Points (optimized)",
   "points2": "Points (high quality)",
-  "annotationstoggle": "<b>Annotations toggle.</b> Switches on and off the annotations."
+  "annotationstoggle": "<b>Annotations toggle.</b> Switches on and off the annotations.",
+  "interpretation": "Interpretative Editon and Romanisation"
 }

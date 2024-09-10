@@ -3,7 +3,8 @@
 
 <head>
     <title>Metadata</title>
-    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,200,300,400,500,600&display=swap"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap" rel="stylesheet">
 
@@ -25,12 +26,12 @@
             document.getElementById('smd5').textContent = t('documentation');
             document.getElementById('imd0').textContent = t('type') + ":";
             document.getElementById('imd1').textContent = t('language') + ":";
-            document.getElementById('imd2').textContent = t('tags') + ":";
+            //document.getElementById('imd2').textContent = t('tags') + ":";
             document.getElementById('imd3').textContent = t('writingsystem') + ":";
             document.getElementById('imd4').textContent = t('genre') + ":";
             document.getElementById('imd5').textContent = t('editinscription');
-            document.getElementById('imd8').textContent = t('transcription');
-            document.getElementById('imd9').textContent = t('description');
+            document.getElementById('imd20').textContent = t('interpretation');
+            document.getElementById('imd9').textContent = t('description')+ ":";
             document.getElementById('imd10').textContent = t('translation');
             document.getElementById('imd11').textContent = t('contributors');
             document.getElementById('imd12').textContent = t('date') + ":";
@@ -171,10 +172,10 @@
                 <div class="metadata-edit-button">
                     <a id="edit-link" target="_blank">
                         <div class="theme-button" id="imd5" title="Edit the inscription's metadata"
-                             style="margin-top:20px; padding:6px 15px; text-align:center; width:auto; color:white; font-size:13px;">
+                            style="margin-top:20px; padding:6px 15px; text-align:center; width:auto; color:white; font-size:13px;">
                         </div>
                     </a>
-                </div>                
+                </div>
 
                 <div class="metadata-content" style="padding-top:0px;">
 
@@ -184,8 +185,8 @@
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label" id="imd3">Writing system:</div>
-                        <div class="theme-color-text tag" id="writing"></div>
+                        <div class="label" id="imd9">Description:</div>
+                        <div class="theme-color-text tag" id="tags"></div>
                     </div>
 
                     <div class="metadata-item">
@@ -194,29 +195,17 @@
                     </div>
 
                     <div class="metadata-item">
+                        <div class="label" id="imd3">Writing system:</div>
+                        <div class="theme-color-text tag" id="writing"></div>
+                    </div>
+
+                    <div class="metadata-item">
                         <div class="label" id="imd4">Genre:</div>
                         <div class="theme-color-text tag" id="genre"></div>
                     </div>
 
-                    <div class="metadata-item">
-                        <div class="label" id="imd12">Date:</div>
-                        <div class="theme-color-text tag" id="date"></div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label" id="imd13">Elevation (cm):</div>
-                        <div class="theme-color-text tag" id="elevation"></div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="label" id="imd2">Tags:</div>
-                        <div class="theme-color-text tag" id="tags"></div>
-                    </div>
-
-                 
-
                     <div class="metadata-description" style="margin-top:20px;">
-                        <div class="metadata-title" id="imd8">Transcription</div>
+                        <div class="metadata-title" id="imd20">Interpretative edition and Romanisation</div>
                         <div id="transcription" class="metadata-description-text"></div>
                     </div>
 
@@ -228,15 +217,76 @@
                         <div id="translation-display" class="metadata-description-text"></div>
                     </div>
 
+                </div>
+
+                <div class="division"> </div>
+
+
+                <div class="metadata-content" style="padding-top:0px;">
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd21">Localization:</div>
+                        <div class="theme-color-text tag" id=""></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd22">Medium:</div>
+                        <div class="theme-color-text tag" id=""></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd23">Condition:</div>
+                        <div class="theme-color-text tag" id="date"></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd23">Letters and Lines:</div>
+                        <div class="theme-color-text tag" id="date"></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd24">Dimensions (cm):</div>
+                        <div class="theme-color-text tag" id=""></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd13">Elevation (cm):</div>
+                        <div class="theme-color-text tag" id=""></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd25">Overlapping inscriptions:</div>
+                        <div class="theme-color-text tag" id=""></div>
+                    </div>
+
+
+                    <div class="metadata-item">
+                        <div class="label" id="imd12">Date:</div>
+                        <div class="theme-color-text tag" id="date"></div>
+                    </div>
+
+                    <div class="metadata-item">
+                        <div class="label" id="">Extra-alphabetical signs:</div>
+                        <div class="theme-color-text tag" id=""></div>
+                    </div>
+
+                
+
+
                     <div class="metadata-description">
                         <div class="metadata-title-row">
-                            <div class="metadata-title" id="imd9">Description</div>
+                            <div class="metadata-title" id="">Comments</div>
                             <div id="description-dropdown"></div>
                         </div>
                         <div id="description-display" class="metadata-description-text"></div>
                     </div>
                     <div class="metadata-description">
                         <div class="metadata-title" id="imd11">Contributors</div>
+                        <div id="contributors" class="metadata-description-text contributors"></div>
+                    </div>
+
+                    <div class="metadata-description">
+                        <div class="metadata-title" id="">Bibliography</div>
                         <div id="contributors" class="metadata-description-text contributors"></div>
                     </div>
                 </div>

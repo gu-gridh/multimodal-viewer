@@ -31,7 +31,7 @@
             document.getElementById('imd4').textContent = t('genre') + ":";
             document.getElementById('imd5').textContent = t('editinscription');
             document.getElementById('imd20').textContent = t('interpretation');
-            document.getElementById('imd9').textContent = t('description')+ ":";
+            document.getElementById('imd9').textContent = t('description') + ":";
             document.getElementById('imd10').textContent = t('translation');
             document.getElementById('imd11').textContent = t('contributors');
             document.getElementById('imd12').textContent = t('date') + ":";
@@ -204,25 +204,34 @@
                         <div class="theme-color-text tag" id="genre"></div>
                     </div>
 
-                    <div class="metadata-description" style="margin-top:20px;">
-                        <div class="metadata-title" id="imd20">Interpretative edition and Romanisation</div>
-                        <div id="transcription" class="metadata-description-text"></div>
-                    </div>
+                    <div class="metadata-columns" style="">
+                        <div style="padding-top:0px;width:100%; padding-right:30px; border-width:0px 1px 0px 0px; border-color: rgb(180,100,100); border-style:dotted;">
+                            <div class="metadata-description" style="margin-top:0px;">
+                                <div class="metadata-title" id="imd20">Interpretative edition</div>
+                                <div id="interpretation" class="metadata-description-text" style="margin-top:-5px">
+                                </div>
+                            </div>
 
-                    <div class="metadata-description">
-                        <div class="metadata-title-row">
-                            <div class="metadata-title" id="imd10">Translation</div>
-                            <div id="translation-dropdown"></div>
+                            <div class="metadata-description">
+                                <div class="metadata-title-row">
+                                    <div class="metadata-title" id="imd10">Translation</div>
+                                    <div id="translation-dropdown"></div>
+                                </div>
+                                <div id="translation-display" class="metadata-description-text"></div>
+                            </div>
                         </div>
-                        <div id="translation-display" class="metadata-description-text"></div>
+
+                        <div class="metadata-description" style="padding-left:30px; margin-top:0px;">
+                            <div class="metadata-title" id="imd24">Romanisation</div>
+                            <div id="romanisation" class="metadata-description-text" style="margin-top:-5px"></div>
+                        </div>
+
                     </div>
 
-                </div>
-
-                <div class="division"> </div>
 
 
-                <div class="metadata-content" style="padding-top:0px;">
+
+                    <div class="division"> </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd21">Localization:</div>
@@ -270,9 +279,6 @@
                         <div class="theme-color-text tag" id=""></div>
                     </div>
 
-                
-
-
                     <div class="metadata-description">
                         <div class="metadata-title-row">
                             <div class="metadata-title" id="">Comments</div>
@@ -280,16 +286,23 @@
                         </div>
                         <div id="description-display" class="metadata-description-text"></div>
                     </div>
+
+                    <div class="division"> </div>
+
+                    <div class="metadata-description" style="margin-top:-5px">
+                        <div class="metadata-title" id="">Bibliography</div>
+                        <div id="" class="metadata-description-text contributors"></div>
+                    </div>
+
+
                     <div class="metadata-description">
                         <div class="metadata-title" id="imd11">Contributors</div>
                         <div id="contributors" class="metadata-description-text contributors"></div>
                     </div>
 
-                    <div class="metadata-description">
-                        <div class="metadata-title" id="">Bibliography</div>
-                        <div id="contributors" class="metadata-description-text contributors"></div>
-                    </div>
+
                 </div>
+
             </div>
         </div>
 </body>

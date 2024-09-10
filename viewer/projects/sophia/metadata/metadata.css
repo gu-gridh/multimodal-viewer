@@ -177,8 +177,10 @@ body {
 .metadata-description .metadata-title {
 	font-weight: 200;
 	font-size: 1.2em;
-	line-height:1.2;
+	line-height:1.0;
 	margin-bottom:0px;
+	margin-top:0px;
+	padding:0px;
 	width:auto;
 }
 
@@ -334,15 +336,27 @@ font-size: 1.0em!important;
 	outline: none;
 }
 
-.division{
-	margin-top:10px;
-	margin-bottom:20px;
+.metadata-columns{
+	float:left;
+	display:flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content:center;
 	width:100%;
+	margin-top:20px;
+	padding:0px;
+}
+
+.division{
+	margin-top:20px;
+	margin-bottom:30px;
+	width:calc(100% + 40px);
 	height:1px;
 	border-color: rgb(180,100,100);
 	border-width:1px 0 0 0;
 	border-style:dotted;
 	float:left;
+	margin-left:-20px;
 
 }
   

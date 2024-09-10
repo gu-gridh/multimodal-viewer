@@ -177,7 +177,7 @@ body {
 .metadata-description .metadata-title {
 	font-weight: 200;
 	font-size: 1.2em;
-	line-height:1.0;
+	line-height:1.2;
 	margin-bottom:0px;
 	margin-top:0px;
 	padding:0px;
@@ -344,7 +344,6 @@ font-size: 1.0em!important;
 	justify-content:center;
 	width:100%;
 	margin-top:20px;
-	padding:0px;
 }
 
 .division{

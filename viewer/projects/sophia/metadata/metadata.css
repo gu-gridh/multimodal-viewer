@@ -162,8 +162,8 @@ body {
 .metadata-item {
 	float: left;
 	margin-bottom: 15px;
-	margin-right: 35px;
-	font-size: 1.1em;
+	margin-right: 30px;
+	font-size: 0.95em;
 	font-weight:200;
 }
 
@@ -341,10 +341,19 @@ font-size: 1.0em!important;
 	display:flex;
 	flex-direction: row;
 	align-items: flex-start;
-	justify-content:center;
+	justify-content:flex-start;
 	width:100%;
-	margin-top:20px;
+	flex-wrap:wrap;
 }
+
+.metadata-columns .column{
+	display:flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width:auto;
+	margin-top:0px;
+}
+
 
 .division{
 	margin-top:20px;

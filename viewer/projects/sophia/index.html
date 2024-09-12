@@ -225,7 +225,7 @@
                             ? tagsData.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') 
                             : '';
 
-                        updateMetadataContent(tags, 'panel_tags'); 
+                       // updateMetadataContent(tags, 'panel_tags'); 
                     } else {
                         console.error('No features found in response');
                     }
@@ -381,6 +381,7 @@
             updateMetadataContent(defaultTitle, 'inscription-title');
             updateMetadataContent(defaultText, 'interpretation');
             updateMetadataContent(defaultText, 'romanisation');
+            updateMetadataContent(defaultText, 'diplomatic');
             updateMetadataContent(defaultText, 'type');
             updateMetadataContent(defaultText, 'writing');
             updateMetadataContent(defaultText, 'language');
@@ -444,6 +445,7 @@
                 const type = data.type_of_inscription ? (currentLang === 'uk' && data.type_of_inscription.text_ukr ? data.type_of_inscription.text_ukr : data.type_of_inscription.text) : "Unknown";
                 const interpretation = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Interpretation not available</p>");
                 const romanisation = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Romanisation not available</p>");
+                const diplomatic = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Textual graffiti not available</p>");
                 const writing = data.writing_system ? (currentLang === 'uk' && data.writing_system.text_ukr ? data.writing_system.text_ukr : data.writing_system.text) : "";
                 const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
                 const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
@@ -458,6 +460,7 @@
                 updateMetadataContent(fullTitle, 'inscription-title');
                 updateMetadataContent(interpretation, 'interpretation');
                 updateMetadataContent(romanisation, 'romanisation');
+                updateMetadataContent(diplomatic, 'diplomatic');
                 updateMetadataContent(type, 'type');
                 updateMetadataContent(writing, 'writing');
                 updateMetadataContent(language, 'language');

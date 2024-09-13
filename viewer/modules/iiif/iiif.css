@@ -109,4 +109,36 @@ body {
 	opacity: 1;
 	cursor: pointer;
 }
+.openseadragon-canvas{
+	display:flex!important;
+	flex-direction: row!important;
+	justify-content:center!important;
+}
+
+.referencestrip{
+	position:absolute!important;
+	bottom:100px!important;
+	width:800px!important;
+	max-width:800px!important;
+	overflow:hidden;
+	border-radius:8px;
+	height:100px!important;
+	margin: 0px 0px 50px!important;
+	opacity:1.0!important;
+	background-color:black!important;
+	object-fit: contain!important;
+	text-align:center!important;
+}
+
+
+
+.referencestrip .img:hover{
+	opacity:0;
+}
+
+.referencestrip:Hover{
+	
+	bottom:100px!important;
+}
+
 

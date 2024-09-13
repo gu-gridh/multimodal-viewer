@@ -430,9 +430,9 @@ body {
 	display: none;
 	position: absolute;
 	background-color: #f9f9f9;
-	min-width: 180px;
+	width: 180px;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	padding: 6px 6px 12px 12px;
+	padding: 6px 6px 12px 6px;
 	z-index: 100;
 	color: black;
 	margin-left: -10px;
@@ -442,7 +442,8 @@ body {
 
 .metadata-dropdown-content p {
 	display: inline;
-	margin-right: 20px;
+	margin-right: 10px;
+	margin-left: 10px;
 	margin-bottom: 0px;
 }
 
@@ -454,4 +455,5 @@ body {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	justify-content: center;
 }

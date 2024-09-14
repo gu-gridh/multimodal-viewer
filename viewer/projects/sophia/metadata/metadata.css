@@ -355,7 +355,7 @@ body {
 	-webkit-appearance: none;
 	user-select: none;
 	-webkit-user-select: none;
-	background-image: url("../../../shared/dropdown-arrow.png");
+	background-image: url(https://data.dh.gu.se/ui-icons/dropdown-arrow_white.png);
 	background-size: 15px;
 	background-repeat: no-repeat;
 	background-position: calc(100% - 10px) 55%;
@@ -419,7 +419,7 @@ body {
 	color: rgb(180, 100, 100);
 	cursor: pointer;
 	font-weight: 500;
-	background-image: url("../../../shared/dropdown-arrow_red.png");
+	background-image: url(https://data.dh.gu.se/ui-icons/dropdown-arrow_red.png);
 	background-size: 15px;
 	background-repeat: no-repeat;
 	background-position: calc(100% - 5px) 100%;

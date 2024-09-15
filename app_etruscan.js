@@ -8,7 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-/* To test: http://localhost:8098/viewer/?q=2683/orthophoto or http://localhost:8098/viewer/?q=1/pointcloud */
+/* To test: http://localhost:8098/viewer/?q=2683/image or http://localhost:8098/viewer/?q=1/pointcloud */
 
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
@@ -68,7 +68,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   if (viewerType === 'pointcloud') {
       apiUrl = `${config.panel}${queryName}`;
-  } else if (viewerType === 'orthophoto') {
+  } else if (viewerType === 'image') {
       apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=1`;
   } else {
       return res.status(400).send('Invalid viewer type');
@@ -85,7 +85,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
       if (viewerType === 'pointcloud') {
           metadata = apiResponse.data.results?.[0];
-      } else if (viewerType === 'orthophoto') {
+      } else if (viewerType === 'image') {
           metadata = apiResponse.data; 
       }
 
@@ -108,7 +108,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                                      .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
                                      .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
                                      .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown');
-          } else if (viewerType === 'orthophoto') {
+          } else if (viewerType === 'image') {
               modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, 'Tomb ' + metadata.tomb.name ?? 'Unknown Tomb')
                                      .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.tomb.description ?? 'No description available')
                                      .replace(/PLACEHOLDER_TYPE/g, metadata.type_of_image?.[0]?.text ?? 'Unknown type')

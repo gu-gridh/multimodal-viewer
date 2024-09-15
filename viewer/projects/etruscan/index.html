@@ -146,8 +146,8 @@
                 const segments = qValue.split('/');
                 const viewerType = segments[1];
 
-                if (viewerType === 'orthophoto') {
-                    return 'orthophoto';
+                if (viewerType === 'image') {
+                    return 'image';
                 } else if (viewerType === 'pointcloud') {
                     return 'pointcloud';
                 }
@@ -172,9 +172,9 @@
             let src;
             let newPath;
             switch (viewerType) {
-                case 'orthophoto':
+                case 'image':
                     src = `/viewer/modules/iiif/iiif.html${queryString}${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/orthophoto${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/image${hashFragment}`;
                     break;
                 case 'pointcloud':
                     src = `/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY`;

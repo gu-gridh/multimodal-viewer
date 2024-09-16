@@ -309,7 +309,7 @@
                 let query = url.searchParams.get('q') || '';
                 const parts = query.split('/');
                 const prefix = parts[0];
-                const suffix = 'orthophoto';
+                const suffix = 'PLACEHOLDER_FILE_NAME';
                 const newQuery = prefix + '/' + suffix;
                 const fragment = url.hash;
                 const newPath = '/viewer/?q=' + newQuery;

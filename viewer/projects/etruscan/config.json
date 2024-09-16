@@ -13,6 +13,7 @@
     }
   },
   "appFile": "app_etruscan.js",
+  "fileNameUsedWhenSharingIIIF": "image",
   "project": "Etruscan",
   "displayAnnotations": false,
   "displayIIIFAnnotations": false,

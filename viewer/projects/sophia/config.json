@@ -12,7 +12,8 @@
       "minMaxTheta": [-180.0, 180.0]
     }
   },
-  "appFile": "app.js",
+  "appFile": "app_sophia.js",
+  "fileNameUsedWhenSharingIIIF": "orthophoto",
   "project": "Sophia",
   "displayAnnotations": true,
   "displayIIIFAnnotations": true,

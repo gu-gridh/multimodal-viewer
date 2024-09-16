@@ -186,27 +186,68 @@ app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locale
 app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
 // Fallback route, serve index.html
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
   const queryName = req.query.q;
-  const queryId = queryName ? queryName.split('/')[0] : '';
+  const querySegments = queryName ? queryName.split('/') : [];
 
-  if (!queryName) {
+  if (!queryName || querySegments.length < 2) {
     const indexPath = path.join(__dirname, 'index.html');
     return res.sendFile(indexPath);
   }
 
-  const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
+  const queryId = querySegments[0];
+  const viewerType = querySegments[1];
+  let apiUrl;
 
-  fs.readFile(indexPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading the file:', err);
-      return res.status(500).send('Internal Server Error');
+  //fetch the backbutton data from the appropriate API if image or pointcloud
+  if (viewerType === 'pointcloud') {
+    apiUrl = `${config.panel}${queryId}`;
+  } else if (viewerType === 'image') {
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=1`;
+  } else {
+    return res.status(400).send('Invalid viewer type');
+  }
+
+  try {
+    const apiResponse = await axios.get(apiUrl);
+
+    if (!apiResponse || !apiResponse.data) {
+      return res.status(404).send('Data not found');
     }
 
-    let modifiedData = data
-    .replace(/PLACEHOLDER_QUERY/g, queryName)
-    res.send(modifiedData);
-  });
+    let metadata;
+    let backButtonValue = '';
+
+    if (viewerType === 'pointcloud') {
+      metadata = apiResponse.data.results?.[0];
+      if (metadata && metadata.title) {
+        const match = metadata.title.match(/\d+/);
+        backButtonValue = match ? match[0] : '';
+      }
+    } else if (viewerType === 'image') {
+      metadata = apiResponse.data;
+      backButtonValue = metadata?.tomb?.name || '';
+    }
+
+    const backButtonUrl = `${config.backButton}${backButtonValue}`;
+
+    const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
+    fs.readFile(indexPath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      let modifiedData = data
+        .replace(/PLACEHOLDER_QUERY/g, queryName)
+        .replace('PLACEHOLDER_BACKBUTTON', backButtonUrl);
+
+      res.send(modifiedData);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    return res.status(500).send('Internal Server Error');
+  }
 });
 
 const PORT = 8098;

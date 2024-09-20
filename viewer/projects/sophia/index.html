@@ -450,7 +450,8 @@
                 const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
                 const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
                 const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') : "";
-                
+                const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "Висота недоступна" : "Elevation not available");
+
                 //title
                 const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
                 const inscriptionTitle = data.title ? `(${data.title})` : "";
@@ -466,6 +467,7 @@
                 updateMetadataContent(language, 'language');
                 updateMetadataContent(genre, 'genre');
                 updateMetadataContent(tags, 'tags');
+                updateMetadataContent(elevation, 'elevation');
             })
             .catch(error => {
                 console.error('Error fetching inscription data:', error);

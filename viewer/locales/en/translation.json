@@ -98,7 +98,7 @@
   "descriptionnotavailable": "<p>Description not available</p>",
   "transcriptionnotavailable": "<p>Transcription not available</p>",
   "date": "Date",
-  "elevation": "Elevation (cm)",
+  "elevation": "Elevation (mm)",
   "download": "Download",
   "points1": "Points (optimized)",
   "points2": "Points (high quality)",

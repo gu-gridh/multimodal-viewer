@@ -8,7 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-/* To test: http://localhost:8098/viewer/?q=2683/image or http://localhost:8098/viewer/?q=1/pointcloud */
+/* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud */
 
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
@@ -250,7 +250,7 @@ app.get('*', async (req, res) => {
   }
 });
 
-const PORT = 8098;
+const PORT = 8094;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -103,6 +103,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     if (queryType === 'orthophoto') {
       if (modelData[0].properties.attached_photograph) {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
+        const sequenceEnabled = false;
+        const displayStyle = sequenceEnabled ? 'flex' : 'none';
         const basePath = `${config.basePath}`;
         const basePathDownload = `${config.downloadPath}`;
         const iiifFilePath = modelData[0].properties.attached_photograph[0].iiif_file;
@@ -110,35 +112,38 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const annotationPath = `${config.annotationPath}`;
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
         const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
-        let updatedHtmlContent = htmlContent.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-                                            .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
-                                            .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.fileNameUsedWhenSharingIIIF))
-                                            .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
-                                            .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
-                                            .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
-                                            .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-                                            .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none');
+        let updatedHtmlContent = htmlContent
+          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
+          .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
+          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
+          .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
+          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
+          .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
+          .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
         res.send(updatedHtmlContent);
       } else {
         res.send('No attached photographs found.');
       }
     } else if (queryType === 'topography') {
       if (modelData[0].properties.attached_topography) {
+        const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
+        const sequenceEnabled = true;
+        const displayStyle = sequenceEnabled ? 'flex' : 'none';
         const basePathIiif = `${config.basePath}`;
         const basePathDownload = `${config.downloadPath}`;
         const annotationPath = `${config.annotationPath}`;
         const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
         const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
-        const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         let updatedHtmlContent = htmlContent
           .replace('PLACEHOLDER_IIIF_IMAGE_URL', JSON.stringify(topographyImagesIiif))
           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
           .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
           .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
-          .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.fileNameUsedWhenSharingIIIF))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true);
+          .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
         res.send(updatedHtmlContent);
       } else {
         res.send('No attached topography images found.');

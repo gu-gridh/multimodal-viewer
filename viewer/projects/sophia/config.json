@@ -13,7 +13,6 @@
     }
   },
   "appFile": "app_sophia.js",
-  "fileNameUsedWhenSharingIIIF": "orthophoto",
   "project": "Sophia",
   "displayAnnotations": true,
   "displayIIIFAnnotations": true,

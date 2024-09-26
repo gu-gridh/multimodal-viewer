@@ -32,7 +32,7 @@
 
 
   <!--These are hidden if there is only one image--> 
-    <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_ENABLE';">
+    <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_SHOW';">
         <div id="ToolbarHorizontal">   
             <a id="prev-button">
                 <div id="Prev" title="Previous image"class="SwitchButton"></div>
@@ -305,11 +305,11 @@
                 let query = url.searchParams.get('q') || '';
                 const parts = query.split('/');
                 const prefix = parts[0];
-                const suffix = 'PLACEHOLDER_FILE_NAME';
-                const newQuery = prefix + '/' + suffix;
+                const suffix = parts.length > 1 ? parts[1] : ''; 
+                const newQuery = `${prefix}/${suffix}`;
                 const fragment = url.hash;
-                const newPath = '/viewer/?q=' + newQuery;
-                const newUrl = url.origin + newPath + fragment;
+                const newPath = `/viewer/?q=${newQuery}`;
+                const newUrl = `${url.origin}${newPath}${fragment}`;
                 urlToCopy = newUrl;
             });
 
@@ -522,32 +522,32 @@
         }
 
         function logPosition() {
-            $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
-                $('#share-label').removeClass('popup-animation').dequeue();
-            });
+    $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
+        $('#share-label').removeClass('popup-animation').dequeue();
+    });
 
-            if (urlToCopy) {
-                const url = new URL(urlToCopy);
-                const rotationParam = `rotation=${currentRotation}`;
+    if (urlToCopy) {
+        const url = new URL(urlToCopy);
+        const rotationParam = `rotation=${currentRotation}`;
 
-                //remove any existing rotation parameters
-                let hashFragment = url.hash.substring(1);
-                let hashParams = new URLSearchParams(hashFragment);
-                hashParams.delete('rotation');
+        //remove any existing rotation parameters
+        let hashFragment = url.hash.substring(1);
+        let hashParams = new URLSearchParams(hashFragment);
+        hashParams.delete('rotation');
 
-                //add the new rotation parameter
-                hashParams.append('rotation', currentRotation);
+       //add the new rotation parameter
+        hashParams.append('rotation', currentRotation);
 
-                //reconstruct the URL
-                urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
+        //reconstruct the URL
+        urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
 
-                navigator.clipboard.writeText(urlToCopy)
-                    .then(() => console.log(urlToCopy + ' copied to clipboard'))
-                    .catch(err => console.error('Could not copy URL:', err));
-            } else {
-                console.error('No URL to copy');
-            }
-        }
+        navigator.clipboard.writeText(urlToCopy)
+            .then(() => console.log(`${urlToCopy} copied to clipboard`))
+            .catch(err => console.error('Could not copy URL:', err));
+    } else {
+        console.error('No URL to copy');
+    }
+}
     </script>
 
     <div id="guide"

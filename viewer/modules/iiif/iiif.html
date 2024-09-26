@@ -117,6 +117,7 @@
         let previousAnnotationId = null;
         let annotationClicked = false;
         let currentRotation = 0; //current rotation
+        let isInitialLoad = true;
 
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
@@ -289,6 +290,7 @@
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
+                preserveViewport: true,
                 sequenceMode: 'PLACEHOLDER_SEQUENCE_ENABLE',
                 nextButton: "next-button",
                 previousButton: "prev-button",
@@ -327,19 +329,22 @@
             });
 
             viewer.addHandler('open', function () {
-                if (!isNaN(zoom) && !isNaN(x) && !isNaN(y) && !isNaN(rotation)) {
-                    //console.log('setting position based on url')
-                    viewer.viewport.zoomTo(zoom);
-                    viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
-                    viewer.viewport.setRotation(rotation, true); 
-                    currentRotation = rotation;
-                } else if (savedState) {
-                    //console.log('setting position based on savedstate')
-                    viewer.viewport.zoomTo(savedState.zoom);
-                    viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
-                    viewer.viewport.setRotation(savedState.rotation, true); 
-                    currentRotation = savedState.rotation || 0;
+                if (isInitialLoad) {
+                    if (!isNaN(zoom) && !isNaN(x) && !isNaN(y) && !isNaN(rotation)) {
+                        //console.log('setting position based on url')
+                        viewer.viewport.zoomTo(zoom);
+                        viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
+                        viewer.viewport.setRotation(rotation, true); 
+                        currentRotation = rotation;
+                    } else if (savedState) {
+                        //console.log('setting position based on savedstate')
+                        viewer.viewport.zoomTo(savedState.zoom);
+                        viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
+                        viewer.viewport.setRotation(savedState.rotation, true); 
+                        currentRotation = savedState.rotation || 0;
+                    }
                 }
+                isInitialLoad = false;
             });
 
             viewer.addHandler('viewport-change', function () {

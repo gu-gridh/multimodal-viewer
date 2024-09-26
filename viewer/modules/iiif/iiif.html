@@ -32,8 +32,8 @@
 
 
   <!--These are hidden if there is only one image--> 
-    <div class="interface-area-top" style="display:none">
-        <div id="ToolbarHorizontal" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">   
+    <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_ENABLE';">
+        <div id="ToolbarHorizontal">   
             <a id="prev-button">
                 <div id="Prev" title="Previous image"class="SwitchButton"></div>
             </a>
@@ -59,9 +59,7 @@
     <div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
     </a>
 
-
  <!-- rotation buttons -->
-
     <div id="toolButtonsContainerVertical">
         <a id="rotate-left" href="#rotate-left">
             <div id="RotateLeft" class="toolButtonVertical compact"><img src="https://data.dh.gu.se/ui-icons/rotate_left_white.png" /></div>
@@ -279,7 +277,7 @@
             var viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
-                tileSources: 'PLACEHOLDER_IIIF_IMAGE_URL',
+                tileSources: 'PLACEHOLDER_SEQUENCE_ENABLE' ? JSON.parse('PLACEHOLDER_IIIF_IMAGE_URL') : 'PLACEHOLDER_IIIF_IMAGE_URL',
                 immediateRender: false,
                 visibilityRatio: 0.85,
                 minZoomImageRatio: 0.85,
@@ -291,7 +289,7 @@
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
-                sequenceMode: false,
+                sequenceMode: 'PLACEHOLDER_SEQUENCE_ENABLE',
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 fullPageButton: "full-page",

@@ -81,35 +81,70 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {  
+app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  if (!queryName) {
-    return res.status(400).send('Query parameter is missing');
+  const queryType = fullQuery ? fullQuery.split('/')[1] : '';
+  
+  if (!queryName || !queryType) {
+    return res.status(400).send('Query parameter is missing or incorrect');
   }
+
   const apiUrl = `${config.panel}${queryName}`;
+
   try {
     const apiResponse = await axios.get(apiUrl);
+    const modelData = apiResponse.data.features;
 
-    if (!apiResponse || !apiResponse.data || !apiResponse.data.features) {
+    if (!modelData || modelData.length === 0) {
       return res.status(404).send('Data not found');
     }
 
-    const modelData = apiResponse.data.features;
-
-    if (modelData.length > 0 && modelData[0].properties.attached_topography) {
-      const basePathIiif = `${config.basePath}`;
-      const basePathDownload = `${config.downloadPath}`;
-      const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-      const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
-      const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer',  'modules', 'iiif', 'iiifSequence.html'), 'utf8');
-      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(topographyImagesIiif))
-                                          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
-                                          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
-      res.send(updatedHtmlContent);
+    if (queryType === 'orthophoto') {
+      if (modelData[0].properties.attached_photograph) {
+        const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
+        const basePath = `${config.basePath}`;
+        const basePathDownload = `${config.downloadPath}`;
+        const iiifFilePath = modelData[0].properties.attached_photograph[0].iiif_file;
+        const downloadFile = modelData[0].properties.attached_photograph[0].file;
+        const annotationPath = `${config.annotationPath}`;
+        const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
+        const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
+        let updatedHtmlContent = htmlContent.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
+                                            .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
+                                            .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.fileNameUsedWhenSharingIIIF))
+                                            .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
+                                            .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
+                                            .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
+                                            .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
+                                            .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none');
+        res.send(updatedHtmlContent);
+      } else {
+        res.send('No attached photographs found.');
+      }
+    } else if (queryType === 'topography') {
+      if (modelData[0].properties.attached_topography) {
+        const basePathIiif = `${config.basePath}`;
+        const basePathDownload = `${config.downloadPath}`;
+        const annotationPath = `${config.annotationPath}`;
+        const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
+        const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
+        const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
+        let updatedHtmlContent = htmlContent
+          .replace('PLACEHOLDER_IIIF_IMAGE_URL', JSON.stringify(topographyImagesIiif))
+          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
+          .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
+          .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
+          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
+          .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.fileNameUsedWhenSharingIIIF))
+          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true);
+        res.send(updatedHtmlContent);
+      } else {
+        res.send('No attached topography images found.');
+      }
     } else {
-      console.log('No attached topography images found.');
-      res.send('No attached topography images found.');
+      res.status(400).send('Invalid type specified in query');
     }
   } catch (error) {
     console.error('Error fetching data from API:', error);
@@ -190,50 +225,6 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
 
       res.send(modifiedData);
     });
-  } catch (error) {
-    console.error('Error fetching data from API:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-});
-
-app.get('/viewer/modules/iiif/iiif.html', async (req, res) => { 
-  const fullQuery = req.query.q;
-  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  if (!queryName) {
-    return res.status(400).send('Query parameter is missing');
-  }
-
-  const apiUrl = `${config.panel}${queryName}`;
-  try {
-    const apiResponse = await axios.get(apiUrl);
-    const modelData = apiResponse.data.features;
-
-    if (modelData.length > 0 && modelData[0].properties.attached_photograph) {
-      fs.readFile(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
-        if (err) {
-          console.error('Error reading the file:', err);
-          return res.status(500).send('Internal Server Error');
-        }
-        const basePath = `${config.basePath}`;
-        const basePathDownload = `${config.downloadPath}`;
-        const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
-        const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
-        const annotationPath = `${config.annotationPath}`;
-        const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-        const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
-        let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-                               .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.fileNameUsedWhenSharingIIIF)) 
-                               .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath)) 
-                               .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g,  JSON.stringify(`${annotationPath}${queryName}`))
-                               .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
-                               .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-                               .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none');
-        res.send(modifiedData);
-      });
-    } else {
-      console.log('No attached topography images found.');
-      res.send('No attached topography images found.');
-    }
   } catch (error) {
     console.error('Error fetching data from API:', error);
     return res.status(500).send('Internal Server Error');

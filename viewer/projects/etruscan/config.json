@@ -17,7 +17,7 @@
   "project": "Etruscan",
   "displayAnnotations": false,
   "displayIIIFAnnotations": false,
-  "backButton": "https://etruscan.dh.gu.se/place/",
+  "backButton": "https://etruscan.dh.gu.se/",
   "panel": "https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=",
   "metadata": "",
   "pointcloud": "",

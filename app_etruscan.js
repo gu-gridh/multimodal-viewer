@@ -201,9 +201,9 @@ app.get('*', async (req, res) => {
 
   //fetch the backbutton data from the appropriate API if image or pointcloud
   if (viewerType === 'pointcloud') {
-    apiUrl = `${config.panel}${queryId}`;
+    apiUrl = `${config.panel}${queryId}&depth=2`;
   } else if (viewerType === 'image') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=1`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
   } else {
     return res.status(400).send('Invalid viewer type');
   }
@@ -220,13 +220,23 @@ app.get('*', async (req, res) => {
 
     if (viewerType === 'pointcloud') {
       metadata = apiResponse.data.results?.[0];
-      if (metadata && metadata.title) {
-        const match = metadata.title.match(/\d+/);
-        backButtonValue = match ? match[0] : '';
+      if (metadata && metadata.tomb && metadata.tomb[0]) {
+        const tomb = metadata.tomb[0];
+        if (tomb.dataset && tomb.name) {
+          const shortName = tomb.dataset.short_name.replace(/ /g, '_');
+          const tombName = tomb.name.replace(/ /g, '_');
+          backButtonValue = `${shortName}_${tombName}`;
+        }
       }
     } else if (viewerType === 'image') {
-      metadata = apiResponse.data;
-      backButtonValue = metadata?.tomb?.name || '';
+      const metadata = apiResponse.data;
+      if (metadata && metadata.tomb) {
+        const tombName = metadata.tomb.name.replace(/ /g, '_') || '';
+        const datasetShortName = metadata.tomb.dataset?.short_name.replace(/ /g, '_') || '';
+        backButtonValue = `${datasetShortName}_${tombName}`;
+      } else {
+        backButtonValue = '';
+      }    
     }
 
     const backButtonUrl = `${config.backButton}${backButtonValue}`;

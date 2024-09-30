@@ -572,8 +572,6 @@
                 //reconstruct the URL
                 urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
 
-                console.log('URL with rotation:', url.search);
-
                 navigator.clipboard.writeText(urlToCopy)
                     .then(() => console.log(`${urlToCopy} copied to clipboard`))
                     .catch(err => console.error('Could not copy URL:', err));

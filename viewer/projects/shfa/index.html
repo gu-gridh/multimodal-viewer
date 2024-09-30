@@ -284,7 +284,7 @@
             let newPath;
             switch (viewerType) {
                 case 'visualisation':
-                    src = `/viewer/modules/iiif/iiif.html${queryString}${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/visualisation${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/visualisation${hashFragment}`;
                     buttonNum = 1;
                     break;

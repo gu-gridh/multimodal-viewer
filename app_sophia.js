@@ -120,7 +120,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
           .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
           .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled)
+          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
         res.send(updatedHtmlContent);
       } else {
         res.send('No attached photographs found.');
@@ -136,14 +137,15 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
         const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
         let updatedHtmlContent = htmlContent
-          .replace('PLACEHOLDER_IIIF_IMAGE_URL', JSON.stringify(topographyImagesIiif))
+          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
           .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
           .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
           .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled)
+          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
         res.send(updatedHtmlContent);
       } else {
         res.send('No attached topography images found.');

@@ -17,40 +17,7 @@ try {
   process.exit(1);
 }
 
-// app.get('/modules/openlime/openlime.html', async (req, res) => {
-//   const fullQuery = req.query.q;
-//   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-//   // Fetch RTI image data from the API
-//   const apiUrl = `${config.panel}${queryName}`;
-//   try {
-//     const apiResponse = await axios.get(apiUrl);
-//     const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
-
-//     fs.readFile(path.join(__dirname, 'modules', 'openlime', 'openlime.html'), 'utf8', (err, htmlData) => {
-//       if (err) {
-//         console.error('Error reading the file:', err);
-//         return res.status(500).send('Internal Server Error');
-//       }
-//       const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
-
-//       const dropdownHtml = rtiImages.map(rti => 
-//         `<option value="${rti.url}">RTI ${rti.id}</option>`
-//       ).join('');
-
-//       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
-//       modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', 
-//         `<select id="rtiImageDropdown" onchange="updateRTIImage(this.value)">
-//           ${dropdownHtml}
-//         </select>`);      
-//       res.send(modifiedHtml);
-//     });
-//   } catch (error) {
-//     console.error('Error fetching data from API:', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {
+app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   if (!queryName) {
@@ -75,13 +42,17 @@ app.get('/viewer/modules/iiif/iiifSequence.html', async (req, res) => {
       const imageIDs = modelData[0].colour_images.map(image => image.id);
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const downloadableFiles = modelData[0].colour_images.map(image => image.file);
-      const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiifSequence.html'), 'utf8');
-      let updatedHtmlContent = htmlContent.replace('PLACEHOLDER_IIIF_IMAGE_URLS', JSON.stringify(iiifImageUrls))
+      const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
+      let updatedHtmlContent = htmlContent
+        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
         .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
         .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
         .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
-        .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs));
+        .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs))
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, 'none')
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, false)
+        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');

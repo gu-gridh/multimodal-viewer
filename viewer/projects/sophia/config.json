@@ -1,17 +1,4 @@
 {
-  "mesh": {
-    "gargo": {
-      "title": "Placeholder",
-      "trackballStart": [0, 0, 0, 0, 0, 1.5],
-      "meshURL": "",
-      "startPhi": 1.0,
-      "startTheta": 1.0,
-      "startDistance": 1.5,
-      "startPan": [0.0, 0, 0.0],
-      "minMaxPhi": [-180, 180],
-      "minMaxTheta": [-180.0, 180.0]
-    }
-  },
   "appFile": "app_sophia.js",
   "project": "Sophia",
   "displayAnnotations": true,

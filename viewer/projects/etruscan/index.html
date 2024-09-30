@@ -173,7 +173,7 @@
             let newPath;
             switch (viewerType) {
                 case 'image':
-                    src = `/viewer/modules/iiif/iiif.html${queryString}${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/image${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/image${hashFragment}`;
                     break;
                 case 'pointcloud':

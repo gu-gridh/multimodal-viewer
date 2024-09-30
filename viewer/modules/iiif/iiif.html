@@ -30,7 +30,6 @@
         </div>
     </div>
 
-
   <!--These are hidden if there is only one image--> 
     <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_SHOW';">
         <div id="ToolbarHorizontal">   
@@ -56,7 +55,7 @@
   
  <!-- This button is only visible if the back-button is missing (to balance things up) -->
     <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
-    <div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
+        <div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
     </a>
 
  <!-- rotation buttons -->
@@ -119,12 +118,24 @@
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
 
+        //variables for setting download name
+        var temp = PLACEHOLDER_PROJECT;
+        var creator = 'PLACEHOLDER_CREATORS';
+        var locationIds = 'PLACEHOLDER_LOCATION_ID';
+        var imgIds = 'PLACEHOLDER_IMAGE_IDS';
+        var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URL';
+
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
-        function saveViewerState(viewer) {
+        function isPlaceholder(value) {
+            return value.includes('PLACEHOLDER');
+        }
+
+        function saveViewerState(viewer) 
+        {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
             var state = {
@@ -220,9 +231,6 @@
         }
 
         window.onload = function () {
-            var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
-            var downloadSources = JSON.parse(downloadSourceString);
-
             // for restoring the zoom and pan and rotation from the URL
             const hash = window.location.hash.substring(1);
             const hashParams = new URLSearchParams(hash);
@@ -246,8 +254,24 @@
             var savedState = getSavedViewerState();
 
             document.getElementById('download').addEventListener('click', function (event) {
+                var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
+
                 event.preventDefault();
-                const imageUrl = downloadSources;
+                try {
+                    var downloadSources = isPlaceholder(downloadSourceString) ? [] : JSON.parse(downloadSourceString);
+                    var creators = isPlaceholder(creator) ? [["Unknown Creator"]] : JSON.parse(creator);
+                    var locationIdArray = isPlaceholder(locationIds) ? ["Unknown Location"] : JSON.parse(locationIds);
+                    var imgIdArray = isPlaceholder(imgIds) ? [0] : JSON.parse(imgIds);
+                } catch (error) {
+                    console.error("Error parsing JSON data:", error);
+                    return;
+                }
+
+                const pageIndex = viewer.currentPage();
+                const imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
+                const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
+                const locationId = locationIdArray[0]; 
+                const imgId = imgIdArray[pageIndex]; 
 
                 const popup = document.getElementById('download-label');
                 popup.style.display = 'block';
@@ -262,7 +286,9 @@
                     .then(response => response.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        const filename = `image.jpg`;
+                        let filename = temp.toLowerCase() === "shfa" ?
+                            `${creatorName}_${locationId}_SHFAid${imgId}.png` :
+                            `image_${pageIndex + 1}.jpg`;
                         const a = document.createElement('a');
                         a.style.display = 'none';
                         a.href = url;
@@ -278,7 +304,7 @@
             var viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
-                tileSources: 'PLACEHOLDER_SEQUENCE_ENABLE' ? JSON.parse('PLACEHOLDER_IIIF_IMAGE_URL') : 'PLACEHOLDER_IIIF_IMAGE_URL',
+                tileSources: 'PLACEHOLDER_IIIF_IMAGE_URL',
                 immediateRender: false,
                 visibilityRatio: 0.85,
                 minZoomImageRatio: 0.85,
@@ -527,32 +553,34 @@
         }
 
         function logPosition() {
-    $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
-        $('#share-label').removeClass('popup-animation').dequeue();
-    });
+            $('#share-label').addClass('popup-animation').delay(3000).queue(function () {
+                $('#share-label').removeClass('popup-animation').dequeue();
+            });
 
-    if (urlToCopy) {
-        const url = new URL(urlToCopy);
-        const rotationParam = `rotation=${currentRotation}`;
+            if (urlToCopy) {
+                const url = new URL(urlToCopy);
+                const rotationParam = `rotation=${currentRotation}`;
 
-        //remove any existing rotation parameters
-        let hashFragment = url.hash.substring(1);
-        let hashParams = new URLSearchParams(hashFragment);
-        hashParams.delete('rotation');
+                //remove any existing rotation parameters
+                let hashFragment = url.hash.substring(1);
+                let hashParams = new URLSearchParams(hashFragment);
+                hashParams.delete('rotation');
 
-       //add the new rotation parameter
-        hashParams.append('rotation', currentRotation);
+            //add the new rotation parameter
+                hashParams.append('rotation', currentRotation);
 
-        //reconstruct the URL
-        urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
+                //reconstruct the URL
+                urlToCopy = `${url.origin}${url.pathname}${url.search}#${hashParams.toString()}`;
 
-        navigator.clipboard.writeText(urlToCopy)
-            .then(() => console.log(`${urlToCopy} copied to clipboard`))
-            .catch(err => console.error('Could not copy URL:', err));
-    } else {
-        console.error('No URL to copy');
-    }
-}
+                console.log('URL with rotation:', url.search);
+
+                navigator.clipboard.writeText(urlToCopy)
+                    .then(() => console.log(`${urlToCopy} copied to clipboard`))
+                    .catch(err => console.error('Could not copy URL:', err));
+            } else {
+                console.error('No URL to copy');
+            }
+        }
     </script>
 
     <div id="guide"

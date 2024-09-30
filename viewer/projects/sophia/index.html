@@ -750,32 +750,32 @@
             switch (viewerType) {
                 case 'orthophoto':
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/orthophoto${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/orthophoto`;
                     buttonNum = 1;
                     break;
                 case 'topography':
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/topography${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/topography${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/topography`;
                     buttonNum = 2;
                     break;
                 case 'mesh':
-                    src = `/viewer/modules/mesh/mesh.html?q=${qValue}/mesh${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/mesh${hashFragment}`;
+                    src = `/viewer/modules/mesh/mesh.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
                 case 'rti':
-                    src = `/viewer/modules/rti/rti.html?q=${qValue}/rti${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/rti${hashFragment}`;
+                    src = `/viewer/modules/rti/rti.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/rti`;
                     buttonNum = 4;
                     break;
                 case 'metadata-compact':
                     src = `/viewer/projects/sophia/metadata/metadata.html?q=${qValue}/metadata-compact${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/metadata-compact${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/metadata-compact`;
                     buttonNum = 5;
                     break;
                 default:
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/orthophoto${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/orthophoto`;
                     buttonNum = 1;
                     break;
             }

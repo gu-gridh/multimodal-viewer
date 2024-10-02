@@ -30,11 +30,11 @@
         </div>
     </div>
 
-  <!--These are hidden if there is only one image--> 
+    <!--These are hidden if there is only one image-->
     <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_SHOW';">
-        <div id="ToolbarHorizontal">   
+        <div id="ToolbarHorizontal">
             <a id="prev-button">
-                <div id="Prev" title="Previous image"class="SwitchButton"></div>
+                <div id="Prev" title="Previous image" class="SwitchButton"></div>
             </a>
             <span id="currentpage"></span>
             <a id="next-button">
@@ -51,26 +51,29 @@
             <button id="saveNo"></button>
         </div>
     </div>
-  
-  
- <!-- This button is only visible if the back-button is missing (to balance things up) -->
+
+
+    <!-- This button is only visible if the back-button is missing (to balance things up) -->
     <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
-        <div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
+        <div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;">
+        </div>
     </a>
 
- <!-- rotation buttons -->
+    <!-- rotation buttons -->
     <div id="toolButtonsContainerVertical">
         <a id="rotate-left" href="#rotate-left">
-            <div id="RotateLeft" class="toolButtonVertical compact"><img src="https://data.dh.gu.se/ui-icons/rotate_left_white.png" /></div>
+            <div id="RotateLeft" class="toolButtonVertical compact"><img
+                    src="https://data.dh.gu.se/ui-icons/rotate_left_white.png" /></div>
         </a>
         <a id="rotate-right" href="#rotate-right">
-            <div id="RotateRight" class="toolButtonVertical compact"><img src="https://data.dh.gu.se/ui-icons/rotate_right_white.png" /></div>
+            <div id="RotateRight" class="toolButtonVertical compact"><img
+                    src="https://data.dh.gu.se/ui-icons/rotate_right_white.png" /></div>
         </a>
-    </div> 
+    </div>
 
     <div class="interface-area">
 
-<!-- Toolbar -->
+        <!-- Toolbar -->
         <div class="toolbar-bottom">
             <a id="home" href="#home">
                 <div id="Home" title="Reset the view" class="NavButton"></div>
@@ -82,24 +85,29 @@
                 <div id="ZoomOut" title="Zoom out the view" class="NavButton"></div>
             </a>
 
-            <div id="clear-annotations" class="clear-annotation-button NavButton" title="Toggle annotation visibility"  style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"></div>
+            <div id="clear-annotations" class="clear-annotation-button NavButton" title="Toggle annotation visibility"
+                style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"></div>
 
-            <div class="annotate-button NavButton" style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
-                    onclick="$('#instructions').show();" title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
-    
+            <div class="annotate-button NavButton"
+                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
+                onclick="$('#instructions').show();"
+                title="Hold shift and click-and-drag to mark the section you wish to annotate."></div>
 
-            <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
+
+            <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page"
+                onclick="togglePane()">
                 <div id="FullPage" class="NavButton full-page"></div>
             </a>
         </div>
 
-     <!-- Sidebuttons -->
+        <!-- Sidebuttons -->
         <a id="download" target="_blank">
             <div id="" class="round-button download-button compact" title="Download image"></div>
         </a>
         <div id="download-label" class="label-popup" style="display: none;"></div>
-        
-        <div id="trackball_position" class="round-button share-button compact" title="Copy link to view" onclick="logPosition();">
+
+        <div id="trackball_position" class="round-button share-button compact" title="Copy link to view"
+            onclick="logPosition();">
             <div id="share-label" class="label-popup"></div>
         </div>
         <div class="guide-button compact" title="User Guide"
@@ -134,8 +142,7 @@
             return value.includes('PLACEHOLDER');
         }
 
-        function saveViewerState(viewer) 
-        {
+        function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
             var state = {
@@ -144,6 +151,15 @@
                 rotation: currentRotation
             };
             sessionStorage.setItem('viewerState', JSON.stringify(state));
+        }
+
+        function updatePageInfo() {
+            const pageInfo = document.getElementById('currentpage');
+            if (pageInfo && viewer) {
+                const currentPage = viewer.currentPage() + 1;
+                const totalPages = viewer.tileSources.length;
+                pageInfo.innerHTML = `${currentPage} ${i18next.t('of')} ${totalPages}`;
+            }
         }
 
         function getSavedViewerState() {
@@ -182,7 +198,6 @@
             if (typeof i18next.t === 'function') {
                 document.getElementById('share-label').textContent = i18next.t('linkcopied');
                 document.getElementById('download-label').textContent = i18next.t('downloadstarted');
-                // document.getElementById('1').textContent = i18next.t('annotate');
                 document.getElementById('2').innerHTML = i18next.t('frame-object');
                 document.getElementById('3').innerHTML = i18next.t('full-screen');
                 document.getElementById('4').textContent = i18next.t('tools');
@@ -194,12 +209,7 @@
                 document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('redoselection');
-                // const clearAnnotationsButton = document.getElementById('clear-annotations');
-                // if (annotationsVisible) {
-                //     clearAnnotationsButton.textContent = i18next.t('hideannotations');
-                // } else {
-                //     clearAnnotationsButton.textContent = i18next.t('showannotations');
-                // }
+                updatePageInfo();
             }
         }
 
@@ -240,7 +250,7 @@
             let rotation = parseFloat(hashParams.get('rotation')) || 0;
 
             //normalize rotation
-            rotation = ((rotation % 360) + 360) % 360; 
+            rotation = ((rotation % 360) + 360) % 360;
 
             const currentQuery = new URLSearchParams(window.location.search).get('q');
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
@@ -270,8 +280,8 @@
                 const pageIndex = viewer.currentPage();
                 const imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
                 const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
-                const locationId = locationIdArray[0]; 
-                const imgId = imgIdArray[pageIndex]; 
+                const locationId = locationIdArray[0];
+                const imgId = imgIdArray[pageIndex];
 
                 const popup = document.getElementById('download-label');
                 popup.style.display = 'block';
@@ -301,7 +311,7 @@
                     .catch(() => console.error("Could not download the image"));
             });
 
-            var viewer = OpenSeadragon({
+            viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
                 tileSources: 'PLACEHOLDER_IIIF_IMAGE_URL',
@@ -333,7 +343,7 @@
                 let query = url.searchParams.get('q') || '';
                 const parts = query.split('/');
                 const prefix = parts[0];
-                const suffix = parts.length > 1 ? parts[1] : ''; 
+                const suffix = parts.length > 1 ? parts[1] : '';
                 const newQuery = `${prefix}/${suffix}`;
                 const fragment = url.hash;
                 const newPath = `/viewer/?q=${newQuery}`;
@@ -344,13 +354,13 @@
             viewer.bookmarkUrl();
 
             //hide annotations when rotating
-            viewer.addHandler('rotate', function() {
+            viewer.addHandler('rotate', function () {
                 currentRotation = viewer.viewport.getRotation();
                 anno.setVisible(false);
             });
 
             //show annotations after rotation
-            viewer.addHandler('animation-finish', function() {
+            viewer.addHandler('animation-finish', function () {
                 anno.setVisible(true);
             });
 
@@ -360,13 +370,13 @@
                         //console.log('setting position based on url')
                         viewer.viewport.zoomTo(zoom);
                         viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
-                        viewer.viewport.setRotation(rotation, true); 
+                        viewer.viewport.setRotation(rotation, true);
                         currentRotation = rotation;
                     } else if (savedState) {
                         //console.log('setting position based on savedstate')
                         viewer.viewport.zoomTo(savedState.zoom);
                         viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
-                        viewer.viewport.setRotation(savedState.rotation, true); 
+                        viewer.viewport.setRotation(savedState.rotation, true);
                         currentRotation = savedState.rotation || 0;
                     }
                 }
@@ -375,6 +385,10 @@
 
             viewer.addHandler('viewport-change', function () {
                 saveViewerState(viewer);
+            });
+
+            viewer.addHandler("page", function (data) {
+                updatePageInfo();
             });
 
             // Initialize the Annotorious plugin
@@ -423,13 +437,13 @@
                 const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
                 if (displayInscriptions) {
                     selection.body = [{
-                    type: 'TextualBody',
-                    purpose: 'tagging',
-                    value: 'MyTag'
-                }];
+                        type: 'TextualBody',
+                        purpose: 'tagging',
+                        value: 'MyTag'
+                    }];
 
-                await anno.updateSelected(selection);
-                anno.saveSelected();
+                    await anno.updateSelected(selection);
+                    anno.saveSelected();
                 }
             });
 
@@ -566,7 +580,7 @@
                 let hashParams = new URLSearchParams(hashFragment);
                 hashParams.delete('rotation');
 
-            //add the new rotation parameter
+                //add the new rotation parameter
                 hashParams.append('rotation', currentRotation);
 
                 //reconstruct the URL
@@ -598,14 +612,19 @@
                     </div>
 
 
-                    <div class="guide-instructions-item annotate-option" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
-                        <div class="guide-instructions-item-icon" style="background-image:url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)"></div>
+                    <div class="guide-instructions-item annotate-option"
+                        style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)">
+                        </div>
                         <div class="guide-instructions-item-label" id="10">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option" style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
-                        <div class="guide-instructions-item-icon" style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
+                    <div class="guide-instructions-item annotate-option"
+                        style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
                         <div class="guide-instructions-item-label" id="7">
                         </div>
                     </div>
@@ -616,7 +635,7 @@
                         <div class="guide-instructions-item-label" id="3">
                         </div>
                     </div>
-                    
+
                     <div class="guide-closer" id="5"></div>
                 </div>
             </div>

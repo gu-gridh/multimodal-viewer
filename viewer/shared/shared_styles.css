@@ -402,11 +402,12 @@ h2 {
     font-size: 0.8em !important;
     font-weight: 100;
     pointer-events: none !important;
+
 }
 
 .SwitchButton {
 	pointer-events:auto;
-	  width: 35px;
+	  width: 25px!important;
 	  height: 35px;
 	  color: white;
 	  opacity: 0.8;
@@ -417,6 +418,7 @@ h2 {
 	  cursor:pointer;
 	  user-select: none;
 	  -webkit-user-select: none;
+
 	}
 	.SwitchButton:hover {
 	  opacity: 1;

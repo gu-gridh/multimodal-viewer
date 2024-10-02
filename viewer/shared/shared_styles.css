@@ -393,7 +393,7 @@ h2 {
 
 #Next {
     background-image: url(https://data.dh.gu.se/ui-icons/arrow_next_white.png);
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 #currentpage {
@@ -402,7 +402,6 @@ h2 {
     font-size: 0.8em !important;
     font-weight: 100;
     pointer-events: none !important;
-
 }
 
 .SwitchButton {
@@ -418,8 +417,8 @@ h2 {
 	  cursor:pointer;
 	  user-select: none;
 	  -webkit-user-select: none;
-
 	}
+    
 	.SwitchButton:hover {
 	  opacity: 1;
 	  cursor:pointer;

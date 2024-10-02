@@ -140,6 +140,7 @@
             rightIframe.onload = function() {
                 fetchPanelInfo();
             };
+
             changeLeftViewer(viewerType);
 
             //if there's an annotation ID, send it to iiif.html
@@ -737,10 +738,10 @@
             const queryString = window.location.search;
             const params = new URLSearchParams(queryString);
             const currentUrl = new URL(window.location.href);
-            const hashFragment = currentUrl.hash
+            const hashFragment = currentUrl.hash || '';
 
             let qValue = params.get('q');
-            if (qValue.includes('/')) {
+            if (qValue && qValue.includes('/')) {
                 qValue = qValue.split('/')[0];
             }
 
@@ -748,13 +749,13 @@
             let newPath;
             switch (viewerType) {
                 case 'orthophoto':
-                    src = `/viewer/modules/iiif/iiif.html${queryString}${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/orthophoto${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/orthophoto`;
                     buttonNum = 1;
                     break;
                 case 'topography':
-                    src = `/viewer/modules/iiif/iiifSequence.html${queryString}${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/topography${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/topography${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/topography`;
                     buttonNum = 2;
                     break;
                 case 'mesh':
@@ -768,12 +769,12 @@
                     buttonNum = 4;
                     break;
                 case 'metadata-compact':
-                    src = `/viewer/projects/sophia/metadata/metadata.html${queryString}`;
-                    newPath = `/viewer/?q=${qValue}`;
+                    src = `/viewer/projects/sophia/metadata/metadata.html?q=${qValue}/metadata-compact${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/metadata-compact`;
                     buttonNum = 5;
                     break;
                 default:
-                    src = `/viewer/modules/iiif/iiif.html${queryString}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/orthophoto`;
                     buttonNum = 1;
                     break;

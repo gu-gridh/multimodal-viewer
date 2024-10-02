@@ -1,17 +1,4 @@
 {
-  "mesh": {
-    "gargo": {
-      "title": "Placeholder",
-      "trackballStart": [0, 0, 0, 0, 0, 1.5],
-      "meshURL": "https://data.dh.gu.se/shfa_meshes/compressed/Kville 28 svärd.nxz",
-      "startPhi": 1.0,
-      "startTheta": 1.0,
-      "startDistance": 1.5,
-      "startPan": [0.0, 0, 0.0],
-      "minMaxPhi": [-180, 180],
-      "minMaxTheta": [-180.0, 180.0]
-    }
-  },
   "appFile": "app_shfa.js",
   "project": "SHFA",
   "displayAnnotations": false,

@@ -140,8 +140,12 @@
 
             //flag to ensure openAnnotation only fires once
             let messageSent = false;
-     
+
             changeLeftViewer(viewerType);
+      
+            if (annotationId === null || annotationId === '') {
+                changeRightViewer('metadata');
+            }
 
             //if there's an annotation ID, send it to iiif.html
             if (annotationId) {
@@ -182,9 +186,6 @@
                     document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
             }
-            if (annotationId === null) {
-                changeRightViewer('metadata');
-            }
         });
 
         //retrieve annotation Id
@@ -213,7 +214,11 @@
                 const segments = qValue.split('/');
                 if (segments.length > 1) {
                     const viewerType = segments[1];
-                    //match the viewerType to the expected strings
+                    
+                    if (viewerType && !isNaN(viewerType)) {
+                        return 'annotation';
+                    }
+                    
                     switch (viewerType) {
                         case 'mesh':
                             return 'mesh';
@@ -224,10 +229,12 @@
                         case 'orthophoto':
                             return 'orthophoto';
                         default:
-                            return 'orthophoto'; //default
+                            return 'orthophoto'; // default
                     }
                 }
             }
+            
+            return 'orthophoto';
         }
 
         function toggleRightPane() {
@@ -390,10 +397,14 @@
                     newPath = `/viewer/?q=${qValue}/metadata-compact`;
                     buttonNum = 5;
                     break;
+                case 'annotation':
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
+                    buttonNum = 6;
+                    break;
                 default:
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/orthophoto`;
-                    buttonNum = 1;
+                    buttonNum = 7;
                     break;
             }
 
@@ -408,7 +419,7 @@
         function changeRightViewer(viewerType, annotationId = null) {
             const iframe = document.getElementById('right-Iframe');
             let iframeUrl = '';
-
+            
             if (viewerType === 'metadata') {
                 iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
             } else if (viewerType === 'annotation' && annotationId) {

@@ -18,7 +18,6 @@
 <body>
     <script>
         function updateTranslations(t) {
-            document.getElementById('smd0').textContent = t('panel');
             document.getElementById('smd1').textContent = t('inscriptions') + ":";
             document.getElementById('smd2').textContent = t('languages') + ":";
             document.getElementById('smd5').textContent = t('documentation');
@@ -79,12 +78,6 @@
             let currentLanguage = localStorage.getItem('i18nextLang') || 'en';
             currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
             changeLanguage(currentLanguage);
-            toggleVisibility(currentLanguage);
-        }
-
-        function toggleVisibility(lang) {
-            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
-            document.getElementById('documentation_uk').style.display = lang === 'uk' ? 'block' : 'none';
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -103,7 +96,6 @@
                 }
                 setButtonLabel(savedLang);
                 updateTranslations(t);
-                toggleVisibility(savedLang);
             });
         });
     </script>
@@ -119,20 +111,19 @@
             <div class="metadata-surface">
 
                 <div class="metadata-surface-title">
-                    <div id="smd0" style="display:inline;">Surface</div> PLACEHOLDER_TITLE
+                    <div id="panel-title" style="display:inline;"></div>
                 </div>
-
 
                 <div class="metadata-content">
                     <div class="metadata-item">
                         <div class="label" id="smd1"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_INSCRIPTIONS</div>
+                        <div id="panel-inscriptions" class="theme-color-text tag"></div>
                     </div>
 
 
                     <div class="metadata-item">
                         <div class="label" id="smd2"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_LANGUAGES</div>
+                        <div id="panel-languages" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
@@ -153,8 +144,7 @@
 
                 <div class="metadata-description">
                     <div class="metadata-title" id="smd5"></div>
-                    <div class="label" id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</div>
-                    <div class="label" id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</div>
+                    <div class="label" id="panel-documentation"></div>
                 </div>
             </div>
             <div class="metadata-inscription">
@@ -163,9 +153,7 @@
                 </div>
 
                 <div class="metadata-inscription-title">
-                    <div class="metadata-inscription-title-part" id="inscription-title">
-                        PLACEHOLDER_INSCRIPTION_TITLE
-                    </div>
+                    <div class="metadata-inscription-title-part" id="inscription-title"></div>
                 </div>
 
                 <div class="metadata-edit-button">
@@ -179,27 +167,27 @@
                 <div class="metadata-content" style="padding-top:0px;">
                     <div class="metadata-item">
                         <div class="label" id="imd0">Type:</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_TYPE</div>
+                        <div id="inscription-type" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd9">Description:</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_TAGS</div>
+                        <div id="inscription-tags" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd4">Genre:</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_GENRE</div>
+                        <div id="inscription-genre" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd1">Language:</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_LANGUAGE</div>
+                        <div id="inscription-language" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd3">Writing system:</div>
-                        <div class="theme-color-text tag">PLACEHOLDER_WRITING</div>
+                        <div id="inscription-writing" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-columns" style="margin-top:20px;">
@@ -207,32 +195,29 @@
                         <div class="left-column">
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title" id="">Textual Graffiti</div>
-                                <div class="metadata-description-text" style="margin-top:-5px">PLACEHOLDER_DIPLOMATIC
+                                <div class="metadata-description-text" id="inscription-diplomatic" style="margin-top:-5px">
                                 </div>
                             </div>
 
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title" id="imd20">Interpretative edition</div>
-                                <div class="metadata-description-text" style="margin-top:-5px">
-                                    PLACEHOLDER_INTERPRETATION
+                                <div class="metadata-description-text" id="inscription-interpretation" style="margin-top:-5px">
                                 </div>
                             </div>
                         </div>
 
                         <div class="right-column metadata-description">
                             <div class="metadata-title" id="imd24">Romanisation</div>
-                            <div class="metadata-description-text" style="margin-top:-5px">PLACEHOLDER_ROMANISATION
+                            <div class="metadata-description-text" id="inscription-romanisation" style="margin-top:-5px">
                             </div>
 
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title-row">
                                     <div class="metadata-title" id="imd10">Translation</div>
                                 </div>
-                                <div id="translation-display" class="metadata-description-text">PLACEHOLDER_TRANSLATION
-                                </div>
+                                <div id="inscription-translation" class="metadata-description-text"></div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="division"> </div>
@@ -249,7 +234,6 @@
                                 <div class="theme-color-text tag" id="date"></div>
                             </div>
 
-
                             <div class="metadata-item">
                                 <div class="label" id="imd23">Lines and letters:</div>
                                 <div class="theme-color-text tag" id="date"></div>
@@ -257,7 +241,7 @@
 
                             <div class="metadata-item">
                                 <div class="label" id="imd13"></div>
-                                <div class="theme-color-text tag">PLACEHOLDER_ELEVATION</div>
+                                <div id="inscription-elevation" class="theme-color-text tag"></div>
                             </div>
 
                             <div class="metadata-item">
@@ -299,19 +283,17 @@
                                 <div class="metadata-title-row">
                                     <div class="metadata-title" id="">Comments</div>
                                 </div>
-                                <div id="description-display" class="metadata-description-text">PLACEHOLDER_COMMENTS
+                                <div id="description-display" id="inscription-comments" class="metadata-description-text">
                                 </div>
                             </div>
                         </div>
 
                         <div class="division"> </div>
 
-
                         <div class="metadata-description" style="margin-top:-5px">
                             <div class="metadata-title" id="">Bibliography</div>
                             <div id="" class="metadata-description-text contributors"></div>
                         </div>
-
 
                         <div class="metadata-description">
                             <div class="metadata-title" id="imd11">Contributors</div>

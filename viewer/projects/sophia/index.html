@@ -68,8 +68,6 @@
             transform: scale(1.07);
         }
 
-
-
         @media screen and (max-width: 1000px) {
             #back-button {
                 /* margin-left: 20px; */
@@ -302,6 +300,9 @@
                 if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
                     changeRightViewer('annotation', currentAnnotationId);
                 }
+                else {
+                    changeRightViewer('metadata');
+                }
             }
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
@@ -418,11 +419,10 @@
         function changeRightViewer(viewerType, annotationId = null) {
             const iframe = document.getElementById('right-Iframe');
             let iframeUrl = '';
-            
+            const currentLang = localStorage.getItem('i18nextLang') || 'en';
             if (viewerType === 'metadata') {
-                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&lang=${currentLang}`;
             } else if (viewerType === 'annotation' && annotationId) {
-                const currentLang = localStorage.getItem('i18nextLang') || 'en';
                 iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&annotationId=${annotationId}&lang=${currentLang}`;
             } else if (viewerType === 'pointcloud') {
                 iframeUrl = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';

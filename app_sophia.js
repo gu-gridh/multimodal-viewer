@@ -1,4 +1,5 @@
 const express = require('express');
+const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
@@ -171,7 +172,6 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   }
 
   const apiUrl = `${config.metadata}${queryName}&depth=1`;
-
   try {
     const apiResponse = await axios.get(apiUrl);
     if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
@@ -192,13 +192,14 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         return res.status(500).send('Internal Server Error');
       }
 
-      let modifiedHtml = htmlData
-        .replace(/PLACEHOLDER_TITLE/g, metadata.title ?? 'Unknown')
-        .replace(/PLACEHOLDER_ROOM/g, metadata.room ?? 'Unknown')
-        .replace(/PLACEHOLDER_INSCRIPTIONS/g, metadata.number_of_inscriptions ?? 'Unknown')
-        .replace(/PLACEHOLDER_LANGUAGES/g, metadata.number_of_languages ?? 'Unknown')
-        .replace(/PLACEHOLDER_DOCUMENTATION_EN/g, metadata.documentation.map(doc => doc.observation).join(' '))
-        .replace(/PLACEHOLDER_DOCUMENTATION_UK/g, metadata.documentation.map(doc => doc.text_ukr).join(' '));
+      const $ = cheerio.load(htmlData);
+      const panelTitle = currentLang === 'uk' ? 'Панель' : 'Panel';
+      const panelDocumentation = currentLang === 'uk' ? metadata.documentation.map(doc => doc.text_ukr).join(' ') : metadata.documentation.map(doc => doc.observation).join(' ');
+
+      $('#panel-title').html(`${panelTitle} ${metadata.title ?? 'Unknown'}`);
+      $('#panel-inscriptions').html(metadata.number_of_inscriptions ?? 'Unknown');
+      $('#panel-languages').html(metadata.number_of_languages ?? 'Unknown');
+      $('#panel-documentation').html(panelDocumentation);
 
       if (annotationId) {
         const inscriptionApiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/inscription/${annotationId}?depth=2`;
@@ -225,27 +226,26 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             const comments = currentLang === 'uk' ? (data.comments_ukr || "<p>коментар недоступний</p>") : (data.comments_eng || "<p>Comment not available</p>");
             const editlink = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
 
-            modifiedHtml = modifiedHtml
-            .replace(/PLACEHOLDER_INSCRIPTION_TITLE/g, fullTitle)
-            .replace(/PLACEHOLDER_TYPE/g, type)
-            .replace(/PLACEHOLDER_INTERPRETATION/g, interpretation)
-            .replace(/PLACEHOLDER_ROMANISATION/g, romanisation)
-            .replace(/PLACEHOLDER_DIPLOMATIC/g, diplomatic)
-            .replace(/PLACEHOLDER_WRITING/g, writing)
-            .replace(/PLACEHOLDER_LANGUAGE/g, language)
-            .replace(/PLACEHOLDER_GENRE/g, genre)
-            .replace(/PLACEHOLDER_EDIT_LINK/g, editlink)
-            .replace(/PLACEHOLDER_TAGS/g, tags)
-            .replace(/PLACEHOLDER_TRANSLATION/g, translation)
-            .replace(/PLACEHOLDER_COMMENTS/g, comments)
-            .replace(/PLACEHOLDER_ELEVATION/g, elevation);
+            $('#inscription-title').html(fullTitle);
+            $('#inscription-type').html(type);
+            $('#inscription-interpretation').html(interpretation);
+            $('#inscription-romanisation').html(romanisation);
+            $('#inscription-diplomatic').html(diplomatic);
+            $('#inscription-writing').html(writing);
+            $('#inscription-language').html(language);
+            $('#inscription-genre').html(genre);
+            $('#inscription-tags').html(tags);
+            $('#inscription-elevation').html(elevation);
+            $('#inscription-translation').html(translation);
+            $('#inscription-coments').html(comments);
+            $('#edit-link').attr('href', editlink);
           }
         } catch (error) {
           console.error('Error fetching inscription data:', error);
         }
       }
 
-      res.send(modifiedHtml);
+      res.send($.html());
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);

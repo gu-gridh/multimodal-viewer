@@ -1,4 +1,5 @@
 const express = require('express');
+const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
@@ -163,6 +164,9 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   const { projectName } = req.params;
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
+  const annotationId = req.query.annotationId || null;  
+  const currentLang = req.query.lang || 'en';
+
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
@@ -175,26 +179,73 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     }
 
     const metadata = apiResponse.data.results?.[0];
+
     if (!metadata) {
       return res.status(404).send('Data not found or malformed');
     }
 
     const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
-
-    fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
+    
+    fs.readFile(metadataPath, 'utf8', async (err, htmlData) => {
       if (err) {
         console.error('Error reading the file:', err);
         return res.status(500).send('Internal Server Error');
       }
 
-      let modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, metadata.title ?? 'Unknown')
-                                 .replace(/PLACEHOLDER_ROOM/g, metadata.room ?? 'Unknown')
-                                 .replace(/PLACEHOLDER_INSCRIPTIONS/g, metadata.number_of_inscriptions ?? 'Unknown')
-                                 .replace(/PLACEHOLDER_LANGUAGES/g, metadata.number_of_languages ?? 'Unknown')
-                                 .replace(/PLACEHOLDER_DOCUMENTATION_EN/g, metadata.documentation.map(doc => doc.observation).join(' '))
-                                 .replace(/PLACEHOLDER_DOCUMENTATION_UK/g, metadata.documentation.map(doc => doc.text_ukr).join(' '))
+      const $ = cheerio.load(htmlData);
+      const panelTitle = currentLang === 'uk' ? 'Панель' : 'Panel';
+      const panelDocumentation = currentLang === 'uk' ? metadata.documentation.map(doc => doc.text_ukr).join(' ') : metadata.documentation.map(doc => doc.observation).join(' ');
 
-      res.send(modifiedHtml);
+      $('#panel-title').html(`${panelTitle} ${metadata.title ?? 'Unknown'}`);
+      $('#panel-inscriptions').html(metadata.number_of_inscriptions ?? 'Unknown');
+      $('#panel-languages').html(metadata.number_of_languages ?? 'Unknown');
+      $('#panel-documentation').html(panelDocumentation);
+
+      if (annotationId) {
+        const inscriptionApiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/inscription/${annotationId}?depth=2`;
+        try {
+          const inscriptionResponse = await axios.get(inscriptionApiUrl);
+          if (inscriptionResponse.data) {
+            const data = inscriptionResponse.data;
+
+            const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
+            const inscriptionTitle = data.title ? `(${data.title})` : "";
+            const titlePrefix = currentLang === 'uk' ? 'Hапис' : 'Inscription';
+            const fullTitle = `${titlePrefix} ${panelTitle}:${annotationId} ${inscriptionTitle}`;
+
+            const type = data.type_of_inscription ? (currentLang === 'uk' && data.type_of_inscription.text_ukr ? data.type_of_inscription.text_ukr : data.type_of_inscription.text) : "Unknown";
+            const interpretation = data.interpretative_edition ? data.interpretative_edition : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Interpretation not available</p>");
+            const romanisation = data.romanisation ? data.romanisation : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Romanisation not available</p>");
+            const diplomatic = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Textual graffiti not available</p>");
+            const writing = data.writing_system ? (currentLang === 'uk' && data.writing_system.text_ukr ? data.writing_system.text_ukr : data.writing_system.text) : "";
+            const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
+            const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
+            const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') : "";
+            const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "Висота недоступна" : "Elevation not available");
+            const translation = currentLang === 'uk' ? (data.translation_ukr || "<p>Переклад недоступний</p>") : (data.translation_eng || "<p>Translation not available</p>");
+            const comments = currentLang === 'uk' ? (data.comments_ukr || "<p>коментар недоступний</p>") : (data.comments_eng || "<p>Comment not available</p>");
+            const editlink = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
+
+            $('#inscription-title').html(fullTitle);
+            $('#inscription-type').html(type);
+            $('#inscription-interpretation').html(interpretation);
+            $('#inscription-romanisation').html(romanisation);
+            $('#inscription-diplomatic').html(diplomatic);
+            $('#inscription-writing').html(writing);
+            $('#inscription-language').html(language);
+            $('#inscription-genre').html(genre);
+            $('#inscription-tags').html(tags);
+            $('#inscription-elevation').html(elevation);
+            $('#inscription-translation').html(translation);
+            $('#inscription-coments').html(comments);
+            $('#edit-link').attr('href', editlink);
+          }
+        } catch (error) {
+          console.error('Error fetching inscription data:', error);
+        }
+      }
+
+      res.send($.html());
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);

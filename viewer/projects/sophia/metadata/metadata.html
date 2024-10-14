@@ -18,15 +18,11 @@
 <body>
     <script>
         function updateTranslations(t) {
-            document.getElementById('smd0').textContent = t('panel');
             document.getElementById('smd1').textContent = t('inscriptions') + ":";
             document.getElementById('smd2').textContent = t('languages') + ":";
-            //document.getElementById('smd3').textContent = t('room') + ":";
-            //document.getElementById('smd4').textContent = t('tags') + ":";
             document.getElementById('smd5').textContent = t('documentation');
             document.getElementById('imd0').textContent = t('type') + ":";
             document.getElementById('imd1').textContent = t('language') + ":";
-            //document.getElementById('imd2').textContent = t('tags') + ":";
             document.getElementById('imd3').textContent = t('writingsystem') + ":";
             document.getElementById('imd4').textContent = t('genre') + ":";
             document.getElementById('imd5').textContent = t('editinscription');
@@ -34,7 +30,6 @@
             document.getElementById('imd9').textContent = t('description') + ":";
             document.getElementById('imd10').textContent = t('translation');
             document.getElementById('imd11').textContent = t('contributors');
-            // document.getElementById('imd12').textContent = t('date') + ":";
             document.getElementById('imd13').textContent = t('elevation') + ":";
             var translationDisplay = document.getElementById('translation-display');
             var descriptionDisplay = document.getElementById('description-display');
@@ -76,7 +71,6 @@
                 window.parent.postMessage({ type: 'languageChange', lang: lang }, "*");
                 localStorage.setItem('i18nextLang', lang);
                 setButtonLabel(lang);
-                updateTranslations(t);
             });
         }
 
@@ -84,12 +78,6 @@
             let currentLanguage = localStorage.getItem('i18nextLang') || 'en';
             currentLanguage = currentLanguage === 'en' ? 'uk' : 'en';
             changeLanguage(currentLanguage);
-            toggleVisibility(currentLanguage);
-        }
-
-        function toggleVisibility(lang) {
-            document.getElementById('documentation_en').style.display = lang === 'en' ? 'block' : 'none';
-            document.getElementById('documentation_uk').style.display = lang === 'uk' ? 'block' : 'none';
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -108,11 +96,9 @@
                 }
                 setButtonLabel(savedLang);
                 updateTranslations(t);
-                toggleVisibility(savedLang);
             });
         });
     </script>
-
 
     <div class="container">
         <div class="border"></div>
@@ -125,20 +111,19 @@
             <div class="metadata-surface">
 
                 <div class="metadata-surface-title">
-                    <div id="smd0" style="display:inline;">Surface</div> PLACEHOLDER_TITLE
+                    <div id="panel-title" style="display:inline;"></div>
                 </div>
-
 
                 <div class="metadata-content">
                     <div class="metadata-item">
                         <div class="label" id="smd1"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_INSCRIPTIONS</div>
+                        <div id="panel-inscriptions" class="theme-color-text tag"></div>
                     </div>
 
 
                     <div class="metadata-item">
                         <div class="label" id="smd2"></div>
-                        <div class="theme-color-text tag">PLACEHOLDER_LANGUAGES</div>
+                        <div id="panel-languages" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
@@ -159,8 +144,7 @@
 
                 <div class="metadata-description">
                     <div class="metadata-title" id="smd5"></div>
-                    <div class="label" id="documentation_en">PLACEHOLDER_DOCUMENTATION_EN</div>
-                    <div class="label" id="documentation_uk">PLACEHOLDER_DOCUMENTATION_UK</div>
+                    <div class="label" id="panel-documentation"></div>
                 </div>
             </div>
             <div class="metadata-inscription">
@@ -169,13 +153,11 @@
                 </div>
 
                 <div class="metadata-inscription-title">
-                    <div class="metadata-inscription-title-part" id="inscription-title">
-                        No inscription selected
-                    </div>
+                    <div class="metadata-inscription-title-part" id="inscription-title"></div>
                 </div>
 
                 <div class="metadata-edit-button">
-                    <a id="edit-link" target="_blank">
+                    <a href="PLACEHOLDER_EDIT_LINK" id="edit-link" target="_blank">
                         <div class="theme-button" id="imd5" title="Edit the inscription's metadata"
                             style="margin-top:20px; padding:6px 15px; text-align:center; width:auto; color:white; font-size:13px;">
                         </div>
@@ -183,69 +165,63 @@
                 </div>
 
                 <div class="metadata-content" style="padding-top:0px;">
-
                     <div class="metadata-item">
                         <div class="label" id="imd0">Type:</div>
-                        <div class="theme-color-text tag" id="type"></div>
+                        <div id="inscription-type" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd9">Description:</div>
-                        <div class="theme-color-text tag" id="tags"></div>
+                        <div id="inscription-tags" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd4">Genre:</div>
-                        <div class="theme-color-text tag" id="genre"></div>
+                        <div id="inscription-genre" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd1">Language:</div>
-                        <div class="theme-color-text tag" id="language"></div>
+                        <div id="inscription-language" class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
                         <div class="label" id="imd3">Writing system:</div>
-                        <div class="theme-color-text tag" id="writing"></div>
+                        <div id="inscription-writing" class="theme-color-text tag"></div>
                     </div>
-
-
-
-
 
                     <div class="metadata-columns" style="margin-top:20px;">
 
                         <div class="left-column">
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title" id="">Textual Graffiti</div>
-                                <div id="diplomatic" class="metadata-description-text" style="margin-top:-5px">
+                                <div class="metadata-description-text" id="inscription-diplomatic" style="margin-top:-5px">
                                 </div>
                             </div>
 
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title" id="imd20">Interpretative edition</div>
-                                <div id="interpretation" class="metadata-description-text" style="margin-top:-5px">
+                                <div class="metadata-description-text" id="inscription-interpretation" style="margin-top:-5px">
                                 </div>
                             </div>
                         </div>
 
                         <div class="right-column metadata-description">
                             <div class="metadata-title" id="imd24">Romanisation</div>
-                            <div id="romanisation" class="metadata-description-text" style="margin-top:-5px"></div>
+                            <div class="metadata-description-text" id="inscription-romanisation" style="margin-top:-5px">
+                            </div>
 
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title-row">
                                     <div class="metadata-title" id="imd10">Translation</div>
-                                    <div id="translation-dropdown"></div>
                                 </div>
-                                <div id="translation-display" class="metadata-description-text"></div>
+                                <div id="inscription-translation" class="metadata-description-text"></div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="division"> </div>
-                    <div class="metadata-columns" >
+                    <div class="metadata-columns">
                         <div class="left-column">
 
                             <div class="metadata-item">
@@ -258,7 +234,6 @@
                                 <div class="theme-color-text tag" id="date"></div>
                             </div>
 
-
                             <div class="metadata-item">
                                 <div class="label" id="imd23">Lines and letters:</div>
                                 <div class="theme-color-text tag" id="date"></div>
@@ -266,7 +241,7 @@
 
                             <div class="metadata-item">
                                 <div class="label" id="imd13"></div>
-                                <div class="theme-color-text tag" id="elevation"></div>
+                                <div id="inscription-elevation" class="theme-color-text tag"></div>
                             </div>
 
                             <div class="metadata-item">
@@ -307,20 +282,18 @@
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title-row">
                                     <div class="metadata-title" id="">Comments</div>
-                                    <div id="description-dropdown"></div>
                                 </div>
-                                <div id="description-display" class="metadata-description-text"></div>
+                                <div id="description-display" id="inscription-comments" class="metadata-description-text">
+                                </div>
                             </div>
                         </div>
 
                         <div class="division"> </div>
 
-
                         <div class="metadata-description" style="margin-top:-5px">
                             <div class="metadata-title" id="">Bibliography</div>
                             <div id="" class="metadata-description-text contributors"></div>
                         </div>
-
 
                         <div class="metadata-description">
                             <div class="metadata-title" id="imd11">Contributors</div>

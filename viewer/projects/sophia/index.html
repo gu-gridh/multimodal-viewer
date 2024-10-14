@@ -68,17 +68,15 @@
             transform: scale(1.07);
         }
 
-  
-
         @media screen and (max-width: 1000px) {
             #back-button {
-             /* margin-left: 20px; */
+                /* margin-left: 20px; */
             }
         }
 
         @media screen and (max-width: 500px) {
             #back-button {
-                display:none;
+                display: none;
             }
         }
     </style>
@@ -91,13 +89,17 @@
             <a href="PLACEHOLDER_BACKBUTTON">
                 <div id="back-button" title="View all surfaces"></div>
             </a>
-           
+
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation" onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
-                    <div class="ui-module-item left" id="btn2" title="Explore topographical documentation" onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
-                    <div class="ui-module-item left" id="btn3" title="Explore 3D documentation" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
-                    <div class="ui-module-item left" id="btn4" title="Explore RTI documentation" onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
+                    <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
+                        onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
+                    <div class="ui-module-item left" id="btn2" title="Explore topographical documentation"
+                        onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
+                    <div class="ui-module-item left" id="btn3" title="Explore 3D documentation"
+                        onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
+                    <div class="ui-module-item left" id="btn4" title="Explore RTI documentation"
+                        onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
                     <div class="ui-module-item left compact" id="btn5" title="Explore photographic documentation"
                         onclick="changeLeftViewer('metadata-compact'); moduleSwitcherLeft(5);">
@@ -111,14 +113,14 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn6" title="Explore the metadata"
-                        onclick="if (isFullscreenMode) { resetPanels(); } changeRightViewer('metadata'); moduleSwitcherRight(6);" style="opacity:1.0"></div>
+                        onclick="if (isFullscreenMode) { resetPanels(); } changeRightViewer('metadata'); moduleSwitcherRight(6);"
+                        style="opacity:1.0"></div>
 
                     <div class="ui-module-item right" id="btn7" title="Explore the spatial context"
                         onclick="changeRightViewer('pointcloud'); moduleSwitcherRight(7);"></div>
                 </div>
             </div>
-            <iframe id="right-Iframe" class="iframes" src="/viewer/projects/sophia/metadata/metadata.html"
-                style="width:100%; border:none;"></iframe>
+            <iframe id="right-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
         </div>
         <div id="footer-container"></div>
     </div>
@@ -136,17 +138,16 @@
             //flag to ensure openAnnotation only fires once
             let messageSent = false;
 
-            const rightIframe = document.getElementById('right-Iframe');
-            rightIframe.onload = function() {
-                fetchPanelInfo();
-            };
-
             changeLeftViewer(viewerType);
+      
+            if (annotationId === null || annotationId === '') {
+                changeRightViewer('metadata');
+            }
 
             //if there's an annotation ID, send it to iiif.html
             if (annotationId) {
                 const iiifIframe = document.getElementById('left-Iframe');
-                
+
                 iiifIframe.onload = function () {
                     if (!messageSent) {
                         iiifIframe.contentWindow.postMessage({ type: 'openAnnotation', id: annotationId }, '*');
@@ -168,71 +169,21 @@
                     },
                 }, function (err, t) {
                     if (err) return console.error('i18next initialization error:', err);
-
                     applyTranslations();
-
-                    window.addEventListener('message', function (event) {
-                        if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                            fetchPanelInfo();
-                            const iiifIframe = document.getElementById('left-Iframe');
-                            if (currentAnnotationId !== null) {
-                                fetchTranslationData(currentAnnotationId); // fetch translation data when language changes
-                                fetchDescriptionData(currentAnnotationId); // fetch description data when language changes
-                                fetchInscriptionData(currentAnnotationId); // fetch rest of metadata
-                                fetchContributorsInfo(currentAnnotationId); // fetch contributors info
-                            }
-                            iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
-                            i18next.changeLanguage(event.data.lang, function (err, t) {
-                                if (err) return console.log('Something went wrong loading', err);
-                                applyTranslations();
-                            });
-                        }
-                    }, false);
                 });
 
-                function applyTranslations() {
-                    if (typeof i18next.t === 'function') {
-                        document.getElementById('btn1').textContent = i18next.t('orthophoto');
-                        document.getElementById('btn2').textContent = i18next.t('topography');
-                        document.getElementById('btn3').textContent = i18next.t('mesh');
-                        document.getElementById('btn4').textContent = i18next.t('rti');
-                        document.getElementById('btn5').textContent = i18next.t('about');
-                        document.getElementById('btn6').textContent = i18next.t('about');
-                        document.getElementById('btn7').textContent = i18next.t('spatialcontext');
-                    }
+            function applyTranslations() {
+                if (typeof i18next.t === 'function') {
+                    document.getElementById('btn1').textContent = i18next.t('orthophoto');
+                    document.getElementById('btn2').textContent = i18next.t('topography');
+                    document.getElementById('btn3').textContent = i18next.t('mesh');
+                    document.getElementById('btn4').textContent = i18next.t('rti');
+                    document.getElementById('btn5').textContent = i18next.t('about');
+                    document.getElementById('btn6').textContent = i18next.t('about');
+                    document.getElementById('btn7').textContent = i18next.t('spatialcontext');
                 }
-
-                changeRightViewer('metadata');
+            }
         });
-
-        function fetchPanelInfo() {
-            const currentLang = localStorage.getItem('i18nextLang') || 'en';
-            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=PLACEHOLDER_ID`;
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.features && data.features.length > 0) {
-                        const spatialPosition = data.features[0].properties.spatial_position;
-
-                        if (!spatialPosition || spatialPosition.length === 0) {
-                            //hide the UI module container
-                            shouldShowUIModuleContainer = false;
-                            document.querySelector('#right-pane .ui-module-container').style.display = 'none';
-                        }
-
-                        //extract and process tags
-                        const tagsData = data.features[0].properties.tags;
-                        const tags = tagsData && tagsData.length > 0 
-                            ? tagsData.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') 
-                            : '';
-
-                       // updateMetadataContent(tags, 'panel_tags'); 
-                    } else {
-                        console.error('No features found in response');
-                    }
-                })
-                .catch(error => console.error('error fetching spatial position data:', error));
-        }
 
         //retrieve annotation Id
         function getAnnotationIdFromUrl(urlParams) {
@@ -255,12 +206,16 @@
             if (hasPhi) {
                 return 'mesh';
             }
-            
+
             if (qValue) {
                 const segments = qValue.split('/');
                 if (segments.length > 1) {
                     const viewerType = segments[1];
-                    //match the viewerType to the expected strings
+                    
+                    if (viewerType && !isNaN(viewerType)) {
+                        return 'annotation';
+                    }
+                    
                     switch (viewerType) {
                         case 'mesh':
                             return 'mesh';
@@ -271,10 +226,12 @@
                         case 'orthophoto':
                             return 'orthophoto';
                         default:
-                            return 'orthophoto'; //default
+                            return 'orthophoto'; // default
                     }
                 }
             }
+            
+            return 'orthophoto';
         }
 
         function toggleRightPane() {
@@ -308,7 +265,7 @@
                 rightPane.style.width = '50%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
                 if (backButton) backButton.style.display = 'block';
-                isFullscreenMode = false; 
+                isFullscreenMode = false;
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '100%';
@@ -327,21 +284,24 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 currentAnnotationId = event.data.value;
-                
+
                 //check if the ID contains any letters
                 const invalidAnnotationPattern = /[a-zA-Z]/;
 
                 if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
-                    fetchInscriptionData(currentAnnotationId); //fetch rest of metadata
-                    fetchTranslationData(currentAnnotationId); //fetch translation data
-                    fetchDescriptionData(currentAnnotationId); //fetch description data
-                    fetchContributorsInfo(currentAnnotationId); //fetch contributors info
+                    changeRightViewer('annotation', currentAnnotationId);
                     updateURLWithAnnotation(currentAnnotationId);
-                    updateEditLinkHref(currentAnnotationId); //update href for annotation
                 } else {
-                    resetMetadataInfo();
-                    updateURLWithAnnotation(null);  
-                    updateEditLinkHref(null); //update href for annotation
+                    updateURLWithAnnotation(null);
+                }
+            }
+            if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
+                const invalidAnnotationPattern = /[a-zA-Z]/;
+                if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
+                    changeRightViewer('annotation', currentAnnotationId);
+                }
+                else {
+                    changeRightViewer('metadata');
                 }
             }
             if (event.data.type === 'togglePane') {
@@ -352,68 +312,12 @@
             }
         }, false);
 
-        function updateEditLinkHref(annotationId) {
-            var iframe = document.getElementById('right-Iframe');
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            if (iframeDoc) {
-                var editLink = iframeDoc.getElementById('edit-link');
-                if (editLink) {
-                    if (annotationId) {
-                        //set the href if annotationId is valid
-                        editLink.href = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
-                    } else if (annotationId === null) {
-                        //remove the href attribute
-                        editLink.removeAttribute('href');
-                    }
-                } else {
-                    console.error('edit link element not found');
-                }
-            } else {
-                console.error('cannot access iframe document');
-            }
-        }
-
-        function resetMetadataInfo() {
-            const currentLang = i18next.language;
-            const defaultTitle = currentLang === 'uk' ? "Напис не вибрано" : "No inscription selected";
-            const defaultText = "";
-
-            updateMetadataContent(defaultTitle, 'inscription-title');
-            updateMetadataContent(defaultText, 'interpretation');
-            updateMetadataContent(defaultText, 'romanisation');
-            updateMetadataContent(defaultText, 'diplomatic');
-            updateMetadataContent(defaultText, 'type');
-            updateMetadataContent(defaultText, 'writing');
-            updateMetadataContent(defaultText, 'language');
-            updateMetadataContent(defaultText, 'genre');
-            updateMetadataContent(defaultText, 'tags');
-            updateMetadataContent(defaultText, 'translation-display');
-            updateMetadataContent(defaultText, 'description-display');
-            updateMetadataContent(defaultText, 'contributors');
-
-            removeDropdown('metadata-dropdown');
-            removeDropdown('metadata-dropdown-2');
-        }
-
-        function removeDropdown(dropdownId) {
-            var iframe = document.getElementById('right-Iframe');
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            if (iframeDoc) {
-                var dropdown = iframeDoc.getElementById(dropdownId);
-                if (dropdown) {
-                    dropdown.remove();
-                }
-            }
-        }
-
         function updateURLWithAnnotation(annotationId) {
             //get the current URL
             const currentUrl = new URL(window.location.href);
             const baseAddress = currentUrl.origin + currentUrl.pathname;
             let queryString = currentUrl.searchParams.get('q');
-            
+
             if (queryString && queryString.includes('/')) {
                 // Remove any existing annotation ID
                 queryString = queryString.split('/')[0];
@@ -431,308 +335,28 @@
             window.history.pushState({}, '', newUrl);
         }
 
-        function fetchInscriptionData(inscriptionId) {
-            const currentLang = localStorage.getItem('i18nextLang') || 'en';
-            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/inscription/${inscriptionId}?depth=2`;
-            fetch(apiUrl)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to fetch data from API');
-                }
-            })
-            .then(data => {
-                const type = data.type_of_inscription ? (currentLang === 'uk' && data.type_of_inscription.text_ukr ? data.type_of_inscription.text_ukr : data.type_of_inscription.text) : "Unknown";
-                const interpretation = data.interpretative_edition ? data.interpretative_edition : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Interpretation not available</p>");
-                const romanisation = data.romanisation ? data.romanisation : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Romanisation not available</p>");
-                const diplomatic = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Textual graffiti not available</p>");
-                const writing = data.writing_system ? (currentLang === 'uk' && data.writing_system.text_ukr ? data.writing_system.text_ukr : data.writing_system.text) : "";
-                const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
-                const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
-                const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') : "";
-                const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "Висота недоступна" : "Elevation not available");
-
-                //title
-                const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
-                const inscriptionTitle = data.title ? `(${data.title})` : "";
-                const titlePrefix = currentLang === 'uk' ? 'Hапис' : 'Inscription';
-                const fullTitle = `${titlePrefix} ${panelTitle}:${inscriptionId} ${inscriptionTitle}`;
-
-                updateMetadataContent(fullTitle, 'inscription-title');
-                updateMetadataContent(interpretation, 'interpretation');
-                updateMetadataContent(romanisation, 'romanisation');
-                updateMetadataContent(diplomatic, 'diplomatic');
-                updateMetadataContent(type, 'type');
-                updateMetadataContent(writing, 'writing');
-                updateMetadataContent(language, 'language');
-                updateMetadataContent(genre, 'genre');
-                updateMetadataContent(tags, 'tags');
-                updateMetadataContent(elevation, 'elevation');
-            })
-            .catch(error => {
-                console.error('Error fetching inscription data:', error);
-            });
-        }
-
-        function fetchTranslationData(inscriptionId) {
-            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/translation/?depth=1&inscription=${inscriptionId}`;
-            
-            const currentLang = localStorage.getItem('i18nextLang') || 'en';
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch translation data from API');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const translations = {};
-                    data.results.forEach(entry => {
-                        const languageKey = currentLang === 'uk' ? entry.translation_language?.text_ukr : entry.translation_language?.text;
-                        const translationText = entry.text;
-                        if (languageKey) {
-                            translations[languageKey] = translationText ? translationText : "<p>Unknown Translation</p>";
-                        }
-                    });
-                    replaceTranslationContent(translations, 'translation-dropdown');
-                })
-                .catch(error => {
-                    console.error('Error fetching translation data:', error);
-                });
-        }
-
-        function fetchDescriptionData(inscriptionId) {
-            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/description/?depth=1&inscription=${inscriptionId}`;
-            
-            const currentLang = localStorage.getItem('i18nextLang') || 'en';
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch translation data from API');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const translations = {};
-                    data.results.forEach(entry => {
-                        const languageKey = currentLang === 'uk' ? entry.language?.text_ukr : entry.language?.text;
-                        const translationText = entry.text;
-                        if (languageKey) {
-                            translations[languageKey] = translationText ? translationText : "<p>Unknown Translation</p>";
-                        }
-                    });
-                    replaceDescriptionContent(translations, 'description-dropdown');
-                })
-                .catch(error => {
-                    console.error('Error fetching translation data:', error);
-                });
-        }
-
-        function fetchContributorsInfo(inscriptionId) {
-            const apiUrl = `https://saintsophia.dh.gu.se/api/inscriptions/inscription-contributors/?id=${inscriptionId}`;
-            
-            fetch(apiUrl)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to fetch data from API');
-                }
-            })
-            .then(data => {
-                const authors = data[0].authors_ordered;
-                let formattedAuthors = '';
-
-                if (authors && Array.isArray(authors)) {
-                    formattedAuthors = `${authors.join(', ')}`;
-                } else {
-                    console.log('no authors found');
-                }
-
-                updateMetadataContent(formattedAuthors, 'contributors');
-            })
-            .catch(error => {
-                console.error('Error fetching inscription data:', error);
-            });
-        }
-
-        function replaceTranslationContent(translations, elementId) {
-            var iframe = document.getElementById('right-Iframe');
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            if (iframeDoc) {
-                var dropdown = iframeDoc.getElementById(elementId);
-                var translationTextsDiv = iframeDoc.getElementById('translation-texts');
-                var translationDisplay = iframeDoc.getElementById('translation-display');
-
-                if (dropdown) {
-                    //clear previous content
-                    dropdown.innerHTML = '';
-                    if (translationDisplay) {
-                        translationDisplay.innerHTML = '';
-                    }
-
-                    //create or clear the translation texts div
-                    if (!translationTextsDiv) {
-                        translationTextsDiv = iframeDoc.createElement('div');
-                        translationTextsDiv.id = 'translation-texts';
-                        translationTextsDiv.style.display = 'none';
-                        iframeDoc.body.appendChild(translationTextsDiv);
-                    } else {
-                        translationTextsDiv.innerHTML = '';
-                    }
-
-                    //populate the translation texts div with the new dataset
-                    for (const [language, translationText] of Object.entries(translations)) {
-                        translationTextsDiv.dataset[language.toLowerCase()] = translationText;
-                    }
-
-                    let optionsHTML = Object.entries(translations).map(([language, _]) =>
-                        `<option value="${language}">${language}</option>`
-                    ).join('');
-
-                    dropdown.innerHTML = `
-                        <select id="metadata-dropdown" onchange="
-                            var selectedLanguage = this.options[this.selectedIndex].value; 
-                            var translationTextsDiv = document.getElementById('translation-texts');
-                            var translationText = translationTextsDiv ? translationTextsDiv.dataset[selectedLanguage.toLowerCase()] : null;
-                            document.getElementById('translation-display').innerHTML = translationText ? translationText : '<p>Translation not available</p>';
-                        ">
-                            ${optionsHTML}
-                        </select>
-                    `;
-
-                    //set the default display to Uk or English if available
-                    const savedLang = localStorage.getItem('i18nextLang') || 'en';
-
-                    if (translations.English && translationDisplay ) {
-                        translationDisplay.innerHTML = translations.English;
-                        iframeDoc.getElementById('metadata-dropdown').value = "English"; 
-                    } else if (translations.Aнглійська && translationDisplay ) {
-                        translationDisplay.innerHTML = translations.Aнглійська;
-                        iframeDoc.getElementById('metadata-dropdown').value = "Aнглійська"; 
-                    }
-                    else if (translationDisplay) {
-                        translationDisplay.innerHTML = savedLang === 'uk' ? '<p>Переклад недоступний</p>' : '<p>Translation not available</p>';
-                    }
-                } else {
-                    console.error('Dropdown element not found:', elementId);
-                }
-            } else {
-                console.error('Cannot access iframe document');
-            }
-        }
-
-        function replaceDescriptionContent(translations, elementId) {
-            var iframe = document.getElementById('right-Iframe');
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            if (iframeDoc) {
-                var dropdown = iframeDoc.getElementById(elementId);
-                var translationTextsDiv = iframeDoc.getElementById('description-texts');
-                var translationDisplay = iframeDoc.getElementById('description-display');
-
-                if (dropdown) {
-                    //clear previous content
-                    dropdown.innerHTML = '';
-                    if (translationDisplay) {
-                        translationDisplay.innerHTML = '';
-                    }
-
-                    //create or clear the description texts div
-                    if (!translationTextsDiv) {
-                        translationTextsDiv = iframeDoc.createElement('div');
-                        translationTextsDiv.id = 'description-texts';
-                        translationTextsDiv.style.display = 'none';
-                        iframeDoc.body.appendChild(translationTextsDiv);
-                    } else {
-                        translationTextsDiv.innerHTML = '';
-                    }
-
-                    //populate the description texts div with the new dataset
-                    for (const [language, translationText] of Object.entries(translations)) {
-                        translationTextsDiv.dataset[language.toLowerCase()] = translationText;
-                    }
-
-                    let optionsHTML = Object.entries(translations).map(([language, _]) =>
-                        `<option value="${language}">${language}</option>`
-                    ).join('');
-
-                    dropdown.innerHTML = `
-                        <select id="metadata-dropdown-2" onchange="
-                            var selectedLanguage = this.options[this.selectedIndex].value; 
-                            var translationTextsDiv = document.getElementById('description-texts');
-                            var translationText = translationTextsDiv ? translationTextsDiv.dataset[selectedLanguage.toLowerCase()] : null;
-                            document.getElementById('description-display').innerHTML = translationText ? translationText : '<p>Description not available</p>';
-                        ">
-                            ${optionsHTML}
-                        </select>
-                    `;
-
-                    //set the default display to Uk or English if available
-                    const savedLang = localStorage.getItem('i18nextLang') || 'en';
-
-                    if (translations.English && translationDisplay ) {
-                        translationDisplay.innerHTML = translations.English;
-                        iframeDoc.getElementById('metadata-dropdown-2').value = "English"; 
-                    } else if (translations.Aнглійська && translationDisplay ) {
-                        translationDisplay.innerHTML = translations.Aнглійська;
-                        iframeDoc.getElementById('metadata-dropdown-2').value = "Aнглійська"; 
-                    }
-                    else if (translationDisplay) {
-                        translationDisplay.innerHTML = savedLang === 'uk' ? '<p>опис недоступний</p>' : '<p>Description not available</p>';
-                    }
-                } else {
-                    console.error('Dropdown element not found:', elementId);
-                }
-            } else {
-                console.error('Cannot access iframe document');
-            }
-        }
-
-        function updateMetadataContent(newContent, elementId) {
-            var iframe = document.getElementById('right-Iframe');
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-            if (iframeDoc) {
-                // target the specific element to update its content
-                var targetElement = iframeDoc.getElementById(elementId);
-                if (targetElement) {
-                    //update the inscription element with newContent
-                    targetElement.innerHTML = newContent;
-                } else {
-                    console.error('Element not found:', elementId);
-                }
-            } else {
-                console.error('Cannot access iframe document');
-            }
-        }
-
         function resetPanels() {
-                const leftPane = document.getElementById('left-pane');
-                const rightPane = document.getElementById('right-pane');
-                const leftUIModuleContainer = leftPane.querySelector('.ui-module-container');
-                const rightUIModuleContainer = rightPane.querySelector('.ui-module-container');
-                const backButton = document.getElementById('back-button');
+            const leftPane = document.getElementById('left-pane');
+            const rightPane = document.getElementById('right-pane');
+            const leftUIModuleContainer = leftPane.querySelector('.ui-module-container');
+            const rightUIModuleContainer = rightPane.querySelector('.ui-module-container');
+            const backButton = document.getElementById('back-button');
 
-                leftPane.style.width = '50%';
-                rightPane.style.width = '50%';
+            leftPane.style.width = '50%';
+            rightPane.style.width = '50%';
 
-                if (leftUIModuleContainer) {
-                    leftUIModuleContainer.style.display = 'flex';
-                }
-                if (rightUIModuleContainer) {
-                    rightUIModuleContainer.style.display = 'flex';
-                }
+            if (leftUIModuleContainer) {
+                leftUIModuleContainer.style.display = 'flex';
+            }
+            if (rightUIModuleContainer) {
+                rightUIModuleContainer.style.display = 'flex';
+            }
 
-                if (backButton) {
-                    backButton.style.display = 'block';
-                }
+            if (backButton) {
+                backButton.style.display = 'block';
+            }
         }
-        
+
         function changeLeftViewer(viewerType) {
             const iframe = document.getElementById('left-Iframe');
             const queryString = window.location.search;
@@ -773,10 +397,14 @@
                     newPath = `/viewer/?q=${qValue}/metadata-compact`;
                     buttonNum = 5;
                     break;
+                case 'annotation':
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
+                    buttonNum = 6;
+                    break;
                 default:
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/orthophoto`;
-                    buttonNum = 1;
+                    buttonNum = 7;
                     break;
             }
 
@@ -788,13 +416,18 @@
             }
         }
 
-        function changeRightViewer(viewerType) {
-            var iframe = document.getElementById('right-Iframe');
+        function changeRightViewer(viewerType, annotationId = null) {
+            const iframe = document.getElementById('right-Iframe');
+            let iframeUrl = '';
+            const currentLang = localStorage.getItem('i18nextLang') || 'en';
             if (viewerType === 'metadata') {
-                iframe.src = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&lang=${currentLang}`;
+            } else if (viewerType === 'annotation' && annotationId) {
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&annotationId=${annotationId}&lang=${currentLang}`;
             } else if (viewerType === 'pointcloud') {
-                iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                iframeUrl = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
             }
+            iframe.src = iframeUrl;
         }
 
         function moduleSwitcherLeft(num) {
@@ -807,10 +440,6 @@
         }
 
     </script>
-
-
-
-
 </body>
 
 </html>

@@ -1,8 +1,6 @@
 <!doctype html>
 <html>
-
 <head>
-
     <title>Sophia Multimodal tool</title>
     <meta charset="utf-8">
     <meta name="description" content="">
@@ -84,12 +82,10 @@
 
 <body>
     <div id="main-content">
-
         <div id="left-pane">
             <a href="PLACEHOLDER_BACKBUTTON">
                 <div id="back-button" title="View all surfaces"></div>
             </a>
-
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
@@ -107,7 +103,6 @@
                 </div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
-
         </div>
         <div id="right-pane">
             <div class="ui-module-container">
@@ -230,7 +225,6 @@
                     }
                 }
             }
-            
             return 'orthophoto';
         }
 
@@ -274,20 +268,11 @@
                 isFullscreenMode = true;
             }
         }
-
-        $(window).resize(function () {
-            if ($('#right-pane').css('display') === 'none') {
-                // here i would very much like to be able to hide all FullPage-buttons  
-            }
-        });
-
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 currentAnnotationId = event.data.value;
-
                 //check if the ID contains any letters
                 const invalidAnnotationPattern = /[a-zA-Z]/;
-
                 if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
                     changeRightViewer('annotation', currentAnnotationId);
                     moduleSwitcherRight(6);
@@ -399,12 +384,12 @@
                     break;
                 case 'annotation':
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
-                    buttonNum = 6;
+                    buttonNum = 1;
                     break;
                 default:
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/orthophoto`;
-                    buttonNum = 7;
+                    buttonNum = 1;
                     break;
             }
 
@@ -438,7 +423,6 @@
             $('.right').css('opacity', '0.6');
             $('#btn' + num).css('opacity', '1.0',);
         }
-
     </script>
 </body>
 

@@ -164,6 +164,8 @@ body {
 	margin-right: 30px;
 	font-size: 0.95em;
 	font-weight: 200;
+	display:flex;
+	flex-direction: row;
 }
 
 
@@ -221,9 +223,10 @@ body {
 	font-size: 1.0em;
 	line-height: 1.2;
 	margin-top: 8px;
-	margin-bottom: 1.5em;
+	margin-bottom: 0em;
 	width: 100%;
 	color: #630000;
+	text-align: left;
 }
 
 .metadata-description-text p {
@@ -231,7 +234,7 @@ body {
 	display: block !important;
 	width: 100% !important;
 	padding-top:0px;
-	line-height:1.5;
+	line-height:1.2;
 	margin-top: 0em;
 	margin-bottom: 0em;
 }
@@ -311,6 +314,12 @@ body {
 	width: auto;
 }
 
+.metadata-item .label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
 
 .metadata-content .tag {
 	float: left;
@@ -382,6 +391,7 @@ body {
 	justify-content: flex-start;
 	width: 100%;
 	flex-wrap: wrap;
+	margin-bottom:10px;
 }
 
 @media screen and (max-width: 650px) {

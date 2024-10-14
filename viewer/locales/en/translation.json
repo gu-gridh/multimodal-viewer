@@ -103,5 +103,18 @@
   "points1": "Points (optimized)",
   "points2": "Points (high quality)",
   "annotationstoggle": "<b>Annotations toggle.</b> Switches on and off the annotations.",
-  "interpretation": "Interpretative Edition"
+  "interpretation": "Interpretative Edition",
+  "romanisation": "Romanisation",
+  "condition": "Condition",
+  "alignment": "Alignment",
+  "linesandletters": "Lines and letters",
+  "dimensions": "Dimensions (mm)",
+  "extraalphabet": "Extra-alphabetical signs",
+  "dating": "Dating",
+  "datingcriteria": "Dating criteria",
+  "overlapping": "Overlapping inscriptions",
+  "comments": "Comments",
+  "section": "Section",
+  "mediamaterial": "Media and material",
+  "bibliography": "Bibliography"
 }

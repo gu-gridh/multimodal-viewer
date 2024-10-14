@@ -223,7 +223,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
             const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";
             const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') : "";
-            const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "Висота недоступна" : "Elevation not available");
+            const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "" : "");
             const translation = currentLang === 'uk' ? (data.translation_ukr || "<p>Переклад недоступний</p>") : (data.translation_eng || "<p>Translation not available</p>");
             const comments = currentLang === 'uk' ? (data.comments_ukr || "<p>коментар недоступний</p>") : (data.comments_eng || "<p>Comment not available</p>");
             
@@ -243,13 +243,13 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             ? data.extra_alphabetical_sign.map(sign => 
                 currentLang === 'uk' ? (sign.text_ukr || '') : (sign.text || '')
               ).filter(Boolean).join(', ')
-            : (currentLang === 'uk' ? "Алфавітний знак недоступний" : "Alphabetical sign not available");
+            : (currentLang === 'uk' ? "" : "");
 
             const datingCriteria = (data.dating_criteria && data.dating_criteria.length > 0) 
             ? data.dating_criteria.map(dating => 
                 currentLang === 'uk' ? (dating.text_ukr || '') : (dating.text || '')
               ).filter(Boolean).join(', ')
-            : (currentLang === 'uk' ? "Критерії датування недоступні" : "Dating criteria not available");  
+            : (currentLang === 'uk' ? "" : "");  
             
             const contributors = (data.author && data.author.length > 0) 
             ? data.author.map(contributor => {
@@ -258,7 +258,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                   : ((contributor.firstname || '') + ' ' + (contributor.lastname || '')).trim();
                 return name || null;
               }).filter(Boolean).join(', ')
-            : (currentLang === 'uk' ? "немає доступних учасників" : "Contributors not available");
+            : (currentLang === 'uk' ? "" : "");
                  
             const bibliographyEntries = (data.bibliography && data.bibliography.length > 0) 
             ? data.bibliography.map(entry => {
@@ -269,12 +269,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                 const body = entry.body_of_publication || "Unpublished";
                 return `${authors} (${year}). <em>${title}</em>. ${body}.`;
               }).join('<br>')
-            : (currentLang === 'uk' ? "Немає доступної бібліографії" : "Bibliography not available");
+            : (currentLang === 'uk' ? "" : "");
 
             //dimensions
             const width = data.width ? data.width : "";
             const height = data.height ? data.height : "";
-            const dimensions = width && height ? `${width} x ${height}` : (currentLang === 'uk' ? "Розміри недоступні" : "Dimension not available");
+            const dimensions = width && height ? `${width} x ${height}` : (currentLang === 'uk' ? "" : "");
             const editlink = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
 
             $('#inscription-title').html(fullTitle);

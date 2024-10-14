@@ -26,11 +26,28 @@
             document.getElementById('imd3').textContent = t('writingsystem') + ":";
             document.getElementById('imd4').textContent = t('genre') + ":";
             document.getElementById('imd5').textContent = t('editinscription');
-            document.getElementById('imd20').textContent = t('interpretation');
+            document.getElementById('imd6').textContent = t('mediamaterial') + ":";
+            document.getElementById('imd7').textContent = t('section') + ":";
             document.getElementById('imd9').textContent = t('description') + ":";
-            document.getElementById('imd10').textContent = t('translation');
-            document.getElementById('imd11').textContent = t('contributors');
-            document.getElementById('imd13').textContent = t('elevation') + ":";
+
+            document.getElementById('imd20').textContent = t('textualgraffiti');
+            document.getElementById('imd21').textContent = t('interpretation');
+            document.getElementById('imd22').textContent = t('romanisation');
+            document.getElementById('imd23').textContent = t('translation');
+            document.getElementById('imd24').textContent = t('comments');
+
+            document.getElementById('imd30').textContent = t('condition');
+            document.getElementById('imd31').textContent = t('alignment');
+            document.getElementById('imd32').textContent = t('linesandletters');
+            document.getElementById('imd33').textContent = t('elevation');
+            document.getElementById('imd34').textContent = t('dimensions');
+            document.getElementById('imd35').textContent = t('extraalphabet');
+            document.getElementById('imd36').textContent = t('dating');
+            document.getElementById('imd37').textContent = t('datingcriteria');
+            document.getElementById('imd38').textContent = t('overlapping');
+            document.getElementById('imd40').textContent = t('bibliography');
+            document.getElementById('imd41').textContent = t('contributors');
+
             var translationDisplay = document.getElementById('translation-display');
             var descriptionDisplay = document.getElementById('description-display');
             var transcription = document.getElementById('transcription');
@@ -127,12 +144,12 @@
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label" id="imd23">Section:</div>
+                        <div class="label" id="imd7">Section:</div>
                         <div class="theme-color-text tag"></div>
                     </div>
 
                     <div class="metadata-item">
-                        <div class="label" id="imd22">Medium and material:</div>
+                        <div class="label" id="imd6">Medium and material:</div>
                         <div class="theme-color-text tag" id=""></div>
                     </div>
 
@@ -194,28 +211,30 @@
 
                         <div class="left-column">
                             <div class="metadata-description" style="margin-top:0px;">
-                                <div class="metadata-title" id="">Textual Graffiti</div>
-                                <div class="metadata-description-text" id="inscription-diplomatic" style="margin-top:-5px">
+                                <div class="metadata-title" id="imd20">Textual Graffiti</div>
+                                <div class="metadata-description-text" id="inscription-diplomatic"
+                                    style="margin-top:-5px">
                                 </div>
                             </div>
 
-                            <div class="metadata-description" style="margin-top:0px;">
-                                <div class="metadata-title" id="imd20">Interpretative edition</div>
-                                <div class="metadata-description-text" id="inscription-interpretation" style="margin-top:-5px">
+                            <div class="metadata-description" style="margin-top:1.2em;">
+                                <div class="metadata-title" id="imd21">Interpretative edition</div>
+                                <div class="metadata-description-text" id="inscription-interpretation"
+                                    style="margin-top:-5px">
                                 </div>
                             </div>
                         </div>
 
                         <div class="right-column metadata-description">
-                            <div class="metadata-title" id="imd24">Romanisation</div>
-                            <div class="metadata-description-text" id="inscription-romanisation" style="margin-top:-5px">
+                            <div class="metadata-title" id="imd22">Romanisation</div>
+                            <div class="metadata-description-text" id="inscription-romanisation"
+                                style="margin-top:-5px">
                             </div>
 
-                            <div class="metadata-description" style="margin-top:0px;">
-                                <div class="metadata-title-row">
-                                    <div class="metadata-title" id="imd10">Translation</div>
-                                </div>
-                                <div id="inscription-translation" class="metadata-description-text"></div>
+                            <div class="metadata-description" style="margin-top:1.2em;">
+                            <div class="metadata-title" id="imd23">Translation</div>
+                            <div class="metadata-description-text" id="inscription-translation"
+                                style="margin-top:-5px"></div>
                             </div>
                         </div>
                     </div>
@@ -225,53 +244,53 @@
                         <div class="left-column">
 
                             <div class="metadata-item">
-                                <div class="label" id="imd23">Condition:</div>
+                                <div class="label" id="imd30">Condition:</div>
                                 <div class="theme-color-text tag" id="inscription-condition"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="imd23">Alignment:</div>
+                                <div class="label" id="imd31">Alignment:</div>
                                 <div class="theme-color-text tag" id="inscription-alignment"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="imd23">Lines and letters:</div>
+                                <div class="label" id="imd32">Lines and letters:</div>
                                 <div class="theme-color-text tag" id="date"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="imd13"></div>
+                                <div class="label" id="imd33">Elevation (mm)</div>
                                 <div id="inscription-elevation" class="theme-color-text tag"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="imd24">Dimensions (mm):</div>
+                                <div class="label" id="imd34">Dimensions (mm):</div>
                                 <div class="theme-color-text tag" id="inscription-dimension"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="">Extra-alphabetical signs:</div>
+                                <div class="label" id="imd35">Extra-alphabetical signs:</div>
                                 <div class="theme-color-text tag" id="inscription-alphabetical"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="">Dating:</div>
+                                <div class="label" id="imd36">Dating:</div>
                                 <div class="theme-color-text tag" id="date"></div>
                             </div>
 
                             <div class="metadata-item">
-                                <div class="label" id="">Dating Criteria:</div>
+                                <div class="label" id="imd37">Dating Criteria:</div>
                                 <div class="theme-color-text tag" id="inscription-dating-criteria"></div>
                             </div>
 
                             <div class="metadata-item">
 
                                 <div class="metadata-dropdown theme-color-text red-arrow">
-                                    <span>Overlapping inscriptions</span>
+                                    <span id="imd38">Overlapping inscriptions</span>
                                     <div class="metadata-dropdown-content">
-                                        <p>120-19c:14</p>
-                                        <p>120-19c:13</p>
-                                        <p>120-19c:16</p>
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
@@ -281,7 +300,7 @@
 
                             <div class="metadata-description" style="margin-top:0px;">
                                 <div class="metadata-title-row">
-                                    <div class="metadata-title">Comments</div>
+                                    <div class="metadata-title" id="imd24">Comments</div>
                                 </div>
                                 <div id="inscription-comment" class="metadata-description-text">
                                 </div>
@@ -291,12 +310,12 @@
                         <div class="division"> </div>
 
                         <div class="metadata-description" style="margin-top:-5px">
-                            <div class="metadata-title" id="">Bibliography</div>
+                            <div class="metadata-title" id="imd40">Bibliography</div>
                             <div id="inscription-bibliography" class="metadata-description-text contributors"></div>
                         </div>
 
                         <div class="metadata-description">
-                            <div class="metadata-title" id="imd11">Contributors</div>
+                            <div class="metadata-title" id="imd41">Contributors</div>
                             <div id="inscription-contributors" class="metadata-description-text contributors"></div>
                         </div>
 

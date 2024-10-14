@@ -102,5 +102,19 @@
   "download": "Download",
   "points1": "Points (optimized)",
   "points2": "Points (high quality)",
-    "annotationstoggle": "<b>Перемикач анотацій.</b> Вмикає та вимикає анотації."
+    "annotationstoggle": "<b>Перемикач анотацій.</b> Вмикає та вимикає анотації.",
+    "interpretation": "Тлумачне видання",
+    "romanisation": "Pоманізація",
+    "condition": "Хвороба",
+    "alignment": "Вирівнювання",
+    "linesandletters": "Лінії та букви",
+    "dimensions": "Розміри (мм)",
+    "extraalphabet": "Позаалфавітні знаки",
+    "dating": "Знайомства",
+    "datingcriteria": "Критерії знайомства",
+    "overlapping": "Написи, що перекриваються",
+    "comments": "Коментарі",
+    "section": "Розділ",
+    "mediamaterial": "Середній і матеріальний",
+    "bibliography": "Бібліографія"
 }

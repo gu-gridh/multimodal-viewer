@@ -208,11 +208,13 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           if (inscriptionResponse.data) {
             const data = inscriptionResponse.data;
 
+            //title
             const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
             const inscriptionTitle = data.title ? `(${data.title})` : "";
             const titlePrefix = currentLang === 'uk' ? 'Hапис' : 'Inscription';
             const fullTitle = `${titlePrefix} ${panelTitle}:${annotationId} ${inscriptionTitle}`;
 
+            //metadata
             const type = data.type_of_inscription ? (currentLang === 'uk' && data.type_of_inscription.text_ukr ? data.type_of_inscription.text_ukr : data.type_of_inscription.text) : "Unknown";
             const interpretation = data.interpretative_edition ? data.interpretative_edition : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Interpretation not available</p>");
             const romanisation = data.romanisation ? data.romanisation : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Romanisation not available</p>");
@@ -224,6 +226,55 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "Висота недоступна" : "Elevation not available");
             const translation = currentLang === 'uk' ? (data.translation_ukr || "<p>Переклад недоступний</p>") : (data.translation_eng || "<p>Translation not available</p>");
             const comments = currentLang === 'uk' ? (data.comments_ukr || "<p>коментар недоступний</p>") : (data.comments_eng || "<p>Comment not available</p>");
+            
+            const conditions = (data.condition && data.condition.length > 0) 
+            ? data.condition.map(cond => 
+                currentLang === 'uk' ? (cond.text_ukr || '') : (cond.text || '')
+              ).filter(Boolean).join(', ')
+            : (currentLang === 'uk' ? "Умови недоступні" : "Condition not available");
+
+            const alignment = (data.alignment && data.alignment.length > 0) 
+            ? data.alignment.map(align => 
+                currentLang === 'uk' ? (align.text_ukr || '') : (align.text || '')
+              ).filter(Boolean).join(', ')
+            : (currentLang === 'uk' ? "вирівнювання недоступне" : "Alignment not available");     
+
+            const alphabeticalSigns = (data.extra_alphabetical_sign && data.extra_alphabetical_sign.length > 0) 
+            ? data.extra_alphabetical_sign.map(sign => 
+                currentLang === 'uk' ? (sign.text_ukr || '') : (sign.text || '')
+              ).filter(Boolean).join(', ')
+            : (currentLang === 'uk' ? "Алфавітний знак недоступний" : "Alphabetical sign not available");
+
+            const datingCriteria = (data.dating_criteria && data.dating_criteria.length > 0) 
+            ? data.dating_criteria.map(dating => 
+                currentLang === 'uk' ? (dating.text_ukr || '') : (dating.text || '')
+              ).filter(Boolean).join(', ')
+            : (currentLang === 'uk' ? "Критерії датування недоступні" : "Dating criteria not available");  
+            
+            const contributors = (data.author && data.author.length > 0) 
+            ? data.author.map(contributor => {
+                const name = currentLang === 'uk' 
+                  ? ((contributor.firstname_ukr || '') + ' ' + (contributor.lastname_ukr || '')).trim()
+                  : ((contributor.firstname || '') + ' ' + (contributor.lastname || '')).trim();
+                return name || null;
+              }).filter(Boolean).join(', ')
+            : (currentLang === 'uk' ? "немає доступних учасників" : "Contributors not available");
+                 
+            const bibliographyEntries = (data.bibliography && data.bibliography.length > 0) 
+            ? data.bibliography.map(entry => {
+                //format: authors (year). title. body of Publication.
+                const authors = entry.authors || "Unknown Author";
+                const year = entry.year || "n.d.";
+                const title = entry.title || "Untitled";
+                const body = entry.body_of_publication || "Unpublished";
+                return `${authors} (${year}). <em>${title}</em>. ${body}.`;
+              }).join('<br>')
+            : (currentLang === 'uk' ? "Немає доступної бібліографії" : "Bibliography not available");
+
+            //dimensions
+            const width = data.width ? data.width : "";
+            const height = data.height ? data.height : "";
+            const dimensions = width && height ? `${width} x ${height}` : (currentLang === 'uk' ? "Розміри недоступні" : "Dimension not available");
             const editlink = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
 
             $('#inscription-title').html(fullTitle);
@@ -235,9 +286,16 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             $('#inscription-language').html(language);
             $('#inscription-genre').html(genre);
             $('#inscription-tags').html(tags);
+            $('#inscription-dimension').html(dimensions);
+            $('#inscription-condition').html(conditions);
+            $('#inscription-alphabetical').html(alphabeticalSigns);
+            $('#inscription-dating-criteria').html(datingCriteria);
+            $('#inscription-contributors').html(contributors);
+            $('#inscription-alignment').html(alignment);
+            $('#inscription-bibliography').html(bibliographyEntries);
             $('#inscription-elevation').html(elevation);
             $('#inscription-translation').html(translation);
-            $('#inscription-coments').html(comments);
+            $('#inscription-comment').html(comments);
             $('#edit-link').attr('href', editlink);
           }
         } catch (error) {

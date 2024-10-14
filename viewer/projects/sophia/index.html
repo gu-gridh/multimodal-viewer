@@ -290,6 +290,7 @@
 
                 if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
                     changeRightViewer('annotation', currentAnnotationId);
+                    moduleSwitcherRight(6);
                     updateURLWithAnnotation(currentAnnotationId);
                 } else {
                     updateURLWithAnnotation(null);
@@ -351,7 +352,6 @@
             if (rightUIModuleContainer) {
                 rightUIModuleContainer.style.display = 'flex';
             }
-
             if (backButton) {
                 backButton.style.display = 'block';
             }

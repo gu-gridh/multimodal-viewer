@@ -103,6 +103,7 @@
   "points1": "Points (optimized)",
   "points2": "Points (high quality)",
   "annotationstoggle": "<b>Annotations toggle.</b> Switches on and off the annotations.",
+  "textualgraffiti": "Textual Graffiti",
   "interpretation": "Interpretative Edition",
   "romanisation": "Romanisation",
   "condition": "Condition",
@@ -116,5 +117,7 @@
   "comments": "Comments",
   "section": "Section",
   "mediamaterial": "Media and material",
+  "inscriber": "Inscriber",
+  "mentioned": "Mentioned",
   "bibliography": "Bibliography"
 }

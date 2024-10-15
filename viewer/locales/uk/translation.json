@@ -16,7 +16,7 @@
   "room": "Кімната",
   "tags": "Теги",
   "type": "Тип",
-  "writingsystem": "Система письма",
+  "writingsystem": "Сценарій",
   "genre": "Жанр",
   "editinscription": "Редагувати напис",
   "documentation": "Документація",
@@ -103,6 +103,7 @@
   "points1": "Points (optimized)",
   "points2": "Points (high quality)",
     "annotationstoggle": "<b>Перемикач анотацій.</b> Вмикає та вимикає анотації.",
+    "textualgraffiti": "Текстові Графіті",
     "interpretation": "Тлумачне видання",
     "romanisation": "Pоманізація",
     "condition": "Хвороба",
@@ -116,5 +117,7 @@
     "comments": "Коментарі",
     "section": "Розділ",
     "mediamaterial": "Середній і матеріальний",
+    "inscriber": "Вписувач",
+    "mentioned": "Згадується",
     "bibliography": "Бібліографія"
 }

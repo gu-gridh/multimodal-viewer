@@ -36,17 +36,20 @@
             document.getElementById('imd23').textContent = t('translation');
             document.getElementById('imd24').textContent = t('comments');
 
-            document.getElementById('imd30').textContent = t('condition');
-            document.getElementById('imd31').textContent = t('alignment');
-            document.getElementById('imd32').textContent = t('linesandletters');
-            document.getElementById('imd33').textContent = t('elevation');
-            document.getElementById('imd34').textContent = t('dimensions');
-            document.getElementById('imd35').textContent = t('extraalphabet');
-            document.getElementById('imd36').textContent = t('dating');
-            document.getElementById('imd37').textContent = t('datingcriteria');
-            document.getElementById('imd38').textContent = t('overlapping');
-            document.getElementById('imd40').textContent = t('bibliography');
-            document.getElementById('imd41').textContent = t('contributors');
+            document.getElementById('imd30').textContent = t('condition') + ":";
+            document.getElementById('imd31').textContent = t('alignment') + ":";
+            document.getElementById('imd32').textContent = t('linesandletters') + ":";
+            document.getElementById('imd33').textContent = t('elevation') + ":";
+            document.getElementById('imd34').textContent = t('dimensions') + ":";
+            document.getElementById('imd35').textContent = t('extraalphabet') + ":";
+            document.getElementById('imd36').textContent = t('dating') + ":";
+            document.getElementById('imd37').textContent = t('datingcriteria') + ":";
+            document.getElementById('imd38').textContent = t('inscriber') + ":";
+            document.getElementById('imd39').textContent = t('mentioned') + ":";
+            document.getElementById('imd40').textContent = t('overlapping');
+
+            document.getElementById('imd41').textContent = t('bibliography');
+            document.getElementById('imd42').textContent = t('contributors');
 
             var translationDisplay = document.getElementById('translation-display');
             var descriptionDisplay = document.getElementById('description-display');
@@ -244,6 +247,16 @@
                         <div class="left-column">
 
                             <div class="metadata-item">
+                                <div class="label" id="imd38">Inscriber:</div>
+                                <div class="theme-color-text tag" id=""></div>
+                            </div>
+
+                            <div class="metadata-item">
+                                <div class="label" id="imd39">Mentioned:</div>
+                                <div class="theme-color-text tag" id=""></div>
+                            </div>
+
+                            <div class="metadata-item">
                                 <div class="label" id="imd30">Condition:</div>
                                 <div class="theme-color-text tag" id="inscription-condition"></div>
                             </div>
@@ -283,10 +296,11 @@
                                 <div class="theme-color-text tag" id="inscription-dating-criteria"></div>
                             </div>
 
-                            <div class="metadata-item">
+                
 
+                            <div class="metadata-item">
                                 <div class="metadata-dropdown theme-color-text red-arrow">
-                                    <span id="imd38">Overlapping inscriptions</span>
+                                    <span id="imd40">Overlapping inscriptions</span>
                                     <div class="metadata-dropdown-content">
                                         <p></p>
                                         <p></p>
@@ -310,12 +324,12 @@
                         <div class="division"> </div>
 
                         <div class="metadata-description" style="margin-top:-5px">
-                            <div class="metadata-title" id="imd40">Bibliography</div>
+                            <div class="metadata-title" id="imd41">Bibliography</div>
                             <div id="inscription-bibliography" class="metadata-description-text contributors"></div>
                         </div>
 
                         <div class="metadata-description">
-                            <div class="metadata-title" id="imd41">Contributors</div>
+                            <div class="metadata-title" id="imd42">Contributors</div>
                             <div id="inscription-contributors" class="metadata-description-text contributors"></div>
                         </div>
 

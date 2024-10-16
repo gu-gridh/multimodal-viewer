@@ -262,7 +262,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             ? data.alignment.map(align => 
                 currentLang === 'uk' ? (align.text_ukr || '') : (align.text || '')
               ).filter(Boolean).join(', ')
-            : (currentLang === 'uk' ? "вирівнювання недоступне" : "Alignment not available");     
+            : (currentLang === 'uk' ? "" : "");     
 
             //alphabetical signs
             const alphabeticalSigns = (data.extra_alphabetical_sign && data.extra_alphabetical_sign.length > 0) 
@@ -321,6 +321,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             $('#inscription-comment').html(comments);
             $('#inscription-type').html(type);
             $('#edit-link').attr('href', editlink);
+            setOrRemoveField('#inscription-alignment', alignment);
             setOrRemoveField('#inscription-language', language);
             setOrRemoveField('#inscription-genre', genre);
             setOrRemoveField('#inscription-tags', tags);

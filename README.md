@@ -22,7 +22,7 @@ PROJECT=dubb npm start
 ## Usage
 
 Sample URLs for testing:  
-Sophia: http://localhost:8095/viewer/?q=118-02/orthophoto   
+Sophia: http://localhost:8095/viewer/?q=120-19c/orthophoto   
 SHFA: http://localhost:8097/viewer/?q=Tanum_1_1-2019_06_13/orthophoto  
 Etruscan: http://localhost:8094/viewer/?q=2683/image  
 

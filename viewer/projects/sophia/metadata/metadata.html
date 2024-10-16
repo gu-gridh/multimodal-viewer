@@ -18,64 +18,43 @@
 <body>
     <script>
         function updateTranslations(t) {
-            document.getElementById('smd1').textContent = t('inscriptions') + ":";
-            document.getElementById('smd2').textContent = t('languages') + ":";
-            document.getElementById('smd5').textContent = t('documentation');
-            document.getElementById('imd0').textContent = t('type') + ":";
-            document.getElementById('imd1').textContent = t('language') + ":";
-            document.getElementById('imd3').textContent = t('writingsystem') + ":";
-            document.getElementById('imd4').textContent = t('genre') + ":";
-            document.getElementById('imd5').textContent = t('editinscription');
-            document.getElementById('imd6').textContent = t('mediamaterial') + ":";
-            document.getElementById('imd7').textContent = t('section') + ":";
-            document.getElementById('imd9').textContent = t('description') + ":";
+            const elements = [
+                { id: 'smd1', key: 'inscriptions', suffix: ":" },
+                { id: 'smd2', key: 'languages', suffix: ":" },
+                { id: 'smd5', key: 'documentation' },
+                { id: 'imd0', key: 'type', suffix: ":" },
+                { id: 'imd1', key: 'language', suffix: ":" },
+                { id: 'imd3', key: 'writingsystem', suffix: ":" },
+                { id: 'imd4', key: 'genre', suffix: ":" },
+                { id: 'imd5', key: 'editinscription' },
+                { id: 'imd6', key: 'mediamaterial', suffix: ":" },
+                { id: 'imd7', key: 'section', suffix: ":" },
+                { id: 'imd9', key: 'description', suffix: ":" },
+                { id: 'imd20', key: 'textualgraffiti' },
+                { id: 'imd21', key: 'interpretation' },
+                { id: 'imd22', key: 'romanisation' },
+                { id: 'imd23', key: 'translation' },
+                { id: 'imd24', key: 'comments' },
+                { id: 'imd30', key: 'condition', suffix: ":" },
+                { id: 'imd31', key: 'alignment', suffix: ":" },
+                { id: 'imd33', key: 'elevation', suffix: ":" },
+                { id: 'imd34', key: 'dimensions', suffix: ":" },
+                { id: 'imd35', key: 'extraalphabet', suffix: ":" },
+                { id: 'imd36', key: 'dating', suffix: ":" },
+                { id: 'imd37', key: 'datingcriteria', suffix: ":" },
+                { id: 'imd38', key: 'inscriber', suffix: ":" },
+                { id: 'imd39', key: 'mentioned', suffix: ":" },
+                { id: 'imd40', key: 'overlapping' },
+                { id: 'imd41', key: 'bibliography' },
+                { id: 'imd42', key: 'contributors' }
+            ];
 
-            document.getElementById('imd20').textContent = t('textualgraffiti');
-            document.getElementById('imd21').textContent = t('interpretation');
-            document.getElementById('imd22').textContent = t('romanisation');
-            document.getElementById('imd23').textContent = t('translation');
-            document.getElementById('imd24').textContent = t('comments');
-
-            document.getElementById('imd30').textContent = t('condition') + ":";
-            document.getElementById('imd31').textContent = t('alignment') + ":";
-            document.getElementById('imd32').textContent = t('linesandletters') + ":";
-            document.getElementById('imd33').textContent = t('elevation') + ":";
-            document.getElementById('imd34').textContent = t('dimensions') + ":";
-            document.getElementById('imd35').textContent = t('extraalphabet') + ":";
-            document.getElementById('imd36').textContent = t('dating') + ":";
-            document.getElementById('imd37').textContent = t('datingcriteria') + ":";
-            document.getElementById('imd38').textContent = t('inscriber') + ":";
-            document.getElementById('imd39').textContent = t('mentioned') + ":";
-            document.getElementById('imd40').textContent = t('overlapping');
-
-            document.getElementById('imd41').textContent = t('bibliography');
-            document.getElementById('imd42').textContent = t('contributors');
-
-            var translationDisplay = document.getElementById('translation-display');
-            var descriptionDisplay = document.getElementById('description-display');
-            var transcription = document.getElementById('transcription');
-
-            const inscriptionTitleElement = document.getElementById('inscription-title');
-            const currentText = inscriptionTitleElement.textContent.trim();
-
-            //replace content only if it is no inscription selected
-            if (currentText === 'No inscription selected' || currentText === 'Напис не вибрано') {
-                inscriptionTitleElement.textContent = t('noinscription');
-            }
-
-            //check if the current text content is translation not available
-            if (translationDisplay && (translationDisplay.textContent.trim() === 'Translation not available' || translationDisplay.textContent.trim() === 'Переклад недоступний')) {
-                translationDisplay.innerHTML = t('translationnotavailable');
-            }
-            //check if the current text content is description not available
-            if (descriptionDisplay && (descriptionDisplay.textContent.trim() === 'Description not available' || descriptionDisplay.textContent.trim() === 'опис недоступний')) {
-                descriptionDisplay.innerHTML = t('descriptionnotavailable');
-            }
-
-            //check if the current text content is transcription not available
-            if (transcription && (transcription.textContent.trim() === 'Transcription not available' || transcription.textContent.trim() === 'транскрипція недоступна')) {
-                transcription.innerHTML = t('transcriptionnotavailable');
-            }
+            elements.forEach(({ id, key, suffix = '' }) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = t(key) + suffix;
+                }
+            });
         }
 
         function setButtonLabel(language) {
@@ -266,10 +245,10 @@
                                 <div class="theme-color-text tag" id="inscription-alignment"></div>
                             </div>
 
-                            <div class="metadata-item">
+                            <!-- <div class="metadata-item">
                                 <div class="label" id="imd32">Lines and letters:</div>
                                 <div class="theme-color-text tag" id="date"></div>
-                            </div>
+                            </div> -->
 
                             <div class="metadata-item">
                                 <div class="label" id="imd33">Elevation (mm)</div>

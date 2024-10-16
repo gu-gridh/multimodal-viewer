@@ -193,6 +193,17 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       }
 
       const $ = cheerio.load(htmlData);
+
+      function setOrRemoveField(selector, value) {
+        if (!value) {
+          //remove the parent .metadata-item div if the value is not available
+          $(selector).closest('.metadata-item').remove();
+        } else {
+          //set the value if it is available
+          $(selector).html(value);
+        }
+      }
+
       const panelTitle = currentLang === 'uk' ? 'Панель' : 'Panel';
       const panelDocumentation = currentLang === 'uk' ? metadata.documentation.map(doc => doc.text_ukr).join(' ') : metadata.documentation.map(doc => doc.observation).join(' ');
 
@@ -226,7 +237,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "" : "");
             const translation = currentLang === 'uk' ? (data.translation_ukr || "<p>Переклад недоступний</p>") : (data.translation_eng || "<p>Translation not available</p>");
             const comments = currentLang === 'uk' ? (data.comments_ukr || "<p>коментар недоступний</p>") : (data.comments_eng || "<p>Comment not available</p>");
-            const inscriber = data.inscriber ? `${data.inscriber.firstname} ${data.inscriber.lastname}` : (currentLang === 'uk' ? "Писаря недоступний" : "Inscriber not available");
+            const inscriber = data.inscriber ? `${data.inscriber.firstname} ${data.inscriber.lastname}` : "";
             const editlink = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
 
             //dimensions
@@ -235,9 +246,9 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             const dimensions = width && height ? `${width} x ${height}` : (currentLang === 'uk' ? "" : "");
 
             //year range
-            const minYear = data.min_year !== null ? data.min_year : '?';
-            const maxYear = data.max_year !== null ? data.max_year : '?';
-            const yearRange = `${minYear} - ${maxYear}`;
+            const minYear = data.min_year !== null ? data.min_year : '';
+            const maxYear = data.max_year !== null ? data.max_year : '';
+            const yearRange = minYear && maxYear ? `${minYear} - ${maxYear}` : '';
 
             //conditions
             const conditions = (data.condition && data.condition.length > 0) 
@@ -288,35 +299,40 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                 return `${authors} (${year}). <em>${title}</em>. ${body}.`;
               }).join('<br>')
             : (currentLang === 'uk' ? "" : "");
+            if (!bibliographyEntries) { //remove the parent metadata-description div if biblography is not available
+              $('#inscription-bibliography').closest('.metadata-description').remove();
+            } else { 
+              $('#inscription-bibliography').html(bibliographyEntries);
+            }
 
             //mentioned people
             const mentionedPersons = (data.mentioned_person && data.mentioned_person.length > 0)
             ? data.mentioned_person.map(person => `${person.firstname} ${person.lastname}`).join(', ')
-            : (currentLang === 'uk' ? "Згадані особи недоступні" : "Mentioned persons not available");
+            : "";
 
             $('#inscription-title').html(fullTitle);
-            $('#inscription-type').html(type);
             $('#inscription-interpretation').html(interpretation);
             $('#inscription-romanisation').html(romanisation);
-            $('#inscription-diplomatic').html(diplomatic);
-            $('#inscription-writing').html(writing);
-            $('#inscription-language').html(language);
-            $('#inscription-genre').html(genre);
-            $('#inscription-tags').html(tags);
-            $('#inscription-dimension').html(dimensions);
             $('#inscription-condition').html(conditions);
-            $('#inscription-alphabetical').html(alphabeticalSigns);
-            $('#inscription-dating-criteria').html(datingCriteria);
-            $('#inscription-mentioned-persons').html(mentionedPersons);
-            $('#inscription-inscriber').html(inscriber);
             $('#inscription-contributors').html(contributors);
             $('#inscription-alignment').html(alignment);
-            $('#inscription-bibliography').html(bibliographyEntries);
-            $('#inscription-elevation').html(elevation);
+            // $('#inscription-bibliography').html(bibliographyEntries);
             $('#inscription-translation').html(translation);
             $('#inscription-comment').html(comments);
-            $('#inscription-year-range').html(yearRange);
+            $('#inscription-type').html(type);
             $('#edit-link').attr('href', editlink);
+            setOrRemoveField('#inscription-language', language);
+            setOrRemoveField('#inscription-genre', genre);
+            setOrRemoveField('#inscription-tags', tags);
+            setOrRemoveField('#inscription-diplomatic', diplomatic);
+            setOrRemoveField('#inscription-writing', writing);
+            setOrRemoveField('#inscription-mentioned-persons', mentionedPersons);
+            setOrRemoveField('#inscription-inscriber', inscriber);
+            setOrRemoveField('#inscription-dating-criteria', datingCriteria);
+            setOrRemoveField('#inscription-alphabetical', alphabeticalSigns);
+            setOrRemoveField('#inscription-dimension', dimensions);
+            setOrRemoveField('#inscription-year-range', yearRange);
+            setOrRemoveField('#inscription-elevation', elevation);
           }
         } catch (error) {
           console.error('Error fetching inscription data:', error);

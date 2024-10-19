@@ -15,7 +15,7 @@ body {
 .container {
 	height: calc(100vh - 50px) !important;
 	width: 100%;
-	padding: 30px 60px 20px 60px !important;
+	padding: 30px 40px 20px 40px !important;
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;

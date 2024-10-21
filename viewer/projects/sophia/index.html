@@ -281,6 +281,8 @@
                         return;
                     }
                     applyTranslations();
+                    const iiifIframe = document.getElementById('left-Iframe');
+                    iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                 });
 
                 const invalidAnnotationPattern = /[a-zA-Z]/;

@@ -66,7 +66,7 @@
   "satisfiedwithselection": "Are you satisfied with the selection?",
   "copyposition": "Copy the position and register",
   "redoselection": "Redo the selection",
-  "openlime-help-text": "Browse available RTI-sets with the menu at the top. <br> Click and drag to change light direction. Scroll to zoom in and out. <br> Deactivate light controls to pan the view.",
+  "openlime-help-text": "Browse available RTI-sets with the menu at the top. Click and drag to change light direction. Deactivate light controls to pan the view.",
   "openlime-help-text-2": "Browse available RTI-sets with the menu at the top. <br> Click and drag to change light direction. Scroll to zoom in and out. <br> When light controls are deactivated, click and drag to pan the view.",
   "light": "Light",
   "diffuse": "Diffuse",

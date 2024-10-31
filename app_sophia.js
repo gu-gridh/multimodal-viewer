@@ -135,8 +135,19 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const basePathIiif = `${config.basePath}`;
         const basePathDownload = `${config.downloadPath}`;
         const annotationPath = `${config.annotationPath}`;
-        const topographyImagesIiif = modelData[0].properties.attached_topography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-        const topographyImagesJpg = modelData[0].properties.attached_topography.map(topography => `${basePathDownload}${topography.file}`);
+
+        //sort the attached_topography array based on the file name
+        const sortedTopography = modelData[0].properties.attached_topography.sort((a, b) => {
+          const order = ['blended', 'texture', 'normal'];
+          const getOrder = (file) => {
+            return order.findIndex(keyword => file.includes(keyword));
+          };
+          return getOrder(a.file) - getOrder(b.file);
+        });
+
+        const topographyImagesIiif = sortedTopography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
+        const topographyImagesJpg = sortedTopography.map(topography => `${basePathDownload}${topography.file}`);
+
         let updatedHtmlContent = htmlContent
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))

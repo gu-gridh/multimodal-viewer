@@ -9,6 +9,7 @@
   "mesh": "Mesh",
   "rti": "RTI",
   "metadata": "Metadata",
+  "metadatahelp": "Please select an inscription to see its metadata",
   "about": "About",
   "spatialcontext": "Spatial Context",
   "language": "Language",

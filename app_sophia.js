@@ -204,6 +204,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       }
 
       const $ = cheerio.load(htmlData);
+      let dataAvailable = false; //is data available?
 
       function setOrRemoveField(selector, value) {
         if (!value) {
@@ -229,6 +230,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           const inscriptionResponse = await axios.get(inscriptionApiUrl);
           if (inscriptionResponse.data) {
             const data = inscriptionResponse.data;
+            dataAvailable = true;
 
             //title
             const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
@@ -349,6 +351,11 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         } catch (error) {
           console.error('Error fetching inscription data:', error);
         }
+      }
+      if (!dataAvailable) {
+        $('.metadata-inscription').remove();
+      } else {
+        $('.metadata-help').css('display', 'none');
       }
       res.send($.html());
     });

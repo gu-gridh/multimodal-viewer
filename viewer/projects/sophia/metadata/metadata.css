@@ -168,6 +168,12 @@ body {
 	flex-direction: row;
 }
 
+.metadata-help {
+    text-align: center;
+    margin-top: 300px;
+    font-size: 1.2em;
+	font-weight: 100;
+}
 
 /* .metadata-item:has(> .tag:empty) {
 	display:none;

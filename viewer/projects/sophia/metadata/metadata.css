@@ -1,3 +1,7 @@
+@font-face {
+	font-family: 'ancient-font';
+	src: url('../../../shared/fonts/Bukyvede.woff2') format('woff2'),
+}
 html,
 body {
 	margin: 0px;
@@ -10,6 +14,11 @@ body {
 	height: calc(100vh) !important;
 	overflow: hidden !important;
 	background-color: rgb(228, 225, 223);
+}
+
+.ancient-font{
+	font-family: "ancient-font", sans-serif !important;
+	font-size:18px!important;
 }
 
 .container {

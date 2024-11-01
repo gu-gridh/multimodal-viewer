@@ -35,7 +35,7 @@
 }
 
 .ui-module {
-    top: 26px;
+    top: 28px;
     font-size:0.9em;
     font-weight:300;
     line-height:1.0;
@@ -144,11 +144,11 @@
 
 @media screen and (max-width: 600px) {
 .ui-module {
-    font-size:0.85em;
+    font-size:0.80em;
 }
 
 .ui-module .ui-module-item {
-    padding: 5px 4px 6px 4px;
+    padding: 4px 3px 5px 3px;
 }
 
 }

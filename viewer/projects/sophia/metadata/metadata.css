@@ -206,7 +206,7 @@ body {
  border-color:black;
  border-style:dotted;
  border-radius:6px;
- margin-left:-50px;
+ margin-left:-20px;
 }
 
 
@@ -219,6 +219,7 @@ body {
 	border-style:dotted;
 	border-radius:6px;
 	margin-top:-30px;
+	margin-left:40px;
    }
 
 /* .metadata-item:has(> .tag:empty) {

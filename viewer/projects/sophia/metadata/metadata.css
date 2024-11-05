@@ -21,6 +21,11 @@ body {
 	font-size:18px!important;
 }
 
+.modern-font{
+	font-family: "Oswald", sans-serif !important;
+	font-size:16px!important;
+}
+
 .container {
 	height: calc(100vh - 50px) !important;
 	width: 100%;

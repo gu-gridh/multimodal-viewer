@@ -240,9 +240,9 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
             //metadata
             const type = data.type_of_inscription ? (currentLang === 'uk' && data.type_of_inscription.text_ukr ? data.type_of_inscription.text_ukr : data.type_of_inscription.text) : "Unknown";
-            const interpretation = data.interpretative_edition ? data.interpretative_edition : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Interpretation not available</p>");
+            const interpretation = data.interpretative_edition ? data.interpretative_edition : (currentLang === 'uk' ? "<p class='modern-font'>транскрипція недоступна</p>" : "<p class='modern-font'>Interpretation not available</p>");
             const romanisation = data.romanisation ? data.romanisation : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Romanisation not available</p>");
-            const diplomatic = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p>транскрипція недоступна</p>" : "<p>Textual graffiti not available</p>");
+            const diplomatic = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p class='modern-font'>транскрипція недоступна</p>" : "<p class='modern-font'>Textual graffiti not available</p>");
             const writing = data.writing_system ? (currentLang === 'uk' && data.writing_system.text_ukr ? data.writing_system.text_ukr : data.writing_system.text) : "";
             const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
             const genre = data.genre && data.genre.length > 0 && data.genre[0].text ? data.genre[0].text : "";

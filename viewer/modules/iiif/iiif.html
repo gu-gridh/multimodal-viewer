@@ -158,7 +158,7 @@
             if (pageInfo && viewer) {
                 const currentPage = viewer.currentPage() + 1;
                 const totalPages = viewer.tileSources.length;
-                pageInfo.innerHTML = `${currentPage} ${i18next.t('of')} ${totalPages}`;
+                pageInfo.innerHTML = `${currentPage} ${i18next.t('/')} ${totalPages}`;
             }
         }
 
@@ -565,6 +565,7 @@
 
                 currentAnnotationId = null;
             });
+            updatePageInfo();
         }
 
         function logPosition() {

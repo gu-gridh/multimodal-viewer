@@ -319,9 +319,9 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             }
 
             //mentioned people
-            const mentionedPersons = (data.mentioned_person && data.mentioned_person.length > 0)
-            ? data.mentioned_person.map(person => `${person.firstname} ${person.lastname}`).join(', ')
-            : "";
+            const mentionedPersons = data.language ? 
+            (currentLang === 'uk' && data.mentioned_person ? data.mentioned_person.map(person => `${person.name_ukr}`).join(', ')
+            : data.mentioned_person.map(person => `${person.name}`).join(', ')) : "";
 
             $('#inscription-title').html(fullTitle);
             $('#inscription-interpretation').html(interpretation);

@@ -125,6 +125,7 @@
         let annotationClicked = false;
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
+        let annotationsLoaded = false;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -402,7 +403,6 @@
                 //extract viewport coordinates from the annotation
                 const fragmentSelector = annotation.target.selector.value;
                 const [vx, vy, vw, vh] = fragmentSelector.replace('xywh=pixel:', '').split(',').map(Number);
-                console.log('Viewport Coordinates:', { vx, vy, vw, vh });
 
                 // Convert viewport coordinates to image coordinates 
                 const imageX = Math.round(vx);
@@ -410,21 +410,17 @@
                 const imageWidth = Math.round(vw);
                 const imageHeight = Math.round(vh);
 
-                console.log('Image Coordinates:', { x: imageX, y: imageY, width: imageWidth, height: imageHeight });
-
                 const imgWidth = imageSize.width;
                 const imgHeight = imageSize.height;
                 const xPercentage = (imageX / imgWidth) * 100;
                 const yPercentage = (imageY / imgHeight) * 100;
                 const widthPercentage = (imageWidth / imgWidth) * 100;
                 const heightPercentage = (imageHeight / imgHeight) * 100;
-                //console.log(`"value": "xywh=percent:${xPercentage.toFixed(2)},${yPercentage.toFixed(2)},${widthPercentage.toFixed(2)},${heightPercentage.toFixed(2)}"`);
 
                 //form the IIIF Image Region
                 const region = `${imageX},${imageY},${imageWidth},${imageHeight}`;
                 const percentageRegion = `pct:${xPercentage.toFixed(2)},${yPercentage.toFixed(2)},${widthPercentage.toFixed(2)},${heightPercentage.toFixed(2)}`;
                 const iiifUrl = `${imageSize['@id']}/${percentageRegion}/!${300},${700}/0/default.jpg`;
-                console.log('IIIF Image Section:', iiifUrl);
 
                 //copy the IIIF region URL to the clipboard
                 navigator.clipboard.writeText(percentageRegion).then(() => {
@@ -452,37 +448,43 @@
                 if (event.data.type === 'openAnnotation') {
                     const annotationId = event.data.id;
 
-                    //save annotation id until annotations have loaded
-                    pendingAnnotationId = annotationId;
+                    if (annotationsLoaded) {
+                        openAnnotationById(annotationId);
+                    } else {
+                        pendingAnnotationId = annotationId;
+                    }
                 }
             });
 
-            anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
-                if (pendingAnnotationId) {
+            const loadAnnotationsPromise = anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
+                annotationsLoaded = true;
+
+                if (pendingAnnotationId !== null) {
                     openAnnotationById(pendingAnnotationId);
                     pendingAnnotationId = null;
                 }
+                return annotations;
             });
 
             function openAnnotationById(annotationId) {
-                const annotation = anno.getAnnotationById(annotationId);
+                loadAnnotationsPromise.then(() => {
+                    const annotation = anno.getAnnotationById(annotationId);
 
-                if (annotation) {
-                    anno.selectAnnotation(annotationId);
-                    anno.fitBounds(annotationId, {
-                        immediately: false,
-                        padding: 200
-                    });
-                    const annotationData = {
-                        type: 'annotationClick',
-                        value: annotationId
-                    };
-
-                    window.parent.postMessage(annotationData, "*");
-
-                } else {
-                    console.error('Annotation not found:', annotationId);
-                }
+                    if (annotation) {
+                        anno.selectAnnotation(annotationId);
+                        anno.fitBounds(annotationId, {
+                            immediately: false,
+                            padding: 200
+                        });
+                        const annotationData = {
+                            type: 'annotationClick',
+                            value: annotationId
+                        };
+                        window.parent.postMessage(annotationData, "*");
+                    } else {
+                        console.error('Annotation not found:', annotationId);
+                    }
+                });
             }
 
             // Attach handlers to listen to events
@@ -637,8 +639,11 @@
                         <div class="guide-instructions-item-label" id="3">
                         </div>
                     </div>
-                    <div class="module-acknowledgement"><p id="11">The module was created with</p> <p><a href="https://github.com/openseadragon/openseadragon" target="_blank">OpenSeadragon</a></p></div>
-
+                    <div class="module-acknowledgement">
+                        <p id="11">The module was created with</p>
+                        <p><a href="https://github.com/openseadragon/openseadragon" target="_blank">OpenSeadragon</a>
+                        </p>
+                    </div>
                     <div class="guide-closer" id="5"></div>
                 </div>
             </div>

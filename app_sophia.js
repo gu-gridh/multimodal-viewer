@@ -245,7 +245,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             const diplomatic = data.transcription ? data.transcription : (currentLang === 'uk' ? "<p class='modern-font'>транскрипція недоступна</p>" : "<p class='modern-font'>Textual graffiti not available</p>");
             const writing = data.writing_system ? (currentLang === 'uk' && data.writing_system.text_ukr ? data.writing_system.text_ukr : data.writing_system.text) : "";
             const language = data.language ? (currentLang === 'uk' && data.language.text_ukr ? data.language.text_ukr : data.language.text) : "";
-            const genre = data.genre ? (currentLang === 'uk' && data.genre[0].text_ukr ? data.genre[0].text_ukr : data.genre[0].text) : ""
+            const genre = data.genre && data.genre.length > 0 ? (currentLang === 'uk' && data.genre[0].text_ukr ? data.genre[0].text_ukr : data.genre[0].text) : "";
             const tags = data.tags && data.tags.length > 0 ? data.tags.map(tag => currentLang === 'uk' && tag.text_ukr ? tag.text_ukr : tag.text).join(', ') : "";
             const elevation = data.elevation !== null ? `${data.elevation}` : (currentLang === 'uk' ? "" : "");
             const translation = currentLang === 'uk' ? (data.translation_ukr || "<p>Переклад недоступний</p>") : (data.translation_eng || "<p>Translation not available</p>");
@@ -319,9 +319,11 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             }
 
             //mentioned people
-            const mentionedPersons = data.language ? 
-            (currentLang === 'uk' && data.mentioned_person ? data.mentioned_person.map(person => `${person.name_ukr}`).join(', ')
-            : data.mentioned_person.map(person => `${person.name}`).join(', ')) : "";
+            const mentionedPersons = data.mentioned_person && data.mentioned_person.length > 0 
+            ? (currentLang === 'uk'
+                ? data.mentioned_person.map(person => person.name_ukr || '').filter(Boolean).join(', ')
+                : data.mentioned_person.map(person => person.name || '').filter(Boolean).join(', '))
+            : "";
 
             $('#inscription-title').html(fullTitle);
             $('#inscription-interpretation').html(interpretation);

@@ -229,7 +229,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     }
 
     //populate panel metadata
-    const panelTitle = currentLang === 'uk' ? 'Панель' : 'Panel';
+    const panelTitle = currentLang === 'uk' ? 'Поверхня' : 'Surface';
     const panelDocumentation = currentLang === 'uk'
       ? metadata.documentation.map(doc => doc.text_ukr).join(' ')
       : metadata.documentation.map(doc => doc.observation).join(' ');

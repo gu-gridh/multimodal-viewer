@@ -86,11 +86,11 @@
   }
 
   .border-style {
-    border-width: 0 0.5px 0 0px;
+    border-width: 0 0 0 0.5px;
     border-color: white;
     border-style: dashed;
-    padding-left: 10px;
-    padding-right: 20px;
+    padding-left: 20px;
+    padding-right: 10px;
 
   }
 
@@ -131,20 +131,33 @@
   #developer-info a:link {
     font-weight: 200;
   }
+
+  @media screen and (max-width: 1210px) {
+   .extra{
+    display:none;
+   }
+}
 </style>
 
 <body>
   <div id="footer">
     <div id="developer-info">
-      <div class="links-stack border-style">
-        <a class="site-link link" href="https://www.gu.se/forskning/digital-dokumentation-av-inskriptioner-i-sofiakatedralen-i-kiev" target="_blank">About the research project</a>
-        <a class="site-link link" href="https://github.com/gu-gridh/multimodal-viewer#multimodal-viewer" target="_blank">GitHub
-          repository and development</a>
-    </div>
       <div class="links-stack">
+        <a class="site-link link"
+          href="https://www.gu.se/forskning/digital-dokumentation-av-inskriptioner-i-sofiakatedralen-i-kiev"
+          target="_blank">About the research project</a>
+        <a class="site-link link" href="https://github.com/gu-gridh/multimodal-viewer#multimodal-viewer"
+          target="_blank">GitHub
+          repository and development</a>
+      </div>
+      <div class="links-stack border-style">
         <a class="site-link link" href="https://github.com/gu-gridh/multimodal-viewer#database-and-api-documentation"
-        target="_blank">Database and API documentation</a>
+          target="_blank">Database and API documentation</a>
         <a href="#" class="download-link link" @click="downloadData">Download all inscription data</a>
+      </div>
+      <div class="links-stack border-style extra">
+        <a class="site-link link" href="https://forms.office.com/e/3CaZQqAK16"
+          target="_blank">Feedback form</a>
       </div>
     </div>
     <div class="partners">

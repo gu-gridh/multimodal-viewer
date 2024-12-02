@@ -3,7 +3,7 @@
   "project": "Sophia",
   "displayAnnotations": true,
   "displayIIIFAnnotations": true,
-  "backButton": "https://71807.dh.gu.se",
+  "backButton": "https://saintsophia.dh.gu.se",
   "panel": "https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=",
   "metadata": "https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=",
   "pointcloud": "https://data.dh.gu.se/saintsophia/pointcloud/cloud.js",

@@ -84,7 +84,7 @@
 
 	<div id="openlime">
 		<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;  bottom:0px;">
-			<div id="instructions" style="bottom:125px; width:260px;">
+			<div id="instructions" style="bottom:125px; width:320px;">
 				<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
 				<div id="1">
 			</div>
@@ -271,7 +271,7 @@ async function init() {
     lime.canvas.addLayer('RTI', currentLayer);
 	OpenLIME.Skin.setUrl('css/skin2.svg');
     let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
-    ui.actions.light.active = true;
+    ui.actions.light.active = false;
     ui.actions.layers.display = false;
     lime.camera.maxFixedZoom = 1;
     window.lime = lime;

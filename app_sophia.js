@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
-const dotenv = require('dotenv'); 
+const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
@@ -12,10 +12,10 @@ const projectName = process.env.PROJECT || 'default';
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
 try {
-    config = require(configPath);
+  config = require(configPath);
 } catch (error) {
-    console.error(`Failed to load config for project ${projectName}:`, error);
-    process.exit(1);
+  console.error(`Failed to load config for project ${projectName}:`, error);
+  process.exit(1);
 }
 
 app.get('/viewer/modules/rti/rti.html', async (req, res) => {
@@ -34,15 +34,15 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
       }
       const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
 
-      const dropdownHtml = rtiImages.map(rti => 
+      const dropdownHtml = rtiImages.map(rti =>
         `<option value="${rti.url}">${rti.title}</option>`
       ).join('');
-      
+
       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
-      modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->', 
+      modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->',
         `<select id="rtiImageDropdown" onchange="updateRTIImage(this.value)">
           ${dropdownHtml}
-        </select>`);      
+        </select>`);
       res.send(modifiedHtml);
     });
   } catch (error) {
@@ -59,7 +59,7 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
     const apiResponse = await axios.get(apiUrl);
     const position = apiResponse.data.features[0]?.properties.spatial_position;
     const direction = apiResponse.data.features[0]?.properties.spatial_direction;
-    
+
     fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
       if (err) {
         console.error('Error reading the file:', err);
@@ -68,7 +68,7 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       let modifiedData = data;
       const positionStr = position ? position.join(',') : '';
       const directionStr = direction ? direction.join(',') : '';
-      
+
       modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, `${config.pointcloud}`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
@@ -86,7 +86,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   const queryType = fullQuery ? fullQuery.split('/')[1] : '';
-  
+
   if (!queryName || !queryType) {
     return res.status(400).send('Query parameter is missing or incorrect');
   }
@@ -219,10 +219,27 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const $ = cheerio.load(htmlData);
     let dataAvailable = false;
 
-    //function to set or remove fields in the HTML
+    //function to set or remove metadata fields in the HTML
     function setOrRemoveField(selector, value) {
       if (!value) {
         $(selector).closest('.metadata-item').remove();
+      } else {
+        $(selector).html(value);
+      }
+    }
+
+    //hide metadata descriptions when type is pictorial graffiti
+    function setOrRemoveDescription(selector, value) { 
+      if (!value) {
+        const $description = $(selector).closest('.metadata-description');
+        const $columnsContainer = $description.closest('.metadata-columns');
+
+        $description.remove();
+
+        //if the columns container has no more metadata-description elements, remove it
+        if ($columnsContainer.find('.metadata-description').length === 0) {
+          $columnsContainer.remove();
+        }
       } else {
         $(selector).html(value);
       }
@@ -233,11 +250,11 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const panelDocumentation = currentLang === 'uk'
       ? metadata.documentation.map(doc => doc.text_ukr).join(' ')
       : metadata.documentation.map(doc => doc.observation).join(' ');
-    const panelMedium = currentLang === 'uk' 
-      ? metadata.medium.text_ukr 
+    const panelMedium = currentLang === 'uk'
+      ? metadata.medium.text_ukr
       : metadata.medium.text;
-    const panelMaterial = currentLang === 'uk' 
-      ? metadata.material.text_ukr 
+    const panelMaterial = currentLang === 'uk'
+      ? metadata.material.text_ukr
       : metadata.material.text;
 
     $('#panel-title').html(`${panelTitle} ${metadata.title ?? 'Unknown'}`);
@@ -259,29 +276,42 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       const fullTitle = `${titlePrefix} ${panelTitle}:${annotationId} ${inscriptionTitle}`;
 
       //metadata fields
-      const type = data.type_of_inscription
+      const isPictorialGraffiti = data.type_of_inscription?.id === 2;
+
+      const typeText = data.type_of_inscription
         ? (currentLang === 'uk' && data.type_of_inscription.text_ukr
           ? data.type_of_inscription.text_ukr
           : data.type_of_inscription.text)
         : "Unknown";
 
-      const interpretation = data.interpretative_edition
-        ? data.interpretative_edition
-        : (currentLang === 'uk'
+      const interpretation = !isPictorialGraffiti
+        ? (data.interpretative_edition || (currentLang === 'uk'
           ? "<p class='modern-font'>транскрипція недоступна</p>"
-          : "<p class='modern-font'>Interpretation not available</p>");
+          : "<p class='modern-font'>Interpretation not available</p>"))
+        : null;
 
-      const romanisation = data.romanisation
+
+      const romanisation = (!isPictorialGraffiti && data.romanisation)
         ? data.romanisation
-        : (currentLang === 'uk'
-          ? "<p>транскрипція недоступна</p>"
-          : "<p>Romanisation not available</p>");
+        : (!isPictorialGraffiti
+          ? (currentLang === 'uk'
+            ? "<p>транскрипція недоступна</p>"
+            : "<p>Romanisation not available</p>")
+          : null);
 
-      const diplomatic = data.transcription
-        ? data.transcription
-        : (currentLang === 'uk'
+      const diplomatic = !isPictorialGraffiti
+        ? (data.transcription || (currentLang === 'uk'
           ? "<p class='modern-font'>транскрипція недоступна</p>"
-          : "<p class='modern-font'>Textual graffiti not available</p>");
+          : "<p class='modern-font'>Textual graffiti not available</p>"))
+        : null;
+
+
+      const translation = !isPictorialGraffiti
+        ? (currentLang === 'uk'
+          ? (data.translation_ukr || "<p>Переклад недоступний</p>")
+          : (data.translation_eng || "<p>Translation not available</p>"))
+        : null;
+
 
       const writing = data.writing_system
         ? (currentLang === 'uk' && data.writing_system.text_ukr
@@ -310,10 +340,6 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       const elevation = data.elevation !== null
         ? `${data.elevation}`
         : (currentLang === 'uk' ? "" : "");
-
-      const translation = currentLang === 'uk'
-        ? (data.translation_ukr || "<p>Переклад недоступний</p>")
-        : (data.translation_eng || "<p>Translation not available</p>");
 
       const comments = currentLang === 'uk'
         ? (data.comments_ukr || "<p>коментар недоступний</p>")
@@ -400,21 +426,21 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         : "";
 
       $('#inscription-title').html(fullTitle);
-      $('#inscription-interpretation').html(interpretation);
-      $('#inscription-romanisation').html(romanisation);
       $('#inscription-condition').html(conditions);
       $('#inscription-contributors').html(contributors);
       $('#inscription-alignment').html(alignment);
-      $('#inscription-translation').html(translation);
       $('#inscription-comment').html(comments);
-      $('#inscription-type').html(type);
+      $('#inscription-type').html(typeText);
       $('#edit-link').attr('href', editlink);
 
+      setOrRemoveDescription('#inscription-interpretation', interpretation);
+      setOrRemoveDescription('#inscription-romanisation', romanisation);
+      setOrRemoveDescription('#inscription-diplomatic', diplomatic);
+      setOrRemoveDescription('#inscription-translation', translation);
       setOrRemoveField('#inscription-alignment', alignment);
       setOrRemoveField('#inscription-language', language);
       setOrRemoveField('#inscription-genre', genre);
       setOrRemoveField('#inscription-tags', tags);
-      setOrRemoveField('#inscription-diplomatic', diplomatic);
       setOrRemoveField('#inscription-writing', writing);
       setOrRemoveField('#inscription-mentioned-persons', mentionedPersons);
       setOrRemoveField('#inscription-inscriber', inscriber);
@@ -458,7 +484,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
       }
 
       let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
-      modifiedData = modifiedData .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
+      modifiedData = modifiedData.replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));

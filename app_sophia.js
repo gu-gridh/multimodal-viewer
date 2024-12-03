@@ -229,7 +229,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     }
 
     //hide metadata descriptions when type is pictorial graffiti
-    function setOrRemoveDescription(selector, value) { 
+    function setOrRemoveDescription(selector, value) {
       if (!value) {
         const $description = $(selector).closest('.metadata-description');
         const $columnsContainer = $description.closest('.metadata-columns');
@@ -251,11 +251,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       ? metadata.documentation.map(doc => doc.text_ukr).join(' ')
       : metadata.documentation.map(doc => doc.observation).join(' ');
     const panelMedium = currentLang === 'uk'
-      ? metadata.medium.text_ukr
-      : metadata.medium.text;
+      ? metadata.medium?.text_ukr ?? 'Unknown'
+      : metadata.medium?.text ?? 'Unknown';
     const panelMaterial = currentLang === 'uk'
-      ? metadata.material.text_ukr
-      : metadata.material.text;
+      ? metadata.material?.text_ukr ?? 'Unknown'
+      : metadata.material?.text ?? 'Unknown';
+
 
     $('#panel-title').html(`${panelTitle} ${metadata.title ?? 'Unknown'}`);
     $('#panel-inscriptions').html(metadata.number_of_inscriptions ?? 'Unknown');

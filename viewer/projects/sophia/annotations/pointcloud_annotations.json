@@ -1,143 +1,143 @@
 {
-   "type":"Potree",
-   "version":1.7,
-   "settings":{
-      "pointBudget":8650000,
-      "fov":40,
-      "edlEnabled":true,
-      "edlRadius":1.2,
-      "edlStrength":0.2,
-      "background":"none",
-      "minNodeSize":0,
-      "showBoundingBoxes":false
+   "type": "Potree",
+   "version": 1.7,
+   "settings": {
+      "pointBudget": 8650000,
+      "fov": 40,
+      "edlEnabled": true,
+      "edlRadius": 1.2,
+      "edlStrength": 0.2,
+      "background": "none",
+      "minNodeSize": 0,
+      "showBoundingBoxes": false
    },
-   "view":{
-      "position":[
+   "view": {
+      "position": [
          -20.15712189439376,
          -13.894017008590126,
          1.4301934132884626
       ],
-      "target":[
+      "target": [
          -21.866454932651326,
          -16.355032264573232,
          1.5771099683106193
       ]
    },
-   "classification":{
-      "0":{
-         "visible":true,
-         "name":"never classified",
-         "color":[
+   "classification": {
+      "0": {
+         "visible": true,
+         "name": "never classified",
+         "color": [
             0.5,
             0.5,
             0.5,
             1
          ]
       },
-      "1":{
-         "visible":true,
-         "name":"unclassified",
-         "color":[
+      "1": {
+         "visible": true,
+         "name": "unclassified",
+         "color": [
             0.5,
             0.5,
             0.5,
             1
          ]
       },
-      "2":{
-         "visible":true,
-         "name":"ground",
-         "color":[
+      "2": {
+         "visible": true,
+         "name": "ground",
+         "color": [
             0.63,
             0.32,
             0.18,
             1
          ]
       },
-      "3":{
-         "visible":true,
-         "name":"low vegetation",
-         "color":[
+      "3": {
+         "visible": true,
+         "name": "low vegetation",
+         "color": [
             0,
             1,
             0,
             1
          ]
       },
-      "4":{
-         "visible":true,
-         "name":"medium vegetation",
-         "color":[
+      "4": {
+         "visible": true,
+         "name": "medium vegetation",
+         "color": [
             0,
             0.8,
             0,
             1
          ]
       },
-      "5":{
-         "visible":true,
-         "name":"high vegetation",
-         "color":[
+      "5": {
+         "visible": true,
+         "name": "high vegetation",
+         "color": [
             0,
             0.6,
             0,
             1
          ]
       },
-      "6":{
-         "visible":true,
-         "name":"building",
-         "color":[
+      "6": {
+         "visible": true,
+         "name": "building",
+         "color": [
             1,
             0.66,
             0,
             1
          ]
       },
-      "7":{
-         "visible":true,
-         "name":"low point(noise)",
-         "color":[
+      "7": {
+         "visible": true,
+         "name": "low point(noise)",
+         "color": [
             1,
             0,
             1,
             1
          ]
       },
-      "8":{
-         "visible":true,
-         "name":"key-point",
-         "color":[
+      "8": {
+         "visible": true,
+         "name": "key-point",
+         "color": [
             1,
             0,
             0,
             1
          ]
       },
-      "9":{
-         "visible":true,
-         "name":"water",
-         "color":[
+      "9": {
+         "visible": true,
+         "name": "water",
+         "color": [
             0,
             0,
             1,
             1
          ]
       },
-      "12":{
-         "visible":true,
-         "name":"overlap",
-         "color":[
+      "12": {
+         "visible": true,
+         "name": "overlap",
+         "color": [
             1,
             1,
             0,
             1
          ]
       },
-      "DEFAULT":{
-         "visible":true,
-         "name":"default",
-         "color":[
+      "DEFAULT": {
+         "visible": true,
+         "name": "default",
+         "color": [
             0.3,
             0.6,
             0.6,
@@ -145,572 +145,508 @@
          ]
       }
    },
-   "pointclouds":[
+   "pointclouds": [
       {
-         "name":"NameOfTomb",
-         "url":"https://data.dh.gu.se/saintsophia/pointcloud/cloud.js",
-         "position":[
+         "name": "NameOfTomb",
+         "url": "https://data.dh.gu.se/saintsophia/pointcloud/cloud.js",
+         "position": [
             -51.570283,
             -38.629849,
             -6.483666
          ],
-         "rotation":[
+         "rotation": [
             0,
             0,
             0,
             "XYZ"
          ],
-         "scale":[
+         "scale": [
             1,
             1,
             1
          ],
-         "material":{
-            "activeAttributeName":"rgba",
-            "ranges":[
+         "material": {
+            "activeAttributeName": "rgba",
+            "ranges": [
                {
-                  "name":"elevationRange",
-                  "value":[
+                  "name": "elevationRange",
+                  "value": [
                      -3.438366,
                      27.014934000000004
                   ]
                },
                {
-                  "name":"intensityRange",
-                  "value":[
+                  "name": "intensityRange",
+                  "value": [
                      "Infinity",
                      "-Infinity"
                   ]
                }
             ],
-            "size":1.17,
-            "minSize":2,
-            "pointSizeType":"ADAPTIVE",
-            "matcap":"matcap.jpg"
+            "size": 1.17,
+            "minSize": 2,
+            "pointSizeType": "ADAPTIVE",
+            "matcap": "matcap.jpg"
          }
       }
    ],
-   "measurements":[
-      
-   ],
-   "volumes":[
-      
-   ],
-   "cameraAnimations":[
-      
-   ],
-   "profiles":[
-      
-   ],
-   "annotations":[
+   "measurements": [],
+   "volumes": [],
+   "cameraAnimations": [],
+   "profiles": [],
+   "annotations": [
       {
-         "uuid":"F1AD58CF-3DA4-48EC-8F75-BD36719ABE6C",
-         "title":"120-01",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "F1AD58CF-3DA4-48EC-8F75-BD36719ABE6C",
+         "title": "120-01",
+         "description": "Annotation Description",
+         "position": [
             -13.856303022411353,
             -23.15954899217987,
             1.35625400039339
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"CE4A8299-82C5-482B-92E3-B0667D926EFB",
-         "title":"120-02",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "CE4A8299-82C5-482B-92E3-B0667D926EFB",
+         "title": "120-02",
+         "description": "Annotation Description",
+         "position": [
             -14.490242972438821,
             -22.94680899719858,
             1.3359539994873995
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"D3AFEA85-F0A2-4005-B282-06A8AB4586F7",
-         "title":"120-03",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "D3AFEA85-F0A2-4005-B282-06A8AB4586F7",
+         "title": "120-03",
+         "description": "Annotation Description",
+         "position": [
             -17.107402988174442,
             -20.67608898960495,
             1.288314027656555
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"217A5079-F95C-462B-A5E3-4FC3C76C5124",
-         "title":"120-04",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "217A5079-F95C-462B-A5E3-4FC3C76C5124",
+         "title": "120-04",
+         "description": "Annotation Description",
+         "position": [
             -17.20920299778271,
             -20.284648987125397,
             1.2857140134468077
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"6683819E-EFD6-4AC6-9B0F-20DD94B2E49E",
-         "title":"120-05",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "6683819E-EFD6-4AC6-9B0F-20DD94B2E49E",
+         "title": "120-05",
+         "description": "Annotation Description",
+         "position": [
             -17.449923000810628,
             -19.72738900153184,
             1.2085339995708457
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"22F9689D-75E1-4790-95B3-D88063DFB034",
-         "title":"120-06",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "22F9689D-75E1-4790-95B3-D88063DFB034",
+         "title": "120-06",
+         "description": "Annotation Description",
+         "position": [
             -18.01524300004769,
             -19.466908995422365,
             1.3006139825477598
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"510B4C76-FF78-48F2-B73F-B932743413C0",
-         "title":"120-07",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "510B4C76-FF78-48F2-B73F-B932743413C0",
+         "title": "120-07",
+         "description": "Annotation Description",
+         "position": [
             -18.453383003290185,
             -19.383269002789497,
             1.2633340033378593
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"762F148B-0A05-437D-ADC9-85393ED50E3D",
-         "title":"120-08",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "762F148B-0A05-437D-ADC9-85393ED50E3D",
+         "title": "120-08",
+         "description": "Annotation Description",
+         "position": [
             -19.109422999594692,
             -19.515489002002717,
             1.2983339997615806
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"1393445C-8A9A-48F0-8E49-74A9DACCF51F",
-         "title":"120-09",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "1393445C-8A9A-48F0-8E49-74A9DACCF51F",
+         "title": "120-09",
+         "description": "Annotation Description",
+         "position": [
             -20.57024299904633,
             -17.96078900400543,
             1.3655540013589853
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"DC211F89-523A-491A-8AD4-CDBAD527F5C6",
-         "title":"120-10",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "DC211F89-523A-491A-8AD4-CDBAD527F5C6",
+         "title": "120-10",
+         "description": "Annotation Description",
+         "position": [
             -20.503143010585788,
             -17.373148988365173,
             1.37765399756813
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"961F3FE1-DD7B-4371-BEC6-ADDA2EED49B8",
-         "title":"120-11",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "961F3FE1-DD7B-4371-BEC6-ADDA2EED49B8",
+         "title": "120-11",
+         "description": "Annotation Description",
+         "position": [
             -20.626343009918216,
             -16.95980900259876,
             1.4121540004291528
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"40E33E5F-2434-4922-94E5-9F5E3B9A7F2F",
-         "title":"120-12",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "40E33E5F-2434-4922-94E5-9F5E3B9A7F2F",
+         "title": "120-12",
+         "description": "Annotation Description",
+         "position": [
             -20.868342993705753,
             -16.383368997735023,
             1.3341540006824726
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"51B600B0-B0E7-457D-BC7E-28A34C2BEEFE",
-         "title":"120-13",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "51B600B0-B0E7-457D-BC7E-28A34C2BEEFE",
+         "title": "120-13",
+         "description": "Annotation Description",
+         "position": [
             -21.836003001120574,
             -16.02714900650883,
             1.3524539993979925
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"421CC067-D043-4441-9C9C-D13927748DE1",
-         "title":"120-14",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "421CC067-D043-4441-9C9C-D13927748DE1",
+         "title": "120-14",
+         "description": "Annotation Description",
+         "position": [
             -22.52056299957085,
             -16.14906899527931,
             1.3913539985098833
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"45D7AB9B-98AA-4EBD-890F-3B808E1C0176",
-         "title":"120-15",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "45D7AB9B-98AA-4EBD-890F-3B808E1C0176",
+         "title": "120-15",
+         "description": "Annotation Description",
+         "position": [
             -19.401243003361706,
             -13.612988999833107,
             1.3634539993383878
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"FC13250D-666A-4DA1-89A6-D48ED90E5699",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-16 target=_parent>120-16</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "FC13250D-666A-4DA1-89A6-D48ED90E5699",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-16 target=_parent>120-16</a>",
+         "description": "Annotation Description",
+         "position": [
             -19.33954300200272,
             -14.184728999642374,
             1.3734540009775156
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"E13E005F-3A77-421F-BD80-1B0E25FFF790",
-         "title":"120-17",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "E13E005F-3A77-421F-BD80-1B0E25FFF790",
+         "title": "120-17",
+         "description": "Annotation Description",
+         "position": [
             -19.213422999877814,
             -14.852268996900555,
             1.3701539972701067
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"F1B4161A-75F9-4C43-B483-3AA2B39F381B",
-         "title":"120-18",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "F1B4161A-75F9-4C43-B483-3AA2B39F381B",
+         "title": "120-18",
+         "description": "Annotation Description",
+         "position": [
             -18.50048300337363,
             -15.00438900514984,
             1.3747540006318086
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"2F28A814-F3C0-4EEC-90AD-90F0B3881188",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-19a target=_parent>120-19a</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "2F28A814-F3C0-4EEC-90AD-90F0B3881188",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-19a target=_parent>120-19a</a>",
+         "description": "Annotation Description",
+         "position": [
             -17.82504299904633,
             -15.160688998545645,
             1.4211539963164324
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"2F28A814-F3C0-4EEC-90AD-90F0B3881188",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-19b target=_parent>120-19b</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "2F28A814-F3C0-4EEC-90AD-90F0B3881188",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-19b target=_parent>120-19b</a>",
+         "description": "Annotation Description",
+         "position": [
             -16.971242940681464,
             -15.976508957466123,
             0.058134005817413126
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"2F28A814-F3C0-4EEC-90AD-90F0B3881188",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-19c target=_parent>120-19c</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "2F28A814-F3C0-4EEC-90AD-90F0B3881188",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-19c target=_parent>120-19c</a>",
+         "description": "Annotation Description",
+         "position": [
             -16.10686300152588,
             -16.841408995112417,
             1.3941140006675719
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"616D5BC8-2E86-43EE-90E3-4A599CC0CC7F",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-20 target=_parent>120-20</a>",
-         "description":"Annotation Description",
-         "annoVisibleDistance":1,
-         "position":[
+         "uuid": "616D5BC8-2E86-43EE-90E3-4A599CC0CC7F",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-20 target=_parent>120-20</a>",
+         "description": "Annotation Description",
+         "annoVisibleDistance": 1,
+         "position": [
             -15.909603000435112,
             -17.500548999189377,
             1.264333990463256
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"61732FFA-A6F6-415F-93DC-2DBDEA2BD517",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-21 target=_parent>120-21</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "61732FFA-A6F6-415F-93DC-2DBDEA2BD517",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-21 target=_parent>120-21</a>",
+         "description": "Annotation Description",
+         "position": [
             -15.777402994039534,
             -18.146789000965594,
             1.286134001859664
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"D5207F36-DF4B-485F-9BF9-B6FB8E2E3CAC",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-22 target=_parent>120-22</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "D5207F36-DF4B-485F-9BF9-B6FB8E2E3CAC",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-22 target=_parent>120-22</a>",
+         "description": "Annotation Description",
+         "position": [
             -15.071862994277964,
             -18.290008985218044,
             1.2939340146865836
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"93730EC2-514B-4561-9DB9-F8941B4ED06B",
-         "title":"120-23",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "93730EC2-514B-4561-9DB9-F8941B4ED06B",
+         "title": "120-23",
+         "description": "Annotation Description",
+         "position": [
             -14.58694298512269,
             -18.30242902775192,
             1.2868140171661375
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"E77F2BB8-681F-4D9A-8F80-31F490A7E884",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-24 target=_parent>120-24</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "E77F2BB8-681F-4D9A-8F80-31F490A7E884",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-24 target=_parent>120-24</a>",
+         "description": "Annotation Description",
+         "position": [
             -12.420883005888939,
             -20.435449006628037,
             1.191034001358985
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"8B346FE5-18A4-4780-BDF4-E658DD2F29CD",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-25 target=_parent>120-25</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "8B346FE5-18A4-4780-BDF4-E658DD2F29CD",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-25 target=_parent>120-25</a>",
+         "description": "Annotation Description",
+         "position": [
             -12.420482999117851,
             -20.944468999989567,
             1.3403539994635576
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
-         "uuid":"C71817AB-ED2B-4871-802B-A5214AF83EB9",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=120-26 target=_parent>120-26</a>",
-         "description":"Annotation Description",
-         "position":[
+         "uuid": "C71817AB-ED2B-4871-802B-A5214AF83EB9",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=120-26 target=_parent>120-26</a>",
+         "description": "Annotation Description",
+         "position": [
             -12.25836300040531,
             -21.6072289935627,
             1.3076540000640744
          ],
-         "offset":[
+         "offset": [
             0,
             0,
             0
          ],
-         "children":[
-            
-         ]
+         "children": []
       },
       {
          "uuid": "3F8BAF7B-6BC2-44F2-A223-FCD34886E627",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=115-01 target=_parent>115-01</a>",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=115-01 target=_parent>115-01</a>",
          "description": "Annotation Description",
          "position": [
             -13.915302978065498,
@@ -1190,7 +1126,7 @@
       },
       {
          "uuid": "4B844004-199C-47AA-B92A-F89BB93BD5DD",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=115-25 target=_parent>115-25</a>",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=115-25 target=_parent>115-25</a>",
          "description": "Annotation description",
          "position": [
             -10.35246300295639,
@@ -1238,7 +1174,7 @@
       },
       {
          "uuid": "D0CA95AE-0E0E-474A-96C3-E9800047A72E",
-         "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=115-27 target=_parent>115-27</a>",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=115-27 target=_parent>115-27</a>",
          "description": "Annotation Description",
          "position": [
             -11.541243009441374,
@@ -1252,2168 +1188,2158 @@
          ],
          "children": []
       },
-         {
-            "uuid": "F258F18E-375D-401B-B303-80B47F4F8AAF",
-            "title": "118-01",
-            "description": "Annotation Description",
-            "position": [
-               -11.200703004315372,
-               -21.597328989891054,
-               1.2948139737739561
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "4D679125-815F-4FC2-A6FB-55908D82430D",
-            "title":"<a href=https://saintsophia.dh.gu.se/viewer/?q=118-02 target=_parent>118-02</a>",
-            "description": "Annotation Description",
-            "position": [
-               -10.730863000905991,
-               -21.33582898893738,
-               1.316214008201599
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "8F6E5D1C-FD4A-400D-B233-8578D97CBEED",
-            "title": "118-04",
-            "description": "Annotation Description",
-            "position": [
-               -6.087463014591222,
-               -25.215369005340577,
-               0.1627740000298017
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "8AAE5EB7-2ABE-4C3F-86EF-61C60F7A9268",
-            "title": "118-03",
-            "description": "Annotation Description",
-            "position": [
-               -2.670883015449526,
-               -21.714329003480913,
-               0.4815339906539915
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "842AFD68-FBAF-4B53-AD79-7E2BCC857AEA",
-            "title": "113-1a",
-            "description": "Annotation Description",
-            "position": [
-               -20.560423000524523,
-               -10.325868994373323,
-               1.3808539995827669
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "183EA183-70B6-4B0A-8875-3155F871A8A2",
-            "title": "113-2a",
-            "description": "Annotation Description",
-            "position": [
-               -20.706743000000003,
-               -9.632928999284744,
-               1.3955540025510782
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "CC768C12-4DB7-4715-8723-D9593B628F72",
-            "title": "113-3a",
-            "description": "Annotation Description",
-            "position": [
-               -19.118622998867515,
-               -8.146329006675721,
-               1.3693539986290926
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "2DDBFB43-54D8-4E34-A218-5B95A405F5F0",
-            "title": "113-4a",
-            "description": "Annotation Description",
-            "position": [
-               -18.430182997997292,
-               -8.300228996697903,
-               1.3399540001430505
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "8ADE5FC6-1AA7-4FE2-B9C7-BA947D056801",
-            "title": "113-5a",
-            "description": "Annotation Description",
-            "position": [
-               -17.869143000500685,
-               -8.319229001674891,
-               1.3318540008642668
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "5305E063-4742-45F0-8D55-14FC7479F328",
-            "title": "113-6a",
-            "description": "Annotation Description",
-            "position": [
-               -17.18990299890328,
-               -8.166429004196168,
-               1.298934009918212
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "B18FE05A-786E-4FB7-916B-B56B483E8407",
-            "title": "113-7a",
-            "description": "Annotation Description",
-            "position": [
-               -17.06110299418259,
-               -7.516208983406067,
-               1.280513985027313
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "E51B054D-C78B-42A0-8C5A-E149EC944C02",
-            "title": "113-8a",
-            "description": "Annotation Description",
-            "position": [
-               -17.18890299687672,
-               -6.303209002861024,
-               1.389854002920627
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "23A9CF4E-D893-4CE5-9345-C98A2AED4710",
-            "title": "113-9a",
-            "description": "Annotation Description",
-            "position": [
-               -15.609482999591712,
-               -4.853909000905993,
-               1.356613976825714
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "89AA5B70-6FF5-41F2-A90F-4CC7B04D18E2",
-            "title": "113-10a",
-            "description": "Annotation Description",
-            "position": [
-               -14.931942998831758,
-               -4.989509001525882,
-               1.338954001841783
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F225A527-4D3D-4E2A-9506-E9E8BF4D6BED",
-            "title": "113-11a",
-            "description": "Annotation Description",
-            "position": [
-               -14.407302999105937,
-               -4.972409002634528,
-               1.3610539996900552
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "FD207058-8824-4CC5-BD73-0D7A8A3826E9",
-            "title": "113-12a",
-            "description": "Annotation Description",
-            "position": [
-               -13.725962999213223,
-               -4.871408999117854,
-               1.3390539998092645
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "D708486D-CCF5-428B-8887-1BB4181A4388",
-            "title": "113-13a",
-            "description": "Annotation Description",
-            "position": [
-               -13.589262994874005,
-               -4.207768993371964,
-               0.8579139988317488
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "48FECA8D-85EA-4D9A-BE12-0A4122A74C69",
-            "title": "113-14a",
-            "description": "Annotation Description",
-            "position": [
-               -13.588482899291996,
-               -3.7097089441146878,
-               0.8581140022172926
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "6CFB410E-3ACF-4085-BAB5-0509BD6BAAA8",
-            "title": "113-15a",
-            "description": "Annotation Description",
-            "position": [
-               -13.696662994969373,
-               -3.032688995279308,
-               0.8880140017166136
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "DC9D1DBF-2E50-48E1-A45A-E0301D25DB56",
-            "title": "113-16a",
-            "description": "Annotation Description",
-            "position": [
-               -8.50684300152588,
-               1.1421910061750467,
-               0.8201139997138975
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "0AFA477C-DC38-4739-8AB0-30B26DC6A10B",
-            "title": "113-17a",
-            "description": "Annotation Description",
-            "position": [
-               -8.006682995303152,
-               1.2169109996885723,
-               0.8850139956369398
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C0A88BA4-768B-44DF-AC91-4ADBEF91D040",
-            "title": "113-18a",
-            "description": "Annotation Description",
-            "position": [
-               -7.289942999666209,
-               1.25211100042916,
-               0.7778139989271162
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "D10266C3-9BC6-4CC2-827B-B3DEAA2A149A",
-            "title": "113-19a",
-            "description": "Annotation Description",
-            "position": [
-               -7.127722999260904,
-               1.9725309876499253,
-               0.807514002491474
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "E4E88B09-DDBC-4465-B77F-1CACFB2AE996",
-            "title": "113-20a",
-            "description": "Annotation Description",
-            "position": [
-               -7.00532299856949,
-               2.58947100753403,
-               0.8315139989747999
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C716676A-4A9D-414B-A54D-EB46C406F229",
-            "title": "113-21a",
-            "description": "Annotation Description",
-            "position": [
-               -7.030223002837182,
-               3.396451003218651,
-               0.8308140020265578
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "EC4FD653-E594-460D-A9AD-06C6DCD9AE44",
-            "title": "113-22a",
-            "description": "Annotation Description",
-            "position": [
-               -6.163923030899049,
-               4.258650980258942,
-               0.9029140006198881
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "627FEA23-BD11-487D-AD39-4709DBCFE2AE",
-            "title": "113-23a",
-            "description": "Annotation Description",
-            "position": [
-               -5.223702992728235,
-               4.30839099508858,
-               0.8298139999999998
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "9180995F-8313-4812-BBBB-E55AE7C2100E",
-            "title": "113-24a",
-            "description": "Annotation Description",
-            "position": [
-               -4.621462998164176,
-               4.694031003695493,
-               0.8691139947071074
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F46E0431-A770-41DA-9C35-EC490B038D72",
-            "title": "113-26a",
-            "description": "Annotation Description",
-            "position": [
-               -4.330043001168249,
-               4.6461309975204514,
-               0.8602139930620192
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "36768FF9-EC2D-4DCD-BFE6-80DD100856F1",
-            "title": "113-25a",
-            "description": "Annotation Description",
-            "position": [
-               -4.447243003242491,
-               4.645030993801122,
-               0.8626140038862227
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "48A24F84-3B22-4B46-9F87-50AA1651CC74",
-            "title": "113-27a",
-            "description": "Annotation Description",
-            "position": [
-               -2.7487430148296426,
-               5.849911004601481,
-               0.49809399881982763
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "3957FF93-7B2B-4C46-80A6-CBBC7B0E6B7E",
-            "title": "113-01b",
-            "description": "Annotation Description",
-            "position": [
-               -1.0387229991178515,
-               3.863370990797044,
-               0.17127399862909254
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "8C9A509F-AAEA-443F-AC42-0951267A12B2",
-            "title": "113-05b",
-            "description": "Annotation Description",
-            "position": [
-               -2.5242230029087125,
-               1.687630992918976,
-               0.4612940017285343
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "4B38D9F6-2E4F-468D-A784-88333D26B36C",
-            "title": "113-02b",
-            "description": "Annotation Description",
-            "position": [
-               -2.199502993562703,
-               2.4901909995350806,
-               0.40949399985024293
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "FF2E12AF-055C-4DB5-BA09-63489ADB8223",
-            "title": "113-04b",
-            "description": "Annotation Description",
-            "position": [
-               -2.1322030017166185,
-               2.1974710028848676,
-               0.42557398946189817
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "4EEE9A74-4F2C-482D-B4CF-A361813A899B",
-            "title": "113-03b",
-            "description": "Annotation Description",
-            "position": [
-               -2.1865030119209337,
-               2.3832710039100675,
-               0.4182940002682205
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "05982992-6F50-41F7-9625-946876223B46",
-            "title": "113-06b",
-            "description": "Annotation Description",
-            "position": [
-               -2.6790230007152616,
-               0.7748710058651014,
-               0.3517740067949289
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "1882DD79-8D90-4405-8572-A682EB3CF432",
-            "title": "113-07b",
-            "description": "Annotation Description",
-            "position": [
-               -3.5304830006318113,
-               -0.044889001335143064,
-               0.38327400357627806
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "53AC26BC-E3B8-4AB9-9C95-1923B99D95D2",
-            "title": "113-08b",
-            "description": "Annotation Description",
-            "position": [
-               -4.3276630166893,
-               -0.0021890086784353002,
-               0.37427400023841795
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "8EC5A3D3-29A1-4490-998E-A713B1B2A3E7",
-            "title": "113-09b",
-            "description": "Annotation Description",
-            "position": [
-               -4.9672830070571905,
-               -0.11568899282359979,
-               0.40277399094009336
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C909AE72-2182-4481-8FB0-6B3488933C1E",
-            "title": "113-10b",
-            "description": "Annotation Description",
-            "position": [
-               -5.62022300303984,
-               -0.19578900017881296,
-               0.33537399740123686
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "4D9075AB-5B37-4EC9-B0D9-B7B6D14D145E",
-            "title": "113-11b",
-            "description": "Annotation Description",
-            "position": [
-               -5.8480430037670175,
-               -0.8994689832153355,
-               0.949113992918968
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "E79F46C8-04F3-483B-98D2-DA533842EF8A",
-            "title": "113-12b",
-            "description": "Annotation Description",
-            "position": [
-               -5.828142994730953,
-               -1.3983690018477475,
-               0.9795139859809874
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C6DA5C62-D1C8-420E-BFAD-E00906D72046",
-            "title": "113-13b",
-            "description": "Annotation Description",
-            "position": [
-               -5.674342998950962,
-               -2.0725089990701733,
-               2.036894003337859
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "346B9300-BE4A-43E5-A314-44C9622A7444",
-            "title": "113-14b",
-            "description": "Annotation Description",
-            "position": [
-               -10.290643003361708,
-               -6.409308995851518,
-               2.0044939987721433
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C6377F29-B38B-47E3-B4F4-33DE4BDEED55",
-            "title": "113-15b",
-            "description": "Annotation Description",
-            "position": [
-               -10.996103012874599,
-               -6.243889000882149,
-               0.7804139982357023
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "9E02A2CF-E53F-4792-BDBC-D11C0D67E357",
-            "title": "113-16b",
-            "description": "Annotation Description",
-            "position": [
-               -11.52314298617172,
-               -6.212888997663498,
-               0.7649140003516672
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "EDCE788B-1404-4208-94AA-05F5A6D10FA6",
-            "title": "113-17b",
-            "description": "Annotation Description",
-            "position": [
-               -12.165622998664858,
-               -6.328068980163575,
-               1.3634139727249144
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "B2C0DF8A-9BD3-4403-81D8-5E7D54450CEB",
-            "title": "113-18b",
-            "description": "Annotation Description",
-            "position": [
-               -12.355283013017655,
-               -6.989768990463258,
-               1.3845540026106828
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "18895B7A-FC06-4205-B0B5-C31F19EBDED2",
-            "title": "113-19b",
-            "description": "Annotation Description",
-            "position": [
-               -12.375282993944168,
-               -7.5298089752044675,
-               1.3705539965906137
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "B2ACF531-5FAB-452B-BDF6-9E601D741B86",
-            "title": "113-20b",
-            "description": "Annotation Description",
-            "position": [
-               -12.261982998283386,
-               -8.230349009536745,
-               1.4036539981045717
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "21DB2B6E-C556-4003-B2FD-4E0C0AD1FC32",
-            "title": "113-21b",
-            "description": "Annotation Description",
-            "position": [
-               -13.769502983596809,
-               -9.754728997270107,
-               1.3479140232696531
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "357940EE-CBD6-45EE-858E-BD1D75C30D85",
-            "title": "113-22b",
-            "description": "Annotation Description",
-            "position": [
-               -14.446682972534184,
-               -9.589928986648559,
-               1.2201139758720396
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "55F59473-1684-42B4-BDA9-5F2FF3F9550E",
-            "title": "113-24b",
-            "description": "Annotation Description",
-            "position": [
-               -15.703363040626527,
-               -9.703028993824958,
-               1.385813994277954
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "55FE1FC7-8ABF-4DD2-A733-156C76DF7EBE",
-            "title": "113-23b",
-            "description": "Annotation Description",
-            "position": [
-               -14.967982990367894,
-               -9.599628986934661,
-               1.3750139902725218
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "A5E50FDF-2DBA-443E-AC9E-5DC47D58DCA9",
-            "title": "113-25b",
-            "description": "Annotation Description",
-            "position": [
-               -15.850443041580206,
-               -10.382889027847291,
-               1.4077139924659727
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "2C9CF213-9241-446E-984C-16ACAC46B458",
-            "title": "113-26b",
-            "description": "Annotation Description",
-            "position": [
-               -15.721743023651129,
-               -11.567988987220765,
-               1.3998139928474425
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "8A83DEF1-FE4F-4B07-9587-49160601C6FC",
-            "title": "113-27b",
-            "description": "Annotation Description",
-            "position": [
-               -17.26474300648499,
-               -13.008949030326843,
-               1.370313985218048
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "67CAE4F1-4A4A-4125-9AF1-CFA1C20805DB",
-            "title": "114-01",
-            "description": "Annotation Description",
-            "position": [
-               -16.85498299570847,
-               -14.469848994301795,
-               0.2463739958515161
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "B04BC8B7-E7E8-47C3-8E1C-E4A824283A51",
-            "title": "114-02",
-            "description": "Annotation Description",
-            "position": [
-               -17.10780299494553,
-               -13.694008996614457,
-               1.2980140279426573
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "55820138-4644-4490-970C-D0F8735F638B",
-            "title": "114-05",
-            "description": "Annotation Description",
-            "position": [
-               -13.786862998205905,
-               -11.627048999910592,
-               1.409353997735023
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "91CE3805-ACA6-4DDD-A51C-990E2933DD40",
-            "title": "114-03",
-            "description": "Annotation Description",
-            "position": [
-               -15.006643000458965,
-               -11.733188982261659,
-               1.5855539852657312
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "257B0B1C-A9F7-4A92-8444-5DEB00613C9C",
-            "title": "114-04",
-            "description": "Annotation Description",
-            "position": [
-               -14.451122999475487,
-               -11.747868996137619,
-               1.2411340000715247
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "FAD6A13C-CF74-4C3A-8F14-2871F42A8FB0",
-            "title": "114-06",
-            "description": "Annotation Description",
-            "position": [
-               -13.632063004124646,
-               -10.935608996685982,
-               1.413454000083446
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "BBF37E2F-0AE5-4B30-8F81-1D8DD5ED0B18",
-            "title": "114-07",
-            "description": "Annotation Description",
-            "position": [
-               -13.619262996066098,
-               -10.417068999636413,
-               1.3180540000923866
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "6D560761-685D-437C-A608-4CE40A4E23FA",
-            "title": "114-08",
-            "description": "Annotation Description",
-            "position": [
-               -11.527643017642973,
-               -8.393348997138979,
-               1.2705139945640562
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "3CC83A90-7199-4E1B-AFBA-F6A782FB3542",
-            "title": "114-10",
-            "description": "Annotation Description",
-            "position": [
-               -10.333043005841262,
-               -8.223028993729592,
-               1.3572539986946577
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "FF80949E-F3F6-4ACA-A94A-C6B164343084",
-            "title": "114-12",
-            "description": "Annotation Description",
-            "position": [
-               -10.166822997329717,
-               -7.042669006771089,
-               1.5749540144481653
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "5231C367-D707-4EA7-80D8-4B9B730A4DCE",
-            "title": "114-09",
-            "description": "Annotation Description",
-            "position": [
-               -10.995082999403948,
-               -8.376028999948964,
-               1.321853999225139
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "9E16FF33-2232-4886-BD47-E8FFE239586B",
-            "title": "114-11",
-            "description": "Annotation Description",
-            "position": [
-               -10.200622999517208,
-               -7.511809028133392,
-               1.3111540001721078
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "DF4023FD-D0B4-45DC-8DA5-1825FAF471DD",
-            "title": "114-13",
-            "description": "Annotation Description",
-            "position": [
-               -4.96940300934601,
-               -2.2314489997615823,
-               1.6116539949455255
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "601B211A-2A09-4EE7-AD44-55711328DA3C",
-            "title": "114-14",
-            "description": "Annotation Description",
-            "position": [
-               -3.6868629578475947,
-               -1.3297689954462086,
-               1.0385140012397764
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "656193D3-F0E3-4908-AA6F-5D83CC477E83",
-            "title": "114-15",
-            "description": "Annotation Description",
-            "position": [
-               -3.510482997353556,
-               -0.8099290024676336,
-               0.4444739964714044
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "CF765D59-2E80-4A27-8D13-42E3F6A3F6A3",
-            "title": "114-16",
-            "description": "Annotation Description",
-            "position": [
-               -2.009302992561345,
-               0.638550996852878,
-               0.37357400329017576
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "0628DD39-9D4F-4103-9772-70CCB3224079",
-            "title": "114-17",
-            "description": "Annotation Description",
-            "position": [
-               -1.6768630053405786,
-               0.765271007271771,
-               0.3624740091075891
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "19A97B12-BC2C-48CE-A21D-4ECDEC29B73D",
-            "title": "114-18",
-            "description": "Annotation Description",
-            "position": [
-               -0.1837630070095031,
-               1.7376310048399048,
-               0.1392740008344644
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "2761E3D7-8066-478C-8798-4B8AE0B4B3BD",
-            "title": "114-19",
-            "description": "Annotation Description",
-            "position": [
-               1.6954569969482378,
-               -0.2624890004947176,
-               1.729873995589256
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "578508B7-DFB2-434C-A018-1DE0059A1D63",
-            "title": "114-37",
-            "description": "Annotation Description",
-            "position": [
-               0.7039970038862151,
-               -1.590189004124646,
-               1.5120539927759165
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "0C2E4B88-5B8F-417C-A7CD-5CFE8B72392C",
-            "title": "114-21",
-            "description": "Annotation Description",
-            "position": [
-               -0.289, 
-               -2.672, 
-               -0.221
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F9633C44-7963-42D5-A1A2-FCFD14A3036F",
-            "title": "114-20",
-            "description": "Annotation Description",
-            "position": [
-               -0.2874830006198863,
-               -3.3410290066757184,
-               1.1940139959945677
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "0DB6F81C-A1DE-4C7B-9C29-595C284AED8F",
-            "title": "114-22",
-            "description": "Annotation Description",
-            "position": [
-               -1.638, 
-               -3.407, 
-               -0.102
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C44CA569-D855-4E79-9394-866DB11C9C0A",
-            "title": "114-23",
-            "description": "Annotation Description",
-            "position": [
-               -2.258502993920331,
-               -3.565909000616905,
-               0.19837400288486418
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F49A195A-F124-4ED1-B87C-47F5B011AF69",
-            "title": "114-24",
-            "description": "Annotation Description",
-            "position": [
-               -3.3721830106334707,
-               -5.910969001740462,
-               1.1207340034332267
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "E56BB34F-C2CF-4F2F-98E4-E9CFE4234DC3",
-            "title": "114-25",
-            "description": "Annotation Description",
-            "position": [
-               -3.8213029949216804,
-               -6.874129000035765,
-               0.22097399802112516
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "FD575AF6-108D-428E-BCB3-CAD1180B8DDA",
-            "title": "114-26",
-            "description": "Annotation Description",
-            "position": [
-               -5.384603000661613,
-               -8.265429003659726,
-               0.23117400677108702
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "020585C6-FB4C-4C75-ACFA-6128AD08C031",
-            "title": "114-27",
-            "description": "Annotation Description",
-            "position": [
-               -6.154962994921689,
-               -8.213929003600121,
-               0.17887400061988767
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F6B66962-5BD7-4FBB-9EE5-65DE5AB5FF22",
-            "title": "114-28",
-            "description": "Annotation Description",
-            "position": [
-               -8.125983000329313,
-               -9.617228986839294,
-               1.4957539999761575
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "06AB4708-931F-4B0B-B358-B89D5B294148",
-            "title": "114-29",
-            "description": "Annotation Description",
-            "position": [
-               -8.810142994802476,
-               -9.754629003027915,
-               1.3155539996826047
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "50FE5316-9718-41FD-B000-0DBF073EEE7E",
-            "title": "114-30",
-            "description": "Annotation Description",
-            "position": [
-               -8.950943001490117,
-               -10.420968998599292,
-               1.3062540001139933
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "88038ED8-1F41-4565-99F5-4B650AC27EA9",
-            "title": "114-31",
-            "description": "Annotation Description",
-            "position": [
-               -10.852583001192087,
-               -12.681628995946884,
-               0.24607400567436155
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "B645D0D3-D3A1-416F-8209-E9C32F6A0C9E",
-            "title": "114-33",
-            "description": "Annotation Description",
-            "position": [
-               -12.235163002562999,
-               -13.032048993300435,
-               1.3937540018835062
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "9C481A76-8F15-4E99-B11B-ED71309599D9",
-            "title": "114-32",
-            "description": "Annotation Description",
-            "position": [
-               -11.570823007319447,
-               -12.92024899322891,
-               1.38665400090599
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C81F0B61-56F0-47A6-B1FE-445A8A8334DE",
-            "title": "114-34",
-            "description": "Annotation Description",
-            "position": [
-               -12.397482997210503,
-               -13.711488998283386,
-               1.3991539964356416
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "865BD72F-804C-4167-AF94-617ACD11A1CC",
-            "title": "114-35",
-            "description": "Annotation Description",
-            "position": [
-               -13.460043001740459,
-               -15.968348994635583,
-               1.4430540019550318
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F105B01D-2553-41DE-8202-556F7148EC17",
-            "title": "114-36",
-            "description": "Annotation Description",
-            "position": [
-               -15.298363000670562,
-               -15.96584899701977,
-               0.8665139953985213
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "4DA89B13-1A71-44BE-B679-E1D0E5A366BC",
-            "title": "112-01",
-            "description": "Annotation Description",
-            "position": [
-               -26.68312299929965,
-               -4.578489006532671,
-               1.3224540000685447
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "A6F52F11-D636-48DA-8986-41DC885AE396",
-            "title": "112-02",
-            "description": "Annotation Description",
-            "position": [
-               -26.775442999237065,
-               -3.9962489928951257,
-               1.261934009441375
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "F5D50FEB-FC0D-4DF4-A03B-0522A38ECE28",
-            "title": "112-03",
-            "description": "Annotation Description",
-            "position": [
-               -24.683123008964543,
-               -2.0328090013172684,
-               1.2112139891281126
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "B5FFF92A-4FC1-4483-98A4-D71D311800A5",
-            "title": "112-04",
-            "description": "Annotation Description",
-            "position": [
-               -24.164463002503396,
-               -2.0239090033974705,
-               1.1932339938964835
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "24D7284F-BDE7-4923-A6AD-7E0BDDCCE104",
-            "title": "112-05",
-            "description": "Annotation Description",
-            "position": [
-               -23.49442299272824,
-               -1.9128089928236065,
-               2.02739399898672
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "DC3D5583-D7FF-4421-9189-F0AB8E3C0777",
-            "title": "112-06",
-            "description": "Annotation Description",
-            "position": [
-               -23.322902998807912,
-               -1.2439690033617055,
-               1.191134003051757
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "30606229-69C4-4211-A341-68AFC9EDDCF9",
-            "title": "112-07",
-            "description": "Annotation Description",
-            "position": [
-               -23.341203003111367,
-               -0.7130289938488019,
-               1.1717340024795524
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "703FCF78-B7BA-4A72-A6F4-49B7398DD12E",
-            "title": "112-08",
-            "description": "Annotation Description",
-            "position": [
-               -21.16518300414849,
-               1.3254910095844323,
-               1.1693140100135802
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "338D7A39-28CC-40D4-836F-EE3D4CB9BEC6",
-            "title": "112-10",
-            "description": "Annotation Description",
-            "position": [
-               -19.937983006747253,
-               1.4482109969959325,
-               1.0940339984979621
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "C2CE6B0A-610A-47A0-B0AF-127512F85103",
-            "title": "112-09",
-            "description": "Annotation Description",
-            "position": [
-               -20.628522998462202,
-               1.3243110007152623,
-               1.1480340036239616
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "FF238F04-9C53-4946-8F5C-144162BC74AA",
-            "title": "112-40",
-            "description": "Annotation Description",
-            "position": [
-               -19.262242989891057,
-               -7.470969000047685,
-               1.2633340033378593
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "E5FDC020-1B9A-4CDA-B98D-E78CC68E7AFA",
-            "title": "112-38",
-            "description": "Annotation Description",
-            "position": [
-               -19.08512300548363,
-               -6.273889000211597,
-               2.0165940024318685
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "D66982F7-5582-4DA9-A457-2F9787E29C4D",
-            "title": "112-36",
-            "description": "Annotation Description",
-            "position": [
-               -17.868643006937987,
-               -6.148989003767014,
-               1.378053996888637
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "19E1253A-DCB0-48E5-9EEE-E507EEAEB40E",
-            "title": "112-39",
-            "description": "Annotation Description",
-            "position": [
-               -19.263743000381474,
-               -6.951348999547008,
-               1.3338539993294471
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "515ED3A6-089F-45A4-8DB8-FA25DA99B7FC",
-            "title": "112-37",
-            "description": "Annotation Description",
-            "position": [
-               -18.401782994087228,
-               -6.149789002408028,
-               1.4524539971628183
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "CE29C21E-8681-4026-926A-6851EF535BE9",
-            "title": "112-35",
-            "description": "Annotation Description",
-            "position": [
-               -15.767303001883505,
-               -4.184649000010104,
-               1.296234008916854
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "390A6758-44AD-4767-B878-0532B39587D2",
-            "title": "112-33",
-            "description": "Annotation Description",
-            "position": [
-               -15.58488299853969,
-               -2.978669000129635,
-               1.2692339989032737
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "82DC3155-6B24-4711-810D-9370CD855F29",
-            "title": "112-34",
-            "description": "Annotation Description",
-            "position": [
-               -15.759303000572203,
-               -3.6606289927520734,
-               1.2524339976396552
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "4604DCD9-79EC-47E8-B8E7-062B34CDB600",
-            "title": "112-32",
-            "description": "Annotation Description",
-            "position": [
-               -14.867642998164186,
-               -2.8840690015735575,
-               1.2360340031471244
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "13A08786-604B-463D-9DBE-81ABA373335C",
-            "title": "112-31",
-            "description": "Annotation Description",
-            "position": [
-               -14.401302999985106,
-               -2.8888690008702227,
-               1.2470339956369392
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "5FCBD437-7D2B-4194-99A0-FEA80601FAA8",
-            "title": "112-11",
-            "description": "Annotation Description",
-            "position": [
-               -13.447243001132492,
-               8.282370993228916,
-               1.446453999904632
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "EBE2F1F9-9977-45F5-AC88-4866C021E25F",
-            "title": "112-12",
-            "description": "Annotation Description",
-            "position": [
-               -13.309443000524524,
-               8.876011006127364,
-               1.1744340034809104
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "EF08066F-A8A4-43AC-8021-78B35BC46A1C",
-            "title": "112-13",
-            "description": "Annotation Description",
-            "position": [
-               -11.589642994277952,
-               10.563631000286101,
-               1.1374139915599821
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "A344C74C-0EDE-44D4-9916-BDDC7C805002",
-            "title": "112-15-21m",
-            "description": "Annotation Description",
-            "position": [
-               -8.11888300028312,
-               12.755770992656714,
-               0.7059139999940394
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "7AD166A9-0D63-4645-A8DA-125F52BE7295",
-            "title": "112-14",
-            "description": "Annotation Description",
-            "position": [
-               -10.212622999621516,
-               11.072350995088577,
-               0.7032940078678127
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "2D2846A0-1EB6-42A4-BA05-A21C04A0FC65",
-            "title": "112-22m",
-            "description": "Annotation Description",
-            "position": [
-               -4.673563000929832,
-               11.901811002574924,
-               0.9748140107288359
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "1354C372-A5B4-4F11-B814-C094EA119FF5",
-            "title": "112-24-28m",
-            "description": "Annotation Description",
-            "position": [
-               -3.7653030006437263,
-               9.11223100003577,
-               0.7646139989986418
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "D6391370-3F17-41B9-88B3-80301AF7CADA",
-            "title": "112-30",
-            "description": "Annotation Description",
-            "position": [
-               -8.442543000858308,
-               3.271111005054472,
-               1.0992140005722044
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-         {
-            "uuid": "6E52A944-B81D-41D9-9C11-02AE9508B28F",
-            "title": "122-23s",
-            "description": "Annotation Description",
-            "position": [
-               -4.711463001740455,
-               11.321530999904631,
-               0.02143399551773051
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "1EB89F2D-2B65-457E-B53E-5696C31AB4D4",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-03 target=_parent>121-03</a>",
-            "description": "Annotation Description",
-            "position": [
-               -17.934905999332422,
-               -21.434775004243853,
-               0.983778002670288
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "9319C23D-A6B5-44DF-8D57-4DA93F3A3D2F",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-04 target=_parent>121-04</a>",
-            "description": "Annotation Description",
-            "position": [
-               -16.96220601106262,
-               -21.88317498927117,
-               0.594677993276596
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "A3034756-C7C3-4FA4-BDDD-0E58121D9DB9",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-05 target=_parent>121-05</a>",
-            "description": "Annotation Description",
-            "position": [
-               -16.25490598545646,
-               -21.959975007820134,
-               0.2950780000011175
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "39284DDB-B65A-4870-8E1F-54B188A6261B",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-06 target=_parent>121-06</a>",
-            "description": "Annotation Description",
-            "position": [
-            	-16.20020599828338,
-				-22.65967499995232,
-				0.5329780068187713
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "35F930A8-EA68-4282-BDE1-C2EAB9A9CDBD",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-01 target=_parent>208-01</a>",
-            "description": "Annotation Description",
-            "position": [
-            	-16.01970599961256,
-				-15.169375003147128,
-				8.71617799408722,
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "583C21AA-F056-432C-9510-E8AB6E607BF6",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-02 target=_parent>208-02</a>",
-            "description": "Annotation Description",
-            "position": [
-               -13.483605996471404,
-               -15.303775013256075,
-               8.573577994182587,
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "BE034E49-5563-4864-8FDB-F63BB58BC9A5",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-03 target=_parent>208-03</a>",
-            "description": "Annotation Description",
-            "position": [
-               -12.337505963760371,
-               -13.717775107192995,
-               8.691378003051758,
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "BDF6E844-B544-455F-AB7C-BC7D07CB0BC9",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-04 target=_parent>208-04</a>",
-            "description": "Annotation Description",
-            "position": [
-               -12.190405991989131,
-               -13.114775025844576,
-               8.779577976158143,
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "D75FED69-6890-4400-97C0-0EAE1DFCE79F",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-05 target=_parent>208-05</a>",
-            "description": "Annotation Description",
-            "position": [
-               -10.897406009155269,
-               -12.875775099563601,
-               8.72047794430542,
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
-
-         {
-            "uuid": "5C011389-2E83-403E-8E86-F5843AE16565",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-14 target=_parent>208-14</a>",
-            "description": "Annotation Description",
-            "position": [
-               -10.152805986171721,
-               -7.090974971961984,
-               8.70767801411438,
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         },
+      {
+         "uuid": "F258F18E-375D-401B-B303-80B47F4F8AAF",
+         "title": "118-01",
+         "description": "Annotation Description",
+         "position": [
+            -11.200703004315372,
+            -21.597328989891054,
+            1.2948139737739561
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "4D679125-815F-4FC2-A6FB-55908D82430D",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=118-02 target=_parent>118-02</a>",
+         "description": "Annotation Description",
+         "position": [
+            -10.730863000905991,
+            -21.33582898893738,
+            1.316214008201599
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "8F6E5D1C-FD4A-400D-B233-8578D97CBEED",
+         "title": "118-04",
+         "description": "Annotation Description",
+         "position": [
+            -6.087463014591222,
+            -25.215369005340577,
+            0.1627740000298017
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "8AAE5EB7-2ABE-4C3F-86EF-61C60F7A9268",
+         "title": "118-03",
+         "description": "Annotation Description",
+         "position": [
+            -2.670883015449526,
+            -21.714329003480913,
+            0.4815339906539915
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "842AFD68-FBAF-4B53-AD79-7E2BCC857AEA",
+         "title": "113-1a",
+         "description": "Annotation Description",
+         "position": [
+            -20.560423000524523,
+            -10.325868994373323,
+            1.3808539995827669
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "183EA183-70B6-4B0A-8875-3155F871A8A2",
+         "title": "113-2a",
+         "description": "Annotation Description",
+         "position": [
+            -20.706743000000003,
+            -9.632928999284744,
+            1.3955540025510782
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "CC768C12-4DB7-4715-8723-D9593B628F72",
+         "title": "113-3a",
+         "description": "Annotation Description",
+         "position": [
+            -19.118622998867515,
+            -8.146329006675721,
+            1.3693539986290926
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "2DDBFB43-54D8-4E34-A218-5B95A405F5F0",
+         "title": "113-4a",
+         "description": "Annotation Description",
+         "position": [
+            -18.430182997997292,
+            -8.300228996697903,
+            1.3399540001430505
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "8ADE5FC6-1AA7-4FE2-B9C7-BA947D056801",
+         "title": "113-5a",
+         "description": "Annotation Description",
+         "position": [
+            -17.869143000500685,
+            -8.319229001674891,
+            1.3318540008642668
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "5305E063-4742-45F0-8D55-14FC7479F328",
+         "title": "113-6a",
+         "description": "Annotation Description",
+         "position": [
+            -17.18990299890328,
+            -8.166429004196168,
+            1.298934009918212
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "B18FE05A-786E-4FB7-916B-B56B483E8407",
+         "title": "113-7a",
+         "description": "Annotation Description",
+         "position": [
+            -17.06110299418259,
+            -7.516208983406067,
+            1.280513985027313
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "E51B054D-C78B-42A0-8C5A-E149EC944C02",
+         "title": "113-8a",
+         "description": "Annotation Description",
+         "position": [
+            -17.18890299687672,
+            -6.303209002861024,
+            1.389854002920627
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "23A9CF4E-D893-4CE5-9345-C98A2AED4710",
+         "title": "113-9a",
+         "description": "Annotation Description",
+         "position": [
+            -15.609482999591712,
+            -4.853909000905993,
+            1.356613976825714
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "89AA5B70-6FF5-41F2-A90F-4CC7B04D18E2",
+         "title": "113-10a",
+         "description": "Annotation Description",
+         "position": [
+            -14.931942998831758,
+            -4.989509001525882,
+            1.338954001841783
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F225A527-4D3D-4E2A-9506-E9E8BF4D6BED",
+         "title": "113-11a",
+         "description": "Annotation Description",
+         "position": [
+            -14.407302999105937,
+            -4.972409002634528,
+            1.3610539996900552
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "FD207058-8824-4CC5-BD73-0D7A8A3826E9",
+         "title": "113-12a",
+         "description": "Annotation Description",
+         "position": [
+            -13.725962999213223,
+            -4.871408999117854,
+            1.3390539998092645
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "D708486D-CCF5-428B-8887-1BB4181A4388",
+         "title": "113-13a",
+         "description": "Annotation Description",
+         "position": [
+            -13.589262994874005,
+            -4.207768993371964,
+            0.8579139988317488
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "48FECA8D-85EA-4D9A-BE12-0A4122A74C69",
+         "title": "113-14a",
+         "description": "Annotation Description",
+         "position": [
+            -13.588482899291996,
+            -3.7097089441146878,
+            0.8581140022172926
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "6CFB410E-3ACF-4085-BAB5-0509BD6BAAA8",
+         "title": "113-15a",
+         "description": "Annotation Description",
+         "position": [
+            -13.696662994969373,
+            -3.032688995279308,
+            0.8880140017166136
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "DC9D1DBF-2E50-48E1-A45A-E0301D25DB56",
+         "title": "113-16a",
+         "description": "Annotation Description",
+         "position": [
+            -8.50684300152588,
+            1.1421910061750467,
+            0.8201139997138975
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "0AFA477C-DC38-4739-8AB0-30B26DC6A10B",
+         "title": "113-17a",
+         "description": "Annotation Description",
+         "position": [
+            -8.006682995303152,
+            1.2169109996885723,
+            0.8850139956369398
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C0A88BA4-768B-44DF-AC91-4ADBEF91D040",
+         "title": "113-18a",
+         "description": "Annotation Description",
+         "position": [
+            -7.289942999666209,
+            1.25211100042916,
+            0.7778139989271162
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "D10266C3-9BC6-4CC2-827B-B3DEAA2A149A",
+         "title": "113-19a",
+         "description": "Annotation Description",
+         "position": [
+            -7.127722999260904,
+            1.9725309876499253,
+            0.807514002491474
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "E4E88B09-DDBC-4465-B77F-1CACFB2AE996",
+         "title": "113-20a",
+         "description": "Annotation Description",
+         "position": [
+            -7.00532299856949,
+            2.58947100753403,
+            0.8315139989747999
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C716676A-4A9D-414B-A54D-EB46C406F229",
+         "title": "113-21a",
+         "description": "Annotation Description",
+         "position": [
+            -7.030223002837182,
+            3.396451003218651,
+            0.8308140020265578
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "EC4FD653-E594-460D-A9AD-06C6DCD9AE44",
+         "title": "113-22a",
+         "description": "Annotation Description",
+         "position": [
+            -6.163923030899049,
+            4.258650980258942,
+            0.9029140006198881
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "627FEA23-BD11-487D-AD39-4709DBCFE2AE",
+         "title": "113-23a",
+         "description": "Annotation Description",
+         "position": [
+            -5.223702992728235,
+            4.30839099508858,
+            0.8298139999999998
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "9180995F-8313-4812-BBBB-E55AE7C2100E",
+         "title": "113-24a",
+         "description": "Annotation Description",
+         "position": [
+            -4.621462998164176,
+            4.694031003695493,
+            0.8691139947071074
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F46E0431-A770-41DA-9C35-EC490B038D72",
+         "title": "113-26a",
+         "description": "Annotation Description",
+         "position": [
+            -4.330043001168249,
+            4.6461309975204514,
+            0.8602139930620192
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "36768FF9-EC2D-4DCD-BFE6-80DD100856F1",
+         "title": "113-25a",
+         "description": "Annotation Description",
+         "position": [
+            -4.447243003242491,
+            4.645030993801122,
+            0.8626140038862227
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "48A24F84-3B22-4B46-9F87-50AA1651CC74",
+         "title": "113-27a",
+         "description": "Annotation Description",
+         "position": [
+            -2.7487430148296426,
+            5.849911004601481,
+            0.49809399881982763
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "3957FF93-7B2B-4C46-80A6-CBBC7B0E6B7E",
+         "title": "113-01b",
+         "description": "Annotation Description",
+         "position": [
+            -1.0387229991178515,
+            3.863370990797044,
+            0.17127399862909254
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "8C9A509F-AAEA-443F-AC42-0951267A12B2",
+         "title": "113-05b",
+         "description": "Annotation Description",
+         "position": [
+            -2.5242230029087125,
+            1.687630992918976,
+            0.4612940017285343
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "4B38D9F6-2E4F-468D-A784-88333D26B36C",
+         "title": "113-02b",
+         "description": "Annotation Description",
+         "position": [
+            -2.199502993562703,
+            2.4901909995350806,
+            0.40949399985024293
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "FF2E12AF-055C-4DB5-BA09-63489ADB8223",
+         "title": "113-04b",
+         "description": "Annotation Description",
+         "position": [
+            -2.1322030017166185,
+            2.1974710028848676,
+            0.42557398946189817
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "4EEE9A74-4F2C-482D-B4CF-A361813A899B",
+         "title": "113-03b",
+         "description": "Annotation Description",
+         "position": [
+            -2.1865030119209337,
+            2.3832710039100675,
+            0.4182940002682205
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "05982992-6F50-41F7-9625-946876223B46",
+         "title": "113-06b",
+         "description": "Annotation Description",
+         "position": [
+            -2.6790230007152616,
+            0.7748710058651014,
+            0.3517740067949289
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "1882DD79-8D90-4405-8572-A682EB3CF432",
+         "title": "113-07b",
+         "description": "Annotation Description",
+         "position": [
+            -3.5304830006318113,
+            -0.044889001335143064,
+            0.38327400357627806
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "53AC26BC-E3B8-4AB9-9C95-1923B99D95D2",
+         "title": "113-08b",
+         "description": "Annotation Description",
+         "position": [
+            -4.3276630166893,
+            -0.0021890086784353002,
+            0.37427400023841795
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "8EC5A3D3-29A1-4490-998E-A713B1B2A3E7",
+         "title": "113-09b",
+         "description": "Annotation Description",
+         "position": [
+            -4.9672830070571905,
+            -0.11568899282359979,
+            0.40277399094009336
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C909AE72-2182-4481-8FB0-6B3488933C1E",
+         "title": "113-10b",
+         "description": "Annotation Description",
+         "position": [
+            -5.62022300303984,
+            -0.19578900017881296,
+            0.33537399740123686
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "4D9075AB-5B37-4EC9-B0D9-B7B6D14D145E",
+         "title": "113-11b",
+         "description": "Annotation Description",
+         "position": [
+            -5.8480430037670175,
+            -0.8994689832153355,
+            0.949113992918968
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "E79F46C8-04F3-483B-98D2-DA533842EF8A",
+         "title": "113-12b",
+         "description": "Annotation Description",
+         "position": [
+            -5.828142994730953,
+            -1.3983690018477475,
+            0.9795139859809874
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C6DA5C62-D1C8-420E-BFAD-E00906D72046",
+         "title": "113-13b",
+         "description": "Annotation Description",
+         "position": [
+            -5.674342998950962,
+            -2.0725089990701733,
+            2.036894003337859
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "346B9300-BE4A-43E5-A314-44C9622A7444",
+         "title": "113-14b",
+         "description": "Annotation Description",
+         "position": [
+            -10.290643003361708,
+            -6.409308995851518,
+            2.0044939987721433
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C6377F29-B38B-47E3-B4F4-33DE4BDEED55",
+         "title": "113-15b",
+         "description": "Annotation Description",
+         "position": [
+            -10.996103012874599,
+            -6.243889000882149,
+            0.7804139982357023
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "9E02A2CF-E53F-4792-BDBC-D11C0D67E357",
+         "title": "113-16b",
+         "description": "Annotation Description",
+         "position": [
+            -11.52314298617172,
+            -6.212888997663498,
+            0.7649140003516672
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "EDCE788B-1404-4208-94AA-05F5A6D10FA6",
+         "title": "113-17b",
+         "description": "Annotation Description",
+         "position": [
+            -12.165622998664858,
+            -6.328068980163575,
+            1.3634139727249144
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "B2C0DF8A-9BD3-4403-81D8-5E7D54450CEB",
+         "title": "113-18b",
+         "description": "Annotation Description",
+         "position": [
+            -12.355283013017655,
+            -6.989768990463258,
+            1.3845540026106828
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "18895B7A-FC06-4205-B0B5-C31F19EBDED2",
+         "title": "113-19b",
+         "description": "Annotation Description",
+         "position": [
+            -12.375282993944168,
+            -7.5298089752044675,
+            1.3705539965906137
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "B2ACF531-5FAB-452B-BDF6-9E601D741B86",
+         "title": "113-20b",
+         "description": "Annotation Description",
+         "position": [
+            -12.261982998283386,
+            -8.230349009536745,
+            1.4036539981045717
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "21DB2B6E-C556-4003-B2FD-4E0C0AD1FC32",
+         "title": "113-21b",
+         "description": "Annotation Description",
+         "position": [
+            -13.769502983596809,
+            -9.754728997270107,
+            1.3479140232696531
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "357940EE-CBD6-45EE-858E-BD1D75C30D85",
+         "title": "113-22b",
+         "description": "Annotation Description",
+         "position": [
+            -14.446682972534184,
+            -9.589928986648559,
+            1.2201139758720396
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "55F59473-1684-42B4-BDA9-5F2FF3F9550E",
+         "title": "113-24b",
+         "description": "Annotation Description",
+         "position": [
+            -15.703363040626527,
+            -9.703028993824958,
+            1.385813994277954
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "55FE1FC7-8ABF-4DD2-A733-156C76DF7EBE",
+         "title": "113-23b",
+         "description": "Annotation Description",
+         "position": [
+            -14.967982990367894,
+            -9.599628986934661,
+            1.3750139902725218
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "A5E50FDF-2DBA-443E-AC9E-5DC47D58DCA9",
+         "title": "113-25b",
+         "description": "Annotation Description",
+         "position": [
+            -15.850443041580206,
+            -10.382889027847291,
+            1.4077139924659727
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "2C9CF213-9241-446E-984C-16ACAC46B458",
+         "title": "113-26b",
+         "description": "Annotation Description",
+         "position": [
+            -15.721743023651129,
+            -11.567988987220765,
+            1.3998139928474425
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "8A83DEF1-FE4F-4B07-9587-49160601C6FC",
+         "title": "113-27b",
+         "description": "Annotation Description",
+         "position": [
+            -17.26474300648499,
+            -13.008949030326843,
+            1.370313985218048
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "67CAE4F1-4A4A-4125-9AF1-CFA1C20805DB",
+         "title": "114-01",
+         "description": "Annotation Description",
+         "position": [
+            -16.85498299570847,
+            -14.469848994301795,
+            0.2463739958515161
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "B04BC8B7-E7E8-47C3-8E1C-E4A824283A51",
+         "title": "114-02",
+         "description": "Annotation Description",
+         "position": [
+            -17.10780299494553,
+            -13.694008996614457,
+            1.2980140279426573
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "55820138-4644-4490-970C-D0F8735F638B",
+         "title": "114-05",
+         "description": "Annotation Description",
+         "position": [
+            -13.786862998205905,
+            -11.627048999910592,
+            1.409353997735023
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "91CE3805-ACA6-4DDD-A51C-990E2933DD40",
+         "title": "114-03",
+         "description": "Annotation Description",
+         "position": [
+            -15.006643000458965,
+            -11.733188982261659,
+            1.5855539852657312
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "257B0B1C-A9F7-4A92-8444-5DEB00613C9C",
+         "title": "114-04",
+         "description": "Annotation Description",
+         "position": [
+            -14.451122999475487,
+            -11.747868996137619,
+            1.2411340000715247
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "FAD6A13C-CF74-4C3A-8F14-2871F42A8FB0",
+         "title": "114-06",
+         "description": "Annotation Description",
+         "position": [
+            -13.632063004124646,
+            -10.935608996685982,
+            1.413454000083446
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "BBF37E2F-0AE5-4B30-8F81-1D8DD5ED0B18",
+         "title": "114-07",
+         "description": "Annotation Description",
+         "position": [
+            -13.619262996066098,
+            -10.417068999636413,
+            1.3180540000923866
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "6D560761-685D-437C-A608-4CE40A4E23FA",
+         "title": "114-08",
+         "description": "Annotation Description",
+         "position": [
+            -11.527643017642973,
+            -8.393348997138979,
+            1.2705139945640562
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "3CC83A90-7199-4E1B-AFBA-F6A782FB3542",
+         "title": "114-10",
+         "description": "Annotation Description",
+         "position": [
+            -10.333043005841262,
+            -8.223028993729592,
+            1.3572539986946577
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "FF80949E-F3F6-4ACA-A94A-C6B164343084",
+         "title": "114-12",
+         "description": "Annotation Description",
+         "position": [
+            -10.166822997329717,
+            -7.042669006771089,
+            1.5749540144481653
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "5231C367-D707-4EA7-80D8-4B9B730A4DCE",
+         "title": "114-09",
+         "description": "Annotation Description",
+         "position": [
+            -10.995082999403948,
+            -8.376028999948964,
+            1.321853999225139
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "9E16FF33-2232-4886-BD47-E8FFE239586B",
+         "title": "114-11",
+         "description": "Annotation Description",
+         "position": [
+            -10.200622999517208,
+            -7.511809028133392,
+            1.3111540001721078
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "DF4023FD-D0B4-45DC-8DA5-1825FAF471DD",
+         "title": "114-13",
+         "description": "Annotation Description",
+         "position": [
+            -4.96940300934601,
+            -2.2314489997615823,
+            1.6116539949455255
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "601B211A-2A09-4EE7-AD44-55711328DA3C",
+         "title": "114-14",
+         "description": "Annotation Description",
+         "position": [
+            -3.6868629578475947,
+            -1.3297689954462086,
+            1.0385140012397764
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "656193D3-F0E3-4908-AA6F-5D83CC477E83",
+         "title": "114-15",
+         "description": "Annotation Description",
+         "position": [
+            -3.510482997353556,
+            -0.8099290024676336,
+            0.4444739964714044
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "CF765D59-2E80-4A27-8D13-42E3F6A3F6A3",
+         "title": "114-16",
+         "description": "Annotation Description",
+         "position": [
+            -2.009302992561345,
+            0.638550996852878,
+            0.37357400329017576
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "0628DD39-9D4F-4103-9772-70CCB3224079",
+         "title": "114-17",
+         "description": "Annotation Description",
+         "position": [
+            -1.6768630053405786,
+            0.765271007271771,
+            0.3624740091075891
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "19A97B12-BC2C-48CE-A21D-4ECDEC29B73D",
+         "title": "114-18",
+         "description": "Annotation Description",
+         "position": [
+            -0.1837630070095031,
+            1.7376310048399048,
+            0.1392740008344644
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "2761E3D7-8066-478C-8798-4B8AE0B4B3BD",
+         "title": "114-19",
+         "description": "Annotation Description",
+         "position": [
+            1.6954569969482378,
+            -0.2624890004947176,
+            1.729873995589256
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "578508B7-DFB2-434C-A018-1DE0059A1D63",
+         "title": "114-37",
+         "description": "Annotation Description",
+         "position": [
+            0.7039970038862151,
+            -1.590189004124646,
+            1.5120539927759165
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "0C2E4B88-5B8F-417C-A7CD-5CFE8B72392C",
+         "title": "114-21",
+         "description": "Annotation Description",
+         "position": [
+            -0.289,
+            -2.672,
+            -0.221
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F9633C44-7963-42D5-A1A2-FCFD14A3036F",
+         "title": "114-20",
+         "description": "Annotation Description",
+         "position": [
+            -0.2874830006198863,
+            -3.3410290066757184,
+            1.1940139959945677
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "0DB6F81C-A1DE-4C7B-9C29-595C284AED8F",
+         "title": "114-22",
+         "description": "Annotation Description",
+         "position": [
+            -1.638,
+            -3.407,
+            -0.102
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C44CA569-D855-4E79-9394-866DB11C9C0A",
+         "title": "114-23",
+         "description": "Annotation Description",
+         "position": [
+            -2.258502993920331,
+            -3.565909000616905,
+            0.19837400288486418
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F49A195A-F124-4ED1-B87C-47F5B011AF69",
+         "title": "114-24",
+         "description": "Annotation Description",
+         "position": [
+            -3.3721830106334707,
+            -5.910969001740462,
+            1.1207340034332267
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "E56BB34F-C2CF-4F2F-98E4-E9CFE4234DC3",
+         "title": "114-25",
+         "description": "Annotation Description",
+         "position": [
+            -3.8213029949216804,
+            -6.874129000035765,
+            0.22097399802112516
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "FD575AF6-108D-428E-BCB3-CAD1180B8DDA",
+         "title": "114-26",
+         "description": "Annotation Description",
+         "position": [
+            -5.384603000661613,
+            -8.265429003659726,
+            0.23117400677108702
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "020585C6-FB4C-4C75-ACFA-6128AD08C031",
+         "title": "114-27",
+         "description": "Annotation Description",
+         "position": [
+            -6.154962994921689,
+            -8.213929003600121,
+            0.17887400061988767
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F6B66962-5BD7-4FBB-9EE5-65DE5AB5FF22",
+         "title": "114-28",
+         "description": "Annotation Description",
+         "position": [
+            -8.125983000329313,
+            -9.617228986839294,
+            1.4957539999761575
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "06AB4708-931F-4B0B-B358-B89D5B294148",
+         "title": "114-29",
+         "description": "Annotation Description",
+         "position": [
+            -8.810142994802476,
+            -9.754629003027915,
+            1.3155539996826047
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "50FE5316-9718-41FD-B000-0DBF073EEE7E",
+         "title": "114-30",
+         "description": "Annotation Description",
+         "position": [
+            -8.950943001490117,
+            -10.420968998599292,
+            1.3062540001139933
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "88038ED8-1F41-4565-99F5-4B650AC27EA9",
+         "title": "114-31",
+         "description": "Annotation Description",
+         "position": [
+            -10.852583001192087,
+            -12.681628995946884,
+            0.24607400567436155
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "B645D0D3-D3A1-416F-8209-E9C32F6A0C9E",
+         "title": "114-33",
+         "description": "Annotation Description",
+         "position": [
+            -12.235163002562999,
+            -13.032048993300435,
+            1.3937540018835062
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "9C481A76-8F15-4E99-B11B-ED71309599D9",
+         "title": "114-32",
+         "description": "Annotation Description",
+         "position": [
+            -11.570823007319447,
+            -12.92024899322891,
+            1.38665400090599
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C81F0B61-56F0-47A6-B1FE-445A8A8334DE",
+         "title": "114-34",
+         "description": "Annotation Description",
+         "position": [
+            -12.397482997210503,
+            -13.711488998283386,
+            1.3991539964356416
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "865BD72F-804C-4167-AF94-617ACD11A1CC",
+         "title": "114-35",
+         "description": "Annotation Description",
+         "position": [
+            -13.460043001740459,
+            -15.968348994635583,
+            1.4430540019550318
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F105B01D-2553-41DE-8202-556F7148EC17",
+         "title": "114-36",
+         "description": "Annotation Description",
+         "position": [
+            -15.298363000670562,
+            -15.96584899701977,
+            0.8665139953985213
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "4DA89B13-1A71-44BE-B679-E1D0E5A366BC",
+         "title": "112-01",
+         "description": "Annotation Description",
+         "position": [
+            -26.68312299929965,
+            -4.578489006532671,
+            1.3224540000685447
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "A6F52F11-D636-48DA-8986-41DC885AE396",
+         "title": "112-02",
+         "description": "Annotation Description",
+         "position": [
+            -26.775442999237065,
+            -3.9962489928951257,
+            1.261934009441375
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "F5D50FEB-FC0D-4DF4-A03B-0522A38ECE28",
+         "title": "112-03",
+         "description": "Annotation Description",
+         "position": [
+            -24.683123008964543,
+            -2.0328090013172684,
+            1.2112139891281126
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "B5FFF92A-4FC1-4483-98A4-D71D311800A5",
+         "title": "112-04",
+         "description": "Annotation Description",
+         "position": [
+            -24.164463002503396,
+            -2.0239090033974705,
+            1.1932339938964835
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "24D7284F-BDE7-4923-A6AD-7E0BDDCCE104",
+         "title": "112-05",
+         "description": "Annotation Description",
+         "position": [
+            -23.49442299272824,
+            -1.9128089928236065,
+            2.02739399898672
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "DC3D5583-D7FF-4421-9189-F0AB8E3C0777",
+         "title": "112-06",
+         "description": "Annotation Description",
+         "position": [
+            -23.322902998807912,
+            -1.2439690033617055,
+            1.191134003051757
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "30606229-69C4-4211-A341-68AFC9EDDCF9",
+         "title": "112-07",
+         "description": "Annotation Description",
+         "position": [
+            -23.341203003111367,
+            -0.7130289938488019,
+            1.1717340024795524
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "703FCF78-B7BA-4A72-A6F4-49B7398DD12E",
+         "title": "112-08",
+         "description": "Annotation Description",
+         "position": [
+            -21.16518300414849,
+            1.3254910095844323,
+            1.1693140100135802
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "338D7A39-28CC-40D4-836F-EE3D4CB9BEC6",
+         "title": "112-10",
+         "description": "Annotation Description",
+         "position": [
+            -19.937983006747253,
+            1.4482109969959325,
+            1.0940339984979621
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "C2CE6B0A-610A-47A0-B0AF-127512F85103",
+         "title": "112-09",
+         "description": "Annotation Description",
+         "position": [
+            -20.628522998462202,
+            1.3243110007152623,
+            1.1480340036239616
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "FF238F04-9C53-4946-8F5C-144162BC74AA",
+         "title": "112-40",
+         "description": "Annotation Description",
+         "position": [
+            -19.262242989891057,
+            -7.470969000047685,
+            1.2633340033378593
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "E5FDC020-1B9A-4CDA-B98D-E78CC68E7AFA",
+         "title": "112-38",
+         "description": "Annotation Description",
+         "position": [
+            -19.08512300548363,
+            -6.273889000211597,
+            2.0165940024318685
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "D66982F7-5582-4DA9-A457-2F9787E29C4D",
+         "title": "112-36",
+         "description": "Annotation Description",
+         "position": [
+            -17.868643006937987,
+            -6.148989003767014,
+            1.378053996888637
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "19E1253A-DCB0-48E5-9EEE-E507EEAEB40E",
+         "title": "112-39",
+         "description": "Annotation Description",
+         "position": [
+            -19.263743000381474,
+            -6.951348999547008,
+            1.3338539993294471
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "515ED3A6-089F-45A4-8DB8-FA25DA99B7FC",
+         "title": "112-37",
+         "description": "Annotation Description",
+         "position": [
+            -18.401782994087228,
+            -6.149789002408028,
+            1.4524539971628183
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "CE29C21E-8681-4026-926A-6851EF535BE9",
+         "title": "112-35",
+         "description": "Annotation Description",
+         "position": [
+            -15.767303001883505,
+            -4.184649000010104,
+            1.296234008916854
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "390A6758-44AD-4767-B878-0532B39587D2",
+         "title": "112-33",
+         "description": "Annotation Description",
+         "position": [
+            -15.58488299853969,
+            -2.978669000129635,
+            1.2692339989032737
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "82DC3155-6B24-4711-810D-9370CD855F29",
+         "title": "112-34",
+         "description": "Annotation Description",
+         "position": [
+            -15.759303000572203,
+            -3.6606289927520734,
+            1.2524339976396552
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "4604DCD9-79EC-47E8-B8E7-062B34CDB600",
+         "title": "112-32",
+         "description": "Annotation Description",
+         "position": [
+            -14.867642998164186,
+            -2.8840690015735575,
+            1.2360340031471244
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "13A08786-604B-463D-9DBE-81ABA373335C",
+         "title": "112-31",
+         "description": "Annotation Description",
+         "position": [
+            -14.401302999985106,
+            -2.8888690008702227,
+            1.2470339956369392
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "5FCBD437-7D2B-4194-99A0-FEA80601FAA8",
+         "title": "112-11",
+         "description": "Annotation Description",
+         "position": [
+            -13.447243001132492,
+            8.282370993228916,
+            1.446453999904632
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "EBE2F1F9-9977-45F5-AC88-4866C021E25F",
+         "title": "112-12",
+         "description": "Annotation Description",
+         "position": [
+            -13.309443000524524,
+            8.876011006127364,
+            1.1744340034809104
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "EF08066F-A8A4-43AC-8021-78B35BC46A1C",
+         "title": "112-13",
+         "description": "Annotation Description",
+         "position": [
+            -11.589642994277952,
+            10.563631000286101,
+            1.1374139915599821
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "A344C74C-0EDE-44D4-9916-BDDC7C805002",
+         "title": "112-15-21m",
+         "description": "Annotation Description",
+         "position": [
+            -8.11888300028312,
+            12.755770992656714,
+            0.7059139999940394
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "7AD166A9-0D63-4645-A8DA-125F52BE7295",
+         "title": "112-14",
+         "description": "Annotation Description",
+         "position": [
+            -10.212622999621516,
+            11.072350995088577,
+            0.7032940078678127
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "2D2846A0-1EB6-42A4-BA05-A21C04A0FC65",
+         "title": "112-22m",
+         "description": "Annotation Description",
+         "position": [
+            -4.673563000929832,
+            11.901811002574924,
+            0.9748140107288359
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "1354C372-A5B4-4F11-B814-C094EA119FF5",
+         "title": "112-24-28m",
+         "description": "Annotation Description",
+         "position": [
+            -3.7653030006437263,
+            9.11223100003577,
+            0.7646139989986418
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "D6391370-3F17-41B9-88B3-80301AF7CADA",
+         "title": "112-30",
+         "description": "Annotation Description",
+         "position": [
+            -8.442543000858308,
+            3.271111005054472,
+            1.0992140005722044
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "6E52A944-B81D-41D9-9C11-02AE9508B28F",
+         "title": "122-23s",
+         "description": "Annotation Description",
+         "position": [
+            -4.711463001740455,
+            11.321530999904631,
+            0.02143399551773051
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "1EB89F2D-2B65-457E-B53E-5696C31AB4D4",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-03 target=_parent>121-03</a>",
+         "description": "Annotation Description",
+         "position": [
+            -17.934905999332422,
+            -21.434775004243853,
+            0.983778002670288
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "9319C23D-A6B5-44DF-8D57-4DA93F3A3D2F",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-04 target=_parent>121-04</a>",
+         "description": "Annotation Description",
+         "position": [
+            -16.96220601106262,
+            -21.88317498927117,
+            0.594677993276596
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "A3034756-C7C3-4FA4-BDDD-0E58121D9DB9",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-05 target=_parent>121-05</a>",
+         "description": "Annotation Description",
+         "position": [
+            -16.25490598545646,
+            -21.959975007820134,
+            0.2950780000011175
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "39284DDB-B65A-4870-8E1F-54B188A6261B",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=121-06 target=_parent>121-06</a>",
+         "description": "Annotation Description",
+         "position": [
+            -16.20020599828338,
+            -22.65967499995232,
+            0.5329780068187713
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "35F930A8-EA68-4282-BDE1-C2EAB9A9CDBD",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-01 target=_parent>208-01</a>",
+         "description": "Annotation Description",
+         "position": [
+            -16.01970599961256,
+            -15.169375003147128,
+            8.71617799408722
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "583C21AA-F056-432C-9510-E8AB6E607BF6",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-02 target=_parent>208-02</a>",
+         "description": "Annotation Description",
+         "position": [
+            -13.483605996471404,
+            -15.303775013256075,
+            8.573577994182587
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "BE034E49-5563-4864-8FDB-F63BB58BC9A5",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-03 target=_parent>208-03</a>",
+         "description": "Annotation Description",
+         "position": [
+            -12.337505963760371,
+            -13.717775107192995,
+            8.691378003051758
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "BDF6E844-B544-455F-AB7C-BC7D07CB0BC9",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-04 target=_parent>208-04</a>",
+         "description": "Annotation Description",
+         "position": [
+            -12.190405991989131,
+            -13.114775025844576,
+            8.779577976158143
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "D75FED69-6890-4400-97C0-0EAE1DFCE79F",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-05 target=_parent>208-05</a>",
+         "description": "Annotation Description",
+         "position": [
+            -10.897406009155269,
+            -12.875775099563601,
+            8.72047794430542
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "5C011389-2E83-403E-8E86-F5843AE16565",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-14 target=_parent>208-14</a>",
+         "description": "Annotation Description",
+         "position": [
+            -10.152805986171721,
+            -7.090974971961984,
+            8.70767801411438
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
       {
          "uuid": "736B56AE-12CE-46E2-8257-DDEF3E75F026",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-16 target=_parent>208-16</a>",
          "description": "Annotation Description",
          "position": [
             -11.522306000739093,
-				-8.431874994134908,
-				8.758378022983552,
+            -8.431874994134908,
+            8.758378022983552
          ],
          "offset": [
             0,
@@ -3422,15 +3348,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "5D7589AD-215D-42ED-B8B0-526FF0BB6CD0",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-17 target=_parent>208-17</a>",
          "description": "Annotation Description",
          "position": [
             -12.157805946784968,
-				-8.291274998283392,
-				8.752578025749207,
+            -8.291274998283392,
+            8.752578025749207
          ],
          "offset": [
             0,
@@ -3439,15 +3364,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "6812C3C1-6373-4BEA-833C-627BCB1D7E3D",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-18 target=_parent>208-18</a>",
          "description": "Annotation Description",
          "position": [
             -12.347505995565406,
-				-7.6098750087738125,
-				8.827978003290175,
+            -7.6098750087738125,
+            8.827978003290175
          ],
          "offset": [
             0,
@@ -3456,15 +3380,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "001ED3F5-C17B-413C-8F30-4BA03FC5E255",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-19 target=_parent>208-19</a>",
          "description": "Annotation Description",
          "position": [
-         	-12.318306007915488,
-				-7.095875010204324,
-				8.795477980449677,
+            -12.318306007915488,
+            -7.095875010204324,
+            8.795477980449677
          ],
          "offset": [
             0,
@@ -3473,15 +3396,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "3E395294-517B-43EA-A5E4-06F87AB9A853",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-22 target=_parent>208-22</a>",
          "description": "Annotation Description",
          "position": [
             -14.388705972915645,
-				-4.987675001382833,
-				8.769278055122376,
+            -4.987675001382833,
+            8.769278055122376
          ],
          "offset": [
             0,
@@ -3490,15 +3412,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "3F95B32C-191F-4659-BA7D-304E5E631108",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-23 target=_parent>208-23</a>",
          "description": "Annotation Description",
          "position": [
             -14.884406004434581,
-				-4.945974995851522,
-				8.789578014686585,
+            -4.945974995851522,
+            8.789578014686585
          ],
          "offset": [
             0,
@@ -3507,15 +3428,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "F6454D88-0DCF-4DB9-AD02-1AE5CEBE2FB5",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-26 target=_parent>208-26</a>",
          "description": "Annotation Description",
          "position": [
             -17.02980598731613,
-				-7.010874998497968,
-				8.828678006008149,
+            -7.010874998497968,
+            8.828678006008149
          ],
          "offset": [
             0,
@@ -3524,15 +3444,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "7C1B576F-F94A-4E9C-A31C-A772CCB52250",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-27 target=_parent>208-27</a>",
          "description": "Annotation Description",
          "position": [
             -17.025306015449523,
-				-7.470574990224847,
-				8.824877971485138,
+            -7.470574990224847,
+            8.824877971485138
          ],
          "offset": [
             0,
@@ -3541,15 +3460,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "7ECB3174-5EC7-42E3-BB0C-222CB29BAF3A",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-28 target=_parent>208-28</a>",
          "description": "Annotation Description",
          "position": [
             -17.184905975299834,
-				-8.0975749827385,
-				8.799777978733063,
+            -8.0975749827385,
+            8.799777978733063
          ],
          "offset": [
             0,
@@ -3558,15 +3476,14 @@
          ],
          "children": []
       },
-
       {
          "uuid": "7ECB3174-5EC7-42E3-BB0C-222CB29BAF3A",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-28 target=_parent>208-28</a>",
          "description": "Annotation Description",
          "position": [
             -17.184905975299834,
-				-8.0975749827385,
-				8.799777978733063,
+            -8.0975749827385,
+            8.799777978733063
          ],
          "offset": [
             0,
@@ -3574,16 +3491,15 @@
             0
          ],
          "children": []
-      }, 
-      
+      },
       {
          "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
          "description": "Annotation Description",
          "position": [
             -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            4.840424986743926,
+            8.77917801745224
          ],
          "offset": [
             0,
@@ -3592,19 +3508,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
          "uuid": "6C472FA1-B6EE-4B4D-95CC-136341472702",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=111-04 target=_parent>111-04</a>",
          "description": "Annotation Description",
          "position": [
             -24.65570599964237,
-				4.779825004005431,
-				0.808778026321411,
+            4.779825004005431,
+            0.808778026321411
          ],
          "offset": [
             0,
@@ -3613,19 +3524,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
          "uuid": "6C03EAA8-483B-41BA-92D1-83C7C8D821A9",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=111-06 target=_parent>111-06</a>",
          "description": "Annotation Description",
          "position": [
             -23.44420600724792,
-				4.941125007534026,
-				0.8997779872207641,
+            4.941125007534026,
+            0.8997779872207641
          ],
          "offset": [
             0,
@@ -3634,18 +3540,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
          "uuid": "A321AFFD-2F8D-4FC5-8023-CE79EE71CA4C",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=111-07 target=_parent>111-07</a>",
          "description": "Annotation Description",
          "position": [
             -23.278505988842007,
-				6.1133250011324805,
-				0.7609779920368194,
+            6.1133250011324805,
+            0.7609779920368194
          ],
          "offset": [
             0,
@@ -3654,18 +3556,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
          "uuid": "23427983-9A7A-47D8-9202-F3417D9ED53C",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-20 target=_parent>110-20</a>",
          "description": "Annotation Description",
          "position": [
             -26.858606002193447,
-				3.4380250001251653,
-				0.7689780082492828,
+            3.4380250001251653,
+            0.7689780082492828
          ],
          "offset": [
             0,
@@ -3674,19 +3572,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "5E466A44-1952-4C10-8A3D-547CA173B669",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-22 target=_parent>110-22</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -24.124706026226043,
+            6.873624989223472,
+            0.5777779903202056
          ],
          "offset": [
             0,
@@ -3695,18 +3588,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "846FEA03-5185-4D30-B7BA-C3088126A92B",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-09 target=_parent>110-09</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -30.346905981498715,
+            5.042025001907348,
+            0.7969779755859374
          ],
          "offset": [
             0,
@@ -3715,19 +3604,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "279E0F94-9B52-4D9F-8ADD-EB19FA286F52",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-11 target=_parent>110-11</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -31.805906009441372,
+            4.643825037956233,
+            -0.0031219702453615383
          ],
          "offset": [
             0,
@@ -3736,18 +3620,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "C9B83A02-BA9F-4125-952E-47407D35F0BA",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-12 target=_parent>110-12</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -31.607506000381466,
+            0.39932501330375203,
+            0.11607800944137558
          ],
          "offset": [
             0,
@@ -3756,19 +3636,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "FC553192-DF6B-456E-A1E1-22C5DD119C46",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-14 target=_parent>110-14</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -30.338605975109097,
+            0.1531250031232787,
+            0.931978025653839
          ],
          "offset": [
             0,
@@ -3777,19 +3652,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "89A137A5-F09F-4FE9-8554-CF1A3A3F4AA9",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-15 target=_parent>110-15</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -28.799605993658062,
+            1.562024980926509,
+            0.8174779798774718
          ],
          "offset": [
             0,
@@ -3798,18 +3668,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "AD8CAD28-7E99-4311-84F5-D1AF4B011B62",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-29 target=_parent>110-29</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -19.029205983882896,
+            12.273024993658062,
+            -0.28842199818801895
          ],
          "offset": [
             0,
@@ -3818,19 +3684,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "F619290F-027A-41DC-9639-26C9ACD6BDF9",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-30 target=_parent>110-30</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -18.90720600486373,
+            12.963325011253353,
+            -0.03592200057220474
          ],
          "offset": [
             0,
@@ -3839,19 +3700,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "20941E74-681C-4146-AE2E-08417775F647",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-01 target=_parent>110-01</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -17.553606002765655,
+            13.177024996185295,
+            -0.053021977111816554
          ],
          "offset": [
             0,
@@ -3860,18 +3716,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "4C840D40-98B1-4842-A80B-2B59D4507B2B",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-02 target=_parent>110-02</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -16.079106013828273,
+            14.587725007820126,
+            0.08527802450942978
          ],
          "offset": [
             0,
@@ -3880,18 +3732,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "9F573E7E-1B59-48E6-8A99-005667E08EF0",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=109-09 target=_parent>109-09</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -32.34760598517036,
+            6.216324993801109,
+            0.47347799799728385
          ],
          "offset": [
             0,
@@ -3900,19 +3748,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "38034D89-2A6D-4338-A0A1-6392219965E0",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=109-12 target=_parent>109-12</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -35.651906008821484,
+            3.631724997043605,
+            0.9585780288963317
          ],
          "offset": [
             0,
@@ -3921,19 +3764,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "74E0B659-D927-45B1-AC9B-1C91C7C222EC",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=104-03 target=_parent>104-03</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -35.84310599694824,
+            2.929624999856941,
+            0.9487780120162963
          ],
          "offset": [
             0,
@@ -3942,19 +3780,14 @@
          ],
          "children": []
       },
-
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "C811F563-D599-4C16-9F06-9FD0514FBEF0",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=104-04 target=_parent>104-04</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -35.841206009489056,
+            2.4269250103950455,
+            0.9659780051498412
          ],
          "offset": [
             0,
@@ -3963,18 +3796,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "C13AC1C3-00C6-4EB0-998E-4C0A9B443F5B",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=104-05 target=_parent>104-05</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -35.712106014591214,
+            1.7782249966382935,
+            0.9278780009536742
          ],
          "offset": [
             0,
@@ -3983,18 +3812,14 @@
          ],
          "children": []
       },
-
-
-
-
       {
-         "uuid": "DA2F1F07-D4C5-4251-988A-5175D1810047",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=205-15 target=_parent>205-15</a>",
+         "uuid": "4F5F9694-FE9C-421A-B748-C52DEEF4E394",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=104-02 target=_parent>104-02</a>",
          "description": "Annotation Description",
          "position": [
-            -24.150806006103515,
-				4.840424986743926,
-				8.77917801745224,
+            -38.41960599070167,
+            5.001125009918212,
+            0.7482780005722045
          ],
          "offset": [
             0,
@@ -4003,34 +3828,55 @@
          ],
          "children": []
       },
-
-
-
-
-
-
-
-       {
-            "uuid": "1A68B993-BFDD-4978-9DE5-5FDBD6670CA5",
-            "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-21 target=_parent>110-21</a>",
-            "description": "Annotation Description",
-            "position": [
-             	-25.348783001609327,
-		         4.898251000210102,
-		         0.7993340020861623
-            ],
-            "offset": [
-               0,
-               0,
-               0
-            ],
-            "children": []
-         }
+      {
+         "uuid": "2FBA6B1F-DEAF-4CE8-8DCA-42634B64444C",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=104-01 target=_parent>104-01</a>",
+         "description": "Annotation Description",
+         "position": [
+            -37.40330600944137,
+            0.11242499961852559,
+            0.9654779817848205
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "6-38A6-47D4-B787-005F9C28DDAF",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=113-28b target=_parent>113-28b</a>",
+         "description": "Annotation Description",
+         "position": [
+            -18.532406004887577,
+            -12.812175059318545,
+            0.8839779879837035
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "1A68B993-BFDD-4978-9DE5-5FDBD6670CA5",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=110-21 target=_parent>110-21</a>",
+         "description": "Annotation Description",
+         "position": [
+            -25.348783001609327,
+            4.898251000210102,
+            0.7993340020861623
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      }
    ],
-   "orientedImages":[
-      
-   ],
-   "geopackages":[
-      
-   ]
+   "orientedImages": [],
+   "geopackages": []
 }

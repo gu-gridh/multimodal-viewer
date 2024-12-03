@@ -1,7 +1,14 @@
 @font-face {
-	font-family: 'ancient-font';
+	font-family: 'cyrillic-font';
 	src: url('../../../shared/fonts/Bukyvede.woff2') format('woff2'),
 }
+
+@font-face {
+	font-family: 'greek-font';
+	src: url('../../../shared/fonts/new-athena-nicode.woff2') format('woff2'),
+}
+
+new-athena-nicode.woff2
 html,
 body {
 	margin: 0px;
@@ -17,8 +24,13 @@ body {
 }
 
 .ancient-cyrillic{
-	font-family: "ancient-font", sans-serif !important;
+	font-family: "cyrillic-font", sans-serif !important;
 	font-size:18px!important;
+}
+
+.ancient-greek{
+	font-family: "greek-font", sans-serif !important;
+	font-size:16px!important;
 }
 
 .modern-font{

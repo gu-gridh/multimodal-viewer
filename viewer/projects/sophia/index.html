@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
     <title>Sophia Multimodal tool</title>
     <meta charset="utf-8">
@@ -31,7 +32,7 @@
             flex-direction: column;
         }
 
-        #right-pane{
+        #right-pane {
             background-color: rgb(228, 225, 223);
         }
 
@@ -101,7 +102,7 @@
                     <div class="ui-module-item left" id="btn4" title="Explore RTI documentation"
                         onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
-                  <!--   <div class="ui-module-item left compact" id="btn5" title="About"
+                    <!--   <div class="ui-module-item left compact" id="btn5" title="About"
                         onclick="changeLeftViewer('metadata-compact'); moduleSwitcherLeft(5);">
                     </div> -->
                 </div>
@@ -138,7 +139,7 @@
             let messageSent = false;
 
             changeLeftViewer(viewerType);
-      
+
             if (annotationId === null || annotationId === '') {
                 changeRightViewer('metadata');
             }
@@ -198,11 +199,11 @@
                 const segments = qValue.split('/');
                 if (segments.length > 1) {
                     const viewerType = segments[1];
-                    
+
                     if (viewerType && !isNaN(viewerType)) {
                         return 'annotation';
                     }
-                    
+
                     switch (viewerType) {
                         case 'mesh':
                             return 'mesh';
@@ -274,8 +275,8 @@
                 }
             }
             if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
-                
-                i18next.changeLanguage(event.data.lang, function(err, t) { //change button language
+
+                i18next.changeLanguage(event.data.lang, function (err, t) { //change button language
                     if (err) {
                         console.error('Language change error:', err);
                         return;
@@ -438,6 +439,19 @@
             $('.right').css('opacity', '0.6');
             $('#btn' + num).css('opacity', '1.0',);
         }
+    </script>
+    <!-- Matomo -->
+    <script>
+        var _paq = window._paq = window._paq || [];
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "MATOMO_URL_PLACEHOLDER";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', 'MATOMO_ID_PLACEHOLDER']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+        })();
     </script>
 </body>
 

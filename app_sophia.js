@@ -494,7 +494,21 @@ app.get('*', (req, res) => {
     return res.sendFile(indexPath);
   }
 
-  const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
+  const projectPath = path.join(__dirname, 'viewer', 'projects', projectName);
+  const indexPath = path.join(projectPath, 'index.html');
+  const envPath = path.join(projectPath, '.env');
+
+  let matomoUrl = '';
+  let matomoId = '';
+
+  if (fs.existsSync(envPath)) {
+    const projectEnv = dotenv.parse(fs.readFileSync(envPath));
+
+    matomoUrl = projectEnv.MATOMO_URL || '';
+    matomoId = projectEnv.MATOMO_ID || '';
+  } else {
+    console.warn(`.env file not found at ${envPath}`);
+  }
 
   fs.readFile(indexPath, 'utf8', (err, data) => {
     if (err) {
@@ -503,9 +517,12 @@ app.get('*', (req, res) => {
     }
 
     let modifiedData = data
-    .replace(/PLACEHOLDER_QUERY/g, queryName)
-    .replace(/PLACEHOLDER_ID/g, queryId)
-    .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+      .replace(/PLACEHOLDER_QUERY/g, queryName)
+      .replace(/PLACEHOLDER_ID/g, queryId)
+      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+      .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
+      .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);
+
     res.send(modifiedData);
   });
 });

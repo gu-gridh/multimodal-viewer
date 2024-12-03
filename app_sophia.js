@@ -233,11 +233,19 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const panelDocumentation = currentLang === 'uk'
       ? metadata.documentation.map(doc => doc.text_ukr).join(' ')
       : metadata.documentation.map(doc => doc.observation).join(' ');
+    const panelMedium = currentLang === 'uk' 
+      ? metadata.medium.text_ukr 
+      : metadata.medium.text;
+    const panelMaterial = currentLang === 'uk' 
+      ? metadata.material.text_ukr 
+      : metadata.material.text;
 
     $('#panel-title').html(`${panelTitle} ${metadata.title ?? 'Unknown'}`);
     $('#panel-inscriptions').html(metadata.number_of_inscriptions ?? 'Unknown');
     $('#panel-languages').html(metadata.number_of_languages ?? 'Unknown');
     $('#panel-documentation').html(panelDocumentation);
+    $('#panel-medium').html(panelMedium ?? 'Unknown');
+    $('#panel-material').html(panelMaterial ?? 'Unknown');
 
     //populate inscription data if available
     if (annotationId && inscriptionResponse && inscriptionResponse.data) {

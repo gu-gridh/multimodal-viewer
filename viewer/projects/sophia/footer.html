@@ -5,139 +5,149 @@
   <meta charset="UTF-8">
   <title>Footer</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-</head>
 
+  <style>
+    .download-section {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
 
-<style>
-  #footer {
-    display: block;
-    background-color: #222;
-    color: white;
-    line-height: 1;
-    height: 82px;
-    width: calc(100% + 2px);
-    font-size: 12px;
-    position: absolute;
-    z-index: 3000;
-    bottom: -2px;
-    font-family: "Barlow Condensed", sans-serif;
-  }
-
-  a:link {
-    font-weight: bold;
-    color: white !important;
-    text-decoration: none;
-  }
-
-  a:visited {
-    color: white !important;
-  }
-
-
-
-  .partners {
-    float: right;
-    position: fixed;
-
-    bottom: 0px;
-    right: 0px;
-    height: 80px;
-  }
-
-  .GRIDHLogo {
-    float: right;
-    margin-top: 30px;
-    width: auto;
-    height: auto;
-    text-align: left;
-    font-weight: 100;
-    font-style: normal;
-    font-size: 30px;
-    line-height: 0.8;
-    padding: 0px 40px 5px 30px;
-    vertical-align: middle;
-  }
-
-  .PartnerLogo {
-    float: right;
-    margin-top: 30px;
-    width: auto;
-    height: auto;
-    text-align: left;
-    font-weight: 100;
-    font-style: normal;
-    font-size: 30px;
-    line-height: 0.8;
-    padding: 0px 30px 5px 30px;
-    vertical-align: middle;
-    border-width: 0px 0.5px 0px 0px;
-    border-color: white;
-    border-style: solid;
-  }
-
-  #developer-info {
-    display: flex;
-    align-items: flex-end;
-    margin-left: 30px;
-    margin-top: 15px;
-    font-size: 1.5em;
-    line-height: 1.4;
-    font-weight: 200;
-  }
-
-  .border-style {
-    border-width: 0 0 0 0.5px;
-    border-color: white;
-    border-style: dashed;
-    padding-left: 20px;
-    padding-right: 10px;
-
-  }
-
-  .link {
-    color: white;
-  }
-
-  .link:hover {
-    opacity: 0.8;
-  }
-
-  .download-link {
-    background: url("https://data.dh.gu.se/ui-icons/download_white_circle.png");
-    background-size: 18px;
-    background-position: 0px 50%;
-    background-repeat: no-repeat;
-    padding-left: 25px;
-    margin-left: 0px;
-  }
-
-  .site-link {
-    background: url("https://data.dh.gu.se/ui-icons/arrow_link_white_circle.png");
-    background-size: 18px;
-    background-position: 0px 50%;
-    background-repeat: no-repeat;
-    padding-left: 25px;
-
-  }
-
-  .links-stack {
-    margin-right: 20px;
-  }
-
-  .links-stack a {
-    display: block;
-  }
-
-  #developer-info a:link {
-    font-weight: 200;
-  }
-
-  @media screen and (max-width: 1210px) {
-    .extra {
+    .spinner {
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
       display: none;
     }
-  }
-</style>
+
+    #footer {
+      display: block;
+      background-color: #222;
+      color: white;
+      line-height: 1;
+      height: 82px;
+      width: calc(100% + 2px);
+      font-size: 12px;
+      position: absolute;
+      z-index: 3000;
+      bottom: -2px;
+      font-family: "Barlow Condensed", sans-serif;
+    }
+
+    a:link {
+      font-weight: bold;
+      color: white !important;
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: white !important;
+    }
+
+    .partners {
+      float: right;
+      position: fixed;
+
+      bottom: 0px;
+      right: 0px;
+      height: 80px;
+    }
+
+    .GRIDHLogo {
+      float: right;
+      margin-top: 30px;
+      width: auto;
+      height: auto;
+      text-align: left;
+      font-weight: 100;
+      font-style: normal;
+      font-size: 30px;
+      line-height: 0.8;
+      padding: 0px 40px 5px 30px;
+      vertical-align: middle;
+    }
+
+    .PartnerLogo {
+      float: right;
+      margin-top: 30px;
+      width: auto;
+      height: auto;
+      text-align: left;
+      font-weight: 100;
+      font-style: normal;
+      font-size: 30px;
+      line-height: 0.8;
+      padding: 0px 30px 5px 30px;
+      vertical-align: middle;
+      border-width: 0px 0.5px 0px 0px;
+      border-color: white;
+      border-style: solid;
+    }
+
+    #developer-info {
+      display: flex;
+      align-items: flex-end;
+      margin-left: 30px;
+      margin-top: 15px;
+      font-size: 1.5em;
+      line-height: 1.4;
+      font-weight: 200;
+    }
+
+    .border-style {
+      border-width: 0 0 0 0.5px;
+      border-color: white;
+      border-style: dashed;
+      padding-left: 20px;
+      padding-right: 10px;
+
+    }
+
+    .link {
+      color: white;
+    }
+
+    .link:hover {
+      opacity: 0.8;
+    }
+
+    .download-link {
+      background: url("https://data.dh.gu.se/ui-icons/download_white_circle.png");
+      background-size: 18px;
+      background-position: 0px 50%;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+      margin-left: 0px;
+    }
+
+    .site-link {
+      background: url("https://data.dh.gu.se/ui-icons/arrow_link_white_circle.png");
+      background-size: 18px;
+      background-position: 0px 50%;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+
+    }
+
+    .links-stack {
+      margin-right: 20px;
+    }
+
+    .links-stack a {
+      display: block;
+    }
+
+    #developer-info a:link {
+      font-weight: 200;
+    }
+
+    @media screen and (max-width: 1210px) {
+      .extra {
+        display: none;
+      }
+    }
+  </style>
+</head>
 
 <body>
   <div id="footer">
@@ -153,14 +163,16 @@
       <div class="links-stack border-style">
         <a class="site-link link" href="https://github.com/gu-gridh/multimodal-viewer#database-and-api-documentation"
           target="_blank">Database and API documentation</a>
-        <a href="#" class="download-link link" @click="downloadData">Download all inscription data</a>
+        <div class="download-section">
+          <a href="#" class="download-link link">Download all inscription data</a>
+          <img src="/viewer/shared/interface/6-dots-rotate_white.svg" class="spinner" alt="Loading..." />
+        </div>
       </div>
       <div class="links-stack border-style extra">
         <a class="site-link link" href="https://forms.office.com/e/3CaZQqAK16" target="_blank">Feedback form</a>
       </div>
     </div>
     <div class="partners">
-
 
       <a href="https://dh.gu.se/">
         <div class="link GRIDHLogo" id="">GU / GRIDH</div>
@@ -180,6 +192,9 @@
   <script>
     document.querySelector(".download-link").addEventListener("click", async (event) => {
       event.preventDefault();
+
+      const spinner = document.querySelector(".spinner");
+      spinner.style.display = 'inline-block';
 
       let url = 'https://saintsophia.dh.gu.se/api/inscriptions/inscription/?depth=2';
       const allData = [];
@@ -209,7 +224,8 @@
 
       } catch (error) {
         console.error('Error fetching data:', error);
-        alert('An error occurred while downloading the data.');
+      } finally {
+        spinner.style.display = 'none';
       }
     });
   </script>

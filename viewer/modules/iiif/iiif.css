@@ -141,4 +141,13 @@ body {
 	bottom:100px!important;
 }
 
+@media screen and (max-width: 500px) {
+#toolButtonsContainerVertical{
+display:none!important;
+}
+.toolButtonVertical{
+	display:none!important;
+}
+}
+
 

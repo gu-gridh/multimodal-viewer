@@ -308,9 +308,16 @@ table, th, td, tr {
     box-shadow: inset -2rem 0rem 2rem rgba(0, 0, 0, 0.2) !important;
 }
 
-@media screen and (max-width: 800px) {
-   
-}
+
+
+@media screen and (max-width: 500px) {
+    #toolButtonsContainerVertical{
+    display:none!important;
+    }
+    .toolButtonVertical{
+        display:none!important;
+    }
+    }
 
 /*IE*/
 input[type=range].output-input {
@@ -321,3 +328,4 @@ input[type=range].output-input {
 .output-input::-ms-tooltip {
     display: none;
 }
+

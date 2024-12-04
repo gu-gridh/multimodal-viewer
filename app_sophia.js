@@ -245,6 +245,19 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       }
     }
 
+    //change font if cyrillic
+    function updateFontClass(selector, isCyrillic) {
+      const $element = $(selector);
+      if ($element.length) {
+        $element.removeClass('ancient-cyrillic modern-font');
+        if (isCyrillic) {
+          $element.addClass('ancient-cyrillic');
+        } else {
+          $element.addClass('modern-font');
+        }
+      }
+    }
+
     //populate panel metadata
     const panelTitle = currentLang === 'uk' ? 'Поверхня' : 'Surface';
     const panelDocumentation = currentLang === 'uk'
@@ -256,7 +269,6 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const panelMaterial = currentLang === 'uk'
       ? metadata.material?.text_ukr ?? 'Unknown'
       : metadata.material?.text ?? 'Unknown';
-
 
     $('#panel-title').html(`${panelTitle} ${metadata.title ?? 'Unknown'}`);
     $('#panel-inscriptions').html(metadata.number_of_inscriptions ?? 'Unknown');
@@ -271,10 +283,10 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       dataAvailable = true;
 
       //title
-      const panelTitle = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
+      const title = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
       const inscriptionTitle = data.title ? `(${data.title})` : "";
       const titlePrefix = currentLang === 'uk' ? 'Hапис' : 'Inscription';
-      const fullTitle = `${titlePrefix} ${panelTitle}:${annotationId} ${inscriptionTitle}`;
+      const fullTitle = `${titlePrefix} ${title}:${annotationId} ${inscriptionTitle}`;
 
       //metadata fields
       const isPictorialGraffiti = data.type_of_inscription?.id === 2;
@@ -291,7 +303,6 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           : "<p class='modern-font'>Interpretation not available</p>"))
         : null;
 
-
       const romanisation = (!isPictorialGraffiti && data.romanisation)
         ? data.romanisation
         : (!isPictorialGraffiti
@@ -306,19 +317,21 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           : "<p class='modern-font'>Textual graffiti not available</p>"))
         : null;
 
-
       const translation = !isPictorialGraffiti
         ? (currentLang === 'uk'
           ? (data.translation_ukr || "<p>Переклад недоступний</p>")
           : (data.translation_eng || "<p>Translation not available</p>"))
         : null;
 
-
       const writing = data.writing_system
         ? (currentLang === 'uk' && data.writing_system.text_ukr
           ? data.writing_system.text_ukr
           : data.writing_system.text)
         : "";
+
+      const isCyrillic = data.writing_system && (
+        data.writing_system.text === 'Cyrillic' || data.writing_system.text_ukr === 'Кирилиця'
+      );
 
       const language = data.language
         ? (currentLang === 'uk' && data.language.text_ukr
@@ -438,6 +451,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       setOrRemoveDescription('#inscription-romanisation', romanisation);
       setOrRemoveDescription('#inscription-diplomatic', diplomatic);
       setOrRemoveDescription('#inscription-translation', translation);
+      updateFontClass('#inscription-diplomatic', isCyrillic);
+      updateFontClass('#inscription-interpretation', isCyrillic);
       setOrRemoveField('#inscription-alignment', alignment);
       setOrRemoveField('#inscription-language', language);
       setOrRemoveField('#inscription-genre', genre);

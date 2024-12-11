@@ -55,7 +55,8 @@
 
     <!-- This button is only visible if the back-button is missing (to balance things up) -->
     <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
-        <div id="extra-button" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;">
+        <div id="extra-button" class="toolButtonVertical compact expand-button"
+            style="top:28px; left:30px; position:absolute;">
         </div>
     </a>
 
@@ -178,19 +179,6 @@
                 if (err) return console.error('i18next initialization error:', err);
 
                 applyTranslations();
-
-                window.addEventListener('message', function (event) {
-                    if (event.data.type === 'languageChange') {
-                        const newLang = event.data.lang;
-                        i18next.changeLanguage(newLang, function (err) {
-                            if (err) {
-                                console.error('Error changing language:', err);
-                            } else {
-                                applyTranslations();
-                            }
-                        });
-                    }
-                });
             });
 
         function applyTranslations() {
@@ -259,11 +247,11 @@
             const qValue = parentUrl.searchParams.get('q');
 
             if (qValue && qValue.includes('/')) {
-            const parts = qValue.split('/');
-            const potentialId = parts[1];
-            if (!isNaN(potentialId)) {
-                currentAnnotationId = potentialId;
-            }
+                const parts = qValue.split('/');
+                const potentialId = parts[1];
+                if (!isNaN(potentialId)) {
+                    currentAnnotationId = potentialId;
+                }
             }
 
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
@@ -470,6 +458,11 @@
                             immediately: false,
                             padding: 200
                         });
+                        const annotationData = {
+                            type: 'annotationLoaded',
+                            value: annotationId
+                        };
+                        window.parent.postMessage(annotationData, "*");
                     } else {
                         console.error('Annotation not found:', annotationId);
                     }
@@ -557,6 +550,19 @@
                 currentAnnotationId = null;
             });
             updatePageInfo();
+
+            window.addEventListener('message', function (event) {
+                if (event.data.type === 'languageChange') {
+                    const newLang = event.data.lang;
+                    i18next.changeLanguage(newLang, function (err) {
+                        if (err) {
+                            console.error('Error changing language:', err);
+                        } else {
+                            applyTranslations();
+                        }
+                    });
+                }
+            });
         }
 
         function logPosition() {

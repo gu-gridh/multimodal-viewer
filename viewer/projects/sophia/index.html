@@ -265,8 +265,12 @@
                     updateURLWithAnnotation(null);
                 }
             }
-            if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
 
+            if (event.data.type === 'annotationLoaded') {
+                currentAnnotationId = event.data.value;
+            }
+
+            if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
                 i18next.changeLanguage(event.data.lang, function (err, t) { //change button language
                     if (err) {
                         console.error('Language change error:', err);

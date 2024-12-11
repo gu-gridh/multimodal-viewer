@@ -176,42 +176,7 @@
                 },
             }, function (err, t) {
                 if (err) return console.error('i18next initialization error:', err);
-
-                applyTranslations();
-
-                window.addEventListener('message', function (event) {
-                    if (event.data.type === 'languageChange') {
-                        const newLang = event.data.lang;
-                        i18next.changeLanguage(newLang, function (err) {
-                            if (err) {
-                                console.error('Error changing language:', err);
-                            } else {
-                                applyTranslations();
-                            }
-                        });
-                    }
-                });
             });
-
-        function applyTranslations() {
-            if (typeof i18next.t === 'function') {
-                document.getElementById('share-label').textContent = i18next.t('linkcopied');
-                document.getElementById('download-label').textContent = i18next.t('downloadstarted');
-                document.getElementById('2').innerHTML = i18next.t('frame-object');
-                document.getElementById('3').innerHTML = i18next.t('full-screen');
-                document.getElementById('4').textContent = i18next.t('tools');
-                document.getElementById('5').textContent = i18next.t('close');
-                document.getElementById('6').innerHTML = i18next.t('help-text-iiif');
-                document.getElementById('7').innerHTML = i18next.t('annotate-instructions');
-                document.getElementById('8').innerHTML = i18next.t('satisfiedwithselection');
-                document.getElementById('9').innerHTML = i18next.t('annotate-instructions-2');
-                document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
-                document.getElementById('11').innerHTML = i18next.t('createdwith');
-                document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
-                document.getElementById('saveNo').innerHTML = i18next.t('redoselection');
-                updatePageInfo();
-            }
-        }
 
         function toggleAnnotations() {
             const button = document.getElementById('clear-annotations');
@@ -470,6 +435,11 @@
                             immediately: false,
                             padding: 200
                         });
+                        const annotationData = {
+                            type: 'annotationLoaded',
+                            value: annotationId
+                        };
+                        window.parent.postMessage(annotationData, "*");
                     } else {
                         console.error('Annotation not found:', annotationId);
                     }

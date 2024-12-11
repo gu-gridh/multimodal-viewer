@@ -253,6 +253,7 @@
             }
         }
         window.addEventListener('message', function (event) {
+
             if (event.data.type === 'annotationClick') {
                 currentAnnotationId = event.data.value;
                 //check if the ID contains any letters
@@ -265,18 +266,19 @@
                     updateURLWithAnnotation(null);
                 }
             }
-            if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
 
+            if (event.data.type === 'annotationLoaded') {
+                currentAnnotationId = event.data.value;
+            }
+
+            if (event.data.type === 'languageChange' && typeof event.data.lang === 'string') {
                 i18next.changeLanguage(event.data.lang, function (err, t) { //change button language
                     if (err) {
                         console.error('Language change error:', err);
                         return;
                     }
                     applyTranslations();
-                    const iiifIframe = document.getElementById('left-Iframe');
-                    iiifIframe.contentWindow.postMessage(event.data, '*'); //forward message to iiif.html
                 });
-
                 const invalidAnnotationPattern = /[a-zA-Z]/;
                 if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
                     changeRightViewer('annotation', currentAnnotationId);

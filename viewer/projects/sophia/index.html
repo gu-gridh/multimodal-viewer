@@ -143,17 +143,8 @@
             if (annotationId === null || annotationId === '') {
                 changeRightViewer('metadata');
             }
-
-            //if there's an annotation ID, send it to iiif.html
-            if (annotationId) {
-                const iiifIframe = document.getElementById('left-Iframe');
-
-                iiifIframe.onload = function () {
-                    if (!messageSent) {
-                        iiifIframe.contentWindow.postMessage({ type: 'openAnnotation', id: annotationId }, '*');
-                        messageSent = true;
-                    }
-                };
+            else {
+                changeRightViewer('annotation', annotationId);
             }
 
             const savedLang = localStorage.getItem('i18nextLang') || 'en';

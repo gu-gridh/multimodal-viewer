@@ -119,13 +119,11 @@
         var anno;
         let urlToCopy = '';
         let annotationsVisible = true; // track the visibility state of annotations
-        let pendingAnnotationId = null;
         let currentAnnotationId = null;
         let previousAnnotationId = null;
         let annotationClicked = false;
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
-        let annotationsLoaded = false;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -256,6 +254,17 @@
 
             const currentQuery = new URLSearchParams(window.location.search).get('q');
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
+
+            const parentUrl = new URL(window.parent.location.href);
+            const qValue = parentUrl.searchParams.get('q');
+
+            if (qValue && qValue.includes('/')) {
+            const parts = qValue.split('/');
+            const potentialId = parts[1];
+            if (!isNaN(potentialId)) {
+                currentAnnotationId = potentialId;
+            }
+            }
 
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
             if (prevBaseQuery !== currentBaseQuery) {
@@ -444,24 +453,9 @@
                 }
             });
 
-            window.addEventListener('message', function (event) {
-                if (event.data.type === 'openAnnotation') {
-                    const annotationId = event.data.id;
-
-                    if (annotationsLoaded) {
-                        openAnnotationById(annotationId);
-                    } else {
-                        pendingAnnotationId = annotationId;
-                    }
-                }
-            });
-
             const loadAnnotationsPromise = anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
-                annotationsLoaded = true;
-
-                if (pendingAnnotationId !== null) {
-                    openAnnotationById(pendingAnnotationId);
-                    pendingAnnotationId = null;
+                if (annotations.length > 0 && currentAnnotationId) {
+                    openAnnotationById(currentAnnotationId);
                 }
                 return annotations;
             });
@@ -476,11 +470,6 @@
                             immediately: false,
                             padding: 200
                         });
-                        const annotationData = {
-                            type: 'annotationClick',
-                            value: annotationId
-                        };
-                        window.parent.postMessage(annotationData, "*");
                     } else {
                         console.error('Annotation not found:', annotationId);
                     }

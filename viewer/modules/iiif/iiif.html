@@ -254,62 +254,6 @@
                 }
             }
 
-            const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
-            if (prevBaseQuery !== currentBaseQuery) {
-                sessionStorage.clear(); // clear sessionStorage if the base query part has changed
-                sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
-            }
-
-            var savedState = getSavedViewerState();
-
-            document.getElementById('download').addEventListener('click', function (event) {
-                var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
-
-                event.preventDefault();
-                try {
-                    var downloadSources = isPlaceholder(downloadSourceString) ? [] : JSON.parse(downloadSourceString);
-                    var creators = isPlaceholder(creator) ? [["Unknown Creator"]] : JSON.parse(creator);
-                    var locationIdArray = isPlaceholder(locationIds) ? ["Unknown Location"] : JSON.parse(locationIds);
-                    var imgIdArray = isPlaceholder(imgIds) ? [0] : JSON.parse(imgIds);
-                } catch (error) {
-                    console.error("Error parsing JSON data:", error);
-                    return;
-                }
-
-                const pageIndex = viewer.currentPage();
-                const imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
-                const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
-                const locationId = locationIdArray[0];
-                const imgId = imgIdArray[pageIndex];
-
-                const popup = document.getElementById('download-label');
-                popup.style.display = 'block';
-                popup.classList.add('popup-animation');
-
-                setTimeout(function () {
-                    popup.classList.remove('popup-animation');
-                    popup.style.display = 'none';
-                }, 3000);
-
-                fetch(imageUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        let filename = temp.toLowerCase() === "shfa" ?
-                            `${creatorName}_${locationId}_SHFAid${imgId}.png` :
-                            `image_${pageIndex + 1}.jpg`;
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    })
-                    .catch(() => console.error("Could not download the image"));
-            });
-
             viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
@@ -396,6 +340,92 @@
                 disableEditor: true
             });
 
+            const loadAnnotationsPromise = anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
+                if (annotations.length > 0 && currentAnnotationId) {
+                    console.log('annotations loaded:', annotations);
+                    openAnnotationById(currentAnnotationId);
+                }
+                return annotations;
+            });
+
+            function openAnnotationById(annotationId) {
+                loadAnnotationsPromise.then(() => {
+                    console.log('opening annotation:', annotationId);
+                    const annotation = anno.getAnnotationById(annotationId);
+
+                    if (annotation) {
+                        anno.selectAnnotation(annotationId);
+                        anno.fitBounds(annotationId, {
+                            immediately: false,
+                            padding: 200
+                        });
+                        const annotationData = {
+                            type: 'annotationLoaded',
+                            value: annotationId
+                        };
+                        window.parent.postMessage(annotationData, "*");
+                    } else {
+                        console.error('Annotation not found:', annotationId);
+                    }
+                });
+            }
+
+            const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
+            if (prevBaseQuery !== currentBaseQuery) {
+                sessionStorage.clear(); //clear sessionStorage if the base query part has changed
+                sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
+            }
+
+            var savedState = getSavedViewerState();
+
+            document.getElementById('download').addEventListener('click', function (event) {
+                var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
+
+                event.preventDefault();
+                try {
+                    var downloadSources = isPlaceholder(downloadSourceString) ? [] : JSON.parse(downloadSourceString);
+                    var creators = isPlaceholder(creator) ? [["Unknown Creator"]] : JSON.parse(creator);
+                    var locationIdArray = isPlaceholder(locationIds) ? ["Unknown Location"] : JSON.parse(locationIds);
+                    var imgIdArray = isPlaceholder(imgIds) ? [0] : JSON.parse(imgIds);
+                } catch (error) {
+                    console.error("Error parsing JSON data:", error);
+                    return;
+                }
+
+                const pageIndex = viewer.currentPage();
+                const imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
+                const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
+                const locationId = locationIdArray[0];
+                const imgId = imgIdArray[pageIndex];
+
+                const popup = document.getElementById('download-label');
+                popup.style.display = 'block';
+                popup.classList.add('popup-animation');
+
+                setTimeout(function () {
+                    popup.classList.remove('popup-animation');
+                    popup.style.display = 'none';
+                }, 3000);
+
+                fetch(imageUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        let filename = temp.toLowerCase() === "shfa" ?
+                            `${creatorName}_${locationId}_SHFAid${imgId}.png` :
+                            `image_${pageIndex + 1}.jpg`;
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(() => console.error("Could not download the image"));
+            });
+
             function convertToIIIFRegion(annotation, imageSize) {
                 //extract viewport coordinates from the annotation
                 const fragmentSelector = annotation.target.selector.value;
@@ -440,34 +470,6 @@
                     anno.saveSelected();
                 }
             });
-
-            const loadAnnotationsPromise = anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
-                if (annotations.length > 0 && currentAnnotationId) {
-                    openAnnotationById(currentAnnotationId);
-                }
-                return annotations;
-            });
-
-            function openAnnotationById(annotationId) {
-                loadAnnotationsPromise.then(() => {
-                    const annotation = anno.getAnnotationById(annotationId);
-
-                    if (annotation) {
-                        anno.selectAnnotation(annotationId);
-                        anno.fitBounds(annotationId, {
-                            immediately: false,
-                            padding: 200
-                        });
-                        const annotationData = {
-                            type: 'annotationLoaded',
-                            value: annotationId
-                        };
-                        window.parent.postMessage(annotationData, "*");
-                    } else {
-                        console.error('Annotation not found:', annotationId);
-                    }
-                });
-            }
 
             // Attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {

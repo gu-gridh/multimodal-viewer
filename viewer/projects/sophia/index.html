@@ -135,9 +135,6 @@
             const viewerType = determineInitialViewer(urlParams);
             const annotationId = getAnnotationIdFromUrl(urlParams);
 
-            //flag to ensure openAnnotation only fires once
-            let messageSent = false;
-
             changeLeftViewer(viewerType);
 
             if (annotationId === null || annotationId === '') {

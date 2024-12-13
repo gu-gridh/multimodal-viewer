@@ -32,7 +32,7 @@
   "reference": "Referens",
   "quality": "Mesh Kvalitet",
   "tools": "Verktyg",
-  "help-text-short": "Dubbelklicka för att ändra fokus. Klicka och dra för <br> att panorera. Högerklicka och dra för att rotera. <br>Skrolla för att zooma in och ut.",
+  "help-text-short": "Dubbelklicka för att ändra fokus. Klicka och dra för <br> att panorera. Högerklicka och dra för att rotera (långtryck på pekskärm).",
   "help-text": "Dubbelklicka för att fokusera. Klicka och dra för att panorera.<br>Högerklicka och dra för att rotera. Skrolla för att zooma in och ut.<br>Om möjligt, använd pilarna högst upp för att navigera mellan olika modeller.",
   "help-text-sequence": "Scrolla för att zooma in och ut. Klicka och dra för att panorera vyn. <br> Om tillgängligt, använd pilarna högst upp för att bläddra mellan olika analytiska lager.",
   "frame-object": "<p><b>Centrera objekt.</b></p> Återställer vyn till den ursprunglig positionen.",

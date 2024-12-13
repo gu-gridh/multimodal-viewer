@@ -2707,10 +2707,12 @@ Presenter.prototype = {
 
 		var action = SGL_TRACKBALL_NO_ACTION;
 		if ((ui.isMouseButtonDown(0) && ui.isKeyDown(17)) || ui.isMouseButtonDown(1) || ui.isMouseButtonDown(2)) {
-			action = SGL_TRACKBALL_PAN;
+			// action = SGL_TRACKBALL_PAN;
+			action = SGL_TRACKBALL_ROTATE;
 		}
 		else if (ui.isMouseButtonDown(0)) {
-			action = SGL_TRACKBALL_ROTATE;
+			// action = SGL_TRACKBALL_ROTATE;
+			action = SGL_TRACKBALL_PAN;
 		}
 
 		var testMatrix = this.trackball._matrix.slice();

@@ -2705,6 +2705,8 @@ Presenter.prototype = {
 		if (ui.dragDeltaX(button) != 0) this.x += (ui.cursorDeltaX / 500);
 		if (ui.dragDeltaY(button) != 0) this.y += (ui.cursorDeltaY / 500);
 
+
+		// GRIDH: switches the pan and rotate actions to improve user-experience on mobile devices
 		var action = SGL_TRACKBALL_NO_ACTION;
 		if ((ui.isMouseButtonDown(0) && ui.isKeyDown(17)) || ui.isMouseButtonDown(1) || ui.isMouseButtonDown(2)) {
 			// action = SGL_TRACKBALL_PAN;

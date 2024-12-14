@@ -274,7 +274,7 @@ async function init() {
     let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
     ui.actions.light.active = false;
     ui.actions.layers.display = false;
-    lime.camera.maxFixedZoom = 1;
+    lime.camera.maxFixedZoom = 1.5;
     window.lime = lime;
 }
 
@@ -313,9 +313,9 @@ function updateRTIImage(url) {
         lime.canvas.addLayer('RTI', layer);
         OpenLIME.Skin.setUrl('css/skin2.svg');
         let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
-        ui.actions.light.active = true;
+        ui.actions.light.active = false;
         ui.actions.layers.display = false;
-        lime.camera.maxFixedZoom = 1;
+        lime.camera.maxFixedZoom = 1.5;
         window.lime = lime;
         document.getElementById("openlime").focus();
 		setTimeout(applyTranslations, 10); //apply translations after the viewer is updated

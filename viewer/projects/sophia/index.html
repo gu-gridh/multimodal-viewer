@@ -50,7 +50,7 @@
             margin-top: 20px;
         }
 
-        #back-button {
+        .back-button {
             position: absolute;
             height: 40px;
             width: 40px;
@@ -66,32 +66,32 @@
             cursor: pointer;
         }
 
-        #back-button:hover {
+        .back-button:hover {
             background-color: rgba(0, 0, 0, 1.0);
             transform: scale(1.07);
         }
 
-      
+
 
         @media screen and (max-width: 500px) {
-            #back-button {
+            .back-button {
                 height: 30px;
                 width: 30px;
-                margin-left: 10px;
+                margin-left: 12px;
                 margin-top: 30px;
             }
         }
 
         @media screen and (max-width: 400px) {
-            #back-button {
+            .back-button {
+
              
-                margin-left: 5px;
-           
+
             }
         }
 
         @media screen and (max-width: 350px) {
-            #back-button {
+            .back-button {
                 display: none;
             }
         }
@@ -102,7 +102,7 @@
     <div id="main-content">
         <div id="left-pane">
             <a href="PLACEHOLDER_BACKBUTTON">
-                <div id="back-button" title="View all surfaces"></div>
+                <div class="back-button" title="View all surfaces"></div>
             </a>
             <div class="ui-module-container">
                 <div class="ui-module">
@@ -115,14 +115,18 @@
                     <div class="ui-module-item left" id="btn4" title="Explore RTI documentation"
                         onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
-                    <div class="ui-module-item left compact special-about" id="btn5" title="About"
-                        onclick="changeLeftViewer('metadata-compact'); moduleSwitcherLeft(5);">
+                    <div class="ui-module-item left compact" id="btn5" title="About"
+                        onclick="$('#back-to-visuals').css('display', 'block'); $('#right-pane').css('display', 'block'); $('#left-pane').css('display', 'none'); moduleSwitcherRight(6);">
                     </div>
                 </div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
         </div>
         <div id="right-pane">
+            <div id="back-to-visuals" class="back-button" title="Back to visuals"
+            onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block');moduleSwitcherLeft(1);"
+            style="display:none; margin-left:12px;">
+        </div>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn6" title="Explore the metadata"
@@ -309,7 +313,7 @@
 
         function applyTranslations() {
             if (typeof i18next.t === 'function') {
-                document.getElementById('btn1').textContent = i18next.t('orthophoto');
+                document.getElementById('btn1').textContent = i18next.t('photo');
                 document.getElementById('btn2').textContent = i18next.t('topography');
                 document.getElementById('btn3').textContent = i18next.t('mesh');
                 document.getElementById('btn4').textContent = i18next.t('rti');

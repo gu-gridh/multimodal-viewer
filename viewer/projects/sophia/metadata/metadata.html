@@ -84,7 +84,6 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const savedLang = localStorage.getItem('i18nextLang') || 'en';
-
             i18next.use(i18nextHttpBackend).init({
                 lng: savedLang,
                 fallbackLng: 'en',

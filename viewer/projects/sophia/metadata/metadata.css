@@ -148,6 +148,7 @@ body {
 	padding-top: 0px;
 	font-size: 3.2vw;
 	font-weight: 200;
+	line-height:1.2;
 	float: left;
 	width: calc(100% - 130px);
 }
@@ -512,11 +513,6 @@ body {
 /* On small devices */
 
 @media screen and (max-width: 650px) {
-	.container {
-	height:auto;
-		padding: 80px 40px 20px 40px !important;
-
-	}
 
 	.metadata-surface-title {
 		padding-top: 10px;
@@ -552,3 +548,11 @@ body {
 		width:100%;
 	}
 	}
+
+	@media screen and (max-width: 550px) {
+		.container {
+			height:auto;
+				padding: 80px 15px 20px 15px !important;
+		
+			}
+		}

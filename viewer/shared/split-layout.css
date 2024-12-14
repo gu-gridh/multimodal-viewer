@@ -16,6 +16,11 @@
     width: 100%;
     height: calc(100%)!important;
     overflow:hidden;
+    display:block;
+}
+
+#back-to-visuals{
+    display:none;
 }
 
 .iframes{

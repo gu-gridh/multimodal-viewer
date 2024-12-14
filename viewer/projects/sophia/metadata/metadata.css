@@ -48,6 +48,7 @@ body {
 	/*box-shadow: inset 10px 0px 20px 0px rgb(0, 0, 0, 0.3); */
 }
 
+
 .border {}
 
 /* .metadata-surface {
@@ -204,10 +205,10 @@ body {
 	border-radius: 8px;
 	width: calc(100%);
 	height:calc(100vh - 450px);
+	min-height:200px;
 	margin-left: 0px;
 	background-color: rgba(255, 255, 255, 0.3);
 	overflow: auto;
-
 	margin-top: 20px;
 	margin-bottom: 30px;
     text-align: center;
@@ -324,47 +325,8 @@ body {
 }
 
 
-@media screen and (min-width: 900px) {
 
 
-	.metadata-surface-title {
-		font-size: 3.0em !important;
-	}
-
-	.metadata-item {
-		font-size: 1.0em;
-	}
-
-	.metadata-inscription-title {
-
-		font-size: 2.0em;
-
-	}
-
-}
-
-@media screen and (max-width: 850px) {
-
-
-
-	.metadata-surface-title {
-		font-size: 2.8em !important;
-	}
-
-	.metadata-inscription-title {
-
-		font-size: 1.8em;
-
-	}
-
-}
-
-@media screen and (max-width: 600px) {
-	.container {
-		height: auto !important;
-		/* padding: 80px 60px 40px 60px !important; */
-	}
-}
 
 .metadata-description .label {
 	text-align: left;
@@ -464,28 +426,6 @@ body {
 	margin-bottom:10px;
 }
 
-@media screen and (max-width: 650px) {
-	.metadata-columns {
-		float: left;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: flex-start;
-		width: 100%;
-		flex-wrap: wrap;
-	}
-
-	.metadata-columns .left-column{
-		width:100%;
-	}
-
-	.metadata-columns .right-column{
-		padding-left:0px;
-		border-style:none;
-		width:100%;
-	}
-}
-
 
 
 .division {
@@ -545,3 +485,70 @@ body {
 	flex-wrap: wrap;
 	justify-content: center;
 }
+
+/* On regular screens */
+
+@media screen and (min-width: 900px) {
+
+
+	.metadata-surface-title {
+		font-size: 3.0em !important;
+	}
+
+	.metadata-item {
+		font-size: 1.0em;
+	}
+
+	.metadata-inscription-title {
+
+		font-size: 2.0em;
+
+	}
+
+}
+
+
+
+/* On small devices */
+
+@media screen and (max-width: 650px) {
+	.container {
+	height:auto;
+		padding: 80px 40px 20px 40px !important;
+
+	}
+
+	.metadata-surface-title {
+		padding-top: 10px;
+		font-size: 2.8em !important;
+	}
+
+	.metadata-inscription-title {
+
+		font-size: 1.8em;
+
+	}
+
+	.metadata-columns {
+		float: left;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		width: 100%;
+		flex-wrap: wrap;
+	}
+
+	.metadata-columns .left-column{
+		width:100%;
+		padding-left:0px;
+		padding-right:0px;
+	}
+
+	.metadata-columns .right-column{
+		padding-left:0px;
+		padding-right:0px;
+		border-style:none;
+		width:100%;
+	}
+	}

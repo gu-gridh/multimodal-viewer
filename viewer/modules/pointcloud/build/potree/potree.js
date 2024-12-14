@@ -389,7 +389,7 @@
 	const StreamCopyUsage = 35042;
 
 	// GRIDH: Define the move speed for fpControls #explore
-	const FirstPersonSpeed = 1.0;
+	const FirstPersonSpeed = 1.2;
 
 	const GLSL1 = '100';
 	const GLSL3 = '300 es';
@@ -89693,23 +89693,33 @@ ENDSEC
 				if (distance < 3) {
 					element.css("backgroundColor", "rgba(180,50,50,0.7");
 					element.css("pointerEvents", "auto");
+					element.css("userSelect", "none");
+					element.css("webkitUserSelect", "none");
 				}
 				if (distance > 3) {
 					element.css("backgroundColor", "rgba(180,50,50,0.3");
 					element.css("pointerEvents", "auto");
+					element.css("userSelect", "none");
+					element.css("webkitUserSelect", "none");
 				}
 				if (distance > 4) {
 					element.css("backgroundColor", "rgba(180,50,50,0.2");
 					element.css("pointerEvents", "auto");
+					element.css("userSelect", "none");
+					element.css("webkitUserSelect", "none");
 				}
 
 				if (distance > 5) {
 					element.css("backgroundColor", "rgba(180,50,50,0.05");
 					element.css("pointerEvents", "none");
+					element.css("userSelect", "none");
+					element.css("webkitUserSelect", "none");
 				}
 				if (distance > 6) {
 					element.css("backgroundColor", "rgba(180,50,50,0.0");
 					element.css("pointerEvents", "none");
+					element.css("userSelect", "none");
+					element.css("webkitUserSelect", "none");
 				}
 	
 				element.css("left", screenPos.x + "px");

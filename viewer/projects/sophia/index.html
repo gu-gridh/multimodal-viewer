@@ -116,7 +116,7 @@
                         onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
                     <div class="ui-module-item left compact" id="btn5" title="About"
-                        onclick="$('#back-to-visuals').css('display', 'block'); $('#right-pane').css('display', 'block'); $('#left-pane').css('display', 'none'); moduleSwitcherRight(6);">
+                        onclick="MetadataCompact; $('#back-to-visuals').css('display', 'block'); $('#right-pane').css('display', 'block'); $('#left-pane').css('display', 'none'); ">
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
         </div>
         <div id="right-pane">
             <div id="back-to-visuals" class="back-button" title="Back to visuals"
-            onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block');moduleSwitcherLeft(1);"
+            onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block');changeLeftViewer('inscription');moduleSwitcherLeft(1);"
             style="display:none; margin-left:12px;">
         </div>
             <div class="ui-module-container">
@@ -266,6 +266,22 @@
                 isFullscreenMode = true;
             }
         }
+
+        function MetadataCompact() {
+                currentAnnotationId = event.data.value;
+                //check if the ID contains any letters
+                const invalidAnnotationPattern = /[a-zA-Z]/;
+                if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
+                    changeRightViewer('annotation', currentAnnotationId);
+                    moduleSwitcherRight(6);
+                    updateURLWithAnnotation(currentAnnotationId);
+                } else {
+                    changeRightViewer('metadata');
+                    moduleSwitcherRight(6);
+                }
+            }
+
+
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
                 currentAnnotationId = event.data.value;
@@ -401,11 +417,6 @@
                     src = `/viewer/modules/rti/rti.html${queryString}`;
                     newPath = `/viewer/?q=${qValue}/rti`;
                     buttonNum = 4;
-                    break;
-                case 'metadata-compact':
-                    src = `/viewer/projects/sophia/metadata/metadata.html?q=${qValue}/metadata-compact${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/metadata-compact`;
-                    buttonNum = 5;
                     break;
                 case 'annotation':
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;

@@ -26,63 +26,62 @@
 <style>
 	.control-buttons {
 		position: absolute;
-		top: 30px;
-		right: 30px;
-		z-index: 1000;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: 1fr 1fr 1fr;
-		gap: 0px;
+		top: auto;
+		bottom: 135px;
+		left: calc(50% - 75px);
+		right: auto;
+		width: 160px;
+		z-index: 1;
+		user-select: none;
+		-webkit-user-select: none;
+		display: flex;
+		flex-direction: row;
 		align-items: center;
-		justify-items: center;
+		pointer-events: none;
+
+	}
+
+	@media (max-width: 550px) {
+		#instructions {
+			display: none;
+		}
+	}
+
+	.control-buttons-group {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.control-buttons button {
 		border-radius: 50%;
 		border-color: white;
 		border-width: 0.5px 0px 0px 0px;
 		border-style: solid;
-		padding: 10px;
-		background-color: rgba(0, 0, 0, 0.35);
-		transform: rotateX(0deg);
-	}
-
-	.control-buttons button {
-		background: none;
 		border: none;
 		cursor: pointer;
-		width: 23px;
-		height: 23px;
-		padding: 0;
+		width: 40px;
+		height: 40px;
 		opacity: 0.6;
 		user-select: none;
+		-webkit-user-select: none;
+		background-color: rgba(0, 0, 0, 0.80);
+		pointer-events: auto;
 	}
 
 	.control-buttons button:hover {
 		opacity: 1.0;
 	}
 
-	/* .control-buttons:has(> #moveRight:hover){
-		border-width:0.0px 0.0px 0px 0.5px;
-	}
-
-	.control-buttons:has(> #moveLeft:hover){
-		border-width:0.0px 0.5px 0px 0.0px;
-	}
-
-	.control-buttons:has(> #moveForward:hover){
-		border-width:0.0px 0.0px 0.5px 0.0px;
-	}
-
-	.control-buttons:has(> #moveBackard:hover){
-		border-width:0.5px 0.0px 0.0px 0.0px;
-	} */
-
 	.control-buttons img {
-		width: 90%;
-		height: 90%;
+		width: 100%;
+		height: 100%;
 	}
 
 	.spacer {
-		width: 25px;
-		height: 25px;
+
+		height: 10px;
 	}
 
 	@media (max-width: 400px) {
@@ -171,7 +170,10 @@
 						<div class="guide-instructions-item-label" id="7">
 						</div>
 					</div>
-					<div class="module-acknowledgement"><p id="10">The module was created with</p> <p><a href="https://github.com/potree/potree" target="_blank">Potree</a></p></div>
+					<div class="module-acknowledgement">
+						<p id="10">The module was created with</p>
+						<p><a href="https://github.com/potree/potree" target="_blank">Potree</a></p>
+					</div>
 
 					<div class="guide-closer">Close</div>
 				</div>
@@ -188,15 +190,15 @@
 		<div id="potree_render_area" style="background-color:var(--viewer-bg)">
 
 			<!-- instructions on how to navigate -->
-			<div class="ui-overlay-container" style="position:absolute; bottom:20px; ">
-				<div id="instructions" class="" style="width:350px;">
+			<div class="ui-overlay-container" style="position:absolute; bottom:20px; z-index:1000!important;">
+				<div id="instructions" class="" style="width:350px; ">
 					<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;">
 					</div>
 					<div id="1"></div>
 				</div>
 			</div>
 
-		
+
 			<!-- LOD tools -->
 			<div class="ui-overlay-container"
 				style="position:absolute; height:50px; bottom:55px; z-index:1000; color:white;">
@@ -215,8 +217,6 @@
 
 			<!-- The controls -->
 			<div class="interface-area">
-					
-			
 				<div class="toolbar-bottom" style="width:350px;">
 					<div id="tools"></div>
 					<div id="quality">
@@ -237,6 +237,29 @@
 					?</div>
 			</div>
 
+			<!--  Navigation cntrols -->
+			<div class="control-buttons">
+
+				<div class="control-buttons-group" style="margin-right:15px;">
+					<button id="moveLeft" title="Move Left">
+						<img src="build/potree/resources/icons/left_movement.svg" alt="Move Left">
+					</button>
+				</div>
+				<div class="control-buttons-group" style="">
+					<button id="moveForward" title="Move Forward">
+						<img src="build/potree/resources/icons/up_movement.svg" alt="Move Forward">
+					</button>
+					<div class="spacer"></div>
+					<button id="moveBackward" title="Move Backward">
+						<img src="build/potree/resources/icons/down_movement.svg" alt="Move Backward">
+					</button>
+				</div>
+				<div class="control-buttons-group" style="margin-left:15px;">
+					<button id="moveRight" title="Move Right">
+						<img src="build/potree/resources/icons/right_movement.svg" alt="Move Right">
+					</button>
+				</div>
+			</div>
 
 			<!--  The sudebar -->
 		</div>
@@ -244,26 +267,7 @@
 	</div>
 
 
-	<!--  Navigation cntrols -->
-	<div class="control-buttons">
-		<div class="spacer"></div>
-		<button id="moveForward" title="Move Forward">
-			<img src="build/potree/resources/icons/up_movement.svg" alt="Move Forward">
-		</button>
-		<div class="spacer"></div>
-		<button id="moveLeft" title="Move Left">
-			<img src="build/potree/resources/icons/left_movement.svg" alt="Move Left">
-		</button>
-		<div class="spacer"></div>
-		<button id="moveRight" title="Move Right">
-			<img src="build/potree/resources/icons/right_movement.svg" alt="Move Right">
-		</button>
-		<div class="spacer"></div>
-		<button id="moveBackward" title="Move Backward">
-			<img src="build/potree/resources/icons/down_movement.svg" alt="Move Backward">
-		</button>
-		<div class="spacer"></div>
-	</div>
+
 
 	<script type="module">
 		import * as THREE from "./libs/three.js/build/three.module.js";

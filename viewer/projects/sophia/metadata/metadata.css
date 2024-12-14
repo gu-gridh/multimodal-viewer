@@ -196,50 +196,7 @@ body {
 	flex-direction: row;
 }
 
-.metadata-help {
-	display:flex;
-	flex-direction:column;
-	flex-grow: inherit;
-	align-items: center;
-	justify-content:center;
-	float: left;
-	border-radius: 8px;
-	width: calc(100%);
-	height:calc(100vh - 450px);
-	min-height:200px;
-	margin-left: 0px;
-	background-color: rgba(255, 255, 255, 0.3);
-	overflow: auto;
-	margin-top: 20px;
-	margin-bottom: 30px;
-    text-align: center;
-    font-size: 1.2em;
-	font-weight: 100;
-}
 
-.annotation-box-demo {
- width:100px;
- height:50px;
- margin-top:20px;
- border-width: 2px;
- border-color:black;
- border-style:dotted;
- border-radius:6px;
- margin-left:-20px;
-}
-
-
-.annotation-box-demo-2{
-	width:100px;
-	height:50px;
-	margin-top:20px;
-	border-width: 2px;
-	border-color:black;
-	border-style:dotted;
-	border-radius:6px;
-	margin-top:-30px;
-	margin-left:40px;
-   }
 
 /* .metadata-item:has(> .tag:empty) {
 	display:none;

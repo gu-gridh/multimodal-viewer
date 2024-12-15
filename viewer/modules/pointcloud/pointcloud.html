@@ -60,11 +60,15 @@
 		border-style: solid;
 		cursor: pointer;
 		width: 60px;
-		height: 30px;
+		height: 32px;
 		user-select: none;
 		-webkit-user-select: none;
 		background-color: rgba(0, 0, 0, 0.40);
 		pointer-events: auto;
+		display: flex;
+		flex-direction: column;
+		align-items:center;
+		justify-content: center;
 	}
 
 	.control-buttons button:hover {
@@ -242,7 +246,7 @@
 
 				<div class="control-buttons-group" style="">
 				
-					<button id="moveLeft" title="Move Left" style="border-radius:10px 0px 0px 10px;">
+					<button id="moveLeft" title="Move Left" style="border-radius:10px 0px 0px 10px; margin-right:0px;">
 						<img src="build/potree/resources/icons/movement.svg" alt="Move Left"  style="transform:rotate(-90deg);">
 					</button>
 				</div>
@@ -257,7 +261,7 @@
 				</div>
 				<div class="control-buttons-group" style="">
 				
-					<button id="moveRight" title="Move Right"  style="border-radius:0px 10px 10px 0px;">
+					<button id="moveRight" title="Move Right"  style="border-radius:0px 10px 10px 0px; margin-left:0px;">
 						<img src="build/potree/resources/icons/movement.svg" alt="Move Right" style="transform:rotate(90deg);">
 					</button>
 				</div>

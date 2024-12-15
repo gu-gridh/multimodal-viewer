@@ -2,46 +2,47 @@
 <html>
 
 <head>
-    <title>OpenLime</title>
+	<title>OpenLime</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="UTF-8" />
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 	<link rel="icon" type="image/png" href="">
-	<link rel="stylesheet" href="css/openlime.css"/>
-	<link rel="stylesheet" href="../../shared/shared_styles.css"/>
+	<link rel="stylesheet" href="css/openlime.css" />
+	<link rel="stylesheet" href="../../shared/shared_styles.css" />
 	<link rel="stylesheet" href="/viewer/shared/guide.css">
 	<script type="text/javascript" src="../../libs/jquery.js"></script>
 	<script src="/viewer/libs/i18next.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.3.1/i18nextHttpBackend.min.js"></script>
 	<style>
-		html, body {
+		html,
+		body {
 			margin: 0px;
 			padding: 0px;
 			height: calc(100% - 0px);
-			overflow:hidden;
+			overflow: hidden;
 		}
 
 		#openlime {
-			position:relative;
+			position: relative;
 			height: 100%;
 		}
 
 		#openlime>canvas {
-			width:100%;
-			height:100%;
+			width: 100%;
+			height: 100%;
 			/* this is important, it would cause firefox flickering! */
 			overflow: hidden;
 		}
 
 		.relight {
-			position: relative; 
-			width: 100%; 
-			height: calc(100vh - 80px); 
+			position: relative;
+			width: 100%;
+			height: calc(100vh - 80px);
 		}
 
 		#rtiImageDropdown {
 			min-width: 70px;
-			height:30px;
+			height: 30px;
 			padding: 3px 10px 5px 10px;
 			color: white;
 			cursor: pointer;
@@ -49,13 +50,13 @@
 			top: 80px;
 			margin-left: calc(50% - 40px);
 			position: absolute;
-			background-color: rgba(0,0,0,0.9);
+			background-color: rgba(0, 0, 0, 0.9);
 			box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
 			border-radius: 6px;
 			border-width: 0;
 			font-family: "Oswald", sans-serif !important;
 			font-size: 14px;
-			font-weight:200;
+			font-weight: 200;
 			-webkit-appearance: none;
 			user-select: none;
 			-webkit-user-select: none;
@@ -73,7 +74,6 @@
 			width: 15%;
 			cursor: pointer;
 		}
-
 	</style>
 </head>
 
@@ -88,76 +88,82 @@
 			<div id="instructions" style="bottom:125px; width:320px;">
 				<div class="instruction-closer" onclick="$('#instructions').hide();" style="margin-top:-10px;"></div>
 				<div id="1">
-			</div>
-		</div>
-
-	
-		<div class="guide-button compact" title="User Guide" style="bottom:23px" onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">?</div>
-
-		<a id="download" target="_blank">
-			<div id="" class="round-button download-button compact deactivated" style="bottom:23px" title="Download image"></div>
-		</a>
-
-		<div id="trackball_position" class="round-button share-button compact deactivated" style="bottom:70px" title="Copy link to view"
-			onclick="logTrackballPosition();">
-			<div id="share-label" class="label-popup">Link copied</div>
-		</div>
-
-	</div>
-	
-	<div id="guide" onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)'); $('#instructions').css('transform', 'scale(1.0)');">
-		<div class="guide-content">
-			<!-- <h1>User Guide: <br>Spatial Context</h1> -->
-			<div class="guide-instructions">
-				<div class="guide-instructions-intro" id="9">	
-				</div>
-
-				<div id="guide-instructions-tools">
-					<h2 id="2"></h2>
-
-					<div class="guide-instructions-item">
-						<div class="guide-instructions-item-icon"
-							style="background-image:url()"></div>
-						<div class="guide-instructions-item-label" id="4">
-						</div>
-					</div>
-
-					<div class="guide-instructions-item">
-						<div class="guide-instructions-item-icon"
-							style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
-						<div class="guide-instructions-item-label" id="5">
-						</div>
-					</div>
-
-					<div class="guide-instructions-item">
-						<div class="guide-instructions-item-icon"
-							style="background-image:url(https://data.dh.gu.se/ui-icons/light_on.png)"></div>
-						<div class="guide-instructions-item-label" id="6">
-						</div>
-					</div>
-
-					<div class="guide-instructions-item">
-						<div class="guide-instructions-item-icon"
-							style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
-						<div class="guide-instructions-item-label" id="7">
-						</div>
-					</div>
-
-					<div class="guide-instructions-item full-screen-option">
-						<div class="guide-instructions-item-icon"
-							style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
-						<div class="guide-instructions-item-label" id="8">
-						</div>
-					</div>
-
-					<div class="module-acknowledgement"><p id="11">The module was created with</p> <p><a href="https://github.com/cnr-isti-vclab/openlime" target="_blank">OpenLime</a></p></div>
-
-
-					<div class="guide-closer" id="3"></div>
 				</div>
 			</div>
+
+
+			<div class="guide-button compact" title="User Guide" style="bottom:23px"
+				onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
+				?</div>
+
+			<a id="download" target="_blank">
+				<div id="" class="round-button download-button compact deactivated" style="bottom:23px"
+					title="Download image"></div>
+			</a>
+
+			<div id="trackball_position" class="round-button share-button compact deactivated" style="bottom:70px"
+				title="Copy link to view" onclick="logTrackballPosition();">
+				<div id="share-label" class="label-popup">Link copied</div>
+			</div>
+
 		</div>
-	</div>
+
+		<div id="guide"
+			onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)'); $('#instructions').css('transform', 'scale(1.0)');">
+			<div class="guide-content">
+				<!-- <h1>User Guide: <br>Spatial Context</h1> -->
+				<div class="guide-instructions">
+					<div class="guide-instructions-intro" id="9">
+					</div>
+
+					<div id="guide-instructions-tools">
+						<h2 id="2"></h2>
+
+						<div class="guide-instructions-item">
+							<div class="guide-instructions-item-icon" style="background-image:url()"></div>
+							<div class="guide-instructions-item-label" id="4">
+							</div>
+						</div>
+
+						<div class="guide-instructions-item">
+							<div class="guide-instructions-item-icon"
+								style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
+							<div class="guide-instructions-item-label" id="5">
+							</div>
+						</div>
+
+						<div class="guide-instructions-item">
+							<div class="guide-instructions-item-icon"
+								style="background-image:url(https://data.dh.gu.se/ui-icons/light_on.png)"></div>
+							<div class="guide-instructions-item-label" id="6">
+							</div>
+						</div>
+
+						<div class="guide-instructions-item">
+							<div class="guide-instructions-item-icon"
+								style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
+							<div class="guide-instructions-item-label" id="7">
+							</div>
+						</div>
+
+						<div class="guide-instructions-item full-screen-option">
+							<div class="guide-instructions-item-icon"
+								style="background-image:url(https://data.dh.gu.se/ui-icons/expand_white.svg)"></div>
+							<div class="guide-instructions-item-label" id="8">
+							</div>
+						</div>
+
+						<div class="module-acknowledgement">
+							<p id="11">The module was created with</p>
+							<p><a href="https://github.com/cnr-isti-vclab/openlime" target="_blank">OpenLime</a></p>
+						</div>
+
+
+						<div class="guide-closer" id="3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 </body>
 
 <script src="js/openlime.js"></script>
@@ -180,10 +186,10 @@
 
 			applyTranslations();
 
-			window.addEventListener('message', function(event) {
+			window.addEventListener('message', function (event) {
 				if (event.data.type === 'languageChange') {
 					const newLang = event.data.lang;
-					i18next.changeLanguage(newLang, function(err) {
+					i18next.changeLanguage(newLang, function (err) {
 						if (err) {
 							console.error('Error changing language:', err);
 						} else {
@@ -213,119 +219,125 @@
 	}
 	// <-- Language Control -->
 
-//autodetect type:
-async function autodetect() {
-	// let response = await fetch('rti-folder/plane_0.tzi');
-	// if(response.status == 200)
-	// 	return "tarzoom";
+	//autodetect type:
+	async function autodetect() {
+		// let response = await fetch('rti-folder/plane_0.tzi');
+		// if(response.status == 200)
+		// 	return "tarzoom";
 
-	// response = await fetch('rti-folder/plane_0.dzi');
-	// if(response.status == 200)
-	// 	return "deepzoom";
+		// response = await fetch('rti-folder/plane_0.dzi');
+		// if(response.status == 200)
+		// 	return "deepzoom";
 
-    //     response = await fetch('rti-folder/planes.tzi');
-    //     if(response.status == 200)
-    //             return "itarzoom";
+		//     response = await fetch('rti-folder/planes.tzi');
+		//     if(response.status == 200)
+		//             return "itarzoom";
 
-	// response = await fetch('rti-folder/plane_0.jpg');
-	// if(response.status == 200)
-    //             return "image";
+		// response = await fetch('rti-folder/plane_0.jpg');
+		// if(response.status == 200)
+		//             return "image";
 
-	// alert("Could not detect an RTI here");
-	// return "";
-}
-
-async function autodetectNormals(layout) {
-	if(layout == 'tarzoom') {
-		let response = await fetch('rti-folder/normals.tzi');
-		if(response.status == 200)
-			return true;
-	}
-	if(layout == 'deepzoom') {
-		let response = await fetch('rti-folder/normals.dzi');
-		if(response.status == 200)
-			return true;
-	}
-	if(layout == 'image') {
-		let response = await fetch('rti-folder/normals.jpg');
-		if(response.status == 200)
-			return true;
+		// alert("Could not detect an RTI here");
+		// return "";
 	}
 
-	return false;
-}
+	async function autodetectNormals(layout) {
+		if (layout == 'tarzoom') {
+			let response = await fetch('rti-folder/normals.tzi');
+			if (response.status == 200)
+				return true;
+		}
+		if (layout == 'deepzoom') {
+			let response = await fetch('rti-folder/normals.dzi');
+			if (response.status == 200)
+				return true;
+		}
+		if (layout == 'image') {
+			let response = await fetch('rti-folder/normals.jpg');
+			if (response.status == 200)
+				return true;
+		}
 
-var lime = new OpenLIME.Viewer('#openlime', { background: 'var(--viewer-bg)' });
-var currentLayer = null;
+		return false;
+	}
 
-async function init() {
-	var initialRTIUrl = 'PLACEHOLDER_RTI';
-	var infoUrl = initialRTIUrl + 'info.json';
-    currentLayer = new OpenLIME.Layer({
-        layout: 'deepzoom',
-        type: 'rti',
-        url: infoUrl,
-		// url: 'rti-folder/info.json',
-        normals: false,
-    });
+	var lime = new OpenLIME.Viewer('#openlime', { background: 'var(--viewer-bg)' });
+	var currentLayer = null;
 
-    lime.canvas.addLayer('RTI', currentLayer);
-	OpenLIME.Skin.setUrl('css/skin2.svg');
-    let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
-    ui.actions.light.active = false;
-    ui.actions.layers.display = false;
-    lime.camera.maxFixedZoom = 1.5;
-    window.lime = lime;
-}
+	async function init() {
+		var initialRTIUrl = 'PLACEHOLDER_RTI';
+		var infoUrl = initialRTIUrl + 'info.json';
+		currentLayer = new OpenLIME.Layer({
+			layout: 'deepzoom',
+			type: 'rti',
+			url: infoUrl,
+			// url: 'rti-folder/info.json',
+			normals: false,
+		});
 
-function removePreviousLimeViewer() {
-    const selectors = ['.openlime-overlay', '.openlime-lightdir', '.openlime-layers-menu', '.openlime-toolbar', '#openlime canvas'];
+		lime.canvas.addLayer('RTI', currentLayer);
+		OpenLIME.Skin.setUrl('css/skin2.svg');
+		let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
+		ui.actions.light.active = false;
+		ui.actions.layers.display = false;
+		lime.camera.maxFixedZoom = 1.5;
+		window.lime = lime;
+	}
 
-    selectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(element => {
-            element.parentNode.removeChild(element);
-        });
-    });
+	function removePreviousLimeViewer() {
+		const selectors = ['.openlime-overlay', '.openlime-lightdir', '.openlime-layers-menu', '.openlime-toolbar', '#openlime canvas'];
 
-    let allElementsRemoved = selectors.every(selector => document.querySelector(selector) === null);
-    return allElementsRemoved;
-}
+		selectors.forEach(selector => {
+			document.querySelectorAll(selector).forEach(element => {
+				element.parentNode.removeChild(element);
+			});
+		});
 
-function updateRTIImage(url) {
-    let allElementsRemoved = removePreviousLimeViewer();
-	
-    if (allElementsRemoved) {
-        if (lime && currentLayer) {
-            lime.canvas.removeLayer(currentLayer); 
-            currentLayer = null;
-        }
+		let allElementsRemoved = selectors.every(selector => document.querySelector(selector) === null);
+		return allElementsRemoved;
+	}
 
-        let infoUrl = url + 'info.json';
-        lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+	function updateRTIImage(url) {
+		let allElementsRemoved = removePreviousLimeViewer();
 
-        let layer = new OpenLIME.Layer({
-            layout: 'deepzoom',
-            type: 'rti',
-            url: infoUrl,
-            normals: false
-        });
+		if (allElementsRemoved) {
+			if (lime && currentLayer) {
+				lime.canvas.removeLayer(currentLayer);
+				currentLayer = null;
+			}
 
-        lime.canvas.addLayer('RTI', layer);
-        OpenLIME.Skin.setUrl('css/skin2.svg');
-        let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
-        ui.actions.light.active = false;
-        ui.actions.layers.display = false;
-        lime.camera.maxFixedZoom = 1.5;
-        window.lime = lime;
-        document.getElementById("openlime").focus();
-		setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
+			let infoUrl = url + 'info.json';
+			lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
 
-    } else {
-        console.error("Not all elements were removed. Viewer update aborted.");
-    }
-}
+			let layer = new OpenLIME.Layer({
+				layout: 'deepzoom',
+				type: 'rti',
+				url: infoUrl,
+				normals: false
+			});
 
-init();
+			lime.canvas.addLayer('RTI', layer);
+			OpenLIME.Skin.setUrl('css/skin2.svg');
+			let ui = new OpenLIME.UIBasic(lime, { skin: 'css/skin2.svg', showLightDirections: true });
+			ui.actions.light.active = false;
+			ui.actions.layers.display = false;
+			lime.camera.maxFixedZoom = 1.5;
+			window.lime = lime;
+			document.getElementById("openlime").focus();
+			setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
+
+		} else {
+			console.error("Not all elements were removed. Viewer update aborted.");
+		}
+	}
+
+	init();
+
+	setTimeout(hideInfo, 12000)
+
+	function hideInfo() {
+		$('#instructions').css('transform', 'scale(0.0)');
+	}
 
 </script>
 

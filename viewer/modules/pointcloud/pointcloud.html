@@ -38,7 +38,7 @@
 		flex-direction: row;
 		align-items: center;
 		pointer-events: none;
-
+		transform: rotate3d(2, 0, 0, 0rad);
 	}
 
 	@media (max-width: 550px) {
@@ -57,9 +57,9 @@
 	.control-buttons button {
 		border-radius: 50%;
 		border-color: white;
-		border-width: 0.5px 0px 0px 0px;
+		border-width: 0px 0px 0px 0px;
 		border-style: solid;
-		border: none;
+		
 		cursor: pointer;
 		width: 40px;
 		height: 40px;
@@ -432,7 +432,13 @@
 
 				viewer.scene.view.lookAt(new THREE.Vector3(lookAtPosition[0], lookAtPosition[1], lookAtPosition[2]));
 			}
-		);		
+		);	
+		
+setTimeout(hideInfo, 14000)
+
+function hideInfo() {
+    $('#instructions').css('transform', 'scale(0.0)');
+}
 	</script>
 
 

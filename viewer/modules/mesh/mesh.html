@@ -46,9 +46,6 @@
 		top: 2px;
 		z-index: 100;
 	}
-
-
-	
 </style>
 
 <body>
@@ -112,7 +109,10 @@
 						</div>
 					</div>
 
-					<div class="module-acknowledgement"><p id="11">The module was created with</p> <p><a href="https://github.com/cnr-isti-vclab/3DHOP" target="_blank">3DHop</a></p></div>
+					<div class="module-acknowledgement">
+						<p id="11">The module was created with</p>
+						<p><a href="https://github.com/cnr-isti-vclab/3DHOP" target="_blank">3DHop</a></p>
+					</div>
 
 					<div class="guide-closer" id="10"></div>
 				</div>
@@ -146,14 +146,16 @@
 
 		<!-- The mobile toolbar has fewer tools due to complexity issues.-->
 
-		
-		    <!-- This button is only visible if the back-button is missing (to balance things up) -->
-			<a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
-				<div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;"></div>
-				</a>
+
+		<!-- This button is only visible if the back-button is missing (to balance things up) -->
+		<a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page"
+			onclick="togglePane()">
+			<div id="" class="toolButtonVertical compact expand-button" style="top:28px; left:30px; position:absolute;">
+			</div>
+		</a>
 
 		<div class="interface-area-top">
-			
+
 			<div id="ToolbarHorizontal">
 				<div id="Prev" class="SwitchButton"
 					onclick="presenter.setInstanceVisibilityByName('mesh1', true, true); presenter.setInstanceVisibilityByName('mesh2', false, false);">
@@ -169,7 +171,8 @@
 		<div class="interface-area">
 			<div id="toolbar_m" class="toolbar-bottom">
 				<div id="toolbar">
-					<img id="home_m" title="Reset the view" src="https://data.dh.gu.se/ui-icons/frame_white.png" style="width:28px; height:28px; padding-top::4px!important;"/>
+					<img id="home_m" title="Reset the view" src="https://data.dh.gu.se/ui-icons/frame_white.png"
+						style="width:28px; height:28px; padding-top::4px!important;" />
 
 					<!--ZOOM-->
 					<img id="zoomin" class="narrow-toolbar-icon" title="Zoom in the view"
@@ -178,9 +181,11 @@
 						src="https://data.dh.gu.se/ui-icons/zoomout_big_white.png" />
 
 					<!--COLOR-->
-					<img id="color_on_m" title="Disable colour information" src="https://data.dh.gu.se/ui-icons/colour_off.png"
+					<img id="color_on_m" title="Disable colour information"
+						src="https://data.dh.gu.se/ui-icons/colour_off.png"
 						style="position:absolute; visibility:hidden; " />
-					<img id="color_m" title="Enable colour information" src="https://data.dh.gu.se/ui-icons/colour_on.png" />
+					<img id="color_m" title="Enable colour information"
+						src="https://data.dh.gu.se/ui-icons/colour_on.png" />
 
 					<!--SPECULAR-->
 					<img id="specular" class="specular_off specular_on" title="Toggle specular light"
@@ -200,7 +205,8 @@
 
 					<!--FULLSCREEN-->
 					<img id="full1" class="full-page full-screen-option" title="Enter full screen"
-						src="https://data.dh.gu.se/ui-icons/expand_white.svg" style="position:relative;" onclick="togglePane()" />
+						src="https://data.dh.gu.se/ui-icons/expand_white.svg" style="position:relative;"
+						onclick="togglePane()" />
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
@@ -222,14 +228,16 @@
 				<div id="share-label" class="label-popup"></div>
 			</div>
 
-			
+
 
 		</div>
 		<div id="toolButtonsContainerVertical">
-			<button id="rotateLeft" class="toolButtonVertical compact" title="Press to rotate counter-clockwise. Double-click to rotate 90 degrees counter-clockwise.">
-				<img src="https://data.dh.gu.se/ui-icons/rotate_left_white.png"  />
+			<button id="rotateLeft" class="toolButtonVertical compact"
+				title="Press to rotate counter-clockwise. Double-click to rotate 90 degrees counter-clockwise.">
+				<img src="https://data.dh.gu.se/ui-icons/rotate_left_white.png" />
 			</button>
-			<button id="rotateRight" class="toolButtonVertical compact" title="Press to rotate clockwise. Double-click to rotate 90 degrees clockwise." >
+			<button id="rotateRight" class="toolButtonVertical compact"
+				title="Press to rotate clockwise. Double-click to rotate 90 degrees clockwise.">
 				<img src="https://data.dh.gu.se/ui-icons/rotate_right_white.png" />
 			</button>
 		</div>
@@ -294,42 +302,42 @@
 			});
 		});
 
-		function rotateMesh(degrees) {
-			rotationAngle += degrees;
+	function rotateMesh(degrees) {
+		rotationAngle += degrees;
 
-			var radianAngle = sglDegToRad(rotationAngle);
-			var rotationMatrix = SglMat4.rotationAngleAxis(radianAngle, [0.0, 0.0, 1.0]);
+		var radianAngle = sglDegToRad(rotationAngle);
+		var rotationMatrix = SglMat4.rotationAngleAxis(radianAngle, [0.0, 0.0, 1.0]);
 
-			presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(
-				SglMat4.translation([0.0, 0.0, 0.0]),
-				rotationMatrix
-			);
+		presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(
+			SglMat4.translation([0.0, 0.0, 0.0]),
+			rotationMatrix
+		);
 
-			presenter._scene.modelInstances['mesh2'].transform.matrix = SglMat4.mul(
-				SglMat4.translation([0.0, 0.0, 0.0]),
-				rotationMatrix
-			);
+		presenter._scene.modelInstances['mesh2'].transform.matrix = SglMat4.mul(
+			SglMat4.translation([0.0, 0.0, 0.0]),
+			rotationMatrix
+		);
 
-			presenter.repaint();
-		}
+		presenter.repaint();
+	}
 
 	document.addEventListener("DOMContentLoaded", function () {
 		// Rotation in 90 degrees step when double-clicking
 		document.getElementById('rotateLeft').ondblclick = function () { rotateMesh(90); };
-		document.getElementById('rotateRight').ondblclick = function () { rotateMesh(-90); }; 
+		document.getElementById('rotateRight').ondblclick = function () { rotateMesh(-90); };
 
 		// Smooth rotation when keeping the mouse pressed down
 		var rotationInterval;
 
-		document.getElementById('rotateLeft').onmousedown = function () { 
-			rotationInterval = setInterval(function() { rotateMesh(1); }, 30); 
+		document.getElementById('rotateLeft').onmousedown = function () {
+			rotationInterval = setInterval(function () { rotateMesh(1); }, 30);
 		};
-		document.getElementById('rotateRight').onmousedown = function () { 
-			rotationInterval = setInterval(function() { rotateMesh(-1); }, 30); 
+		document.getElementById('rotateRight').onmousedown = function () {
+			rotationInterval = setInterval(function () { rotateMesh(-1); }, 30);
 		};
 
-		document.onmouseup = function () { 
-			clearInterval(rotationInterval); 
+		document.onmouseup = function () {
+			clearInterval(rotationInterval);
 		};
 	});
 
@@ -509,11 +517,11 @@
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
 		if (action == 'home') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
-		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART), 
-		presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]),SglMat4.rotationAngleAxis(0, [0, 0, 1])),
-		presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]),SglMat4.rotationAngleAxis(0, [0, 0, 1])), 
-		rotationAngle = 0;
-		
+		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART),
+			presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]), SglMat4.rotationAngleAxis(0, [0, 0, 1])),
+			presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]), SglMat4.rotationAngleAxis(0, [0, 0, 1])),
+			rotationAngle = 0;
+
 		//--FULLSCREEN--
 		else if (action == 'full' || action == 'full_on') fullscreenSwitch();
 		//--FULLSCREEN--
@@ -609,6 +617,12 @@
 			setup3dhop();
 		});
 	});
+
+	setTimeout(hideInfo, 12000)
+
+	function hideInfo() {
+		$('#instructions').css('transform', 'scale(0.0)');
+	}
 
 </script>
 

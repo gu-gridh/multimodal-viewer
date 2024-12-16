@@ -527,7 +527,7 @@ app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locale
 app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
 // Fallback route, serve index.html
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
   const queryName = req.query.q;
   const queryId = queryName ? queryName.split('/')[0] : '';
 
@@ -545,28 +545,43 @@ app.get('*', (req, res) => {
 
   if (fs.existsSync(envPath)) {
     const projectEnv = dotenv.parse(fs.readFileSync(envPath));
-
     matomoUrl = projectEnv.MATOMO_URL || '';
     matomoId = projectEnv.MATOMO_ID || '';
   } else {
     console.warn(`.env file not found at ${envPath}`);
   }
 
-  fs.readFile(indexPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading the file:', err);
-      return res.status(500).send('Internal Server Error');
-    }
+  try {
+    const apiUrl = `${config.panel}${queryId}`;
+    const apiResponse = await axios.get(apiUrl);
+    const rtiImages = apiResponse.data.features[0].properties.attached_RTI || [];
 
-    let modifiedData = data
-      .replace(/PLACEHOLDER_QUERY/g, queryName)
-      .replace(/PLACEHOLDER_ID/g, queryId)
-      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
-      .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
-      .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);
+    fs.readFile(indexPath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading the index.html file:', err);
+        return res.status(500).send('Internal Server Error');
+      }
 
-    res.send(modifiedData);
-  });
+      let modifiedData = data
+        .replace(/PLACEHOLDER_QUERY/g, queryName)
+        .replace(/PLACEHOLDER_ID/g, queryId)
+        .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+        .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
+        .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);
+
+      //if there are no RTI images, remove the RTI tab
+      if (rtiImages.length === 0) {
+        modifiedData = modifiedData.replace(
+          /<div class="ui-module-item left" id="btn4" title="Explore RTI documentation"[^>]*>\s*<\/div>/,
+          ''
+        );           
+      }
+      res.send(modifiedData);
+    });
+  } catch (error) {
+    console.error('Error fetching data from API:', error);
+    return res.status(500).send('Internal Server Error');
+  }
 });
 
 const PORT = 8095;

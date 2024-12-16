@@ -83,11 +83,8 @@
         }
 
         @media screen and (max-width: 400px) {
-            .back-button {
-
-             
-
-            }
+            /* .back-button {
+            } */
         }
 
         @media screen and (max-width: 350px) {
@@ -115,8 +112,7 @@
                     <div class="ui-module-item left" id="btn4" title="Explore RTI documentation"
                         onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
                     </div>
-                    <div class="ui-module-item left compact" id="btn5" title="About"
-                        onclick="MetadataCompact();">
+                    <div class="ui-module-item left compact" id="btn5" title="About" onclick="MetadataCompact();">
                     </div>
                 </div>
             </div>
@@ -124,9 +120,9 @@
         </div>
         <div id="right-pane">
             <div id="back-to-visuals" class="back-button" title="Back to visuals"
-            onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block');changeLeftViewer('inscription');moduleSwitcherLeft(1);"
-            style="display:none; margin-left:12px;">
-        </div>
+                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block');changeLeftViewer('inscription');moduleSwitcherLeft(1);"
+                style="display:none; margin-left:12px;">
+            </div>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn6" title="Explore the metadata"
@@ -268,23 +264,22 @@
         }
 
         function MetadataCompact() {
-            $('#back-to-visuals').css('display', 'block'); 
-            $('#right-pane').css('display', 'block'); 
-            $('#left-pane').css('display', 'none'); 
-                currentAnnotationId = event.data.value;
-                //check if the ID contains any letters
-                const invalidAnnotationPattern = /[a-zA-Z]/;
-                if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
-                    changeRightViewer('annotation', currentAnnotationId);
-                    moduleSwitcherRight(6);
-                    updateURLWithAnnotation(currentAnnotationId);
-                } else {
-                    changeRightViewer('metadata');
-                    updateURLWithAnnotation(null);
-                    moduleSwitcherRight(6);
-                }
-            }
-
+            $('#back-to-visuals').css('display', 'block');
+            $('#right-pane').css('display', 'block');
+            $('#left-pane').css('display', 'none');
+            // currentAnnotationId = event.data.value;
+            // //check if the ID contains any letters
+            // const invalidAnnotationPattern = /[a-zA-Z]/;
+            // if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
+            //     changeRightViewer('annotation', currentAnnotationId);
+            //     moduleSwitcherRight(6);
+            //     updateURLWithAnnotation(currentAnnotationId);
+            // } else {
+            //     changeRightViewer('metadata');
+            //     updateURLWithAnnotation(null);
+            //     moduleSwitcherRight(6);
+            // }
+        }
 
         window.addEventListener('message', function (event) {
             if (event.data.type === 'annotationClick') {
@@ -333,13 +328,22 @@
 
         function applyTranslations() {
             if (typeof i18next.t === 'function') {
-                document.getElementById('btn1').textContent = i18next.t('photo');
-                document.getElementById('btn2').textContent = i18next.t('topography');
-                document.getElementById('btn3').textContent = i18next.t('mesh');
-                document.getElementById('btn4').textContent = i18next.t('rti');
-                document.getElementById('btn5').textContent = i18next.t('about');
-                document.getElementById('btn6').textContent = i18next.t('about');
-                document.getElementById('btn7').textContent = i18next.t('spatialcontext');
+                const buttons = [
+                    { id: 'btn1', key: 'photo' },
+                    { id: 'btn2', key: 'topography' },
+                    { id: 'btn3', key: 'mesh' },
+                    { id: 'btn4', key: 'rti' },
+                    { id: 'btn5', key: 'about' },
+                    { id: 'btn6', key: 'about' },
+                    { id: 'btn7', key: 'spatialcontext' },
+                ];
+
+                buttons.forEach(button => {
+                    const element = document.getElementById(button.id);
+                    if (element) {
+                        element.textContent = i18next.t(button.key);
+                    }
+                });
             }
         }
 

@@ -267,18 +267,6 @@
             $('#back-to-visuals').css('display', 'block');
             $('#right-pane').css('display', 'block');
             $('#left-pane').css('display', 'none');
-            // currentAnnotationId = event.data.value;
-            // //check if the ID contains any letters
-            // const invalidAnnotationPattern = /[a-zA-Z]/;
-            // if (currentAnnotationId != null && !invalidAnnotationPattern.test(currentAnnotationId)) {
-            //     changeRightViewer('annotation', currentAnnotationId);
-            //     moduleSwitcherRight(6);
-            //     updateURLWithAnnotation(currentAnnotationId);
-            // } else {
-            //     changeRightViewer('metadata');
-            //     updateURLWithAnnotation(null);
-            //     moduleSwitcherRight(6);
-            // }
         }
 
         window.addEventListener('message', function (event) {

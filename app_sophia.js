@@ -23,9 +23,18 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   // Fetch RTI image data from the API
   const apiUrl = `${config.panel}${queryName}`;
+
   try {
     const apiResponse = await axios.get(apiUrl);
-    const rtiImages = apiResponse.data.features[0].properties.attached_RTI;
+    const rtiImages = apiResponse.data?.features?.[0]?.properties?.attached_RTI || [];
+
+    if (Array.isArray(rtiImages) && rtiImages.length > 0) {
+      rtiImages.sort((a, b) => {
+        const numA = parseInt(a.title.match(/\d+/)?.[0] || 0, 10);
+        const numB = parseInt(b.title.match(/\d+/)?.[0] || 0, 10);
+        return numA - numB;
+      });
+    }
 
     fs.readFile(path.join(__dirname, 'viewer', 'modules', 'rti', 'rti.html'), 'utf8', (err, htmlData) => {
       if (err) {

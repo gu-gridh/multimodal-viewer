@@ -91,7 +91,6 @@
 				</div>
 			</div>
 
-
 			<div class="guide-button compact" title="User Guide" style="bottom:23px"
 				onclick="$('#instructions').css('transform', 'scale(0.0)'); $('#guide').css('pointer-events', 'auto');$('#guide').css('opacity', '1.0');$('#guide-instructions-tools').css('transform', 'scale(1.0)');">
 				?</div>
@@ -105,7 +104,6 @@
 				title="Copy link to view" onclick="logTrackballPosition();">
 				<div id="share-label" class="label-popup">Link copied</div>
 			</div>
-
 		</div>
 
 		<div id="guide"
@@ -157,7 +155,6 @@
 							<p id="11">The module was created with</p>
 							<p><a href="https://github.com/cnr-isti-vclab/openlime" target="_blank">OpenLime</a></p>
 						</div>
-
 
 						<div class="guide-closer" id="3"></div>
 					</div>
@@ -257,7 +254,6 @@
 			if (response.status == 200)
 				return true;
 		}
-
 		return false;
 	}
 
@@ -298,38 +294,38 @@
 	}
 
 	function updateRTIImage(url) {
-		let allElementsRemoved = removePreviousLimeViewer();
+    let allElementsRemoved = removePreviousLimeViewer();
 
-		if (allElementsRemoved) {
-			if (lime && currentLayer) {
-				lime.canvas.removeLayer(currentLayer);
-				currentLayer = null;
-			}
+    if (allElementsRemoved) {
+        if (lime && currentLayer) {
+            lime.canvas.removeLayer(currentLayer);
+            currentLayer = null;
+        }
 
-			let infoUrl = url + 'info.json';
-			lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+        let infoUrl = url + 'info.json';
+        lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
 
-			let layer = new OpenLIME.Layer({
-				layout: 'deepzoom',
-				type: 'rti',
-				url: infoUrl,
-				normals: false
-			});
+        let layer = new OpenLIME.Layer({
+            layout: 'deepzoom',
+            type: 'rti',
+            url: infoUrl,
+            normals: false
+        });
 
-			lime.canvas.addLayer('RTI', layer);
-			OpenLIME.Skin.setUrl('css/icons.svg');
-			let ui = new OpenLIME.UIBasic(lime, { skin: 'css/icons.svg', showLightDirections: true });
-			ui.actions.light.active = true;
-			ui.actions.layers.display = false;
-			lime.camera.maxFixedZoom = 1.5;
-			window.lime = lime;
-			document.getElementById("openlime").focus();
-			setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
+        lime.canvas.addLayer('RTI', layer);
+        OpenLIME.Skin.setUrl('css/icons.svg');
+        let ui = new OpenLIME.UIBasic(lime, { skin: 'css/icons.svg', showLightDirections: true });
+		ui.toggleLightController(false); //light bulb svg off
+        ui.actions.layers.display = false; //light setting off
+        lime.camera.maxFixedZoom = 1.5;
+        window.lime = lime;
 
-		} else {
-			console.error("Not all elements were removed. Viewer update aborted.");
-		}
-	}
+        document.getElementById("openlime").focus();
+        setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
+    } else {
+        console.error("Not all elements were removed. Viewer update aborted.");
+    }
+}
 
 	init();
 

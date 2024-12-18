@@ -294,38 +294,39 @@
 	}
 
 	function updateRTIImage(url) {
-    let allElementsRemoved = removePreviousLimeViewer();
+		let allElementsRemoved = removePreviousLimeViewer();
 
-    if (allElementsRemoved) {
-        if (lime && currentLayer) {
-            lime.canvas.removeLayer(currentLayer);
-            currentLayer = null;
-        }
+		if (allElementsRemoved) {
+			if (lime && currentLayer) {
+				lime.canvas.removeLayer(currentLayer);
+				currentLayer = null;
+			}
 
-        let infoUrl = url + 'info.json';
-        lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
+			let infoUrl = url + 'info.json';
+			lime = new OpenLIME.Viewer('#openlime', { background: 'black' });
 
-        let layer = new OpenLIME.Layer({
-            layout: 'deepzoom',
-            type: 'rti',
-            url: infoUrl,
-            normals: false
-        });
+			let layer = new OpenLIME.Layer({
+				layout: 'deepzoom',
+				type: 'rti',
+				url: infoUrl,
+				normals: false
+			});
 
-        lime.canvas.addLayer('RTI', layer);
-        OpenLIME.Skin.setUrl('css/icons.svg');
-        let ui = new OpenLIME.UIBasic(lime, { skin: 'css/icons.svg', showLightDirections: true });
-		ui.toggleLightController(false); //light bulb svg off
-        ui.actions.layers.display = false; //light setting off
-        lime.camera.maxFixedZoom = 1.5;
-        window.lime = lime;
+			lime.canvas.addLayer('RTI', layer);
+			OpenLIME.Skin.setUrl('css/icons.svg');
+			let ui = new OpenLIME.UIBasic(lime, { skin: 'css/icons.svg', showLightDirections: true });
+			ui.toggleLightController(false); //light bulb svg off
+			//ui.actions.light.active = true;
+			ui.actions.layers.display = false;
+			lime.camera.maxFixedZoom = 1.5;
+			window.lime = lime;
 
-        document.getElementById("openlime").focus();
-        setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
-    } else {
-        console.error("Not all elements were removed. Viewer update aborted.");
-    }
-}
+			document.getElementById("openlime").focus();
+			setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
+		} else {
+			console.error("Not all elements were removed. Viewer update aborted.");
+		}
+	}
 
 	init();
 

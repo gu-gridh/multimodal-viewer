@@ -17,6 +17,13 @@
         src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.14/dist/openseadragon-annotorious.min.js"></script>
     <script type="text/javascript" src="/viewer/libs/jquery.js"></script>
     <script src="openseadragon-bookmark-url.js"></script>
+    <style>
+        .a9s-annotation.editable rect,
+        .a9s-annotation.editable polygon,
+        .a9s-annotation.editable path {
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>

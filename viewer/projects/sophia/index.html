@@ -104,13 +104,13 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
-                        onclick="changeLeftViewer('inscription');moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
+                        onclick="changeLeftViewer('inscription');" style="opacity:1.0;"></div>
                     <div class="ui-module-item left" id="btn2" title="Explore topographical documentation"
-                        onclick="changeLeftViewer('topography');moduleSwitcherLeft(2);"></div>
+                        onclick="changeLeftViewer('topography');"></div>
                     <div class="ui-module-item left" id="btn3" title="Explore 3D documentation"
-                        onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"></div>
+                        onclick="changeLeftViewer('mesh');"></div>
                     <div class="ui-module-item left" id="btn4" title="Explore RTI documentation"
-                        onclick="changeLeftViewer('rti');moduleSwitcherLeft(4);">
+                        onclick="changeLeftViewer('rti');">
                     </div>
                     <div class="ui-module-item left compact" id="btn5" title="About" onclick="MetadataCompact();">
                     </div>
@@ -120,7 +120,7 @@
         </div>
         <div id="right-pane">
             <div id="back-to-visuals" class="back-button" title="Back to visuals"
-                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block');changeLeftViewer('inscription');moduleSwitcherLeft(1);"
+                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block'); changeLeftViewer('inscription');"
                 style="display:none; margin-left:12px;">
             </div>
             <div class="ui-module-container">

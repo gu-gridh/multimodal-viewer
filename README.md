@@ -1,5 +1,5 @@
 # Multimodal Viewer
-A Node.js application built with Express for visualizing and interacting with meshes, pointclouds, RTI, and IIIF images. It uses the <a href="https://3dhop.net">3DHOP</a>, <a href="https://github.com/potree/potree">Potree</a>, <a href="https://github.com/cnr-isti-vclab/openlime">OpenLime</a>, and <a href="https://openseadragon.github.io">Openseadragon</a> libraries, with additions, adaptations, and custom user interface by Jonathan Westin and Tristan Bridge.
+A Node.js application built with Express for visualizing and interacting with meshes, pointclouds, RTI, and IIIF images. It uses the <a href="https://3dhop.net">3DHOP</a>, <a href="https://github.com/potree/potree">Potree</a>, <a href="https://github.com/cnr-isti-vclab/openlime">OpenLime</a>, <a href="https://openseadragon.github.io">Openseadragon</a>, and Annotorious (https://annotorious.github.io) libraries, with additions, adaptations, and custom user interface by Jonathan Westin and Tristan Bridge.
 
 
 

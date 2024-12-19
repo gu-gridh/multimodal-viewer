@@ -637,7 +637,7 @@
 	var actionarea = window
 	var drawcanvas = document.getElementById('draw-canvas');
 	var lightcanvas = document.getElementById('light-canvas');
-	window.addEventListener("mousemove", LightDirections);
+	window.addEventListener("mousemove", LightDirections); // Mimics the way the light trackball also works outside the canvas
 	drawcanvas.addEventListener("mousemove",LightDirections);
 
 	// Create the light directions
@@ -682,7 +682,7 @@
 			} lightcanvas.appendChild(lightDirections);
 		}
 
-		else {lightDirections.remove()}
+		else {lightDirections.remove()} // Remove lines when the pointer is no longer pressed
 	}
 
 

@@ -653,18 +653,11 @@
 			line.setAttribute('stroke-width', '0.5');
 		}
 
-
-		// Check if the pointer is pressed and remove the light direction when pointer is released
-	/* 	var mousepressed = false;
-	$(drawcanvas).mousedown(function () {
-		mousepressed = true;
-	}).mouseup(function () {
+// Check if the pointer is released and removes the light direction lines at once
+	$(drawcanvas).mouseup(function () {
 		lightDirections.remove();
 		mousepressed = false;
-	}).mouseout(function () {
-		lightDirections.remove();
-		triggerMouseEvent (targetNode, "mouseup");
-	}); */
+	});
 
 	$(document).mouseup(function () {
 		lightDirections.remove();

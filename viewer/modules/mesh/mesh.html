@@ -634,10 +634,11 @@
 
 
 	// Visible Light Directions
-
+	var actionarea = window
 	var drawcanvas = document.getElementById('draw-canvas');
 	var lightcanvas = document.getElementById('light-canvas');
-	drawcanvas.addEventListener("mousemove", LightDirections);
+	window.addEventListener("mousemove", LightDirections);
+	drawcanvas.addEventListener("mousemove",LightDirections);
 
 	// Create the light directions
 	var lightDirections = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -654,20 +655,20 @@
 
 
 	// Check if the pointer is pressed and remove the light direction when pointer is released
-	var mousepressed = false;
-	$(drawcanvas).mousedown(function () {
-		mousepressed = true;
-	}).mouseup(function () {
-		lightDirections.remove();
-		mousepressed = false;
-	}).mouseout(function () {
-		lightDirections.remove();
-		mousepressed = false;
-	});
+	// var mousepressed = false;
+	// $(drawcanvas).mousedown(function () {
+	// 	mousepressed = true;
+	// }).mouseup(function () {
+	// 	lightDirections.remove();
+	// 	mousepressed = false;
+	// }).mouseout(function () {
+	// 	lightDirections.remove();
+	// 	mousepressed = false;
+	// });
 
 	// Draw the light directions only when light is activated and pointer is pressed
 	function LightDirections() {
-		if (presenter.isLightTrackballEnabled() && mousepressed === true) {
+		if (presenter.isLightTrackballEnabled() && presenter.ui.isMouseButtonDown(0)) {
 			
 			var rect = drawcanvas.getBoundingClientRect();
 			let xz = event.clientX - rect.width / 2;
@@ -680,6 +681,8 @@
 					s.setAttribute("y2", n / 0.5 + yz);
 			} lightcanvas.appendChild(lightDirections);
 		}
+
+		else {lightDirections.remove()}
 	}
 
 

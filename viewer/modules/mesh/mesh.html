@@ -654,17 +654,23 @@
 		}
 
 
-	// Check if the pointer is pressed and remove the light direction when pointer is released
-	// var mousepressed = false;
-	// $(drawcanvas).mousedown(function () {
-	// 	mousepressed = true;
-	// }).mouseup(function () {
-	// 	lightDirections.remove();
-	// 	mousepressed = false;
-	// }).mouseout(function () {
-	// 	lightDirections.remove();
-	// 	mousepressed = false;
-	// });
+		// Check if the pointer is pressed and remove the light direction when pointer is released
+	/* 	var mousepressed = false;
+	$(drawcanvas).mousedown(function () {
+		mousepressed = true;
+	}).mouseup(function () {
+		lightDirections.remove();
+		mousepressed = false;
+	}).mouseout(function () {
+		lightDirections.remove();
+		triggerMouseEvent (targetNode, "mouseup");
+	}); */
+
+	$(document).mouseup(function () {
+		lightDirections.remove();
+		mousepressed = false;
+	});
+
 
 	// Draw the light directions only when light is activated and pointer is pressed
 	function LightDirections() {

@@ -127,9 +127,13 @@
 
 	<!-- And this is the main action -->
 
-	<div id="module-container" style="background-color:var(--viewer-bg)">
-		<div id='light-canvas'
-			style='position:absolute; width:100%; height:100vh; z-index:1000; overflow:hidden; pointer-events: none; '>
+	<div id="module-container" style="background-color:var(--viewer-bg);">
+		<div id='light-container'
+			style='position:absolute; width:100%; height:100%; z-index:1000; overflow:hidden; pointer-events: none; display:flex; flex-direction:column; align-items: center; justify-content: center; '>
+			<div id='light-canvas'
+			style='width:600px; height:600px;pointer-events: none;'>
+
+		</div>
 		</div>
 		<div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
 
@@ -637,14 +641,14 @@
 
 	// Create the light directions
 	var lightDirections = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	lightDirections.setAttribute('viewBox', '-100, -100, 200 200');
+	lightDirections.setAttribute('viewBox', '-100 -100 200 200');
 	lightDirections.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 	for (let t = -1; t <= 1; t++)
 		for (let e = -1; e <= 1; e++) {
 			let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 
 			(line.pos = [35 * t, 35 * e]), lightDirections.appendChild(line);
-			line.setAttribute('stroke', 'rgba(255,255,0, 0.5)');
+			line.setAttribute('stroke', 'rgba(255,255,0, 0.3)');
 			line.setAttribute('stroke-width', '0.5');
 		}
 
@@ -661,7 +665,7 @@
 	function LightDirections() {
 		if (presenter.isLightTrackballEnabled() && mousepressed === true) {
 			
-			var rect = lightcanvas.getBoundingClientRect();
+			var rect = drawcanvas.getBoundingClientRect();
 			let xz = event.clientX - rect.width / 2;
 			let yz = event.clientY - rect.height / 2;
 			let i =[...lightDirections.children];

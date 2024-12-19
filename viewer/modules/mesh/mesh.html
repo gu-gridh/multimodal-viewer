@@ -653,7 +653,7 @@
 		}
 
 
-	// Draw the light directions only when light is activated and pointer is pressed
+	// Check if the pointer is pressed and remove the light direction when pointer is released
 	var mousepressed = false;
 	$(drawcanvas).mousedown(function () {
 		mousepressed = true;
@@ -662,6 +662,7 @@
 		mousepressed = false;
 	});
 
+	// Draw the light directions only when light is activated and pointer is pressed
 	function LightDirections() {
 		if (presenter.isLightTrackballEnabled() && mousepressed === true) {
 			
@@ -672,7 +673,6 @@
 			for(let s of i) {
 				let i = s.pos[0],
 					n = s.pos[1];
-
 				s.setAttribute("x1", 0.6 * i - 0), s.setAttribute("y1", 0.6 * n + 0), s.setAttribute("x2", i / 0.5 + xz),
 					s.setAttribute("y2", n / 0.5 + yz);
 			} lightcanvas.appendChild(lightDirections);

@@ -128,7 +128,9 @@
 	<!-- And this is the main action -->
 
 	<div id="module-container" style="background-color:var(--viewer-bg)">
-
+		<div id='light-canvas'
+			style='position:absolute; width:100%; height:100vh; z-index:1000; overflow:hidden; pointer-events: none; '>
+		</div>
 		<div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
 
 			<!-- The draw canvas is the home of the 3d-model-->
@@ -623,6 +625,57 @@
 	function hideInfo() {
 		$('#instructions').css('transform', 'scale(0.0)');
 	}
+
+
+
+
+	// Visible Light Directions
+
+	var drawcanvas = document.getElementById('draw-canvas');
+	var lightcanvas = document.getElementById('light-canvas');
+	drawcanvas.addEventListener("mousemove", LightDirections);
+
+	// Create the light directions
+	var lightDirections = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	lightDirections.setAttribute('viewBox', '-100, -100, 200 200');
+	lightDirections.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+	for (let t = -1; t <= 1; t++)
+		for (let e = -1; e <= 1; e++) {
+			let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+			(line.pos = [35 * t, 35 * e]), lightDirections.appendChild(line);
+			line.setAttribute('stroke', 'rgba(255,255,0, 0.5)');
+			line.setAttribute('stroke-width', '0.5');
+		}
+
+
+	// Draw the light directions only when light is activated and pointer is pressed
+	var mousepressed = false;
+	$(drawcanvas).mousedown(function () {
+		mousepressed = true;
+	}).mouseup(function () {
+		lightDirections.remove();
+		mousepressed = false;
+	});
+
+	function LightDirections() {
+		if (presenter.isLightTrackballEnabled() && mousepressed === true) {
+			
+			var rect = lightcanvas.getBoundingClientRect();
+			let xz = event.clientX - rect.width / 2;
+			let yz = event.clientY - rect.height / 2;
+			let i =[...lightDirections.children];
+			for(let s of i) {
+				let i = s.pos[0],
+					n = s.pos[1];
+
+				s.setAttribute("x1", 0.6 * i - 0), s.setAttribute("y1", 0.6 * n + 0), s.setAttribute("x2", i / 0.5 + xz),
+					s.setAttribute("y2", n / 0.5 + yz);
+			} lightcanvas.appendChild(lightDirections);
+		}
+	}
+
+
 
 </script>
 

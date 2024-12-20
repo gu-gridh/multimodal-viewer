@@ -659,7 +659,7 @@
 
 	// Draw the light directions only when light is activated and pointer is pressed
 	function LightDirections(event) {
-		if (presenter && presenter.isLightTrackballEnabled && presenter.isLightTrackballEnabled() && presenter.ui.isMouseButtonDown(0)) {
+		if (presenter && presenter.isLightTrackballEnabled() && presenter.ui.isMouseButtonDown(0)) {
 			var rect = drawcanvas.getBoundingClientRect();
 			let xz = event.clientX - rect.width / 2;
 			let yz = event.clientY - rect.height / 2;

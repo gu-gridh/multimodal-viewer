@@ -130,10 +130,9 @@
 	<div id="module-container" style="background-color:var(--viewer-bg);">
 		<div id='light-container'
 			style='position:absolute; width:100%; height:100%; z-index:1000; overflow:hidden; pointer-events: none; display:flex; flex-direction:column; align-items: center; justify-content: center; '>
-			<div id='light-canvas'
-			style='width:700px; height:700px;pointer-events: none;'>
+			<div id='light-canvas' style='width:700px; height:700px;pointer-events: none;'>
 
-		</div>
+			</div>
 		</div>
 		<div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
 
@@ -575,15 +574,14 @@
 		document.getElementById("log-text").scrollTop = document.getElementById("log-text").scrollHeight;
 	}
 
-
 	//--MEASURE--
 	function onEndMeasure(measure) {
 		// measure.toFixed(2) sets the number of decimals when displaying the measure
 		// depending on the model measure units, use "mm","m","km" or whatever you have
 		$('#measure-output').html(measure.toFixed(2) * 100 + " cm");
 	}
-	//--MEASURE--
 
+	//--MEASURE--
 	function MenuSwitch() {
 		var x = document.getElementById("module-container");
 		if (x.style.left === "420px") {
@@ -630,15 +628,12 @@
 		$('#instructions').css('transform', 'scale(0.0)');
 	}
 
-
-
-
 	// Visible Light Directions
 	var actionarea = window
 	var drawcanvas = document.getElementById('draw-canvas');
 	var lightcanvas = document.getElementById('light-canvas');
 	window.addEventListener("mousemove", LightDirections); // Mimics the way the light trackball also works outside the canvas
-	drawcanvas.addEventListener("mousemove",LightDirections);
+	drawcanvas.addEventListener("mousemove", LightDirections);
 
 	// Create the light directions
 	var lightDirections = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -653,7 +648,7 @@
 			line.setAttribute('stroke-width', '0.5');
 		}
 
-// Check if the pointer is released and removes the light direction lines at once
+	// Check if the pointer is released and removes the light direction lines at once
 	$(document).mouseup(function () {
 		lightDirections.remove();
 	});
@@ -662,27 +657,23 @@
 		lightDirections.remove();
 	});
 
-
 	// Draw the light directions only when light is activated and pointer is pressed
-	function LightDirections() {
-		if (presenter.isLightTrackballEnabled() && presenter.ui.isMouseButtonDown(0)) {
-			
+	function LightDirections(event) {
+		if (presenter && presenter.isLightTrackballEnabled() && presenter.ui.isMouseButtonDown(0)) {
 			var rect = drawcanvas.getBoundingClientRect();
 			let xz = event.clientX - rect.width / 2;
 			let yz = event.clientY - rect.height / 2;
-			let i =[...lightDirections.children];
-			for(let s of i) {
+			let i = [...lightDirections.children];
+			for (let s of i) {
 				let i = s.pos[0],
 					n = s.pos[1];
 				s.setAttribute("x1", 0.6 * i - 0), s.setAttribute("y1", 0.6 * n + 0), s.setAttribute("x2", i / 0.5 + xz),
 					s.setAttribute("y2", n / 0.5 + yz);
 			} lightcanvas.appendChild(lightDirections);
-		}
+		} 
 
-		else {lightDirections.remove()} // Remove lines when the pointer is no longer pressed
+		else { lightDirections.remove(); } // Remove lines when the pointer is no longer pressed	
 	}
-
-
 
 </script>
 

@@ -79579,7 +79579,7 @@ ENDSEC
 				}
 			));
 
-					// FULLSCREEN
+					// GRIDH FULLSCREEN
 					elToolbar.append(this.createToolIconExpanded(
 						'https://data.dh.gu.se/ui-icons/expand_white.svg',
 						'',

@@ -153,14 +153,14 @@
 }
 
 #potree_map_toggle{
-	float:			left;
+/* 	float:			left;
 	margin:			0;
 	background:		none;
 	width:			2.5em;
 	height:			2.5em;
 	z-index:		100;
 	cursor: 		pointer;
-	margin:			4px;
+	margin:			4px; */
 }
 
 #potree_render_area{

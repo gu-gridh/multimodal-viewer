@@ -79586,11 +79586,11 @@ ENDSEC
 						() => {
 
 							let renderArea = $('#potree_render_area');
-							let isVisible = renderArea.css('left') !== '0px';
+							let isVisible = renderArea.css('right') !== '0px';
 							
 							//close the sidebar if it's open
 							if (isVisible) {
-								renderArea.css('left', '0px');  
+								renderArea.css('right', '0px');  
 							}
 							window.parent.postMessage({ type: 'togglePane2' }, '*');
 						}
@@ -89316,14 +89316,19 @@ ENDSEC
 
 		};
 
+		// GRIDH - added class change to MenuToggle to make it move when the render area shrinks.
+
 		toggleSidebar() {
 			let renderArea = $('#potree_render_area');
-			let isVisible = renderArea.css('left') !== '0px';
+			let MenuToggle = $('.potree_menu_toggle');
+			let isVisible = renderArea.css('right') !== '0px';
 
 			if (isVisible) {
-				renderArea.css('left', '0px');
+				renderArea.css('right', '0px');
+				MenuToggle.css('right', '30px');
 			} else {
-				renderArea.css('left', '420px');
+				renderArea.css('right', '400px');
+				MenuToggle.css('right', '430px');
 			}
 		};
 
@@ -89365,7 +89370,7 @@ ENDSEC
 			let viewer = this;
 			let sidebarContainer = $('#potree_sidebar_container');
 			sidebarContainer.load(new URL(Potree.scriptPath + '/sidebar.html').href, () => {
-				sidebarContainer.css('width', '300px');
+				sidebarContainer.css('width', '400px');
 				sidebarContainer.css('height', '100%');
 
 				let imgMenuToggle = document.createElement('img');

@@ -2,6 +2,58 @@
 
 /* CSS - Cascading Style Sheet */
 
+.potree_menu_toggle{
+    display:        block;
+    position:       fixed;
+    float:          left;
+    right:          30px;
+    top:            30px;
+	background:		none;
+	width:			2.5em;
+	height:			2.5em;
+	z-index:		100000;
+	cursor: 		pointer;
+    -webkit-transition: right .4s!important;
+	transition: right .5s!important;
+}
+
+/* Hide away complexities on mobile */
+
+@media screen and (max-width: 1050px) {
+    .potree_menu_toggle {
+        display: none;
+    }
+    
+    /* .orientation {
+        display: none;
+    } */
+}
+
+
+#potree_sidebar_container {
+    padding:0px!important;
+    right:0px!important;
+    width:400px!important;
+	background-color:	var(--bg-color)!important;
+	box-shadow: inset 2rem 0rem 2rem rgba(0, 0, 0, 0.3)!important;
+}
+
+#sidebar_root{
+	color:				var(--font-color)!important;
+	font-family:		"Barlow Condensed", sans-serif !important;
+	font-size:			1em;
+	width:				100%;
+    padding:            0px!important;
+}
+
+#potree_menu{
+    padding:0px 10px 0px 20px;
+}
+
+#potree_render_area{
+	-webkit-transition: right .4s!important;
+	transition: right .5s!important;
+}
 
 .potree_container :focus {
 	outline: none;
@@ -213,26 +265,11 @@ color: rgb(0, 213, 250) !important;
         border-width:0.5px 0px 0px 0px;
         -webkit-backdrop-filter: blur(3px); 
         backdrop-filter: blur(3px); 
-        width:calc(100% - 60px); 
+        width:calc(100% - 60px);
     }
 
   
 
-.potree_menu_toggle {
-    display: block;
-}
-
-/* Hide away complexities on mobile */
-
-@media screen and (max-width: 1050px) {
-    .potree_menu_toggle {
-        display: none;
-    }
-    
-    /* .orientation {
-        display: none;
-    } */
-}
 
 /* Point cloud annotation style */
 

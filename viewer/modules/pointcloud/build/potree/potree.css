@@ -60,12 +60,12 @@
 	overflow-y:	scroll;
 	font-size:	100%;
 	background-color:	var(--bg-color);
-	box-shadow: inset -2rem 0rem 2rem rgba(0, 0, 0, 0.3)!important;
+	box-shadow: inset -2rem 0rem 2rem rgba(0, 0, 0, 0.3);
 }
 
 #sidebar_root{
-	color:				var(--font-color);
-	font-family:		"Barlow Condensed", sans-serif !important;
+	color:				white;
+	font-family:		"Barlow Condensed", sans-serif;
 	font-size:			1em;
 	width:				380px;
 }
@@ -145,7 +145,7 @@
 }
 
 .potree_menu_toggle{
-	float:			left;
+	/* float:			left;
 	margin:			0;
 	background:		none;
 	width:			2.5em;
@@ -153,7 +153,7 @@
 	z-index:		100;
 	cursor: 		pointer;
 	margin-top:			15px;
-	margin-left:			19px;
+	margin-left:			19px; */
 }
 
 #potree_map_toggle{

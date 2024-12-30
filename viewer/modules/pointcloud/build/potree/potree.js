@@ -79586,11 +79586,14 @@ ENDSEC
 						() => {
 
 							let renderArea = $('#potree_render_area');
+							let MenuToggle = $('.potree_menu_toggle');
 							let isVisible = renderArea.css('right') !== '0px';
 							
 							//close the sidebar if it's open
 							if (isVisible) {
 								renderArea.css('right', '0px');  
+								MenuToggle.css('right', '30px');  
+								
 							}
 							window.parent.postMessage({ type: 'togglePane2' }, '*');
 						}

@@ -79579,7 +79579,7 @@ ENDSEC
 				}
 			));
 
-					// GRIDH FULLSCREEN
+					// GRIDH: FULLSCREEN
 					elToolbar.append(this.createToolIconExpanded(
 						'https://data.dh.gu.se/ui-icons/expand_white.svg',
 						'',
@@ -79735,8 +79735,9 @@ ENDSEC
 			tree.jstree("check_node", vectorsID);
 			tree.jstree("check_node", imagesID);
 
+			// GRIDH: close all as default
 			tree.on('create_node.jstree', (e, data) => {
-				tree.jstree("open_all");
+				tree.jstree("close_all");
 			});
 
 			tree.on("select_node.jstree", (e, data) => {
@@ -89319,7 +89320,7 @@ ENDSEC
 
 		};
 
-		// GRIDH - added class change to MenuToggle to make it move when the render area shrinks.
+		// GRIDH: added class change to MenuToggle to make it move when the render area shrinks.
 
 		toggleSidebar() {
 			let renderArea = $('#potree_render_area');

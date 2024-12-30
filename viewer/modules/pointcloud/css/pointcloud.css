@@ -13,15 +13,20 @@
 	height:			2.5em;
 	z-index:		100000;
 	cursor: 		pointer;
-    -webkit-transition: right .4s!important;
-	transition: right .5s!important;
+    pointer-events: auto;
+    opacity:        1.0;
+    scale:          1.0;
+    -webkit-transition: all .4s!important;
+	transition: all .5s!important;
 }
 
 /* Hide away complexities on mobile */
 
 @media screen and (max-width: 1050px) {
     .potree_menu_toggle {
-        display: none;
+        scale:0;
+        opacity:0;
+        pointer-events:none;
     }
     
     /* .orientation {

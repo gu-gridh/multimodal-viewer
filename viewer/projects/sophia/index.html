@@ -82,10 +82,6 @@
             }
         }
 
-        @media screen and (max-width: 400px) {
-            /* .back-button {
-            } */
-        }
 
         @media screen and (max-width: 350px) {
             .back-button {
@@ -381,6 +377,7 @@
 
         function changeLeftViewer(viewerType) {
             const iframe = document.getElementById('left-Iframe');
+            const main = document.getElementById('main-content');
             const queryString = window.location.search;
             const params = new URLSearchParams(queryString);
             const currentUrl = new URL(window.location.href);
@@ -441,6 +438,7 @@
                 if (qValue.includes('immersive')) {
                     toggleLeftPane();
                     uiModules.css('display', 'none');  
+                    main.classList.add("single-module");
                 }
 
             // when linking to a position in the pointcloud    

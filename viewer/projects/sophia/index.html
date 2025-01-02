@@ -142,6 +142,7 @@
         let shouldShowUIModuleContainer = true;
         let currentAnnotationId = null;
         let isFullscreenMode = false;
+        let uiModules = $('.ui-module-container');
 
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -150,10 +151,11 @@
 
             changeLeftViewer(viewerType);
 
-            if (annotationId === null || annotationId === '') {
+            // different metadata modes when the pointcloud module is not linked
+            if (viewerType != 'pointcloud' && annotationId === null || annotationId === '') {
                 changeRightViewer('metadata');
             }
-            else {
+            else if (viewerType != 'pointcloud') {
                 changeRightViewer('annotation', annotationId);
             }
 
@@ -192,10 +194,6 @@
             //check if phi is present in the URL
             const hasPhi = params.has('phi');
 
-            if (hasPhi) {
-                return 'mesh';
-            }
-
             if (qValue) {
                 const segments = qValue.split('/');
                 if (segments.length > 1) {
@@ -214,6 +212,8 @@
                             return 'rti';
                         case 'orthophoto':
                             return 'orthophoto';
+                        case 'pointcloud':
+                            return 'pointcloud';
                         default:
                             return 'orthophoto'; // default
                     }
@@ -392,6 +392,7 @@
             }
 
             let src;
+            let srcright;
             let newPath;
             switch (viewerType) {
                 case 'orthophoto':
@@ -425,25 +426,50 @@
                     break;
             }
 
-            if (iframe) {
+            if (iframe && viewerType != 'pointcloud') {
                 iframe.src = src;
                 moduleSwitcherLeft(buttonNum);
                 //update browser URL
                 window.history.pushState({}, '', newPath);
             }
+
+            // pointcloud url logics
+            else if (iframe && viewerType === 'pointcloud') {
+                changeRightViewer('pointcloud');
+               
+            // when linking to the fullscreen pointcloud    
+                if (qValue.includes('immersive')) {
+                    toggleLeftPane();
+                    uiModules.css('display', 'none');  
+                }
+
+            // when linking to a position in the pointcloud    
+                else {
+                    moduleSwitcherRight(7);
+                    changeLeftViewer('orthophoto');
+                }
+            }
+
+
         }
 
         function changeRightViewer(viewerType, annotationId = null) {
+
             const iframe = document.getElementById('right-Iframe');
             let iframeUrl = '';
             const currentLang = localStorage.getItem('i18nextLang') || 'en';
-            if (viewerType === 'metadata') {
-                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&lang=${currentLang}`;
-            } else if (viewerType === 'annotation' && annotationId) {
-                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&annotationId=${annotationId}&lang=${currentLang}`;
-            } else if (viewerType === 'pointcloud') {
-                iframeUrl = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+            if (viewerType === 'pointcloud') {
+                iframeUrl = `/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY`;
             }
+
+            else if (viewerType === 'metadata') {
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&lang=${currentLang}`;
+            }
+
+            else if (viewerType === 'annotation' && annotationId) {
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&annotationId=${annotationId}&lang=${currentLang}`;
+            }
+
             iframe.src = iframeUrl;
         }
 

@@ -93,10 +93,11 @@
 
 <body>
     <div id="main-content">
+        <a href="PLACEHOLDER_BACKBUTTON">
+            <div id="main-back" class="back-button" title="View all surfaces"></div>
+        </a>
         <div id="left-pane">
-            <a href="PLACEHOLDER_BACKBUTTON">
-                <div class="back-button" title="View all surfaces"></div>
-            </a>
+           
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
@@ -116,7 +117,7 @@
         </div>
         <div id="right-pane">
             <div id="back-to-visuals" class="back-button" title="Back to visuals"
-                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block'); changeLeftViewer('inscription');"
+                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block'); $('#main-back').css('display', 'block'); changeLeftViewer('inscription');"
                 style="display:none; margin-left:12px;">
             </div>
             <div class="ui-module-container">
@@ -263,6 +264,7 @@
             $('#back-to-visuals').css('display', 'block');
             $('#right-pane').css('display', 'block');
             $('#left-pane').css('display', 'none');
+            $('#main-back').css('display', 'none');
         }
 
         window.addEventListener('message', function (event) {

@@ -123,6 +123,8 @@ body {
 	margin-bottom:20px;
 }
 
+
+
 .metadata-content .preview {
 	height: auto;
 	margin-top: 10px;
@@ -186,7 +188,11 @@ body {
 
 .metadata-description {
 	margin-top: 10px;
-	text-align: justify;
+	text-align: left;
 	font-weight: 300;
 	width: 100%;
+}
+
+.metadata-description div p {
+	margin-bottom:10px;
 }

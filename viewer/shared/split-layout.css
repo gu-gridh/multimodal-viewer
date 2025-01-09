@@ -124,13 +124,23 @@
         display:none;
     }
 
-    .single-module #right-pane {
-        display: block;
+    .single-module-left #right-pane {
+        display: none;
+      
+    }
+
+    .single-module-left #left-pane {
+        display: block!important;
         width:100%;
     }
 
-    .single-module #left-pane {
-        display: none!important;
+    .single-module-right #right-pane {
+        display: block!important;
+        width:100%;
+    }
+
+    .single-module-right #left-pane {
+        display: none;  
     }
 
 
@@ -138,7 +148,12 @@
         display:none;
     }
 
-    .single-module .ui-module-container{
+    .single-module-left .ui-module-container{
+        display:flex;
+        width:100vw;
+    }
+
+    .single-module-right .ui-module-container{
         display:flex;
         width:100vw;
     }

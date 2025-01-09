@@ -14,7 +14,7 @@ body {
 
 .metadata-container {
 	width: 100%;
-	padding: 80px 40px 40px 40px !important;
+	padding: 40px 40px 40px 40px !important;
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
@@ -35,7 +35,7 @@ body {
 	border-radius: 5px;
 	border-width: 0px;
 	padding: 8px 13px;
-	margin-top: -55px;
+	margin-top: -20px;
 	right:30px;
 	background-color: var(--color-4);
 	color: white;

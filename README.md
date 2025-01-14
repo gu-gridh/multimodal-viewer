@@ -29,9 +29,3 @@ Etruscan: http://localhost:8094/viewer/?q=2683/image
 ## Installation
 
 npm install
-
-## Database and API Documentation
-
-
-
-

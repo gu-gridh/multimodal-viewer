@@ -6,11 +6,6 @@ svg.a9s-annotationlayer .a9s-annotation .a9s-outer {
   stroke-dasharray: 1;
 }
 
-svg.a9s-annotationlayer{
-  fill: rgba(0, 0, 0, 0.5)!important;
-}
-
-
 svg.a9s-annotationlayer .a9s-handle .a9s-handle-outer {
   display: none;
 }

@@ -1,10 +1,15 @@
 svg.a9s-annotationlayer .a9s-selection .a9s-outer,
 svg.a9s-annotationlayer .a9s-annotation .a9s-outer {
   display: block;
-  stroke-width: 6.0;
-  stroke: rgba(0,0,0,0.2);
+  stroke-width: 20.0;
+  stroke: rgba(0,0,0,0.01);
   stroke-dasharray: 1;
 }
+
+svg.a9s-annotationlayer{
+  fill: rgba(0, 0, 0, 0.5)!important;
+}
+
 
 svg.a9s-annotationlayer .a9s-handle .a9s-handle-outer {
   display: none;
@@ -25,6 +30,7 @@ svg.a9s-annotationlayer .a9s-annotation .a9s-inner {
 /** Disable the hover effect from the default stylesheet **/
 svg.a9s-annotationlayer .a9s-annotation.editable:hover .a9s-inner {
   fill: transparent;
+ 
 }
 
 /** Corner handles **/
@@ -38,7 +44,6 @@ svg.a9s-annotationlayer .a9s-handle .a9s-handle-inner {
 svg.a9s-annotationlayer .a9s-selection-mask {
   fill: rgba(0, 0, 0, 0.5);
 }
-
 
 
 .r6o-editor {

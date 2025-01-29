@@ -23,6 +23,7 @@
   "documentation": "Documentation",
   "transcription": "Transcription",
   "description": "Description",
+  "tombdescription": "Tomb Description",
   "translation": "Translation",
   "contributors": "Contributors",
   "image": "Image",

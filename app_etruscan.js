@@ -67,7 +67,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   let apiUrl;
 
   if (viewerType === 'pointcloud') {
-      apiUrl = `${config.panel}${queryName}`;
+      apiUrl = `${config.panel}${queryName}&depth=2`;
   } else if (viewerType === 'image') {
       apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=1`;
   } else {
@@ -106,11 +106,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           if (viewerType === 'pointcloud') {
               modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, metadata.title ?? 'Unknown')
                                      .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
+                                     .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.preview_image?.tomb?.description ?? 'No description available')
                                      .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
                                      .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown');
           } else if (viewerType === 'image') {
               modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, 'Tomb ' + metadata.tomb.name ?? 'Unknown Tomb')
-                                     .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.tomb.description ?? 'No description available')
+                                     .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb.description ?? 'No description available')
                                      .replace(/PLACEHOLDER_TYPE/g, metadata.type_of_image?.[0]?.text ?? 'Unknown type')
                                      .replace(/PLACEHOLDER_CREATOR/g, `${metadata.author.firstname} ${metadata.author.lastname}` ?? 'Unknown Creator')
                                      .replace(/PLACEHOLDER_DATE/g, `${metadata.date}` ?? 'Unknown Date')
@@ -121,12 +122,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           //remove blocks with empty placeholders
           modifiedHtml = modifiedHtml.replace(/<div[^>]*>\s*<div[^>]*>[^<]+:<\/div>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Type:<\/div>\s*<span[^>]*>PLACEHOLDER_TYPE<\/span>\s*<\/div>/g, '')
+          .replace(/<div[^>]*class=["']metadata-description["'][^>]*>\s*<div[^>]*class=["']label["'][^>]*>Description<\/div>\s*<div>\s*<p>PLACEHOLDER_TOMB_DESCRIPTION<\/p>\s*<\/div>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Creator:<\/div>\s*<span[^>]*>PLACEHOLDER_CREATOR<\/span>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Date:<\/div>\s*<span[^>]*>PLACEHOLDER_DATE<\/span>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Points \(optimized\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_OPTIMIZED<\/span>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Points \(high quality\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_FULL<\/span>\s*<\/div>/g, '')
-          .replace(/<p[^>]*>PLACEHOLDER_DESCRIPTION<\/p>/g, '');
-
+            .replace(/<p[^>]*>PLACEHOLDER_DESCRIPTION<\/p>/g, '');
           res.send(modifiedHtml);
       });
   } catch (error) {

@@ -104,14 +104,20 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           let modifiedHtml;
 
           if (viewerType === 'pointcloud') {
-              modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, metadata.title ?? 'Unknown')
+              modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, 
+                                          metadata.tomb?.[0]?.dataset?.short_name &&  metadata.tomb?.[0]?.name 
+                                              ? `${metadata.tomb[0].dataset.short_name} ${metadata.tomb?.[0]?.name}` 
+                                              : 'Unknown')
                                      .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
                                      .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.preview_image?.tomb?.description ?? '')
                                      .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
                                      .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
                                      .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.[0]?.dataset?.short_name ?? '')
           } else if (viewerType === 'image') {
-              modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, 'Tomb ' + metadata.tomb.name ?? 'Unknown Tomb')
+              modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, 
+                                        metadata.tomb?.dataset.short_name &&  metadata.tomb?.name 
+                                            ? `${metadata.tomb?.dataset.short_name} ${metadata.tomb?.name}` 
+                                            : 'Unknown')
                                      .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb.description ?? '')
                                      .replace(/PLACEHOLDER_TYPE/g, metadata.type_of_image?.[0]?.text ?? 'Unknown type')
                                      .replace(/PLACEHOLDER_CREATOR/g, `${metadata.author.firstname} ${metadata.author.lastname}` ?? 'Unknown Creator')

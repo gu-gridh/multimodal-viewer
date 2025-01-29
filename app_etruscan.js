@@ -69,7 +69,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   if (viewerType === 'pointcloud') {
       apiUrl = `${config.panel}${queryName}&depth=2`;
   } else if (viewerType === 'image') {
-      apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=1`;
+      apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
   } else {
       return res.status(400).send('Invalid viewer type');
   }
@@ -86,7 +86,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       if (viewerType === 'pointcloud') {
           metadata = apiResponse.data.results?.[0];
       } else if (viewerType === 'image') {
-          metadata = apiResponse.data; 
+          metadata = apiResponse.data;
       }
 
       if (!metadata) {
@@ -108,7 +108,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                                      .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
                                      .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.preview_image?.tomb?.description ?? '')
                                      .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
-                                     .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown');
+                                     .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
+                                     .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.[0]?.dataset?.short_name ?? '')
           } else if (viewerType === 'image') {
               modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g, 'Tomb ' + metadata.tomb.name ?? 'Unknown Tomb')
                                      .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb.description ?? '')
@@ -116,7 +117,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
                                      .replace(/PLACEHOLDER_CREATOR/g, `${metadata.author.firstname} ${metadata.author.lastname}` ?? 'Unknown Creator')
                                      .replace(/PLACEHOLDER_DATE/g, `${metadata.date}` ?? 'Unknown Date')
                                      .replace(/PLACEHOLDER_IMAGE_URL/g, metadata.iiif_file ?? '')
-                                     .replace(/PLACEHOLDER_DOWNLOAD_URL/g, metadata.file ?? '');
+                                     .replace(/PLACEHOLDER_DOWNLOAD_URL/g, metadata.file ?? '')
+                                     .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.dataset?.short_name ?? '');
           }
 
           //remove blocks with empty placeholders
@@ -127,7 +129,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           .replace(/<div[^>]*>\s*<div[^>]*>Date:<\/div>\s*<span[^>]*>PLACEHOLDER_DATE<\/span>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Points \(optimized\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_OPTIMIZED<\/span>\s*<\/div>/g, '')
           .replace(/<div[^>]*>\s*<div[^>]*>Points \(high quality\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_FULL<\/span>\s*<\/div>/g, '')
-            .replace(/<p[^>]*>PLACEHOLDER_DESCRIPTION<\/p>/g, '');
+          .replace(/<p[^>]*>PLACEHOLDER_DESCRIPTION<\/p>/g, '');
           res.send(modifiedHtml);
       });
   } catch (error) {

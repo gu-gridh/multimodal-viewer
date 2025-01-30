@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
     <title>Etruscan Multimodal tool</title>
     <meta charset="utf-8">
     <meta name="description" content="">
@@ -39,11 +38,11 @@
         }
 
         #right-pane {
-            width:420px;
+            width: 420px;
         }
 
         #left-pane {
-            width:calc(100% - 420px);
+            width: calc(100% - 420px);
         }
 
         .edit-button {
@@ -80,14 +79,39 @@
             opacity: 0.6;
         }
 
-
         @media screen and (max-width: 1050px) {
-
             #main-content {
                 height: calc(100% - 0px) !important;
-
             }
-        
+        }
+
+        @media screen and (max-width: 1050px) {
+            .ui-module {
+                position: absolute;
+                top: 25px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                justify-content: center;
+                background-color: black;
+                box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.5) !important;
+                margin: 5px;
+                border-radius: 8px;
+                z-index: 1000;
+            }
+        }
+
+        @media screen and (min-width: 1051px) {
+            .ui-module {
+                display: none !important;
+            }
+        }
+
+        /* override */
+        .ui-module-item:hover,
+        .ui-module-item.active {
+            color: white !important;
+            opacity: 1.0 !important;
         }
     </style>
 </head>
@@ -97,26 +121,20 @@
         <div class="back-button" title="Go back"></div>
     </a>
 
-
- 
-    
-
     <div id="main-content" class="single-module-left">
-        <!-- <div class="ui-module-container">
-            <div class="ui-module">
-                <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
-                    onclick="changeLeftViewer('inscription');" style="opacity:1.0;">Documentation</div>
-                <div class="ui-module-item left" id="btn2" title="Explore topographical documentation"
-                    onclick="changeLeftViewer('metadata');">About</div> 
-            </div>
-        </div> -->
+        <div class="ui-module">
+            <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation">
+                Documentation</div>
+            <div class="ui-module-item left" id="btn2" title="Explore topographical documentation">About</div>
+        </div>
 
-        <div id="left-pane">    
-            <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;" src="/viewer/projects/sophia/metadata/pointcloud.html"></iframe>
+        <div id="left-pane">
+            <iframe id="left-Iframe" class="iframes" style="width:100%; border:none;"
+                src="/viewer/projects/sophia/metadata/pointcloud.html"></iframe>
         </div>
 
         <div id="right-pane">
-            <iframe id="right-Iframe" class="iframes"  style="width:100%; border:none;"></iframe>
+            <iframe id="right-Iframe" class="iframes" style="width:100%; border:none;"></iframe>
         </div>
 
         <div id="footer-container"></div>
@@ -130,7 +148,36 @@
 
             changeRightViewer('metadata');
             changeLeftViewer(viewerType);
+
+            $("#btn1").on("click", function () {
+                showMainViewer();
+                setActiveButton("#btn1");
+                $(".back-button").show();
+            });
+
+            $("#btn2").on("click", function () {
+                showMetadataPanel();
+                setActiveButton("#btn2");
+                $(".back-button").hide();
+            });
+
+            setActiveButton("#btn1");
         });
+
+        function showMainViewer() {
+            $("#left-pane").css({ width: "100%", display: "block" });
+            $("#right-pane").css({ width: "0", display: "none" });
+        }
+
+        function showMetadataPanel() {
+            $("#right-pane").css({ width: "100%", display: "block" });
+            $("#left-pane").css({ width: "0", display: "none" });
+        }
+
+        function setActiveButton(buttonId) {
+            $(".ui-module-item").removeClass("active");
+            $(buttonId).addClass("active");
+        }
 
         function determineViewerTypeFromQuery() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -182,11 +229,13 @@
         }
 
         window.addEventListener('message', function (event) {
-            if (event.data.type === 'togglePane') {
-                toggleRightPane();
-            }
-            if (event.data.type === 'togglePane2') {
-                toggleRightPane();
+            if (window.innerWidth > 1051) { //not in mobile view
+                if (event.data.type === 'togglePane') {
+                    toggleRightPane();
+                }
+                if (event.data.type === 'togglePane2') {
+                    toggleRightPane();
+                }
             }
         }, false);
 
@@ -208,7 +257,7 @@
                 leftPane.style.width = 'calc(100% - 420px)';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
                 if (backButton) backButton.style.display = 'block';
-                isFullscreenMode = false; 
+                isFullscreenMode = false;
             } else {
                 rightPane.style.width = '1px';
                 leftPane.style.width = '100%';

@@ -324,14 +324,21 @@ user-select: none;
 
 #entry_2{
 	border-radius: 8px 0px 0px 8px;
+	border-style:solid;
+	border-color: grey;
+    border-width:0.5px 0px 0px 0px;
 	user-select: none;
 	overflow:hidden;
 	pointer-events:auto;
+	height:calc(100% + 50px);
 	}
 
 
 #entry_3{
 	border-radius: 0px 0px 0px 0px;
+	border-style:solid;
+	border-color: grey;
+    border-width:0.5px 0px 0px 0px;
 	user-select: none;
 	overflow:hidden;
 	pointer-events:auto;
@@ -340,6 +347,9 @@ user-select: none;
 
 #entry_4{
 	border-radius: 0px 8px 8px 0px;
+	border-style:solid;
+	border-color: grey;
+    border-width:0.5px 0px 0px 0px;
 	user-select: none;
 	overflow:hidden;
 	pointer-events:auto;
@@ -354,15 +364,14 @@ user-select: none;
 	flex-direction:row;
 	justify-content:center;
 	height:auto;
-	overflow:hidden;
+
 	user-select: none;
 	pointer-events:none;
-	border-style: solid;
-	border-radius:8px;
-    border-color: grey;
-    border-width:0.5px 0px 0px 0px;
-	background-color:black;
+
+
+
 	bottom:0px;
+	margin-bottom:0px;
 	user-select: none;
 	-webkit-user-select: none; /* Safari */
 }

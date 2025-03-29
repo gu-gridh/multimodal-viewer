@@ -473,20 +473,25 @@ h2 {
 
 /* This one describes the look of the UI-element with the navigation instructions */
 #instructions {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
     pointer-events: none;
     position: absolute;
     z-index: 100000;
     width: 340px;
     height: auto;
+    min-height:45px;
     bottom: 110px;
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     text-align: center;
     padding: 15px 15px;
-    font-size: 0.95em;
+    font-size: 0.9em;
     font-weight:300;
-    line-height: 1.5;
+    line-height: 1.4;
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     user-select: none;
 	-webkit-user-select: none; /* Safari */
@@ -519,7 +524,7 @@ h2 {
 }
 
 .instruction-closer:hover {
-    background-color: rgb(80, 80, 80);
+    opacity:0.6;
 }
 
 .LODtool {
@@ -528,6 +533,7 @@ h2 {
     z-index: 100000;
     width: 270px;
     height: auto;
+    min-height:45px;
     bottom: 20px;
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.8);

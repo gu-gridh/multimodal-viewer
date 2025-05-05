@@ -107,6 +107,8 @@ body {
 	padding: 0px 0px 10px 0px;
 	line-height: 1.2;
 	width: 100%;
+	font-size: 1.1em;
+	font-weight: 300;
 }
 
 .metadata-item {

@@ -26,7 +26,7 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
 
   try {
     const apiResponse = await axios.get(apiUrl);
-    const rtiImages = apiResponse.data?.features?.[0]?.properties?.attached_RTI || [];
+    const rtiImages = apiResponse.data?.features?.[0]?.properties?.rti || [];
 
     if (Array.isArray(rtiImages) && rtiImages.length > 0) {
       rtiImages.sort((a, b) => {
@@ -508,7 +508,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
         return res.status(500).send('Internal Server Error');
       }
 
-      let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
+      let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.mesh?.[0]?.url || ''));
       modifiedData = modifiedData.replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
       modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
@@ -563,7 +563,7 @@ app.get('*', async (req, res) => {
   try {
     const apiUrl = `${config.panel}${queryId}`;
     const apiResponse = await axios.get(apiUrl);
-    const rtiImages = apiResponse.data.features[0].properties.attached_RTI || [];
+    const rtiImages = apiResponse.data.features[0].properties.rti || [];
 
     fs.readFile(indexPath, 'utf8', (err, data) => {
       if (err) {

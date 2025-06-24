@@ -382,7 +382,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       const authorMap = {};
       if (Array.isArray(data.author)) {
         data.author.forEach(a => {
-          authorMap[a.id] = `${a.firstname} ${a.lastname}`;
+          authorMap[a.id] = `${a.lastname}`;
         });
       }
 
@@ -400,7 +400,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             .attr('alt', img.title || 'Korniienko image');
 
           const authorName = authorMap[img.author] || '—';
-          $card.find('.kor-line1').text(`${authorName} ${n(img.year)}, Plate ${n(img.plate)}`);
+          $card.find('.kor-line1').text(`${authorName} ${n(img.year)}, plate ${n(img.plate)}`);
           $card.find('.kor-line2').text(`${n(img.type_of_image)}`);
           $card.find('.kor-line3').text(`${n(img.type_of_license)}`);
           $('#korniienko-gallery').append($card);

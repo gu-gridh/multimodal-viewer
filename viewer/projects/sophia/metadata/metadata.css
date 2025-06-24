@@ -26,9 +26,13 @@ body {
 	font-size: 0.85em;
 }
 
-.korniienko-meta div {
-	font-weight: 200;
-	line-height: 1.3;
+.korniienko-meta{
+	font-weight: 300;
+}
+
+.kor-line{
+margin-bottom:8px!important;
+height:auto;
 }
 
 .korniienko-thumb {
@@ -41,7 +45,7 @@ body {
 }
 
 .korniienko-thumb:hover {
-	transform: scale(1.05);
+	transform: scale(1.03);
 }
 
 .ancient-cyrillic {

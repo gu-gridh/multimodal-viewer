@@ -21,7 +21,7 @@ try {
 app.get('/viewer/modules/rti/rti.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  // Fetch RTI image data from the API
+  //fetch RTI image data from the API
   const apiUrl = `${config.panel}${queryName}`;
 
   try {
@@ -374,6 +374,44 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
       const editlink = `https://saintsophia.dh.gu.se/admin/inscriptions/inscription/${annotationId}/change/`;
 
+      //KORNIENKO GALLERY
+      const korniienko = Array.isArray(data.korniienko_image)
+        ? data.korniienko_image.filter(i => i.published)
+        : [];
+
+      const authorMap = {};
+      if (Array.isArray(data.author)) {
+        data.author.forEach(a => {
+          authorMap[a.id] = `${a.firstname} ${a.lastname}`;
+        });
+      }
+
+      if (korniienko.length) {
+        const $template = $('#korniienko-gallery .korniienko-card.template');
+        const n = v => (v === null || v === undefined || v === '') ? '—' : v;
+
+        korniienko.forEach(img => {
+          const $card = $template.clone().removeClass('template');
+
+          //thumbnail
+          $card.find('.kor-link').attr('href', img.url);
+          $card.find('.korniienko-thumb')
+            .attr('src', img.url)
+            .attr('alt', img.title || 'Korniienko image');
+
+          const authorName = authorMap[img.author] || '—';
+          $card.find('.kor-line1').text(`${authorName} ${n(img.year)}, Plate ${n(img.plate)}`);
+          $card.find('.kor-line2').text(`${n(img.type_of_image)}`);
+          $card.find('.kor-line3').text(`${n(img.type_of_license)}`);
+          $('#korniienko-gallery').append($card);
+        });
+
+        $template.remove();
+      } else {
+        $('#korniienko-gallery').remove();
+        $('#gallery-title-container').remove();
+      }
+
       //dimensions
       const width = data.width ? data.width : "";
       const height = data.height ? data.height : "";
@@ -583,7 +621,7 @@ app.get('*', async (req, res) => {
         modifiedData = modifiedData.replace(
           /<div class="ui-module-item left" id="btn4" title="Explore RTI documentation"[^>]*>\s*<\/div>/,
           ''
-        );           
+        );
       }
       res.send(modifiedData);
     });

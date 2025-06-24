@@ -49,7 +49,8 @@
                 { id: 'imd40', key: 'overlapping' },
                 { id: 'imd41', key: 'bibliography' },
                 { id: 'imd42', key: 'contributors' },
-                { id: 'imd43', key: 'metadatahelp' }
+                { id: 'imd43', key: 'metadatahelp' },
+                { id: 'imd44', key: 'images' }
             ];
 
             elements.forEach(({ id, key, suffix = '' }) => {
@@ -127,7 +128,7 @@
                         <div id="panel-languages" class="theme-color-text tag"></div>
                     </div>
 
-                   <!--  <div class="metadata-item">
+                    <!--  <div class="metadata-item">
                         <div class="label" id="imd7">Section:</div>
                         <div class="theme-color-text tag"></div>
                     </div> -->
@@ -154,7 +155,6 @@
                 </div>
             </div>
             <div class="metadata-inscription">
-               
 
                 <div class="metadata-inscription-title">
                     <div class="metadata-inscription-title-part" id="inscription-title"></div>
@@ -219,9 +219,9 @@
                             </div>
 
                             <div class="metadata-description" style="margin-top:1.2em;">
-                            <div class="metadata-title" id="imd23">Translation</div>
-                            <div class="metadata-description-text" id="inscription-translation"
-                                style="margin-top:-5px"></div>
+                                <div class="metadata-title" id="imd23">Translation</div>
+                                <div class="metadata-description-text" id="inscription-translation"
+                                    style="margin-top:-5px"></div>
                             </div>
                         </div>
                     </div>
@@ -309,21 +309,31 @@
                             <div id="inscription-bibliography" class="metadata-description-text contributors"></div>
                         </div>
 
-                        <div class="metadata-description">
+                        <div class="metadata-description" style="margin-bottom:20px">
                             <div class="metadata-title" id="imd42" style="margin-top:-5px;">Contributors</div>
                             <div id="inscription-contributors" class="metadata-description-text contributors"></div>
                         </div>
 
+                        <div id="gallery-title-container" class="metadata-description">
+                            <div class="metadata-title" id="imd44"></div>
+                        </div>
 
+                        <div id="korniienko-gallery" class="image-container">
+                            <div class="korniienko-card template">
+                                <a class="kor-link" target="_blank" rel="noopener">
+                                    <img class="korniienko-thumb" src="" alt="">
+                                </a>
+                                <div class="korniienko-meta">
+                                    <div class="kor-line1"></div> <!-- author year, plate -->
+                                    <div class="kor-line2"></div> <!-- type of image -->
+                                    <div class="kor-line3"></div> <!-- type of license -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
-                <div class="image-container">
-                    <!-- Insert image carousel text -->
-                </div>
-
             </div>
+
             <div class="metadata-help">
                 <div id="imd43"></div>
                 <div class="annotation-box-demo"></div>

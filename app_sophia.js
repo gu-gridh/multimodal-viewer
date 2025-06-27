@@ -531,36 +531,47 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  if (!queryName) {
+  if (!queryName) { 
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.panel}${queryName}`;
   try {
-    const apiResponse = await axios.get(apiUrl);
-    const modelData = apiResponse.data.features;
+    const { data } = await axios.get(`${config.panel}${queryName}`);
+    const mesh = data.features?.[0]?.properties?.attached_3Dmesh?.[0] || {};
+    const isDownloadable = mesh.is_downloadable && mesh.url_for_download;
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
+    fs.readFile(
+      path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'),
+      'utf8',
+      (err, html) => {
+        if (err) return res.status(500).send('Internal server error');
+
+        let modified = html
+          .replace(/PLACEHOLDER_MESH/g, JSON.stringify(mesh.url || ''))
+          .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
+          .replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0))
+          .replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0))
+          .replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5))
+          .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
+          .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
+          .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
+          .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
+        const $ = cheerio.load(modified);
+
+        if (isDownloadable) {
+          $('#download').attr('href', mesh.url_for_download);
+          $('#download .download-button').removeClass('deactivated');
+        } else {
+          $('#download').removeAttr('href');
+          $('#download .download-button').addClass('deactivated');
+        }
+
+        res.send($.html());
       }
-
-      let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(modelData?.[0]?.properties?.attached_3Dmesh?.[0]?.url || ''));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
-      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]));
-      modifiedData = modifiedData.replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
-
-      res.send(modifiedData);
-    });
-  } catch (error) {
-    console.error('Error fetching data from API:', error);
-    return res.status(500).send('Internal Server Error');
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Internal server error');
   }
 });
 
@@ -573,7 +584,7 @@ app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'proje
 app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locales')));
 app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
-// Fallback route, serve index.html
+//Fallback route, serve index.html
 app.get('*', async (req, res) => {
   const queryName = req.query.q;
   const queryId = queryName ? queryName.split('/')[0] : '';

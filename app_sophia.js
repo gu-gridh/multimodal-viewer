@@ -387,6 +387,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       }
 
       if (korniienko.length) {
+        korniienko.sort((a, b) => {
+          const ta = (a.type_of_image || '').toLowerCase();
+          const tb = (b.type_of_image || '').toLowerCase();
+          return tb.localeCompare(ta, undefined, { sensitivity: 'base' }); //reverse alphabetical
+        });
+
         const $template = $('#korniienko-gallery .korniienko-card.template');
         const n = v => (v === null || v === undefined || v === '') ? '—' : v;
 

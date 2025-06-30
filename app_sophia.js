@@ -407,7 +407,14 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
           const authorName = authorMap[img.author] || '—';
           $card.find('.kor-line1').text(`${authorName} ${n(img.year)}, plate ${n(img.plate)}`);
-          $card.find('.kor-line2').text(`${n(img.type_of_image)}`);
+          const imgTypeText = (() => { //hardcode image types for ukrainian
+            if (currentLang === 'uk') {
+              if (img.type_of_image === 'Drawing')    return 'Малюнок';
+              if (img.type_of_image === 'Photograph') return 'Фотографія';
+            }
+            return n(img.type_of_image);
+          })();
+          $card.find('.kor-line2').text(imgTypeText);
           $card.find('.kor-line3').text(`${n(img.type_of_license)}`);
           $('#korniienko-gallery').append($card);
         });

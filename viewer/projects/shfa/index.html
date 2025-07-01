@@ -47,44 +47,6 @@
             height: 300px;
             margin-top: 20px;
         }
-
-        #back-button {
-            position: absolute;
-            height: 40px;
-            width: 40px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 1.0);
-            background-image: url(/viewer/shared/interface/back.png);
-            background-size: 15px;
-            background-position: center;
-            background-repeat: no-repeat;
-            margin-top: 28px;
-            margin-left: 30px;
-            z-index: 1000;
-            cursor: pointer;
-        }
-
-        #back-button:hover {
-            background-color: rgba(0, 0, 0, 1.0);
-            transform: scale(1.07);
-        }
-
-       
-
-        @media screen and (max-width: 500px) {
-            #back-button {
-                height: 30px;
-                width: 30px;
-                margin-left: 10px;
-                margin-top: 30px;
-            }
-        }
-
-        @media screen and (max-width: 350px) {
-            #back-button {
-                display: none;
-            }
-        }
     </style>
 </head>
 
@@ -92,9 +54,6 @@
     <div id="main-content">
 
         <div id="left-pane">
-            <a href="PLACEHOLDER_BACKBUTTON">
-                <div id="back-button"></div>
-            </a>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left" id="btn3" onclick="changeLeftViewer('mesh');moduleSwitcherLeft(3);"
@@ -203,17 +162,14 @@
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = rightPane.querySelector('.ui-module-container');
-            var backButton = document.getElementById('back-button');
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
-                if (backButton) backButton.style.display = 'block';
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'none';
-                if (backButton) backButton.style.display = 'block';
             }
         }
 
@@ -221,18 +177,14 @@
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
-            var backButton = document.getElementById('back-button');
-
             if (leftPane.style.width === '1px') {
                 leftPane.style.width = '50%';
                 rightPane.style.width = '50%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
-                if (backButton) backButton.style.display = 'block';
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '99%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'none';
-                if (backButton) backButton.style.display = 'none';
             }
         }
 

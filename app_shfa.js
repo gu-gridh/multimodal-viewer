@@ -334,7 +334,6 @@ app.get('*', (req, res) => {
 
     let modifiedData = data
       .replace(/PLACEHOLDER_QUERY/g, queryName)
-      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
     res.send(modifiedData);
   });
 });

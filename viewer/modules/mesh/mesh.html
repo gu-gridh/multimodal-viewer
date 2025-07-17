@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
 <head>
@@ -426,8 +426,6 @@
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
 			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
-		} else {
-			console.error('Invalid parameters for trackball animation');
 		}
 
 		if (!isNaN(rotation)) {

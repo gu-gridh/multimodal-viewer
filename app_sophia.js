@@ -30,8 +30,8 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
 
     if (Array.isArray(rtiImages) && rtiImages.length > 0) {
       rtiImages.sort((a, b) => {
-        const numA = parseInt(a.title.match(/\d+/)?.[0] || 0, 10);
-        const numB = parseInt(b.title.match(/\d+/)?.[0] || 0, 10);
+        const numA = parseInt(a.title?.match(/\d+/)?.[0] || 0, 10);
+        const numB = parseInt(b.title?.match(/\d+/)?.[0] || 0, 10);
         return numA - numB;
       });
     }
@@ -66,8 +66,8 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const apiUrl = `${config.panel}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
-    const position = apiResponse.data.features[0]?.properties.spatial_position;
-    const direction = apiResponse.data.features[0]?.properties.spatial_direction;
+    const position = apiResponse.data?.features?.[0]?.properties?.spatial_position;
+    const direction = apiResponse.data?.features?.[0]?.properties?.spatial_direction;
 
     fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
       if (err) {
@@ -111,14 +111,14 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     }
 
     if (queryType === 'orthophoto') {
-      if (modelData[0].properties.attached_photograph) {
+      if (modelData?.[0]?.properties?.attached_photograph?.length) {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = false;
         const displayStyle = sequenceEnabled ? 'flex' : 'none';
         const basePath = `${config.basePath}`;
         const basePathDownload = `${config.downloadPath}`;
-        const iiifFilePath = modelData[0].properties.attached_photograph[0].iiif_file;
-        const downloadFile = modelData[0].properties.attached_photograph[0].file;
+        const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
+        const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
         const annotationPath = `${config.annotationPath}`;
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
         const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
@@ -137,7 +137,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         res.send('No attached photographs found.');
       }
     } else if (queryType === 'topography') {
-      if (modelData[0].properties.attached_topography) {
+      if (modelData?.[0]?.properties?.attached_topography?.length) {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = true;
         const displayStyle = sequenceEnabled ? 'flex' : 'none';
@@ -146,7 +146,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const annotationPath = `${config.annotationPath}`;
 
         //sort the attached_topography array based on the file name
-        const sortedTopography = modelData[0].properties.attached_topography.sort((a, b) => {
+        const sortedTopography = (modelData?.[0]?.properties?.attached_topography || []).sort((a, b) => {
           const order = ['blended', 'texture', 'normal'];
           const getOrder = (file) => {
             return order.findIndex(keyword => file.includes(keyword));
@@ -270,8 +270,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     //populate panel metadata
     const panelTitle = currentLang === 'uk' ? 'Поверхня' : 'Surface';
     const panelDocumentation = currentLang === 'uk'
-      ? metadata.documentation.map(doc => doc.text_ukr).join(' ')
-      : metadata.documentation.map(doc => doc.observation).join(' ');
+      ? (metadata.documentation || []).map(d => d?.text_ukr).join(' ')
+      : (metadata.documentation || []).map(d => d?.observation).join(' ');
     const panelMedium = currentLang === 'uk'
       ? metadata.medium?.text_ukr ?? 'Unknown'
       : metadata.medium?.text ?? 'Unknown';
@@ -625,7 +625,7 @@ app.get('*', async (req, res) => {
   try {
     const apiUrl = `${config.panel}${queryId}`;
     const apiResponse = await axios.get(apiUrl);
-    const rtiImages = apiResponse.data.features[0].properties.attached_RTI || [];
+    const rtiImages = apiResponse.data?.features?.[0]?.properties?.attached_RTI || [];
 
     fs.readFile(indexPath, 'utf8', (err, data) => {
       if (err) {

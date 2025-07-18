@@ -29,3 +29,8 @@ Etruscan: http://localhost:8094/viewer/?q=2683/image
 ## Installation
 
 npm install
+
+## Deployment
+
+Run corresponding deploy script at `/appl/js/multimodal-viewer` as our gridh user.<br> 
+Log out of that user and run `sudo systemctl restart ...` with the PROJECT name + `-viewer`.

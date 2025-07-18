@@ -202,6 +202,7 @@
                 document.getElementById('11').innerHTML = i18next.t('createdwith');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('redoselection');
+                document.getElementById('andLabel').textContent = i18next.t('and');
                 updatePageInfo();
             }
         }
@@ -347,7 +348,6 @@
 
             const loadAnnotationsPromise = anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
                 if (annotations.length > 0 && currentAnnotationId) {
-                    console.log('annotations loaded:', annotations);
                     openAnnotationById(currentAnnotationId);
                 }
                 return annotations;
@@ -643,6 +643,7 @@
                     <div class="module-acknowledgement">
                         <p id="11">The module was created with</p>
                         <p><a href="https://github.com/openseadragon/openseadragon" target="_blank">OpenSeadragon</a></p>
+                        <span id="andLabel"></span>
                         <p><a href="https://annotorious.github.io" target="_blank">Annotorious</a></p>
                     </div>
                     <div class="guide-closer" id="5"></div>

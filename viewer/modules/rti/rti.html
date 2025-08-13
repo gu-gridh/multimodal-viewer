@@ -94,7 +94,7 @@
 				?</div>
 
 			<a id="download" target="_blank">
-				<div id="" class="round-button download-button compact deactivated" style="bottom:23px"
+				<div id="" class="round-button download-button compact" style="bottom:23px"
 					title="Download image"></div>
 			</a>
 
@@ -276,6 +276,7 @@
 		ui.actions.layers.display = false;
 		lime.camera.maxFixedZoom = 1.5;
 		window.lime = lime;
+		updateDownloadButtonFor('PLACEHOLDER_RTI');
 	}
 
 	function removePreviousLimeViewer() {
@@ -323,6 +324,26 @@
 			setTimeout(applyTranslations, 10); //apply translations after the viewer is updated
 		} else {
 			console.error("Not all elements were removed. Viewer update aborted.");
+		}
+		updateDownloadButtonFor(url);
+	}
+
+	function updateDownloadButtonFor(url) {
+		const sel = document.getElementById('rtiImageDropdown');
+		if (!sel) return;
+
+		const opt = [...sel.options].find(o => o.value === url) || sel.options[sel.selectedIndex];
+
+		const a = document.getElementById('download');
+		const btn = a.querySelector('.download-button');
+		const downloadable = opt?.dataset.downloadable === '1' && opt.dataset.dlUrl;
+
+		if (downloadable) {
+			a.setAttribute('href', opt.dataset.dlUrl);
+			btn.classList.remove('deactivated');
+		} else {
+			a.removeAttribute('href');
+			btn.classList.add('deactivated');
 		}
 	}
 

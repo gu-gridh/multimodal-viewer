@@ -43,9 +43,16 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
       }
       const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
 
-      const dropdownHtml = rtiImages.map(rti =>
-        `<option value="${rti.url}">${rti.title}</option>`
-      ).join('');
+      const dropdownHtml = rtiImages.map(rti => {
+        const dl = rti.url_for_download || '';
+        const downloadable = rti.is_downloadable && !!dl;
+        return `<option
+                  value="${rti.url}"
+                  data-downloadable="${downloadable ? '1' : '0'}"
+                  data-dl-url="${dl}">
+                  ${rti.title}
+                </option>`;
+      }).join('');
 
       let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
       modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->',

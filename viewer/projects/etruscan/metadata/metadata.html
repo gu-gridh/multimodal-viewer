@@ -26,7 +26,7 @@
                 { id: 'metalabel3', key: 'date' },
                 { id: 'metalabel4', key: 'points1' },
                 { id: 'metalabel5', key: 'points2' },
-                { id: 'metalabel9', key: 'license' },
+                { id: 'metalabel6', key: 'license' },
                 { id: 'metalabel7', key: 'download' },
                 { id: 'metalabel8', key: 'description' },
             ];
@@ -34,7 +34,7 @@
             elements.forEach(function (element) {
                 const domElement = document.getElementById(element.id);
                 if (domElement) {
-                    domElement.textContent = t(element.key) + (element.id !== 'metalabel6' && element.id !== 'metalabel7' && element.id !== 'metalabel8' ? ":" : "");
+                    domElement.textContent = t(element.key) + (element.id !== 'metalabel7' && element.id !== 'metalabel8' ? ":" : "");
                 }
             });
         }

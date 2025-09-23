@@ -106,7 +106,7 @@ body {
 	padding: 0px 0px 10px 0px;
 	line-height: 1.1;
 	width: 100%;
-	font-size: 1.0em;
+	font-size: 1.1em;
 	font-weight: 300;
 }
 
@@ -156,9 +156,6 @@ body {
 }
 
 
-
-
-
 .metadata-description .metadata-title {
 	font-weight: 200;
 	font-size: 1.3em;
@@ -202,6 +199,12 @@ body {
 	}
 }
 
+.metadata-content,
+.metadata-description .label,
+.metadata-description p {
+	font-family: "Barlow Condensed", sans-serif !important;
+}
+
 .metadata-description .label {
 	text-align: left;
 	width: auto;
@@ -228,17 +231,13 @@ body {
 	font-weight: 600;
 }
 
-.metadata-content,
-.metadata-description .label,
-.metadata-description p {
-	font-family: "Barlow Condensed", sans-serif !important;
-}
+
 
 .metadata-description div p {
 	margin: 0;
 	font-weight: 300;
 	max-width: 500px;
-	font-size:0.9em;
+	font-size:0.95em;
 	margin-bottom: 10px;
 }
 

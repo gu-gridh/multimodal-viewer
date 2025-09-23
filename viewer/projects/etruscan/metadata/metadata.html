@@ -13,50 +13,7 @@
     <script src="/viewer/libs/i18next.min.js"></script>
     <script src="/viewer/libs/i18next-http-backend.min.js"></script>
     <style>
-        .metadata-title {
-            font-family: 'Teko', sans-serif !important;
-            padding-top: 0px;
-            font-size: 2.5em !important;
-            padding-bottom: 10px;
-        }
-
-        .metadata-content,
-        .metadata-description .label,
-        .metadata-description p {
-            font-family: "Barlow Condensed", sans-serif !important;
-        }
-
-        .metadata-description p {
-            margin: 0;
-            font-weight: 300;
-            max-width: 500px;
-        }
-
-        .metadata-content .label {
-            display: inline;
-        }
-
-        .metadata-content .data {
-            color: rgb(180, 100, 100);
-            font-weight: 600;
-            display: inline;
-        }
-
-        .metadata-content .dataset {
-            color:rgb(255, 255, 255);
-            padding: 2px 6px;
-            background-color: var(--color-4); 
-            border-radius: 4px;
-        }
-
-        .metadata-description .label {
-            font-size: 1.5em;
-            font-weight: inherit;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-            padding-top: 30px;
-            font-weight: 500;
-        }
+        
     </style>
 </head>
 
@@ -69,6 +26,7 @@
                 { id: 'metalabel3', key: 'date' },
                 { id: 'metalabel4', key: 'points1' },
                 { id: 'metalabel5', key: 'points2' },
+                { id: 'metalabel9', key: 'license' },
                 { id: 'metalabel7', key: 'download' },
                 { id: 'metalabel8', key: 'description' },
             ];
@@ -179,6 +137,13 @@
             <div class="label" id="metalabel5">Points (high quality):</div> <span
                 class="data">PLACEHOLDER_POINTS_FULL</span>
         </div>
+
+      
+            <div class="metadata-content">
+                <div class="label" id="metalabel6">License:</div> 
+                <span class="data"><a href="https://creativecommons.org/licenses/by/4.0/">CCBY 4.0</a></span>
+            </div>
+  
 
         <div class="metadata-description" style="padding-top: 0px;">
             <div>

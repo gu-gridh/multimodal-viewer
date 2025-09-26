@@ -2956,7 +2956,7 @@
         constructor(t) {
             super({}),
                 Object.assign(this, {
-                    modes: ["light", "Diffuse", "Specular"],
+                    modes: ["light", "Diffuse", "Specular", "normals"],
                     mode: "normal",
                     type: ["ptm", "hsh", "sh", "rbf", "bln"],
                     colorspaces: ["lrgb", "rgb", "mrgb", "mycc"],

@@ -74,6 +74,7 @@
   "light": "Light",
   "diffuse": "Diffuse",
   "specular": "Specular",
+  "normal": "Normals",
   "shaderlayers": "<p>Shader layers.</p> Switch between <p>Light, Diffuse,</p> and <p>Specular</p> layers to enhance different details.",
   "line-tool": "<p>Line tool.</p> Activates the line tool. Click again to erase all lines.",
   "pointcloud-instructions": "Click and drag to change direction. Move with WASD- <br> or Arrow-keys, or Double-click. Right-click and drag to pan.<br> Use the sliders to adjust the look and density of the pointcloud.",

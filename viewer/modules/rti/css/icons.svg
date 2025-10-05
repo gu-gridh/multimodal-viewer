@@ -226,20 +226,10 @@ style="fill:#ffcc00;fill-opacity:1;stroke:#666666;stroke-width:0;stroke-miterlim
        id="rotate"
        class="openlime-button openlime-rotate"
        transform="translate(315.99999,115.47771)">
-      <rect
-         ry="12"
-         rx="12"
-         y="185.67021"
-         x="282.24948"
-         height="71"
-         width="71"
-         id="rect2993-7-6"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#666666;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <path
-         id="path1572-5"
-         d="m 317.77975,196.95146 v 7.42383 a 16.793785,16.793785 0 0 1 16.79297,16.79492 16.793785,16.793785 0 0 1 -2.13867,8.16602 l -5.45312,-3.13868 3.67773,13.65625 13.65625,-3.67773 -5.4668,-3.14649 a 24.218407,24.218407 0 0 0 3.15039,-11.85937 24.218407,24.218407 0 0 0 -24.21875,-24.21875 z m -12.93945,5.55859 -13.65625,3.67774 5.50391,3.16797 a 24.218407,24.218407 0 0 0 -3.12696,11.81445 24.218407,24.218407 0 0 0 24.21875,24.21875 v -7.42578 a 16.793785,16.793785 0 0 1 -16.79297,-16.79297 16.793785,16.793785 0 0 1 2.11329,-8.12305 l 5.41797,3.11914 z"
-         style="opacity:1;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         inkscape:connector-curvature="0" />
+      <image
+        width="20" height="20"
+        xlink:href="https://data.dh.gu.se/ui-icons/rotate_left_white.png"
+        />
     </g>
     <g
        id="ruler"

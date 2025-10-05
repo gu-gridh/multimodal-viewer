@@ -2565,7 +2565,7 @@
                  
                     rotate: {
                         title: "Rotate",
-                        display: !1,
+                        display: !0,
                         key: "r",
                         task: (t) => {
                             i.rotate(250, 90);

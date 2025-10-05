@@ -2530,7 +2530,7 @@
                 autoFit: !0,
                 actions: {
                     home: {
-                        title: "Home",
+                        title: "Reset view",
                         display: !0,
                         key: "Home",
                         task: (t) => {
@@ -2564,7 +2564,7 @@
                     },
                  
                     rotate: {
-                        title: "Rotate",
+                        title: "Rotate view",
                         display: !0,
                         key: "r",
                         task: (t) => {
@@ -2573,7 +2573,7 @@
                     },
                 
                     light: {
-                        title: "light",
+                        title: "Toggle light control",
                         display: "auto",
                         key: "l",
                         task: (t) => {
@@ -2588,7 +2588,7 @@
                         },
                     },
                     fullscreen: {
-                        title: "Fullscreen",
+                        title: "Toggle full screen",
                         display: !0,
                         key: "f",
                         task: (t) => {

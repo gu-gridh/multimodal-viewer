@@ -50,7 +50,7 @@ body {
 }
 
 #toolbar_m {
-  
+
 }
 
 #toolbar_m img {
@@ -72,6 +72,10 @@ body {
     -ms-touch-action: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0); 
     -webkit-tap-highlight-color: transparent;
+}
+
+#toolbar_m button {
+    border-width:0px!important;
 }
 
 #toolbar_m img:hover {
@@ -307,6 +311,72 @@ table, th, td, tr {
     overflow-y: scroll;
     box-shadow: inset -2rem 0rem 2rem rgba(0, 0, 0, 0.2) !important;
 }
+
+.full-page-mesh{
+    	background-position: bottom!important;
+        background-size: 40px;
+        border-width: 0px!important;
+
+}
+
+.light-deactivated{
+    opacity:0.4;
+}
+
+/* #home_m{
+    background: url(https://data.dh.gu.se/ui-icons/frame_white.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: top;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+#zoomin{
+    background: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: top;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+#zoomout{
+    background: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: top;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+#color_on_m{
+    background: url(https://data.dh.gu.se/ui-icons/colour_on.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: top;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+#color_off_m{
+    background: url(https://data.dh.gu.se/ui-icons/colour_off.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: top;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	cursor: pointer;
+} */
 
 
 

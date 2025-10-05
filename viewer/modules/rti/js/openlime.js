@@ -2582,7 +2582,7 @@
                     },
                     ruler: {
                         title: "Draw",
-                        display: !0,
+                        display: !1,
                         task: (t) => {
                             this.toggleRuler();
                         },
@@ -2818,12 +2818,12 @@
             }
         }
         toggleFullscreen() {
-            // let t = this.viewer.canvasElement,
-            //     e = this.viewer.containerElement;
-            // e.classList.toggle("openlime-fullscreen-active")
-            //     ? (e.requestFullscreen || e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen).call(e)
-            //     : ((document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen).call(document),
-            //       document.querySelector(".openlime-scale > line"),
+            let t = this.viewer.canvasElement,
+                 e = this.viewer.containerElement;
+             e.classList.toggle("openlime-fullscreen-active")
+              //   ? (e.requestFullscreen || e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen).call(e)
+             //    : ((document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen).call(document),
+              //     document.querySelector(".openlime-scale > line"),
             //       this.viewer.resize(t.offsetWidth, t.offsetHeight));
             // this.viewer.resize(t.offsetWidth, t.offsetHeight);
             window.parent.postMessage({ type: 'togglePane' }, '*');

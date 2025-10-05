@@ -170,12 +170,21 @@
 }
 
 .openlime-light path[style] {
-	fill:#80808011 !important; 
+		fill:#575757 !important; 
 }
 
 .openlime-light-active .openlime-light path[style] {
 	fill:#ffcc00 !important; 
 }
+
+.openlime-ruler path[style] {
+		fill:#575757 !important; 
+}
+
+.openlime-ruler-active .openlime-ruler path[style] {
+	fill:#ffcc00 !important; 
+}
+
 
 .openlime-lightdir {
 	position:absolute;
@@ -640,4 +649,6 @@ opacity:1;
 .openlime-zoomout    { 
 
 }
+
+
 

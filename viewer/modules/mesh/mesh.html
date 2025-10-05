@@ -87,7 +87,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(https://data.dh.gu.se/ui-icons/light_on.png)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/light-bulb_white.svg); background-position: 5px 0px;"></div>
 						<div class="guide-instructions-item-label">
 							<p id="7"></p>
 						</div>
@@ -95,7 +95,7 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(/viewer/shared/interface/distance_on.svg)"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/distance_white.svg)"></div>
 						<div class="guide-instructions-item-label">
 							<p id="8"></p>
 						</div>
@@ -197,21 +197,20 @@
 						onclick="toggleSpecular()" src="https://data.dh.gu.se/ui-icons/specular_empty.svg" />
 
 					<!--LIGHT-->
-					<img id="light_on_m" title="Disable light control" src="https://data.dh.gu.se/ui-icons/light_on.png"
+					<img id="light_on_m" title="Disable light control" src="https://data.dh.gu.se/ui-icons/light-bulb_active.svg"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="light_m" title="Enable light control" src="https://data.dh.gu.se/ui-icons/light.png" />
+					<img id="light_m" title="Enable light control" src="https://data.dh.gu.se/ui-icons/light-bulb_off.svg"/>
 
 
 					<!--MEASURE-->
-					<img id="measure_on_m" title="Disable measure tool" src="/viewer/shared/interface/distance_on.svg"
+					<img id="measure_on_m" title="Disable measure tool" src="https://data.dh.gu.se/ui-icons/distance_active.svg"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="measure_m" title="Enable measure tool" src="/viewer/shared/interface/distance_off.svg" />
+					<img id="measure_m" title="Enable measure tool" src="https://data.dh.gu.se/ui-icons/distance_white.svg" />
 
 
 					<!--FULLSCREEN-->
-					<img id="full1" class="full-page full-screen-option" title="Enter full screen"
-						src="https://data.dh.gu.se/ui-icons/expand_white.svg" style="position:relative;"
-						onclick="togglePane()" />
+					<img id="full1" class="full-page full-page-mesh full-screen-option" title="Enter full screen" style="position:relative;"
+						onclick="togglePane(), classList.toggle('full-page-active')"  src="/viewer/shared/interface/blank.svg"/>
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->

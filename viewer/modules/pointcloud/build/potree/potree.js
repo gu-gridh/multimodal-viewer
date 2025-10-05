@@ -79381,7 +79381,7 @@ ENDSEC
 
 			// DISTANCE
 			elToolbar.append(this.createToolIconExpanded(
-				Potree.resourcePath + '/icons/distance.svg',
+				'https://data.dh.gu.se/ui-icons/distance_white.svg',
 				'',
 				() => {
 					$('#menu_measurements').next().slideDown();

@@ -31,11 +31,11 @@ body {
 }
 
 
-#FullPage {
+.full-page {
 	background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
-	background-size: 100%;
+	background-size: 90%;
 	background-repeat: no-repeat;
-	background-position: center;
+	background-position: top;
 	width: 30px;
 	height: 30px;
 	overflow: hidden;

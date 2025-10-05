@@ -313,10 +313,15 @@ table, th, td, tr {
 }
 
 .full-page-mesh{
-    	background-position: bottom!important;
-        background-size: 40px;
-        border-width: 0px!important;
-
+    background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
+	background-size: 110%!important;
+    background-position: 0px 8px!important;
+	background-repeat: no-repeat!important;
+	width: 30px!important;
+	height: 30px!important;
+	overflow: hidden;
+	cursor: pointer;
+    border-width: 0px!important;
 }
 
 .light-deactivated{

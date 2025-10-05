@@ -2556,7 +2556,7 @@
                   
                     layers: {
                         title: "Layers",
-                        display: !0,
+                        display: !1,
                         key: "Escape",
                         task: (t) => {
                             this.toggleLayers();

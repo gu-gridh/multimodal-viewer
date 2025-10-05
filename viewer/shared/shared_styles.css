@@ -184,11 +184,11 @@ body {
 
 .full-page {
 	background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
-	background-size: 90%;
+	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: top;
-	width: 30px;
-	height: 30px;
+	width: 32px;
+	height: 32px;
 	overflow: hidden;
 	cursor: pointer;
 }
@@ -196,7 +196,7 @@ body {
 .full-page-active {
 	background: url(https://data.dh.gu.se/ui-icons/compress_white.svg);
     background-repeat: no-repeat;
-		background-size: 100%;
+	background-size: 100%;
 }
 
 

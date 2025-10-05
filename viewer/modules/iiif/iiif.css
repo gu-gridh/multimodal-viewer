@@ -33,11 +33,11 @@ body {
 
 .full-page {
 	background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
-	background-size: 90%;
+	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: top;
-	width: 30px;
-	height: 30px;
+	width: 34px;
+	height: 34px;
 	overflow: hidden;
 	cursor: pointer;
 }
@@ -90,8 +90,8 @@ body {
 
 .NavButton {
 	pointer-events: auto;
-	width: 35px;
-	height: 35px;
+	width: 36px;
+	height: 36px;
 	color: white;
 	opacity: 0.8;
 	margin-right: 6px;

@@ -2405,22 +2405,6 @@
          "children": []
       },
       {
-         "uuid": "2761E3D7-8066-478C-8798-4B8AE0B4B3BD",
-         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=114-19 target=_parent>114-19</a>",
-         "description": "Annotation Description",
-         "position": [
-            1.6954569969482378,
-            -0.2624890004947176,
-            1.729873995589256
-         ],
-         "offset": [
-            0,
-            0,
-            0
-         ],
-         "children": []
-      },
-      {
          "uuid": "578508B7-DFB2-434C-A018-1DE0059A1D63",
          "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=114-37 target=_parent>114-37</a>",
          "description": "Annotation Description",
@@ -3900,6 +3884,38 @@
             -13.436164023555754,
 				-15.12412797425079,
 				-0.1313220061511995
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "2D552C03-2FF4-4C2D-8B2B-6D86E7D38173",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-25 target=_parent>208-25</a>",
+         "description": "Annotation Description",
+         "position": [
+            -17.184664026512145,
+				-6.321628020503994,
+				8.864578002765656
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
+      },
+      {
+         "uuid": "2D552C03-2FF4-4C2D-8B2B-6D86E7D38173",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=114-19b target=_parent>114-19b</a>",
+         "description": "Annotation Description",
+         "position": [
+         1.0581360265121518,
+			-1.0214279850273087,
+			-0.03752202765655532
          ],
          "offset": [
             0,

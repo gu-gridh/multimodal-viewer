@@ -416,7 +416,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           $card.find('.kor-line1').text(`${authorName} ${n(img.year)}, plate ${n(img.plate)}`);
           const imgTypeText = (() => { //hardcode image types for ukrainian
             if (currentLang === 'uk') {
-              if (img.type_of_image === 'Drawing')    return 'Малюнок';
+              if (img.type_of_image === 'Drawing') return 'Малюнок';
               if (img.type_of_image === 'Photograph') return 'Фотографія';
             }
             return n(img.type_of_image);
@@ -541,6 +541,10 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       $('.metadata-help').css('display', 'none');
     }
 
+    //const epidocUrl = apiResponse.data.results[0]?.epidoc_url;
+    const epidocUrl = `/viewer/projects/${projectName}/epidoc/sample.xml`;
+    $('#epidoc-rendering').attr('data-epidoc-url', epidocUrl);
+
     res.send($.html());
   } catch (error) {
     console.error('Error fetching data from API:', error);
@@ -551,7 +555,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  if (!queryName) { 
+  if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
 

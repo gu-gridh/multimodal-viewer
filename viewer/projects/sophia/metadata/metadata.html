@@ -357,6 +357,7 @@
                         const resp = await fetch(url, { cache: "no-store" });
                         const xml = await resp.text();
                         const leidenNode = convert(xml, null, true);
+                        leidenNode.querySelector('.leiden-transcription br')?.remove();
                         target.innerHTML = "";
                         target.appendChild(leidenNode);
 

@@ -26,13 +26,13 @@ body {
 	font-size: 0.85em;
 }
 
-.korniienko-meta{
+.korniienko-meta {
 	font-weight: 300;
 }
 
-.kor-line{
-margin-bottom:8px!important;
-height:auto;
+.kor-line {
+	margin-bottom: 8px !important;
+	height: auto;
 }
 
 .korniienko-thumb {
@@ -156,7 +156,6 @@ height:auto;
 	font-weight: 600;
 }
 
-
 .metadata-inscription-title {
 	letter-spacing: -0.0rem;
 	text-align: left;
@@ -183,7 +182,6 @@ height:auto;
 	margin-top: -15px;
 }
 
-
 .metadata-subtitle {
 	letter-spacing: -0.0rem;
 	font-size: 2.0vw;
@@ -192,7 +190,6 @@ height:auto;
 	margin-bottom: 10px;
 	margin-top: -8px;
 	float: left;
-
 }
 
 .metadata-content {
@@ -211,8 +208,6 @@ height:auto;
 	display: flex;
 	flex-direction: row;
 }
-
-
 
 /* .metadata-item:has(> .tag:empty) {
 	display:none;
@@ -239,8 +234,6 @@ height:auto;
 	border-color: rgb(180, 100, 100);
 	border-style: dotted;
 }
-
-
 
 .metadata-title-row {
 	margin-bottom: 0px;
@@ -298,10 +291,6 @@ height:auto;
 	mask-image: linear-gradient(180deg, #000 -30%, transparent);
 }
 
-
-
-
-
 .metadata-description .label {
 	text-align: left;
 	width: auto;
@@ -311,8 +300,6 @@ height:auto;
 	font-weight: 200;
 	min-height: 20px;
 }
-
-
 
 .metadata-content .label {
 	float: left;
@@ -325,8 +312,6 @@ height:auto;
 	white-space: nowrap;
 }
 
-
-
 .metadata-content .tag {
 	float: left;
 	padding-left: 5px;
@@ -336,7 +321,6 @@ height:auto;
 	font-weight: 500;
 }
 
-
 .metadata-description {
 	margin-top: 10px;
 	text-align: justify;
@@ -345,18 +329,12 @@ height:auto;
 	width: 100%;
 }
 
-
-
-
 .metadata-center-button {
 	display: flex;
 	justify-content: center;
 	width: 100%;
 	padding-bottom: 0px;
 }
-
-
-
 
 #metadata-dropdown,
 #metadata-dropdown-2 {
@@ -400,8 +378,6 @@ height:auto;
 	margin-bottom: 10px;
 }
 
-
-
 .division {
 	margin-top: 20px;
 	margin-bottom: 30px;
@@ -412,7 +388,6 @@ height:auto;
 	border-style: dotted;
 	float: left;
 	margin-left: -20px;
-
 }
 
 .metadata-dropdown {
@@ -461,10 +436,7 @@ height:auto;
 }
 
 /* On regular screens */
-
 @media screen and (min-width: 900px) {
-
-
 	.metadata-surface-title {
 		font-size: 3.0em !important;
 	}
@@ -474,17 +446,12 @@ height:auto;
 	}
 
 	.metadata-inscription-title {
-
 		font-size: 2.0em;
-
 	}
 
 }
 
-
-
 /* On small devices */
-
 @media screen and (max-width: 650px) {
 
 	.metadata-surface-title {
@@ -493,9 +460,7 @@ height:auto;
 	}
 
 	.metadata-inscription-title {
-
 		font-size: 1.8em;
-
 	}
 
 	.metadata-columns {

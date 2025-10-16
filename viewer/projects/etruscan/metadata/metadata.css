@@ -112,7 +112,7 @@ body {
 
 .metadata-item a:visited {
 	text-decoration: none;
-	color: yellow;
+	color: rgb(180, 100, 100);
 }
 
 .metadata-item {
@@ -142,11 +142,11 @@ body {
 	text-decoration: none;
 }
 
-.metadata-content .data a {
-	color: rgb(180, 100, 100);
+.metadata-content .data a, a:link, a:active, a:visited {
+	color: rgb(180, 100, 100)!important;
 	text-decoration: none;
-
 }
+
 
 .metadata-content .dataset {
 	color: rgb(255, 255, 255);

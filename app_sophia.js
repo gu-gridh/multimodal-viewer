@@ -114,7 +114,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const modelData = apiResponse.data.features;
 
     if (!modelData || modelData.length === 0) {
-      return res.status(404).send('<div style="height:100%;width:100%;padding-top:45%;text-align:center;color:white;font-weight:100;font-size: 1.3em;font-family:sans-serif;">No data available<br>Немає даних</div>');
+      return res.status(404).send('<div style="height:100%;width:100%;padding-top:45%;text-align:center;color:white;font-weight:100;font-size: 1.3em;font-family:sans-serif;">No data available yet<br>Ще немає даних</div>');
     }
 
     if (queryType === 'orthophoto') {

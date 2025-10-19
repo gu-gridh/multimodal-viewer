@@ -114,7 +114,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const modelData = apiResponse.data.features;
 
     if (!modelData || modelData.length === 0) {
-      return res.status(404).send('Data not found');
+      return res.status(404).send('<div style="height:100%;width:100%;padding-top:45%;text-align:center;color:white;font-weight:100;font-size: 1.3em;font-family:sans-serif;">No data available<br>Немає даних</div>');
     }
 
     if (queryType === 'orthophoto') {
@@ -224,11 +224,11 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
     //validate panel metadata response
     if (!apiResponse || !apiResponse.data || !apiResponse.data.results) {
-      return res.status(404).send('Panel data not found');
+      return res.status(404).send('Missing data');
     }
     const metadata = apiResponse.data.results[0];
     if (!metadata) {
-      return res.status(404).send('Panel data malformed');
+      return res.status(404).send('');       
     }
 
     //load HTML template using Cheerio

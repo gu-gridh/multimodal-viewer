@@ -4019,6 +4019,22 @@
             0
          ],
          "children": []
+      },
+      {
+         "uuid": "2D552C03-2FF4-4C2D-8B2B-6D86E7D38173",
+         "title": "<a href=https://saintsophia.dh.gu.se/viewer/?q=208-21 target=_parent>208-21</a>",
+         "description": "Annotation Description",
+         "position": [
+            -13.722, 
+            -4.806, 
+            8.763
+         ],
+         "offset": [
+            0,
+            0,
+            0
+         ],
+         "children": []
       }
    ],
    "orientedImages": [],

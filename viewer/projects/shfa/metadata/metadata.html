@@ -172,6 +172,28 @@
     [name=sfm-field]{
         display: none;
     } */
+
+     .link-button {
+        /* display: relative; */
+        padding: 4px 8px 4px 10px;
+        color: white;
+        background-color: #4588ca;
+        border-radius: 6px;
+        font-size: 1.1em;
+        text-decoration: none;
+        cursor: pointer;
+        margin-top: 0px;
+        margin-bottom: 20px;
+        width: max-content;
+        height: max-content;
+        font-weight: 400;
+        font-family: "Barlow Condensed", sans-serif !important;
+        border: 0px;
+    }
+
+    .link-button:hover {
+        background-color: #497db1;
+    }
 </style>
 
 <body>
@@ -213,6 +235,7 @@
             document.getElementById('df-creator').textContent = t('creator');
             document.getElementById('tvt-type').textContent = t('image-type');
             document.getElementById('df-type').textContent = t('image-type');
+            document.getElementById('shfa-link').textContent = t('shfa-site-link');
         }
 
         function setButtonLabel(language) {
@@ -278,6 +301,10 @@
 
                 <div class="metadata-panel-title">
                     <div style="display:inline;"></div> PLACEHOLDER_TITLE
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <a class='link-button' id="shfa-link" href="https://shfa.dh.gu.se/search=" target="_blank" rel="noopener"></a>
                 </div>
 
                 <div class="tag-label-header" id="lang3" style="margin-bottom: 15px;"></div>

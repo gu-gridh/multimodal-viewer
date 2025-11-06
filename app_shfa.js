@@ -203,6 +203,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const keywordTextsSV = formatKeywords(categories, 'sv');
     const keywordTextsEN = formatKeywords(categories, 'en');
 
+    const shfaSiteUrl = `https://shfa.dh.gu.se/search=${site?.lamning_id || site?.raa_id || site?.placename}`
+
     const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
     fs.readFile(metadataPath, 'utf8', (err, htmlData) => {
@@ -242,7 +244,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         .replace(/PLACEHOLDER_DF_CREATOR/g, dfCreator || 'Unknown')
         .replace(/PLACEHOLDER_DF_DATE/g, dfYear || 'Unknown')
         .replace(/PLACEHOLDER_REFERENCE_SV/g, referenceSV)
-        .replace(/PLACEHOLDER_REFERENCE_EN/g, referenceEN);
+        .replace(/PLACEHOLDER_REFERENCE_EN/g, referenceEN)
+        .replace("https://shfa.dh.gu.se/search=", shfaSiteUrl)
 
 
       res.send(modifiedHtml);

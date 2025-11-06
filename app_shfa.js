@@ -195,12 +195,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         const categoryLabel = lang === 'sv' ? keywords.categorySV : keywords.categoryEN;
         const keywordList = keywords[lang].sort((a, b) => { return a.localeCompare(b) }).join(', ');
         return `<div style="margin-bottom: 15px;">
-                    <span style="color: #fff; font-weight: 600; font-size: 120%;">${categoryLabel}:</span> 
-                    <span style="display: inline; color: rgb(200, 225, 250) !important; font-weight: 400; font-size: 120%;">${keywordList}</span>`
-                          
-        // return `<div style="margin-bottom: 10px;">
-        //                   <button class="keyword-button">${categoryLabel}</button> <button class="keyword-button">${keywordList}</button>
-        //               </div>`;
+                          <span style="color: #fff; font-weight: 600; font-size: 120%;">${categoryLabel}:</span> <span style="display: inline; color: rgb(200, 225, 250) !important; font-weight: 400; font-size: 120%;">${keywordList}</span>
+                      </div>`;
       }).join('');
     };
 
@@ -256,7 +252,6 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 // mesh Route
 app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {

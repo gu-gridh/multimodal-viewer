@@ -7,15 +7,13 @@
           <lb n="1"/>hyc fuit Albertus Wisensky
           <lb n="2"/>anno d<supplied reason="lost">om</supplied>ini 1582
 
-          <lb n="3"/>hic <gap reason="lost" extent="3" unit="character"/> scripsit
+          <lb n="3"/>hic <gap reason="illegible" quantity="3" unit="character"/> scripsit
 
           <lb n="4"/>anno <unclear>domi</unclear>ni
 
           <lb n="5"/>
-          <choice>
-            <abbr>DM</abbr>
-            <expan><ex>D(eo)</ex> <ex>M(aximo)</ex></expan>
-          </choice> sacrum
+            <expan><abbr>D</abbr><ex>eo</ex></expan>
+            <expan><abbr>M</abbr><ex>aximo</ex></expan>
 
           <lb n="6"/>
           <choice>

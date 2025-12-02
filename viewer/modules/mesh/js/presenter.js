@@ -214,7 +214,7 @@ Presenter.prototype = {
 	_parseConfig: function (options) {
 		var r = sglGetDefaultObject({
 			pickedpointColor: [1.0, 0.0, 1.0],
-			measurementColor: [0.5, 1.0, 0.5],
+			measurementColor: [2.0, 1.0, 0.0],
 			showClippingPlanes: true,
 			showClippingBorder: false,
 			clippingBorderSize: 0.5,

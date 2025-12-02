@@ -46,6 +46,20 @@
 		top: 2px;
 		z-index: 100;
 	}
+
+	#loader {
+		position:absolute;
+		top:calc(50% - 25px);
+		left:calc(50% - 25px);
+		color:white;
+		width:100%;
+		text-align: center;
+		background:url(/viewer/shared/interface/6-dots-rotate_white.svg);
+		background-repeat: no-repeat;
+		background-size: contain;
+		width:50px;
+		height:50px;
+	}
 </style>
 
 <body>
@@ -128,6 +142,7 @@
 	<!-- And this is the main action -->
 
 	<div id="module-container" style="background-color:var(--viewer-bg);">
+		<div id="loader"></div>
 		<div id='light-container'
 			style='position:absolute; width:100%; height:100%; z-index:1000; overflow:hidden; pointer-events: none; display:flex; flex-direction:column; align-items: center; justify-content: center; '>
 			<div id='light-canvas' style='width:700px; height:700px;pointer-events: none;'>
@@ -365,7 +380,6 @@
 
 	function setup3dhop() {
 		presenter = new Presenter("draw-canvas");
-
 		presenter.setScene({
 			meshes: {
 				"mesh1": { url: PLACEHOLDER_MESH },
@@ -393,6 +407,7 @@
 					// 		SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
 					// },
 				}
+				
 			},
 
 			/* These are the numbers that we need to be able to manipulate in backend when registering the model */

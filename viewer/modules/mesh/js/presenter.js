@@ -991,6 +991,8 @@ Presenter.prototype = {
 	_testReady: function () {
 		if (this._objectsToLoad != 0) return;
 		this._sceneReady = this._scenePrepare();
+		// GRIDH loading indicator
+		$('#loader').hide();
 		this.repaint();
 	},
 

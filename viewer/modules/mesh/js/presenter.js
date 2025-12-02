@@ -992,7 +992,7 @@ Presenter.prototype = {
 		if (this._objectsToLoad != 0) return;
 		this._sceneReady = this._scenePrepare();
 		// GRIDH loading indicator
-		$('#loader').hide();
+		$('#loader').css('transform', 'scale(0.0)');
 		this.repaint();
 	},
 

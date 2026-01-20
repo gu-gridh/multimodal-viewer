@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <text>
+    <body>
+      <div type="edition">
+        <ab>
+          <lb n="1"/>hyc fuit Albertus Wisensky
+          <lb n="2"/>anno d<supplied reason="lost">om</supplied>ini 1582
+
+          <lb n="3"/>hic <gap reason="illegible" quantity="3" unit="character"/> scripsit
+
+          <lb n="4"/>anno <unclear>domi</unclear>ni
+
+          <lb n="5"/>
+            <expan><abbr>D</abbr><ex>eo</ex></expan>
+            <expan><abbr>M</abbr><ex>aximo</ex></expan>
+
+
+
+          <lb n="6"/>
+          <choice>
+            <sic>albertu</sic>
+            <corr>albertus</corr>
+          </choice>
+
+          <lb n="7"/><del rend="erasure">scriptum</del> fuit
+
+          <lb n="8"/>anno <add place="over">X</add>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

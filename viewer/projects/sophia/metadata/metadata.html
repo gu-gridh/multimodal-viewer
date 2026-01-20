@@ -328,6 +328,10 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="epidoc-rendering" class="metadata-description">
+                            <div class="metadata-title">EpiDoc</div>
+                            <div class="metadata-description-text"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -337,6 +341,32 @@
                 <div class="annotation-box-demo"></div>
                 <div class="annotation-box-demo-2"></div>
             </div>
+
+            <script type="module">
+                import { convert } from "/viewer/libs/epidoc-viewer-core/index.js";
+
+                const host = document.querySelector('#epidoc-rendering');
+                const target = host?.querySelector('.metadata-description-text');
+                const raw = host?.dataset.epidocText;
+
+                (async () => {
+                    if (!host || !target) return;
+                    if (!raw) { target.innerHTML = "<em>No Epidoc available</em>"; return; }
+
+                    try {
+                        const xml = decodeURIComponent(raw);
+                        const leidenNode = convert(xml, null, true);
+                        leidenNode.querySelector('.leiden-transcription br')?.remove();
+                        target.innerHTML = "";
+                        target.appendChild(leidenNode);
+
+                    } catch (e) {
+                        console.error(e);
+                        target.innerHTML = "<em>Could not render Epidoc</em>";
+                    }
+                })();
+            </script>
+
 </body>
 
 </html>

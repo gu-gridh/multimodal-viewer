@@ -521,6 +521,12 @@
                 window.parent.postMessage(annotationData, "*");
             });
 
+            //deselect
+            anno.on('cancelSelected', function () {
+                currentAnnotationId = null;
+                window.parent.postMessage({ type: 'annotationClick', value: null }, "*");
+            });
+
             let isDragging = false;
             let startX, startY;
             const dragThreshold = 1; //drag threshold

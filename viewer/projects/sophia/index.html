@@ -274,11 +274,10 @@
                     changeRightViewer('annotation', currentAnnotationId);
                     moduleSwitcherRight(6);
                     updateURLWithAnnotation(currentAnnotationId);
-                    //tell the viewer to pan to this annotation
-                    sendOpenAnnotation(currentAnnotationId);
                 } else {
                     updateURLWithAnnotation(null);
-                    sendOpenAnnotation(null);
+                    moduleSwitcherRight(6);
+                    changeRightViewer('metadata', null, Date.now());
                 }
             }
 
@@ -452,7 +451,7 @@
 
         }
 
-        function changeRightViewer(viewerType, annotationId = null) {
+        function changeRightViewer(viewerType, annotationId = null, resetVersion = null) {
 
             const iframe = document.getElementById('right-Iframe');
             let iframeUrl = '';
@@ -463,6 +462,9 @@
 
             else if (viewerType === 'metadata') {
                 iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&lang=${currentLang}`;
+                if (resetVersion) {
+                    iframeUrl += `&reset=${resetVersion}`;
+                }
             }
 
             else if (viewerType === 'annotation' && annotationId) {

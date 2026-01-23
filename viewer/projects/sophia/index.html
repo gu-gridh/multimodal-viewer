@@ -94,7 +94,7 @@
             <div id="main-back" class="back-button" title="View all surfaces"></div>
         </a>
         <div id="left-pane">
-           
+
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
@@ -185,7 +185,7 @@
 
         function determineInitialViewer(params) {
             const qValue = params.get('q');
-            
+
             //check if phi is present in the URL
             //const hasPhi = params.has('phi');
 
@@ -274,8 +274,11 @@
                     changeRightViewer('annotation', currentAnnotationId);
                     moduleSwitcherRight(6);
                     updateURLWithAnnotation(currentAnnotationId);
+                    //tell the viewer to pan to this annotation
+                    sendOpenAnnotation(currentAnnotationId);
                 } else {
                     updateURLWithAnnotation(null);
+                    sendOpenAnnotation(null);
                 }
             }
 
@@ -432,15 +435,15 @@
             // pointcloud url logics
             else if (iframe && viewerType === 'pointcloud') {
                 changeRightViewer('pointcloud');
-               
-            // when linking to the fullscreen pointcloud    
+
+                // when linking to the fullscreen pointcloud    
                 if (qValue.includes('immersive')) {
                     toggleLeftPane();
-                    uiModules.css('display', 'none');  
+                    uiModules.css('display', 'none');
                     main.classList.add("single-module-right");
                 }
 
-            // when linking to a position in the pointcloud    
+                // when linking to a position in the pointcloud    
                 else {
                     moduleSwitcherRight(7);
                     changeLeftViewer('orthophoto');

@@ -435,11 +435,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       }
 
       //dimensions
-      const width = data.width ? data.width : "";
-      const height = data.height ? data.height : "";
-      const dimensions = width && height
-        ? `${width} x ${height}`
-        : (currentLang === 'uk' ? "" : "");
+      // const width = data.width ? data.width : "";
+      // const height = data.height ? data.height : "";
+      // const dimensions = width && height
+      //   ? `${width} x ${height}`
+      //   : (currentLang === 'uk' ? "" : "");
+      const dimensions = "";
 
       //year range
       const minYear = data.min_year !== null ? data.min_year : '';

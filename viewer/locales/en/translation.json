@@ -129,5 +129,7 @@
   "photo": "Photo",
   "license": "License",
   "and": "and",
-  "shfa-site-link": "View the site in the SHFA archive"
+  "shfa-site-link": "View the site in the SHFA archive",
+  "translation-ai": "Translated with AI",
+  "romanisation-ai": "Romanised with AI"
 }

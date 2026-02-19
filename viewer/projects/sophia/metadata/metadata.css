@@ -354,6 +354,27 @@ body {
 	padding-bottom: 0px;
 }
 
+.ai-tag-container{
+	margin-top:10px;
+	display:flex;
+	width:100%;
+	justify-content: left;
+}
+
+.ai-tag{
+	border-radius: 3px;
+	border-width: 0px;
+	padding: 4px 8px;
+	margin-top: 0px;
+	background-color: var(--color-1);
+	color: white;
+	font-size: 0.75em;
+	font-weight: 300;
+	min-height:10px;
+	min-width:10px;
+	pointer-events: none;
+}
+
 
 
 

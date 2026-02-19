@@ -48,7 +48,10 @@
                 { id: 'imd41', key: 'bibliography' },
                 { id: 'imd42', key: 'contributors' },
                 { id: 'imd43', key: 'metadatahelp' },
-                { id: 'imd44', key: 'images' }
+                { id: 'imd44', key: 'images' },
+                { id: 'imd45', key: 'romanisation-ai' },
+                { id: 'imd46', key: 'translation-ai' },
+                { id: 'imd47', key: 'translation-ai' }
             ];
 
             elements.forEach(({ id, key, suffix = '' }) => {
@@ -214,12 +217,19 @@
                             <div class="metadata-title" id="imd22">Romanisation</div>
                             <div class="metadata-description-text" id="inscription-romanisation"
                                 style="margin-top:-5px">
+                             
                             </div>
+                               <div class="ai-tag-container">
+                                    <div class="ai-tag" id="imd45"></div>
+                                </div>
 
                             <div class="metadata-description" style="margin-top:1.2em;">
                                 <div class="metadata-title" id="imd23">Translation</div>
                                 <div class="metadata-description-text" id="inscription-translation"
                                     style="margin-top:-5px"></div>
+                                <div class="ai-tag-container">
+                                    <div class="ai-tag" id="imd46"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -296,6 +306,9 @@
                                     <div class="metadata-title" id="imd24">Comments</div>
                                 </div>
                                 <div id="inscription-comment" class="metadata-description-text">
+                                </div>
+                                <div class="ai-tag-container">
+                                    <div class="ai-tag" id="imd47"></div>
                                 </div>
                             </div>
                         </div>

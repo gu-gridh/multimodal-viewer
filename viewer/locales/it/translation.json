@@ -106,5 +106,7 @@
   "annotationstoggle": "<b>Interruttore annotazioni.</b> Attiva e disattiva le annotazioni.",
    "createdwith": "Creato con",
    "license": "Licenza",
-   "photo": "Foto"
+   "photo": "Foto",
+    "translation-ai": "Translated with AI",
+  "romanisation-ai": "Romanised with AI"
 }

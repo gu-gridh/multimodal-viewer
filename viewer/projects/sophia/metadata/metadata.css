@@ -366,10 +366,10 @@ body {
 	border-width: 0px;
 	padding: 4px 8px;
 	margin-top: 0px;
-	background-color: var(--color-1);
-	color: white;
+	background-color: rgb(230,230,230);
+	color: black;
 	font-size: 0.75em;
-	font-weight: 300;
+	font-weight: 200;
 	min-height:10px;
 	min-width:10px;
 	pointer-events: none;

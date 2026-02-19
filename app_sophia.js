@@ -228,7 +228,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     }
     const metadata = apiResponse.data.results[0];
     if (!metadata) {
-      return res.status(404).send('');       
+      return res.status(404).send('');
     }
 
     //load HTML template using Cheerio
@@ -377,6 +377,10 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         ? (data.comments_ukr || "<p>коментар недоступний</p>")
         : (data.comments_eng || "<p>Comment not available</p>");
 
+      const showRomanisationAiTag = !!data.romanisation;
+      const showTranslationAiTag = currentLang === 'en' && !!data.translation_eng;
+      const showCommentAiTag = currentLang === 'en' && !!data.comments_eng;
+
       const inscriber = data.inscriber
         ? `${data.inscriber.firstname} ${data.inscriber.lastname}`
         : "";
@@ -418,7 +422,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           $card.find('.kor-line1').text(`${authorName} ${n(img.year)}, plate ${n(img.plate)}`);
           const imgTypeText = (() => { //hardcode image types for ukrainian
             if (currentLang === 'uk') {
-              if (img.type_of_image === 'Drawing')    return 'Малюнок';
+              if (img.type_of_image === 'Drawing') return 'Малюнок';
               if (img.type_of_image === 'Photograph') return 'Фотографія';
             }
             return n(img.type_of_image);
@@ -535,6 +539,16 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       setOrRemoveField('#inscription-dimension', dimensions);
       setOrRemoveField('#inscription-year-range', yearRange);
       setOrRemoveField('#inscription-elevation', elevation);
+
+      if (!showRomanisationAiTag) {
+        $('#imd45').closest('.ai-tag-container').css('display', 'none');
+      }
+      if (!showTranslationAiTag) {
+        $('#imd46').closest('.ai-tag-container').css('display', 'none');
+      }
+      if (!showCommentAiTag) {
+        $('#imd47').closest('.ai-tag-container').css('display', 'none');
+      }
     }
 
     //handle when inscription data is not available
@@ -556,7 +570,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  if (!queryName) { 
+  if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
 

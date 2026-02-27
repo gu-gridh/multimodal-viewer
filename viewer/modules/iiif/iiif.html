@@ -287,6 +287,10 @@
                 rotateRightButton: "rotate-right"
             });
 
+            viewer.addHandler('canvas-click', function (event) {
+                viewer.gestureSettingsMouse.clickToZoom = false;
+            });
+
             viewer.addHandler('bookmark-url-change', function (event) {
                 const url = new URL(event.url);
                 let query = url.searchParams.get('q') || '';

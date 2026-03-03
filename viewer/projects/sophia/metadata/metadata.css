@@ -263,6 +263,7 @@ body {
 }
 
 .metadata-description-text {
+	width:100%;
 	font-weight: 300;
 	font-size: 1.0em;
 	line-height: 1.2;
@@ -375,6 +376,36 @@ body {
 	pointer-events: none;
 }
 
+.text-format-container{
+width:auto;
+}
+
+.text-format{
+margin-top:15px;
+align-items: center;
+justify-content: center;
+/* background-color: rgb(230,230,230); */
+border-radius:4px;
+float:left;
+width:auto;
+	 font-size: 12px;
+	 	user-select: none;
+	-webkit-user-select: none;
+	font-weight:400;
+	overflow:hidden;
+}
+
+
+.text-format-option{
+float:left;
+margin-right:5px;
+cursor: pointer;
+color:#666;
+}
+
+.selected{
+color:var(--color-4);
+}
 
 
 

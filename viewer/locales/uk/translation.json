@@ -130,5 +130,7 @@
   "license": "Ліцензія",
   "and": "і",
     "translation-ai": "Перекладено ШІ",
-  "romanisation-ai": "Романізовано ШІ"
+  "romanisation-ai": "Романізовано ШІ",
+    "plain": "Plain",
+  "epidoc": "Epidoc"
 }

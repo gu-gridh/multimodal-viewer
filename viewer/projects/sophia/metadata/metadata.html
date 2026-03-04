@@ -371,26 +371,37 @@
             <script type="module">
                 import { convert } from "/viewer/libs/epidoc-viewer-core/index.js";
 
-                const host = document.querySelector('#epidoc-rendering');
-                const target = host?.querySelector('.metadata-description-text');
+                const plain = document.querySelector("#inscription-diplomatic");
+                const host = document.querySelector("#epidoc-rendering");
+                const target = host?.querySelector(".metadata-description-text");
                 const raw = host?.dataset.epidocText;
+                const btnPlain = document.querySelector("#imd49");
+                const btnEpidoc = document.querySelector("#imd51");
 
-                (async () => {
-                    if (!host || !target) return;
-                    if (!raw) { target.innerHTML = "<em>No Epidoc available</em>"; return; }
+                const show = (epidoc) => {
+                    if (!plain || !host || !btnPlain || !btnEpidoc) return;
+                    plain.style.display = epidoc ? "none" : "";
+                    host.style.display = epidoc ? "" : "none";
+                    btnPlain.classList.toggle("selected", !epidoc);
+                    btnEpidoc.classList.toggle("selected", epidoc);
+                };
 
+                btnPlain?.addEventListener("click", () => show(false));
+                btnEpidoc?.addEventListener("click", () => show(true));
+
+                if (!raw) {
+                    btnEpidoc?.remove();
+                    show(false);
+                } else {
                     try {
-                        const xml = decodeURIComponent(raw);
-                        const leidenNode = convert(xml, null, true);
-                        leidenNode.querySelector('.leiden-transcription br')?.remove();
-                        target.innerHTML = "";
-                        target.appendChild(leidenNode);
-
-                    } catch (e) {
-                        console.error(e);
-                        target.innerHTML = "<em>Could not render Epidoc</em>";
+                        const node = convert(decodeURIComponent(raw), null, true);
+                        node.querySelector(".leiden-transcription br")?.remove();
+                        target?.replaceChildren(node);
+                    } catch {
+                        btnEpidoc?.remove();
                     }
-                })();
+                    show(false);
+                }
             </script>
 
 </body>

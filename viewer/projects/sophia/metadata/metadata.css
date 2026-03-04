@@ -63,6 +63,10 @@ body {
 	font-size: 16px !important;
 }
 
+#epidoc-rendering .leiden-num-span {
+	font-family: "Oswald", sans-serif !important;
+}
+
 .container {
 	height: calc(100vh - 50px) !important;
 	width: 100%;

@@ -382,7 +382,8 @@ body {
 
 .text-format {
 	display: flex;
-	margin-top: 15px;
+	margin-top: -5px;
+	margin-bottom: 10px;
 	width: auto;
 	font-size: 12px;
 	user-select: none;

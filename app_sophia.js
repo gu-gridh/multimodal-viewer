@@ -525,8 +525,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       setOrRemoveDescription('#inscription-romanisation', romanisation);
       setOrRemoveDescription('#inscription-diplomatic', diplomatic);
       setOrRemoveDescription('#inscription-translation', translation);
-      updateFontClass('#inscription-diplomatic', isCyrillic);
-      updateFontClass('#inscription-interpretation', isCyrillic);
+      updateFontClass('#inscription-diplomatic-font', isCyrillic);
+      updateFontClass('#inscription-interpretation-font', isCyrillic);
       setOrRemoveField('#inscription-alignment', alignment);
       setOrRemoveField('#inscription-language', language);
       setOrRemoveField('#inscription-genre', genre);

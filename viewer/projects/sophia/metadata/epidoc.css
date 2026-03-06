@@ -1,14 +1,17 @@
-#epidoc-rendering .leiden-num-span {
+
+
+
+.epidoc-rendering{
+	font-family: inherit !important;
+	font-size: inherit !important;
+}
+
+.epidoc-rendering .leiden-num-span {
 	font-family: "Oswald", sans-serif !important;
 	font-size: 0.7em !important;
 	transform: translateY(3px);
 	width: 25px;
 	color: black;
-}
-
-.leiden-transcription {
-	font-family: "cyrillic-font";
-	font-size: 1.2em;
 }
 
 gap {
@@ -21,7 +24,7 @@ gap {
 	cursor: pointer;
 }
 
-#epidoc-rendering:hover gap {
+.epidoc-rendering:hover gap {
 	opacity:1.0;
 	
 }

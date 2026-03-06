@@ -24,6 +24,10 @@ gap {
 	cursor: pointer;
 }
 
+gap:active {
+	color:white;
+}
+
 .epidoc-rendering:hover gap {
 	opacity:1.0;
 	

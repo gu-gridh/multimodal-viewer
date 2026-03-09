@@ -25,10 +25,23 @@ gap {
 }
 
 gap:active {
-	color:white;
+	color:rgba(0,0,0,0);
 }
 
-.epidoc-rendering:hover gap {
+.epidoc-rendering:hover gap{
 	opacity:1.0;
-	
+}
+
+supplied {
+	opacity: 1.0;
+	cursor: pointer;
+}
+
+supplied:active {
+	color:rgba(0,0,0,0);
+}
+
+
+.epidoc-rendering:hover supplied{
+	color: green;
 }

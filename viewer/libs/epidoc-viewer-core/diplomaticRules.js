@@ -90,7 +90,7 @@ const diplomaticRules = {
         tw.currentNode = node;  // reset treewalker
     },
    // 'unclear': node => node.textContent = '',
-   // 'gap': node => node.textContent = '',
+    'gap': node => node.textContent = 'Test',
     'desc': node => node.textContent = '',
     'note': node => node.textContent = '',
     'ex': node => node.textContent = '',

@@ -578,6 +578,35 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     const { data } = await axios.get(`${config.panel}${queryName}`);
     const mesh = data.features?.[0]?.properties?.attached_3Dmesh?.[0] || {};
     const isDownloadable = mesh.is_downloadable && mesh.url_for_download;
+    const parseStartValue = (value, fallback = 0.0) => {
+      const numericValue = Number(value);
+      return Number.isFinite(numericValue) ? numericValue : fallback;
+    };
+    const hasApiStartPosition = [
+      mesh.start_position_phi,
+      mesh.start_position_theta,
+      mesh.start_position_panX,
+      mesh.start_position_panY,
+      mesh.start_position_panZ,
+      mesh.start_position_zoom,
+      mesh.start_position_rotation
+    ].some(value => {
+      const numericValue = Number(value);
+      return Number.isFinite(numericValue) && numericValue !== 0.0;
+    });
+
+    const startPhi = hasApiStartPosition ? parseStartValue(mesh.start_position_phi) : 0.0;
+    const startTheta = hasApiStartPosition ? parseStartValue(mesh.start_position_theta) : 0.0;
+    const startPan = hasApiStartPosition
+      ? [
+        parseStartValue(mesh.start_position_panX),
+        parseStartValue(mesh.start_position_panY),
+        parseStartValue(mesh.start_position_panZ)
+      ]
+      : [0.0, 0.0, 0.0];
+    const startDistance = hasApiStartPosition ? parseStartValue(mesh.start_position_zoom, 1.5) : 1.5;
+    const startRotation = hasApiStartPosition ? parseStartValue(mesh.start_position_rotation) : 0.0;
+    const trackballStart = [startPhi, startTheta, startPan[0], startPan[1], startPan[2], startDistance];
 
     fs.readFile(
       path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'),
@@ -588,13 +617,14 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
         let modified = html
           .replace(/PLACEHOLDER_MESH/g, JSON.stringify(mesh.url || ''))
           .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
-          .replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(0.0))
-          .replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(0.0))
-          .replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(1.5))
-          .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
+          .replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(startPhi))
+          .replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(startTheta))
+          .replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(startDistance))
+          .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify(startPan))
           .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
           .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-          .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
+          .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify(trackballStart))
+          .replace(/PLACEHOLDER_STARTROTATION/g, JSON.stringify(startRotation));
         const $ = cheerio.load(modified);
 
         if (isDownloadable) {

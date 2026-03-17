@@ -428,13 +428,19 @@
 		const panZ = parseFloat(urlParams.get('panZ'));
 		const zoom = parseFloat(urlParams.get('zoom'));
 		const rotation = parseFloat(urlParams.get('rotation'));
+		const defaultTrackballPosition = PLACEHOLDER_TRACKBALLSTART;
+		const defaultRotation = Number('PLACEHOLDER_STARTROTATION');
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
 			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
+		} else if (Array.isArray(defaultTrackballPosition) && defaultTrackballPosition.some(value => value !== 0.0)) {
+			presenter.animateToTrackballPosition(defaultTrackballPosition);
 		}
 
 		if (!isNaN(rotation)) {
 			rotateMesh(rotation); //apply the rotation to the mesh
+		} else if (defaultRotation !== 0.0) {
+			rotateMesh(defaultRotation);
 		}
 
 		for (inst in presenter._scene.modelInstances) {

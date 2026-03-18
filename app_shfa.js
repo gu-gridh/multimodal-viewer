@@ -281,7 +281,6 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     if (!modelData.three_d_mesh || !modelData.three_d_mesh.mesh_url) {
       return res.status(404).send('No three_d_mesh or mesh_url found');
     }
-
     const meshUrl = modelData.three_d_mesh.mesh_url;
     const qualityUrl = modelData.three_d_mesh.quality_url || '';
 
@@ -299,7 +298,8 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
         .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
         .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
         .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-        .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]));
+        .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]))
+        .replace(/PLACEHOLDER_STARTROTATION/g, 0.0);
 
       res.send(modifiedData);
     });

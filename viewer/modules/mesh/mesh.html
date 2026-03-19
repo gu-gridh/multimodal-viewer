@@ -313,7 +313,11 @@
 		});
 
 	function rotateMesh(degrees) {
-		rotationAngle += degrees;
+		setMeshRotation(rotationAngle + degrees);
+	}
+
+	function setMeshRotation(degrees) {
+		rotationAngle = Number.isFinite(degrees) ? degrees : 0;
 
 		var radianAngle = sglDegToRad(rotationAngle);
 		var rotationMatrix = SglMat4.rotationAngleAxis(radianAngle, [0.0, 0.0, 1.0]);
@@ -438,9 +442,9 @@
 		}
 
 		if (!isNaN(rotation)) {
-			rotateMesh(rotation); //apply the rotation to the mesh
+			setMeshRotation(rotation); //apply the rotation from the shared URL
 		} else if (defaultRotation !== 0.0) {
-			rotateMesh(defaultRotation);
+			setMeshRotation(defaultRotation);
 		}
 
 		for (inst in presenter._scene.modelInstances) {
@@ -530,11 +534,10 @@
 	// Most of the functions have mobile variations, otherwise the buttons break
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
-		if (action == 'home') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
-		if (action == 'home_m') presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART),
-			presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]), SglMat4.rotationAngleAxis(0, [0, 0, 1])),
-			presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(SglMat4.translation([0, 0, 0]), SglMat4.rotationAngleAxis(0, [0, 0, 1])),
-			rotationAngle = 0;
+		if (action == 'home' || action == 'home_m') {
+			presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
+			setMeshRotation(Number('PLACEHOLDER_STARTROTATION'));
+		}
 
 		//--FULLSCREEN--
 		else if (action == 'full' || action == 'full_on') fullscreenSwitch();

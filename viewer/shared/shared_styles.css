@@ -2,8 +2,6 @@
 
 /* CSS - Cascading Style Sheet */
 
-
-
 :root {
 
     --color-0: rgba(38, 38, 38, 1);
@@ -30,8 +28,6 @@
     --viewer-bg: rgba(48, 48, 48, 1);
     --sidebar-bg: rgba(38, 38, 38, 1);
     --selected: #47cbf6;
-
-
 }
 
 html,
@@ -85,36 +81,30 @@ body {
     background-size: 22px;
     background-repeat: no-repeat;
     background-position: 8px;
-    padding-left:40px;
+    padding-left: 40px;
     background-color: var(--color-4);
-    width:auto;
-    height:25px;
+    width: auto;
+    height: 25px;
     max-width: 400px;
 }
 
-
-
-#full-screen-label{
-    display:none;
-    color:white;
-    font-size:0.9em;
-    font-weight:200;
-    width:auto;
-    right:calc(60px);
-    margin-top:30px;
-    border-radius:8px;
-    padding:5px 15px;
-    background-color:rgba(0,0,0,0.8);
-    position:absolute;
+#full-screen-label {
+    display: none;
+    color: white;
+    font-size: 0.9em;
+    font-weight: 200;
+    width: auto;
+    right: calc(60px);
+    margin-top: 30px;
+    border-radius: 8px;
+    padding: 5px 15px;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
 }
-
-
-
-
 
 /* Common share and download buttons for all media categories */
 
-.round-button{
+.round-button {
     width: 40px;
     height: 40px;
     cursor: pointer;
@@ -131,6 +121,7 @@ body {
     cursor: pointer;
     transform: scale(1.07);
 }
+
 .download-button {
     pointer-events: auto;
     background: url(https://data.dh.gu.se/ui-icons/download_white.png);
@@ -147,7 +138,7 @@ body {
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
-    bottom: 50px; 
+    bottom: 50px;
 }
 
 .clear-annotation-button {
@@ -157,7 +148,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     bottom: 150px;
-    margin-top:5px;
+    margin-top: 5px;
 }
 
 .annotate-button {
@@ -167,7 +158,25 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     bottom: 100px;
-    margin-top:5px;
+    margin-top: 5px;
+}
+
+.polygon-annotate-button {
+    pointer-events: auto;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpolygon points='7,9 22,6 29,18 20,29 8,24' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3Ccircle cx='7' cy='9' r='2' fill='white'/%3E%3Ccircle cx='22' cy='6' r='2' fill='white'/%3E%3Ccircle cx='29' cy='18' r='2' fill='white'/%3E%3Ccircle cx='20' cy='29' r='2' fill='white'/%3E%3Ccircle cx='8' cy='24' r='2' fill='white'/%3E%3C/svg%3E");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    bottom: 100px;
+    margin-top: 5px;
+}
+
+svg.a9s-annotationlayer .a9s-selection polygon.a9s-inner,
+svg.a9s-annotationlayer .a9s-annotation polygon.a9s-inner {
+    stroke: red;
+    stroke-width: 2;
+    stroke-dasharray: none;
+    fill: transparent;
 }
 
 .expand-button {
@@ -181,24 +190,22 @@ body {
     height: 38px;
 }
 
-
 .full-page {
-	background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
-	background-size: 100%;
-	background-repeat: no-repeat;
-	background-position: top;
-	width: 32px;
-	height: 32px;
-	overflow: hidden;
-	cursor: pointer;
+    background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: top;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .full-page-active {
-	background: url(https://data.dh.gu.se/ui-icons/compress_white.svg);
+    background: url(https://data.dh.gu.se/ui-icons/compress_white.svg);
     background-repeat: no-repeat;
-	background-size: 100%;
+    background-size: 100%;
 }
-
 
 .label-popup {
     position: absolute;
@@ -207,22 +214,22 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 0.8em;
-    pointer-events: none; 
-    opacity: 0; 
+    pointer-events: none;
+    opacity: 0;
     transition: opacity 0.3s;
-    font-size:0.8em;
+    font-size: 0.8em;
     white-space: nowrap;
 }
 
 #download-label {
-    bottom: 9px; 
-    left: 77px; 
+    bottom: 9px;
+    left: 77px;
 }
 
-#share-label{
-    margin-left:45px;
-    margin-top:7px;
-    min-width:53px;
+#share-label {
+    margin-left: 45px;
+    margin-top: 7px;
+    min-width: 53px;
 }
 
 .popup-animation {
@@ -234,23 +241,26 @@ body {
         opacity: 0;
         transform: scale(0.3);
     }
+
     15% {
         opacity: 1;
         transform: scale(1.0);
     }
+
     80% {
         transform: scale(1.0);
         opacity: 1;
     }
+
     to {
         opacity: 0;
         transform: scale(0.0);
     }
 }
 
-.deactivated{
-    opacity:0.5;
-    pointer-events:none;
+.deactivated {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 /* This is the label that states what type of viewer this is: mesh or point cloud */
@@ -348,7 +358,7 @@ h2 {
     position: absolute;
     top: 80px;
     pointer-events: none;
-    user-select:none;
+    user-select: none;
 }
 
 .toolbar-bottom {
@@ -377,31 +387,33 @@ h2 {
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     border-style: solid;
     border-color: grey;
-    border-width:0.5px 0px 0px 0px;
-    -webkit-backdrop-filter: blur(3px); 
-    backdrop-filter: blur(3px); 
+    border-width: 0.5px 0px 0px 0px;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
 }
 
 /* A switcher for multiple media in same module */
 
 #ToolbarHorizontal {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     background-color: rgb(0, 0, 0, 0.8);
     border-radius: 6px;
     width: auto;
     margin-bottom: 12px;
 }
-  #Prev, #Next {
-    position: relative; 
+
+#Prev,
+#Next {
+    position: relative;
     width: 30px;
     height: 14px;
-    background-size: 35px!important;
+    background-size: 35px !important;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
-    display: flex; 
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -424,60 +436,60 @@ h2 {
 }
 
 .SwitchButton {
-	pointer-events:auto;
-	  width: 25px!important;
-	  height: 35px;
-	  color: white;
-	  opacity: 0.8;
-	  margin-right:8px; 
-	  margin-left:8px; 
-	  margin-top:8px; 
-	  margin-bottom:8px; 
-	  cursor:pointer;
-	  user-select: none;
-	  -webkit-user-select: none;
-	}
-    
-	.SwitchButton:hover {
-	  opacity: 1;
-	  cursor:pointer;
-	}
+    pointer-events: auto;
+    width: 25px !important;
+    height: 35px;
+    color: white;
+    opacity: 0.8;
+    margin-right: 8px;
+    margin-left: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.SwitchButton:hover {
+    opacity: 1;
+    cursor: pointer;
+}
 
 
-  #transcription p {
+#transcription p {
     margin: 0;
     padding: 5px 0 0 10px;
-  }
+}
 
-  #translation-display > p {
+#translation-display>p {
     margin: 0;
-  }
+}
 
-  #translation-display {
+#translation-display {
     clear: both;
-  }
+}
 
-  #description-display > p {
+#description-display>p {
     margin: 0;
-  }
+}
 
-  #description-display {
+#description-display {
     clear: both;
-  }
+}
 
-  #contributors > p {
+#contributors>p {
     margin: 0;
     padding: 2px;
     font-size: 17.6px;
-  }
+}
 
-  #contributors {
+#contributors {
     clear: both;
-  }
+}
 
-  #edit-link {
+#edit-link {
     text-decoration: none;
-  }
+}
 
 
 /* a flex-box style to keep things centered */
@@ -492,16 +504,16 @@ h2 {
 
 /* This one describes the look of the UI-element with the navigation instructions */
 #instructions {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     pointer-events: none;
     position: absolute;
     z-index: 100000;
     width: 340px;
     height: auto;
-    min-height:45px;
+    min-height: 45px;
     bottom: 110px;
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.8);
@@ -509,13 +521,14 @@ h2 {
     text-align: center;
     padding: 15px 15px;
     font-size: 0.9em;
-    font-weight:300;
+    font-weight: 300;
     line-height: 1.4;
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     user-select: none;
-	-webkit-user-select: none; /* Safari */
-    -webkit-backdrop-filter: blur(3px); 
-    backdrop-filter: blur(3px); 
+    -webkit-user-select: none;
+    /* Safari */
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
     transition: all 0.5s ease-in-out;
 }
 
@@ -543,7 +556,7 @@ h2 {
 }
 
 .instruction-closer:hover {
-    opacity:0.6;
+    opacity: 0.6;
 }
 
 .LODtool {
@@ -552,7 +565,7 @@ h2 {
     z-index: 100000;
     width: 270px;
     height: auto;
-    min-height:45px;
+    min-height: 45px;
     bottom: 20px;
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.8);
@@ -564,14 +577,14 @@ h2 {
     box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
     border-style: solid;
     border-color: grey;
-    border-width:0.5px 0px 0px 0px;
-    
+    border-width: 0.5px 0px 0px 0px;
+
 }
 
-.LODtool span{
+.LODtool span {
     user-select: none;
     -webkit-user-select: none;
-    cursor:default;
+    cursor: default;
 }
 
 /* The switch between the different "tabs" in the sidebar */
@@ -677,7 +690,7 @@ a:link {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
     z-index: 1000;
     width: 260px;
-    -webkit-backdrop-filter: blur(5px); 
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
 }
 
@@ -698,16 +711,16 @@ a:link {
     border-width: 0.0px;
     border-radius: 6px;
     border-color: none;
-    width:220px;
+    width: 220px;
 }
 
 .popup-content button:hover {
-    opacity:0.8;
+    opacity: 0.8;
 
 }
 
-#saveNo{
-    background-color:rgb(130,50,50);
+#saveNo {
+    background-color: rgb(130, 50, 50);
 }
 
 
@@ -733,15 +746,13 @@ a:link {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    width:40px;
-    height:40px;
+    width: 40px;
+    height: 40px;
 }
 
 .toolButtonVertical:hover {
-transform:scale(1.05);
+    transform: scale(1.05);
 }
-
-
 
 .toolButtonVertical img:hover {
     opacity: 1.0;
@@ -755,50 +766,49 @@ transform:scale(1.05);
 }
 
 .metadata-help {
-	display:flex;
-	flex-direction:column;
-	flex-grow: inherit;
-	align-items: center;
-	justify-content:center;
-	float: left;
-	border-radius: 8px;
-	width: calc(100%);
-	height:calc(100vh - 450px);
-	min-height:200px;
-	margin-left: 0px;
-	background-color: rgba(255, 255, 255, 0.3);
-	overflow: auto;
-	margin-top: 20px;
-	margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: inherit;
+    align-items: center;
+    justify-content: center;
+    float: left;
+    border-radius: 8px;
+    width: calc(100%);
+    height: calc(100vh - 450px);
+    min-height: 200px;
+    margin-left: 0px;
+    background-color: rgba(255, 255, 255, 0.3);
+    overflow: auto;
+    margin-top: 20px;
+    margin-bottom: 30px;
     text-align: center;
     font-size: 1.2em;
-	font-weight: 100;
+    font-weight: 100;
 }
 
 .annotation-box-demo {
- width:100px;
- height:50px;
- margin-top:20px;
- border-width: 2px;
- border-color:black;
- border-style:dotted;
- border-radius:6px;
- margin-left:40px;
+    width: 100px;
+    height: 50px;
+    margin-top: 20px;
+    border-width: 2px;
+    border-color: black;
+    border-style: dotted;
+    border-radius: 6px;
+    margin-left: 40px;
 }
 
-
-.annotation-box-demo-2{
-	width:100px;
-	height:50px;
-	margin-top:20px;
-	border-width: 2px;
-	border-color:black;
-	border-style:dotted;
-	border-radius:6px;
-	margin-top:-30px;
-	margin-left:-20px;
-   }
+.annotation-box-demo-2 {
+    width: 100px;
+    height: 50px;
+    margin-top: 20px;
+    border-width: 2px;
+    border-color: black;
+    border-style: dotted;
+    border-radius: 6px;
+    margin-top: -30px;
+    margin-left: -20px;
+}
 
 *:focus {
-    outline:none!important;
-  }
+    outline: none !important;
+}

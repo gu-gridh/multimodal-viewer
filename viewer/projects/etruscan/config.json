@@ -4,6 +4,7 @@
   "project": "Etruscan",
   "displayAnnotations": false,
   "displayIIIFAnnotations": false,
+  "displayPolygonTool": false,
   "backButton": "https://etruscan.dh.gu.se/",
   "panel": "https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=",
   "metadata": "",

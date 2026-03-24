@@ -136,6 +136,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
           .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
           .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
+          .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
           .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
           .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled)
           .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
@@ -168,6 +169,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
           .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
+          .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
           .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)

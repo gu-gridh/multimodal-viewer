@@ -66,6 +66,7 @@
   "annotate": "Annotate",
   "annotate-instructions": "<b>Annotate.</b> Annotate the image by holding shift-key while clicking and dragging a rectangle around the desired area.",
   "annotate-instructions-2": "Hold shift and click-and-drag to mark <br> the section you wish to annotate.",
+  "annotate-instructions-polygon": "Click to place polygon points. <br> Double-click to finish the polygon.",
   "satisfiedwithselection": "Are you satisfied with the selection?",
   "copyposition": "Copy the position and register",
   "redoselection": "Redo the selection",

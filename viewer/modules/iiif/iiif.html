@@ -96,12 +96,12 @@
 
             <div class="annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
-                onclick="anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Click and drag to mark the section you wish to annotate."></div>
 
             <div id="polygon-annotate-button" class="polygon-annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';"
-                onclick="anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Click to start polygon annotation."></div>
 
 
@@ -135,6 +135,7 @@
         let annotationClicked = false;
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
+        let currentAnnotationTool = 'rect';
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -202,14 +203,22 @@
                 document.getElementById('6').innerHTML = i18next.t('help-text-iiif');
                 document.getElementById('7').innerHTML = i18next.t('annotate-instructions');
                 document.getElementById('8').innerHTML = i18next.t('satisfiedwithselection');
-                document.getElementById('9').innerHTML = i18next.t('annotate-instructions-2');
                 document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
                 document.getElementById('11').innerHTML = i18next.t('createdwith');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('redoselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
+                setAnnotationInstructions(currentAnnotationTool);
                 updatePageInfo();
             }
+        }
+
+        function setAnnotationInstructions(tool) {
+            currentAnnotationTool = tool;
+            const translationKey = tool === 'polygon'
+                ? 'annotate-instructions-polygon'
+                : 'annotate-instructions-2';
+            document.getElementById('9').innerHTML = i18next.t(translationKey);
         }
 
         function toggleAnnotations() {
@@ -471,6 +480,33 @@
                 });
             }
 
+            function copyPolygonSvg(annotation) {
+                const selectorValue = annotation?.target?.selector?.value || '';
+                const polygonMatch = selectorValue.match(/<polygon[^>]*points="([^"]+)"/i);
+
+                if (!polygonMatch) {
+                    console.error('polygon selector not found:', selectorValue);
+                    return;
+                }
+
+                const roundedPoints = polygonMatch[1]
+                    .trim()
+                    .split(/\s+/)
+                    .map(point => {
+                        const [x, y] = point.split(',');
+                        return `${Math.round(Number(x))},${Math.round(Number(y))}`;
+                    })
+                    .join(' ');
+
+                const polygonSvg = `<svg><polygon points="${roundedPoints}" /></svg>`;
+
+                navigator.clipboard.writeText(polygonSvg).then(() => {
+                    console.log('polygon copied to clipboard:', polygonSvg);
+                }).catch(err => {
+                    console.error(err);
+                });
+            }
+
             anno.on('createSelection', async function (selection) {
                 const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
                 if (displayInscriptions) {
@@ -493,7 +529,14 @@
 
                 // Handle Yes button click
                 document.getElementById('saveYes').onclick = function () {
-                    convertToIIIFRegion(annotation, viewer.source);
+                    const selectorValue = annotation?.target?.selector?.value || '';
+
+                    if (selectorValue.includes('<polygon')) {
+                        copyPolygonSvg(annotation);
+                    } else {
+                        convertToIIIFRegion(annotation, viewer.source);
+                    }
+
                     anno.removeAnnotation(annotation.id);
                     window.open('PLACEHOLDER_INSCRIPTION_URL', '_blank');
                     document.getElementById('savePopup').style.display = 'none';

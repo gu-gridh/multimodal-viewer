@@ -101,6 +101,7 @@
   "descriptionnotavailable": "<p>опис недоступний</p>",
   "transcriptionnotavailable": "<p>транскрипція недоступна</p>",
   "date": "Дата",
+  "annotate-instructions-polygon": "Клацніть, щоб розмістити точки полігону. Двічі клацніть, щоб завершити полігон.",
   "elevation": "Висота (мм)",
   "download": "Download",
   "points1": "Points (optimized)",

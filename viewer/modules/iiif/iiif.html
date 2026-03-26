@@ -96,12 +96,12 @@
 
             <div class="annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
-                onclick="setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="resetPendingSelection(); setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Click and drag to mark the section you wish to annotate."></div>
 
             <div id="polygon-annotate-button" class="polygon-annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';"
-                onclick="setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Click to start polygon annotation."></div>
 
 
@@ -136,6 +136,7 @@
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
         let currentAnnotationTool = 'rect';
+        let pendingAnnotationId = null;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -219,6 +220,15 @@
                 ? 'annotate-instructions-polygon'
                 : 'annotate-instructions-2';
             document.getElementById('9').innerHTML = i18next.t(translationKey);
+        }
+
+        function resetPendingSelection() {
+            document.getElementById('savePopup').style.display = 'none';
+
+            if (pendingAnnotationId) {
+                anno.removeAnnotation(pendingAnnotationId);
+                pendingAnnotationId = null;
+            }
         }
 
         function toggleAnnotations() {
@@ -523,6 +533,8 @@
 
             // Attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {
+                pendingAnnotationId = annotation.id;
+
                 // Show the popup
                 document.getElementById('savePopup').style.display = 'block';
                 document.getElementById('instructions').style.display = 'none';
@@ -538,6 +550,7 @@
                     }
 
                     anno.removeAnnotation(annotation.id);
+                    pendingAnnotationId = null;
                     window.open('PLACEHOLDER_INSCRIPTION_URL', '_blank');
                     document.getElementById('savePopup').style.display = 'none';
                 };
@@ -545,6 +558,7 @@
                 // Handle No button click
                 document.getElementById('saveNo').onclick = function () {
                     anno.removeAnnotation(annotation.id);
+                    pendingAnnotationId = null;
                     document.getElementById('savePopup').style.display = 'none';
                 };
             });

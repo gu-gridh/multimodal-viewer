@@ -148,6 +148,7 @@
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
+        const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
 
         function isPlaceholder(value) {
@@ -232,6 +233,10 @@
         }
 
         function toggleAnnotations() {
+            if (!displayInscriptions) {
+                return;
+            }
+
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
                 // hide annotations
@@ -374,14 +379,20 @@
                 disableEditor: true
             });
 
-            const loadAnnotationsPromise = anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
-                if (annotations.length > 0 && currentAnnotationId) {
-                    openAnnotationById(currentAnnotationId);
-                }
-                return annotations;
-            });
+            const loadAnnotationsPromise = displayInscriptions
+                ? anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
+                    if (annotations.length > 0 && currentAnnotationId) {
+                        openAnnotationById(currentAnnotationId);
+                    }
+                    return annotations;
+                })
+                : Promise.resolve([]);
 
             function openAnnotationById(annotationId) {
+                if (!displayInscriptions) {
+                    return;
+                }
+
                 loadAnnotationsPromise.then(() => {
                     console.log('opening annotation:', annotationId);
                     const annotation = anno.getAnnotationById(annotationId);
@@ -518,17 +529,14 @@
             }
 
             anno.on('createSelection', async function (selection) {
-                const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
-                if (displayInscriptions) {
-                    selection.body = [{
-                        type: 'TextualBody',
-                        purpose: 'tagging',
-                        value: 'MyTag'
-                    }];
+                selection.body = [{
+                    type: 'TextualBody',
+                    purpose: 'tagging',
+                    value: 'MyTag'
+                }];
 
-                    await anno.updateSelected(selection);
-                    anno.saveSelected();
-                }
+                await anno.updateSelected(selection);
+                anno.saveSelected();
             });
 
             // Attach handlers to listen to events

@@ -50,9 +50,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
         .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
         .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs))
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, 'none')
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, false)
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')
       res.send(updatedHtmlContent);
     } else {

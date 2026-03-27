@@ -1,0 +1,59 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(236, 232, 226);
+    font-family: "Barlow", sans-serif !important;
+    color: rgb(28, 28, 28);
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 34px 34px 24px;
+}
+
+.metadata-title {
+    font-family: "Oswald", sans-serif !important;
+    font-size: clamp(2rem, 3vw, 3.1rem);
+    line-height: 1;
+    margin-bottom: 24px;
+    color: rgb(24, 24, 24);
+}
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.metadata-card,
+.metadata-copy {
+    background: rgba(255, 255, 255, 0.78);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    padding: 16px 18px;
+}
+
+.label {
+    font-family: "Oswald", sans-serif !important;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgb(118, 118, 118);
+    margin-bottom: 8px;
+}
+
+.value {
+    font-size: 1.02rem;
+    line-height: 1.45;
+}
+
+.value-copy {
+    white-space: pre-wrap;
+}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Munch Multimodal Tool</title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="/viewer/shared/barlow_font.css" rel="stylesheet">
+    <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
+    <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/split-layout.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        html,
+        body {
+            top: 0;
+            height: 100% !important;
+            width: 100vw;
+            margin: 0 !important;
+            overflow: hidden !important;
+            font-family: "Oswald", sans-serif !important;
+            -ms-overflow-style: none;
+            font-size: 108% !important;
+            background-color: var(--viewer-bg) !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #main-content {
+            height: 100%;
+            display: flex;
+        }
+
+        #left-pane,
+        #right-pane {
+            height: 100%;
+        }
+
+        #left-pane {
+            width: 70%;
+        }
+
+        #right-pane {
+            width: 30%;
+            background-color: rgb(236, 232, 226);
+        }
+
+        .iframes {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-content">
+        <div id="left-pane">
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <div class="ui-module-item left orthophoto" id="btn1"
+                        onclick="changeLeftViewer('photo'); moduleSwitcherLeft(1);" style="opacity:1.0;"></div>
+                    <div class="ui-module-item left" id="btn2"
+                        onclick="changeLeftViewer('topography'); moduleSwitcherLeft(2);">
+                    </div>
+                    <div class="ui-module-item left" id="btn3"
+                        onclick="changeLeftViewer('mesh'); moduleSwitcherLeft(3);">
+                    </div>
+                    <div class="ui-module-item left compact" id="btn5"
+                        onclick="changeLeftViewer('metadata-compact'); moduleSwitcherLeft(5);">
+                    </div>
+                </div>
+            </div>
+            <iframe id="left-iframe" class="iframes" style="width:100%;"></iframe>
+        </div>
+        <div id="right-pane">
+            <iframe id="right-iframe" class="iframes" style="width:100%;"></iframe>
+        </div>
+        <div id="footer-container"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewerType = determineInitialViewer(urlParams);
+            changeLeftViewer(viewerType);
+            changeRightViewer('metadata');
+            $("#footer-container").load("/viewer/projects/munch/footer.html");
+            applyLabels();
+        });
+
+        window.addEventListener('message', function (event) {
+            if (event.data.type === 'togglePane') {
+                toggleRightPane();
+            }
+            if (event.data.type === 'togglePane2') {
+                toggleLeftPane();
+            }
+        }, false);
+
+        function determineInitialViewer(params) {
+            const qValue = params.get('q');
+            if (qValue) {
+                const segments = qValue.split('/');
+                if (segments.length > 1) {
+                    switch (segments[1]) {
+                        case 'mesh':
+                            return 'mesh';
+                        case 'topography':
+                            return 'topography';
+                        case 'photo':
+                            return 'photo';
+                        case 'metadata':
+                            return 'metadata-compact';
+                        case 'iiif':
+                            return 'photo';
+                        default:
+                            return 'photo';
+                    }
+                }
+            }
+            return 'photo';
+        }
+
+        function applyLabels() {
+            document.getElementById('btn1').textContent = 'Photo';
+            document.getElementById('btn2').textContent = 'Topography';
+            document.getElementById('btn3').textContent = 'Mesh';
+            document.getElementById('btn5').textContent = 'About';
+        }
+
+        function getBaseQuery() {
+            const queryString = window.location.search;
+            const params = new URLSearchParams(queryString);
+            let qValue = params.get('q') || '';
+
+            if (qValue.includes('/')) {
+                qValue = qValue.split('/')[0];
+            }
+
+            return qValue;
+        }
+
+        function changeLeftViewer(viewerType) {
+            const iframe = document.getElementById('left-iframe');
+            const queryString = window.location.search;
+            const currentUrl = new URL(window.location.href);
+            const hashFragment = currentUrl.hash || '';
+            const qValue = getBaseQuery();
+            let src = '';
+            let newPath = `/viewer/?q=${qValue}`;
+            let buttonNum = 1;
+
+            switch (viewerType) {
+                case 'topography':
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/topography${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/topography`;
+                    buttonNum = 2;
+                    break;
+                case 'mesh':
+                    src = `/viewer/modules/mesh/mesh.html${queryString}`;
+                    newPath = `/viewer/?q=${qValue}/mesh`;
+                    buttonNum = 3;
+                    break;
+                case 'metadata-compact':
+                    src = `/viewer/projects/munch/metadata/metadata.html?q=${qValue}`;
+                    newPath = `/viewer/?q=${qValue}/metadata`;
+                    buttonNum = 5;
+                    break;
+                case 'photo':
+                default:
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/photo${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/photo`;
+                    buttonNum = 1;
+                    break;
+            }
+
+            iframe.src = src;
+            moduleSwitcherLeft(buttonNum);
+            window.history.replaceState({}, '', newPath);
+        }
+
+        function changeRightViewer(viewerType) {
+            const iframe = document.getElementById('right-iframe');
+            const qValue = getBaseQuery();
+
+            if (viewerType === 'metadata') {
+                iframe.src = `/viewer/projects/munch/metadata/metadata.html?q=${qValue}`;
+            }
+        }
+
+        function toggleRightPane() {
+            var leftPane = document.getElementById('left-pane');
+            var rightPane = document.getElementById('right-pane');
+            if (rightPane.style.width === '0px') {
+                rightPane.style.width = '30%';
+                leftPane.style.width = '70%';
+            } else {
+                rightPane.style.width = '0px';
+                leftPane.style.width = '100%';
+            }
+        }
+
+        function toggleLeftPane() {
+            var leftPane = document.getElementById('left-pane');
+            var rightPane = document.getElementById('right-pane');
+            var uiModuleContainer = leftPane.querySelector('.ui-module-container');
+            if (leftPane.style.width === '1px') {
+                leftPane.style.width = '70%';
+                rightPane.style.width = '30%';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
+            } else {
+                leftPane.style.width = '1px';
+                rightPane.style.width = '99%';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
+            }
+        }
+
+        function moduleSwitcherLeft(num) {
+            $('.left').css('opacity', '0.6');
+            $('#btn' + num).css('opacity', '1.0');
+        }
+    </script>
+</body>
+
+</html>

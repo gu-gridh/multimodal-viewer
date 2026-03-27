@@ -1,0 +1,15 @@
+{
+  "appFile": "app_munch.js",
+  "project": "Munch",
+  "displayAnnotations": false,
+  "displayIIIFAnnotations": false,
+  "displayPolygonTool": true,
+  "backButton": "",
+  "panel": "https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=",
+  "metadata": "https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=",
+  "pointcloud": "",
+  "basePath": "https://img.dh.gu.se/saintsophia/static/",
+  "downloadPath": "https://data.dh.gu.se/saintsophia/static/",
+  "annotationPath": "https://saintsophia.dh.gu.se/api/inscriptions/annotation/?surface=",
+  "inscriptionUrl": "https://saintsophia.dh.gu.se/admin/inscriptions/inscription/"
+}

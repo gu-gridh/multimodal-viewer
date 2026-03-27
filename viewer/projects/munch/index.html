@@ -39,21 +39,62 @@
         }
 
         #left-pane {
-            width: 70%;
+            width: 76%;
         }
 
         #right-pane {
-            width: 30%;
+            width: 24%;
             background-color: rgb(236, 232, 226);
+        }
+
+        .mobile-panel-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1200;
+            padding: 8px 12px;
+            border: 0;
+            background: transparent;
+            color: red;
+            font-family: "Oswald", sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
         }
 
         .iframes {
             border: none;
         }
+
+        @media screen and (max-width: 1050px) {
+            #left-pane {
+                width: 100% !important;
+            }
+
+            .mobile-panel-toggle {
+                display: block;
+            }
+
+            #right-pane {
+                display: none;
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: min(72vw, 340px);
+                height: 100%;
+                z-index: 1100;
+                box-shadow: -12px 0 30px rgba(0, 0, 0, 0.28);
+            }
+
+            #right-pane.mobile-open {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <button class="mobile-panel-toggle" type="button" onclick="toggleMobileMetadata()">About</button>
     <div id="main-content">
         <div id="left-pane">
             <div class="ui-module-container">
@@ -65,9 +106,6 @@
                     </div>
                     <div class="ui-module-item left" id="btn3"
                         onclick="changeLeftViewer('mesh'); moduleSwitcherLeft(3);">
-                    </div>
-                    <div class="ui-module-item left compact" id="btn5"
-                        onclick="changeLeftViewer('metadata-compact'); moduleSwitcherLeft(5);">
                     </div>
                 </div>
             </div>
@@ -110,8 +148,6 @@
                             return 'topography';
                         case 'photo':
                             return 'photo';
-                        case 'metadata':
-                            return 'metadata-compact';
                         case 'iiif':
                             return 'photo';
                         default:
@@ -126,7 +162,6 @@
             document.getElementById('btn1').textContent = 'Photo';
             document.getElementById('btn2').textContent = 'Topography';
             document.getElementById('btn3').textContent = 'Mesh';
-            document.getElementById('btn5').textContent = 'About';
         }
 
         function getBaseQuery() {
@@ -162,11 +197,6 @@
                     newPath = `/viewer/?q=${qValue}/mesh`;
                     buttonNum = 3;
                     break;
-                case 'metadata-compact':
-                    src = `/viewer/projects/munch/metadata/metadata.html?q=${qValue}`;
-                    newPath = `/viewer/?q=${qValue}/metadata`;
-                    buttonNum = 5;
-                    break;
                 case 'photo':
                 default:
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/photo${hashFragment}`;
@@ -185,16 +215,31 @@
             const qValue = getBaseQuery();
 
             if (viewerType === 'metadata') {
-                iframe.src = `/viewer/projects/munch/metadata/metadata.html?q=${qValue}`;
+                const metadataUrl = `/viewer/projects/munch/metadata/metadata.html?q=${qValue}`;
+                const currentSrc = iframe.getAttribute('src');
+
+                if (currentSrc !== metadataUrl) {
+                    iframe.src = metadataUrl;
+                }
             }
+        }
+
+        function toggleMobileMetadata() {
+            changeRightViewer('metadata');
+
+            if (window.innerWidth > 1050) {
+                return;
+            }
+
+            document.getElementById('right-pane').classList.toggle('mobile-open');
         }
 
         function toggleRightPane() {
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             if (rightPane.style.width === '0px') {
-                rightPane.style.width = '30%';
-                leftPane.style.width = '70%';
+                rightPane.style.width = '24%';
+                leftPane.style.width = '76%';
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
@@ -206,8 +251,8 @@
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
             if (leftPane.style.width === '1px') {
-                leftPane.style.width = '70%';
-                rightPane.style.width = '30%';
+                leftPane.style.width = '76%';
+                rightPane.style.width = '24%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
             } else {
                 leftPane.style.width = '1px';

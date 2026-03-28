@@ -39,16 +39,17 @@
         }
 
         #left-pane {
-            width: 76%;
+            width: 70%;
         }
 
         #right-pane {
-            width: 24%;
+            width: 30%;
             background-color: rgb(236, 232, 226);
         }
 
         .mobile-panel-toggle {
             display: none;
+            /* 
             position: fixed;
             top: 16px;
             right: 16px;
@@ -60,13 +61,39 @@
             font-family: "Oswald", sans-serif;
             font-size: 0.9rem;
             cursor: pointer;
+            */
         }
 
         .iframes {
             border: none;
         }
 
+        /* Override for split-layout defaults so the switch to compact can be at 950 instead of 1050 */
         @media screen and (max-width: 1050px) {
+
+            #main-content {
+                height: calc(100% - 80px) !important;
+            }
+
+            .compact {
+                display: none;
+            }
+
+            #right-pane {
+                display: block;
+            }
+
+            #footer-container {
+                display: block;
+            }
+        }
+
+         /* Small screen adaption */
+        @media screen and (max-width: 950px) {
+            #main-content {
+                height: calc(100% - 0px) !important;
+            }
+
             #left-pane {
                 width: 100% !important;
             }
@@ -77,24 +104,35 @@
 
             #right-pane {
                 display: none;
-                position: fixed;
+
                 top: 0;
                 right: 0;
-                width: min(72vw, 340px);
+                width: 100vw;
                 height: 100%;
                 z-index: 1100;
-                box-shadow: -12px 0 30px rgba(0, 0, 0, 0.28);
+                position: fixed;
+                /*       
+                box-shadow: -12px 0 30px rgba(0, 0, 0, 0.28); */
             }
 
             #right-pane.mobile-open {
                 display: block !important;
             }
+
+            .compact {
+                display: block;
+            }
+
+            #footer-container {
+                display: none;
+            }
+
         }
     </style>
 </head>
 
 <body>
-    <button class="mobile-panel-toggle" type="button" onclick="toggleMobileMetadata()">About</button>
+    <!-- <button class="mobile-panel-toggle" type="button" onclick="toggleMobileMetadata()">About</button> -->
     <div id="main-content">
         <div id="left-pane">
             <div class="ui-module-container">
@@ -106,6 +144,8 @@
                     </div>
                     <div class="ui-module-item left" id="btn3"
                         onclick="changeLeftViewer('mesh'); moduleSwitcherLeft(3);">
+                    </div>
+                    <div class="ui-module-item left mobile-panel-toggle" id="btn4" onclick="toggleMobileMetadata()">
                     </div>
                 </div>
             </div>
@@ -162,6 +202,7 @@
             document.getElementById('btn1').textContent = 'Photo';
             document.getElementById('btn2').textContent = 'Topography';
             document.getElementById('btn3').textContent = 'Mesh';
+            document.getElementById('btn4').textContent = 'About';
         }
 
         function getBaseQuery() {
@@ -227,7 +268,7 @@
         function toggleMobileMetadata() {
             changeRightViewer('metadata');
 
-            if (window.innerWidth > 1050) {
+            if (window.innerWidth > 950) {
                 return;
             }
 
@@ -238,8 +279,8 @@
             var leftPane = document.getElementById('left-pane');
             var rightPane = document.getElementById('right-pane');
             if (rightPane.style.width === '0px') {
-                rightPane.style.width = '24%';
-                leftPane.style.width = '76%';
+                rightPane.style.width = '30%';
+                leftPane.style.width = '70%';
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
@@ -251,8 +292,8 @@
             var rightPane = document.getElementById('right-pane');
             var uiModuleContainer = leftPane.querySelector('.ui-module-container');
             if (leftPane.style.width === '1px') {
-                leftPane.style.width = '76%';
-                rightPane.style.width = '24%';
+                leftPane.style.width = '70%';
+                rightPane.style.width = '30%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
             } else {
                 leftPane.style.width = '1px';

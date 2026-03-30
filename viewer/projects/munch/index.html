@@ -49,19 +49,6 @@
 
         .mobile-panel-toggle {
             display: none;
-            /* 
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            z-index: 1200;
-            padding: 8px 12px;
-            border: 0;
-            background: transparent;
-            color: red;
-            font-family: "Oswald", sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            */
         }
 
         .iframes {
@@ -111,8 +98,6 @@
                 height: 100%;
                 z-index: 1100;
                 position: fixed;
-                /*       
-                box-shadow: -12px 0 30px rgba(0, 0, 0, 0.28); */
             }
 
             #right-pane.mobile-open {
@@ -132,7 +117,6 @@
 </head>
 
 <body>
-    <!-- <button class="mobile-panel-toggle" type="button" onclick="toggleMobileMetadata()">About</button> -->
     <div id="main-content">
         <div id="left-pane">
             <div class="ui-module-container">
@@ -170,9 +154,6 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
-            }
-            if (event.data.type === 'togglePane2') {
-                toggleLeftPane();
             }
         }, false);
 
@@ -284,21 +265,6 @@
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
-            }
-        }
-
-        function toggleLeftPane() {
-            var leftPane = document.getElementById('left-pane');
-            var rightPane = document.getElementById('right-pane');
-            var uiModuleContainer = leftPane.querySelector('.ui-module-container');
-            if (leftPane.style.width === '1px') {
-                leftPane.style.width = '70%';
-                rightPane.style.width = '30%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
-            } else {
-                leftPane.style.width = '1px';
-                rightPane.style.width = '99%';
-                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
             }
         }
 

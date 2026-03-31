@@ -608,7 +608,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
       : [0.0, 0.0, 0.0];
     const startDistance = hasApiStartPosition ? parseStartValue(mesh.start_position_zoom, 1.5) : 1.5;
     const startRotation = hasApiStartPosition ? parseStartValue(mesh.start_position_rotation) : 0.0;
-    const trackballStart = [startPhi, startTheta, startPan[0], startPan[1], startPan[2], startDistance];
+    const trackballStart = [0.0, 0.0, startPan[0], startPan[1], startPan[2], startDistance];
 
     fs.readFile(
       path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'),

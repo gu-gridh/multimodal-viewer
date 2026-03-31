@@ -48,16 +48,16 @@
 	}
 
 	#loader {
-		position:absolute;
-		top:calc(50% - 25px);
-		left:calc(50% - 25px);
-		background:url(/viewer/shared/interface/6-dots-rotate_white.svg);
+		position: absolute;
+		top: calc(50% - 25px);
+		left: calc(50% - 25px);
+		background: url(/viewer/shared/interface/6-dots-rotate_white.svg);
 		background-repeat: no-repeat;
 		background-size: contain;
-		width:50px;
-		height:50px;
-		 transition: all 0.5s ease-in-out;
-		 z-index:-1;
+		width: 50px;
+		height: 50px;
+		transition: all 0.5s ease-in-out;
+		z-index: -1;
 	}
 </style>
 
@@ -100,7 +100,8 @@
 
 					<div class="guide-instructions-item">
 						<div class="guide-instructions-item-icon"
-							style="background-image:url(https://data.dh.gu.se/ui-icons/light-bulb_white.svg); background-position: 5px 0px;"></div>
+							style="background-image:url(https://data.dh.gu.se/ui-icons/light-bulb_white.svg); background-position: 5px 0px;">
+						</div>
 						<div class="guide-instructions-item-label">
 							<p id="7"></p>
 						</div>
@@ -205,20 +206,25 @@
 						onclick="toggleSpecular()" src="https://data.dh.gu.se/ui-icons/specular_empty.svg" />
 
 					<!--LIGHT-->
-					<img id="light_on_m" title="Disable light control" src="https://data.dh.gu.se/ui-icons/light-bulb_active.svg"
+					<img id="light_on_m" title="Disable light control"
+						src="https://data.dh.gu.se/ui-icons/light-bulb_active.svg"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="light_m" title="Enable light control" src="https://data.dh.gu.se/ui-icons/light-bulb_off.svg"/>
+					<img id="light_m" title="Enable light control"
+						src="https://data.dh.gu.se/ui-icons/light-bulb_off.svg" />
 
 
 					<!--MEASURE-->
-					<img id="measure_on_m" title="Disable measure tool" src="https://data.dh.gu.se/ui-icons/distance_active.svg"
+					<img id="measure_on_m" title="Disable measure tool"
+						src="https://data.dh.gu.se/ui-icons/distance_active.svg"
 						style="position:absolute; visibility:hidden;  " />
-					<img id="measure_m" title="Enable measure tool" src="https://data.dh.gu.se/ui-icons/distance_white.svg" />
+					<img id="measure_m" title="Enable measure tool"
+						src="https://data.dh.gu.se/ui-icons/distance_white.svg" />
 
 
 					<!--FULLSCREEN-->
-					<img id="full1" class="full-page full-page-mesh full-screen-option" title="Toggle full screen" style="position:relative;"
-						onclick="togglePane(), classList.toggle('full-page-active')"  src="/viewer/shared/interface/blank.svg"/>
+					<img id="full1" class="full-page full-page-mesh full-screen-option" title="Toggle full screen"
+						style="position:relative;" onclick="togglePane(), classList.toggle('full-page-active')"
+						src="/viewer/shared/interface/blank.svg" />
 					<!--FULLSCREEN-->
 
 					<!--CAMERA-->
@@ -313,26 +319,42 @@
 		});
 
 	function rotateMesh(degrees) {
-		setMeshRotation(rotationAngle + degrees);
+		const position = getCurrentTrackballPosition();
+		const currentYaw = position && Number.isFinite(position[0]) ? position[0] : rotationAngle;
+		setTrackballYaw(currentYaw + degrees);
 	}
 
-	function setMeshRotation(degrees) {
+	function getBaseModelMatrix() {
+		var matrix = SglMat4.identity();
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_STARTTHETA), [1.0, 0.0, 0.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_STARTPHI), [0.0, -1.0, 0.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_STARTROTATION), [0.0, 0.0, 1.0]));
+		return matrix;
+	}
+
+	function getCurrentTrackballPosition() {
+		if (!presenter || !presenter.getTrackballPosition) {
+			return null;
+		}
+
+		return presenter.getTrackballPosition().slice();
+	}
+
+	function setTrackballYaw(degrees) {
+		const position = getCurrentTrackballPosition();
+		if (!position) {
+			return;
+		}
+
 		rotationAngle = Number.isFinite(degrees) ? degrees : 0;
+		position[0] = rotationAngle;
+		presenter.setTrackballPosition(position);
+	}
 
-		var radianAngle = sglDegToRad(rotationAngle);
-		var rotationMatrix = SglMat4.rotationAngleAxis(radianAngle, [0.0, 0.0, 1.0]);
-
-		presenter._scene.modelInstances['mesh1'].transform.matrix = SglMat4.mul(
-			SglMat4.translation([0.0, 0.0, 0.0]),
-			rotationMatrix
-		);
-
-		presenter._scene.modelInstances['mesh2'].transform.matrix = SglMat4.mul(
-			SglMat4.translation([0.0, 0.0, 0.0]),
-			rotationMatrix
-		);
-
-		presenter.repaint();
+	function onTrackballUpdate(state) {
+		if (Array.isArray(state) && Number.isFinite(state[0])) {
+			rotationAngle = state[0];
+		}
 	}
 
 	document.addEventListener("DOMContentLoaded", function () {
@@ -376,6 +398,8 @@
 	// <-- Language Control -->
 
 	function setup3dhop() {
+		var baseModelMatrix = getBaseModelMatrix();
+
 		presenter = new Presenter("draw-canvas");
 		presenter.setScene({
 			meshes: {
@@ -387,32 +411,28 @@
 					mesh: "mesh1",
 					color: [0.75, 0.75, 0.75],
 					tags: ["meshes"],
-					// transform: {
-					// 	matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
-					// 		/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
-					// 		SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
-					// },
+					transform: {
+						matrix: baseModelMatrix
+					},
 				},
 				"mesh2": {
 					mesh: "mesh2",
 					color: [0.75, 0.75, 0.75],
 					visible: false,
 					tags: ["meshes"],
-					// transform: {
-					// 	matrix: SglMat4.mul(SglMat4.translation([0.0, 0.0, 0.0]),
-					// 		/* add 90 to "sglDegToRad(0.0)" to rotate 90 degrees counter-clockwise */
-					// 		SglMat4.rotationAngleAxis(sglDegToRad(0.0), [0.0, 0.0, 1.0]))
-					// },
+					transform: {
+						matrix: baseModelMatrix
+					},
 				}
-				
+
 			},
 
 			/* These are the numbers that we need to be able to manipulate in backend when registering the model */
 			trackball: {
 				type: TurntablePanTrackball,
 				trackOptions: {
-					startPhi: PLACEHOLDER_STARTPHI,
-					startTheta: PLACEHOLDER_STARTTHETA,
+					startPhi: 0.0,
+					startTheta: 0.0,
 					startDistance: PLACEHOLDER_STARTDISTANCE,
 					startPanX: PLACEHOLDER_STARTPAN[0],
 					startPanY: PLACEHOLDER_STARTPAN[1],
@@ -433,18 +453,15 @@
 		const zoom = parseFloat(urlParams.get('zoom'));
 		const rotation = parseFloat(urlParams.get('rotation'));
 		const defaultTrackballPosition = PLACEHOLDER_TRACKBALLSTART;
-		const defaultRotation = Number('PLACEHOLDER_STARTROTATION');
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
-			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
+			rotationAngle = !isNaN(rotation) ? rotation : phi;
+			presenter.animateToTrackballPosition([rotationAngle, theta, panX, panY, panZ, zoom]);
 		} else if (Array.isArray(defaultTrackballPosition) && defaultTrackballPosition.some(value => value !== 0.0)) {
+			rotationAngle = Number.isFinite(defaultTrackballPosition[0]) ? defaultTrackballPosition[0] : 0.0;
 			presenter.animateToTrackballPosition(defaultTrackballPosition);
-		}
-
-		if (!isNaN(rotation)) {
-			setMeshRotation(rotation); //apply the rotation from the shared URL
-		} else if (defaultRotation !== 0.0) {
-			setMeshRotation(defaultRotation);
+		} else {
+			rotationAngle = 0.0;
 		}
 
 		for (inst in presenter._scene.modelInstances) {
@@ -519,7 +536,7 @@
 			queryParams.set('panY', position[3].toFixed(12));
 			queryParams.set('panZ', position[4].toFixed(12));
 			queryParams.set('zoom', position[5].toFixed(2));
-			queryParams.set('rotation', rotationAngle.toFixed(2)); //store the rotation
+			queryParams.set('rotation', position[0].toFixed(2)); //store the current yaw
 
 			const newUrl = `${currentUrl.origin}/viewer/?${queryParams.toString()}`;
 
@@ -536,7 +553,7 @@
 		// This one needs to be the same one as the above start position fetched from backend
 		if (action == 'home' || action == 'home_m') {
 			presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
-			setMeshRotation(Number('PLACEHOLDER_STARTROTATION'));
+			rotationAngle = Number.isFinite(PLACEHOLDER_TRACKBALLSTART[0]) ? PLACEHOLDER_TRACKBALLSTART[0] : 0.0;
 		}
 
 		//--FULLSCREEN--
@@ -682,7 +699,7 @@
 				s.setAttribute("x1", 0.6 * i - 0), s.setAttribute("y1", 0.6 * n + 0), s.setAttribute("x2", i / 0.5 + xz),
 					s.setAttribute("y2", n / 0.5 + yz);
 			} lightcanvas.appendChild(lightDirections);
-		} 
+		}
 
 		else { lightDirections.remove(); } // Remove lines when the pointer is no longer pressed	
 	}

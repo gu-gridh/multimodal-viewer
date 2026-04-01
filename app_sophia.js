@@ -597,18 +597,18 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
       return Number.isFinite(numericValue) && numericValue !== 0.0;
     });
 
-    const startPhi = hasApiStartPosition ? parseStartValue(mesh.start_position_phi) : 0.0;
-    const startTheta = hasApiStartPosition ? parseStartValue(mesh.start_position_theta) : 0.0;
-    const startPan = hasApiStartPosition
+    const baseModelPhi = hasApiStartPosition ? parseStartValue(mesh.start_position_phi) : 0.0;
+    const baseModelTheta = hasApiStartPosition ? parseStartValue(mesh.start_position_theta) : 0.0;
+    const cameraStartPan = hasApiStartPosition
       ? [
         parseStartValue(mesh.start_position_panX),
         parseStartValue(mesh.start_position_panY),
         parseStartValue(mesh.start_position_panZ)
       ]
       : [0.0, 0.0, 0.0];
-    const startDistance = hasApiStartPosition ? parseStartValue(mesh.start_position_zoom, 1.5) : 1.5;
-    const startRotation = hasApiStartPosition ? parseStartValue(mesh.start_position_rotation) : 0.0;
-    const trackballStart = [0.0, 0.0, startPan[0], startPan[1], startPan[2], startDistance];
+    const cameraStartDistance = hasApiStartPosition ? parseStartValue(mesh.start_position_zoom, 1.5) : 1.5;
+    const baseModelRotation = hasApiStartPosition ? parseStartValue(mesh.start_position_rotation) : 0.0;
+    const cameraStartState = [0.0, 0.0, cameraStartPan[0], cameraStartPan[1], cameraStartPan[2], cameraStartDistance];
 
     fs.readFile(
       path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'),
@@ -619,14 +619,14 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
         let modified = html
           .replace(/PLACEHOLDER_MESH/g, JSON.stringify(mesh.url || ''))
           .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
-          .replace(/PLACEHOLDER_STARTPHI/g, JSON.stringify(startPhi))
-          .replace(/PLACEHOLDER_STARTTHETA/g, JSON.stringify(startTheta))
-          .replace(/PLACEHOLDER_STARTDISTANCE/g, JSON.stringify(startDistance))
-          .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify(startPan))
+          .replace(/PLACEHOLDER_BASEMODELPHI/g, JSON.stringify(baseModelPhi))
+          .replace(/PLACEHOLDER_BASEMODELTHETA/g, JSON.stringify(baseModelTheta))
+          .replace(/PLACEHOLDER_CAMERASTARTDISTANCE/g, JSON.stringify(cameraStartDistance))
+          .replace(/PLACEHOLDER_CAMERASTARTPAN/g, JSON.stringify(cameraStartPan))
           .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
           .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-          .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify(trackballStart))
-          .replace(/PLACEHOLDER_STARTROTATION/g, JSON.stringify(startRotation));
+          .replace(/PLACEHOLDER_CAMERASTARTSTATE/g, JSON.stringify(cameraStartState))
+          .replace(/PLACEHOLDER_BASEMODELROTATION/g, JSON.stringify(baseModelRotation));
         const $ = cheerio.load(modified);
 
         if (isDownloadable) {

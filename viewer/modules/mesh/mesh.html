@@ -319,20 +319,20 @@
 		});
 
 	function rotateMesh(degrees) {
-		const position = getCurrentTrackballPosition();
+		const position = getCurrentTrackballState();
 		const currentYaw = position && Number.isFinite(position[0]) ? position[0] : rotationAngle;
 		setTrackballYaw(currentYaw + degrees);
 	}
 
 	function getBaseModelMatrix() {
 		var matrix = SglMat4.identity();
-		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_STARTTHETA), [1.0, 0.0, 0.0]));
-		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_STARTPHI), [0.0, -1.0, 0.0]));
-		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_STARTROTATION), [0.0, 0.0, 1.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELTHETA), [1.0, 0.0, 0.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELPHI), [0.0, -1.0, 0.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELROTATION), [0.0, 0.0, 1.0]));
 		return matrix;
 	}
 
-	function getCurrentTrackballPosition() {
+	function getCurrentTrackballState() {
 		if (!presenter || !presenter.getTrackballPosition) {
 			return null;
 		}
@@ -341,7 +341,7 @@
 	}
 
 	function setTrackballYaw(degrees) {
-		const position = getCurrentTrackballPosition();
+		const position = getCurrentTrackballState();
 		if (!position) {
 			return;
 		}
@@ -429,17 +429,17 @@
 
 			/* These are the numbers that we need to be able to manipulate in backend when registering the model */
 			trackball: {
-				type: TurntablePanTrackball,
-				trackOptions: {
-					startPhi: 0.0,
-					startTheta: 0.0,
-					startDistance: PLACEHOLDER_STARTDISTANCE,
-					startPanX: PLACEHOLDER_STARTPAN[0],
-					startPanY: PLACEHOLDER_STARTPAN[1],
-					startPanZ: PLACEHOLDER_STARTPAN[2],
-					minMaxPhi: PLACEHOLDER_MINMAXPHI,
-					minMaxTheta: PLACEHOLDER_MINMAXTHETA,
-					minMaxDist: [0.05, 4.0]
+					type: TurntablePanTrackball,
+					trackOptions: {
+						startPhi: 0.0,
+						startTheta: 0.0,
+						startDistance: PLACEHOLDER_CAMERASTARTDISTANCE,
+						startPanX: PLACEHOLDER_CAMERASTARTPAN[0],
+						startPanY: PLACEHOLDER_CAMERASTARTPAN[1],
+						startPanZ: PLACEHOLDER_CAMERASTARTPAN[2],
+						minMaxPhi: PLACEHOLDER_MINMAXPHI,
+						minMaxTheta: PLACEHOLDER_MINMAXTHETA,
+						minMaxDist: [0.05, 4.0]
 				}
 			}
 		});
@@ -452,14 +452,14 @@
 		const panZ = parseFloat(urlParams.get('panZ'));
 		const zoom = parseFloat(urlParams.get('zoom'));
 		const rotation = parseFloat(urlParams.get('rotation'));
-		const defaultTrackballPosition = PLACEHOLDER_TRACKBALLSTART;
+		const defaultCameraState = PLACEHOLDER_CAMERASTARTSTATE;
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
 			rotationAngle = !isNaN(rotation) ? rotation : phi;
 			presenter.animateToTrackballPosition([rotationAngle, theta, panX, panY, panZ, zoom]);
-		} else if (Array.isArray(defaultTrackballPosition) && defaultTrackballPosition.some(value => value !== 0.0)) {
-			rotationAngle = Number.isFinite(defaultTrackballPosition[0]) ? defaultTrackballPosition[0] : 0.0;
-			presenter.animateToTrackballPosition(defaultTrackballPosition);
+		} else if (Array.isArray(defaultCameraState) && defaultCameraState.some(value => value !== 0.0)) {
+			rotationAngle = Number.isFinite(defaultCameraState[0]) ? defaultCameraState[0] : 0.0;
+			presenter.animateToTrackballPosition(defaultCameraState);
 		} else {
 			rotationAngle = 0.0;
 		}
@@ -552,8 +552,8 @@
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
 		if (action == 'home' || action == 'home_m') {
-			presenter.animateToTrackballPosition(PLACEHOLDER_TRACKBALLSTART);
-			rotationAngle = Number.isFinite(PLACEHOLDER_TRACKBALLSTART[0]) ? PLACEHOLDER_TRACKBALLSTART[0] : 0.0;
+			presenter.animateToTrackballPosition(PLACEHOLDER_CAMERASTARTSTATE);
+			rotationAngle = Number.isFinite(PLACEHOLDER_CAMERASTARTSTATE[0]) ? PLACEHOLDER_CAMERASTARTSTATE[0] : 0.0;
 		}
 
 		//--FULLSCREEN--

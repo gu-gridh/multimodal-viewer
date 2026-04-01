@@ -293,14 +293,14 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
 
       let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
         .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(qualityUrl))
-        .replace(/PLACEHOLDER_STARTPHI/g, 0.0)
-        .replace(/PLACEHOLDER_STARTTHETA/g, 0.0)
-        .replace(/PLACEHOLDER_STARTDISTANCE/g, 1.5)
-        .replace(/PLACEHOLDER_STARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
+        .replace(/PLACEHOLDER_BASEMODELPHI/g, 0.0)
+        .replace(/PLACEHOLDER_BASEMODELTHETA/g, 0.0)
+        .replace(/PLACEHOLDER_CAMERASTARTDISTANCE/g, 1.5)
+        .replace(/PLACEHOLDER_CAMERASTARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
         .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
         .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-        .replace(/PLACEHOLDER_TRACKBALLSTART/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]))
-        .replace(/PLACEHOLDER_STARTROTATION/g, 0.0);
+        .replace(/PLACEHOLDER_CAMERASTARTSTATE/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]))
+        .replace(/PLACEHOLDER_BASEMODELROTATION/g, 0.0);
 
       res.send(modifiedData);
     });

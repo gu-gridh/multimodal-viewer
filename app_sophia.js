@@ -237,6 +237,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const $ = cheerio.load(htmlData);
     let dataAvailable = false;
     let epidocText = '';
+    let epidocInterpretation = '';
 
     //function to set or remove metadata fields in the HTML
     function setOrRemoveField(selector, value) {
@@ -301,6 +302,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       const data = inscriptionResponse.data;
       dataAvailable = true;
       epidocText = data.epidoc_text || '';
+      epidocInterpretation = data.epidoc_interpretation || '';
 
       //title
       const title = data.panel && data.panel.title ? data.panel.title : "Unknown Panel";
@@ -561,6 +563,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     }
 
     $('#epidoc-rendering').attr('data-epidoc-text', encodeURIComponent(epidocText || ''));
+    $('#epidoc-interpretation-rendering').attr('data-epidoc-text', encodeURIComponent(epidocInterpretation || ''));
 
     res.send($.html());
   } catch (error) {

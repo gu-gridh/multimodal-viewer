@@ -230,12 +230,29 @@
                                     </div>
                                 </div>
                                 <div id="inscription-interpretation-font">
-                                    <div class="metadata-description-text" id="inscription-interpretation">
-                                    </div>
+                                    <div class="metadata-description-text" id="inscription-interpretation"></div>
                                     <div id="epidoc-interpretation-rendering" class="epidoc-rendering"
                                         style="margin-top:0px; display:none">
                                         <div class="metadata-description-text"></div>
                                     </div>
+                                    <div id="legend-empty" class="legend">Hover</div>
+                                    
+                                        <div id="legend-omitted" class="legend">
+                                            Omitted characters
+                                        </div>
+
+                                        <div id="legend-lost" class="legend">
+                                            Lost characters
+                                        </div>
+
+                                         <div id="legend-undefined" class="legend">
+                                            Undefined
+                                        </div>
+
+                                        <div id="legend-ex" class="legend">
+                                            Omitted due to abbreviation
+                                        </div>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -407,7 +424,7 @@
                     } else {
                         try {
                             const normalizedRaw = normalizeRaw(decodeURIComponent(raw));
-                            const node = convert(normalizedRaw, () => {}, true);
+                            const node = convert(normalizedRaw, () => { }, true);
                             node.querySelector(".leiden-transcription br")?.remove();
                             target?.replaceChildren(node);
                         } catch {

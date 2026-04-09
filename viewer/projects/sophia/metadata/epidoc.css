@@ -1,4 +1,11 @@
 
+:root {
+    --color-lost: blue;
+    --color-omitted: red;
+    --color-ex: green;
+	--color-undefined:orange;
+}
+
 .epidoc-rendering{
 	font-family: inherit !important;
 	font-size: inherit !important;
@@ -38,7 +45,7 @@ gap:active {
 	opacity:1.0;
 }
 
-supplied {
+supplied, ex {
 	cursor: pointer;
 	opacity:0.5;
 }
@@ -47,7 +54,129 @@ supplied:active {
 
 }
 
-
-.epidoc-rendering:hover supplied{
-	color: Red;
+.epidoc-rendering:hover ab{
+	color:black!important;
 }
+
+.epidoc-rendering:hover ex{
+	color: var(--color-ex);
+	text-decoration-line: underline;
+	opacity:1.0;
+}
+
+.epidoc-rendering:hover .lost{
+	color: var(--color-lost);
+	text-decoration-line:line-through;
+	text-decoration-style:solid;
+	text-decoration-color: var(--color-lost);
+	opacity:0.5;
+}
+
+.epidoc-rendering:hover .undefined{
+	color: var(--color-undefined);
+	text-decoration-line:underline;
+	text-decoration-style:double;
+	text-decoration-color: var(--color-undefined);
+	opacity:1.0;
+}
+
+.epidoc-rendering:hover .omitted{
+	color: var(--color-omitted);
+	text-decoration-line: underline;
+	opacity:0.8;
+}
+
+.epidoc-rendering:hover ~ #legend-empty{
+height:auto;
+margin-top: 7px;
+transition: all 0.3s ease-in-out;
+}
+
+.epidoc-rendering:has(.omitted:hover) ~ #legend-omitted{
+display:block;
+}
+
+.epidoc-rendering:has(.omitted:hover) ~ #legend-empty{
+display:none;
+}
+
+.epidoc-rendering:has(.lost:hover) ~ #legend-lost{
+display:block;
+}
+
+.epidoc-rendering:has(.lost:hover) ~ #legend-empty{
+display:none;
+}
+
+.epidoc-rendering:has(ex:hover) ~ #legend-ex{
+display:block;
+}
+
+.epidoc-rendering:has(ex:hover) ~ #legend-empty{
+display:none;
+}
+
+.epidoc-rendering:has(.undefined:hover) ~ #legend-undefined{
+display:block;
+}
+
+.epidoc-rendering:has(.undefined:hover) ~ #legend-empty{
+display:none;
+}
+
+
+
+
+.legend{
+	font-family: "Oswald", sans-serif !important;
+	border-radius: 3px;
+	padding: 4px 8px;
+	margin-top: 7px;
+	color: white;
+	font-size: 0.9em;
+	font-weight: 300;
+	pointer-events: none;
+	position:relative;
+	width:auto;
+}
+
+#legend-empty{
+	opacity:0;
+	margin-top: 0px;
+	height:10px;
+	overflow:none;
+}
+
+#legend-lost{
+	display:none;
+	color:white;
+	background-color: var(--color-lost);
+}
+#legend-omitted{
+	display:none;
+	color:white;
+	background-color: var(--color-omitted);
+}
+#legend-ex{
+	display:none;
+	color:white;
+	background-color: var(--color-ex);
+}
+
+#legend-undefined{
+	display:none;
+	color:white;
+	background-color: var(--color-undefined);
+}
+
+/* On regular screens */
+
+@media screen and (max-width: 900px) {
+
+.legend{
+	margin-bottom: 10px;
+
+}
+}
+
+

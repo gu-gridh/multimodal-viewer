@@ -23,23 +23,36 @@ function underline(node) {
 }
 
 function addOpeningBracket(reason, node) {
-    if (reason === 'lost') {
+   /*  if (reason === 'lost') {
         node.prepend('[');
     } else if (reason === 'omitted') {
         node.prepend('<');
     } else if (reason === 'subaudible') {
         node.prepend('(scil. ');
-    }
+    } */
 }
 
 function addClosingBracket(reason, node) {
-    if (reason === 'lost') {
+   /*  if (reason === 'lost') {
         node.append(']');
     } else if (reason === 'omitted') {
         node.append('>');
     } else if (reason === 'subaudible') {
         node.append(')');
-    }
+    } */
+}
+
+function addClass(reason, node) {
+     if (reason === 'lost') {
+        node.className = "lost";
+    }  else if (reason === 'omitted') {
+        node.className = "omitted";
+    } else if (reason === 'subaudible') {
+        node.className = "subaudible";
+    } 
+       else if (reason === 'undefined') {
+        node.className = "undefined";
+    } 
 }
 
 /* 
@@ -53,6 +66,7 @@ const mergeAdjacentSupplied = (node, tw) => {
     const reason = node.getAttribute('reason')
     let lastVisitedSupplied = node;
     addOpeningBracket(reason, node);
+    addClass(reason, node);
     if (isUncertain) node.append('(?)')
     let descendants = getDescendants( node )
     let currentNode = tw.nextNode()

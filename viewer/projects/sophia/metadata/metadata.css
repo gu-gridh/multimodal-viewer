@@ -50,7 +50,7 @@ body {
 
 .ancient-cyrillic {
 	font-family: "cyrillic-font", sans-serif !important;
-	font-size: 18px !important;
+	font-size: 16px !important;
 }
 
 .ancient-greek {
@@ -60,7 +60,7 @@ body {
 
 .modern-font {
 	font-family: "Oswald", sans-serif !important;
-	font-size: 15px !important;
+	font-size: 16px !important;
 }
 
 .container {
@@ -125,7 +125,6 @@ body {
 .metadata-inscription-close:hover {
 	background-color: rgb(140, 60, 60);
 }
-
 .image-container {
 	clear: both;
 	display: flex;
@@ -237,6 +236,7 @@ body {
 	border-width: 0px 0px 0px 1px;
 	border-color: rgb(180, 100, 100);
 	border-style: dotted;
+	Padding-bottom:10px;
 }
 
 
@@ -266,7 +266,7 @@ body {
 .metadata-description-text {
 	width: 100%;
 	font-weight: 300;
-	font-size: 1.0em;
+	font-size: 1.1em;
 	line-height: 1.2;
 	margin-top: 8px;
 	margin-bottom: 0em;
@@ -346,6 +346,12 @@ body {
 	width: 100%;
 }
 
+#inscription-interpretation-font{
+	display:flex;
+	flex-direction:column;
+	justify-content: left;
+	align-items: start;
+}
 
 
 
@@ -376,6 +382,7 @@ body {
 	min-width: 10px;
 	pointer-events: none;
 }
+ 
 
 .text-format-container {
 	width: auto;
@@ -450,13 +457,13 @@ body {
 	justify-content: flex-start;
 	width: 100%;
 	flex-wrap: wrap;
-	margin-bottom: 10px;
+	margin-bottom: 0px;
 }
 
 
 
 .division {
-	margin-top: 20px;
+	margin-top: 0px;
 	margin-bottom: 30px;
 	width: calc(100% + 40px);
 	height: 1px;

@@ -5,8 +5,10 @@ const styles = `
 }
 
 .leiden-transcription {
-  font-family: "cyrillic-font";
-  font-size: 18px;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
 }
 
 .underline {
@@ -32,7 +34,3 @@ const styles = `
 `
 
 document.head.appendChild(document.createElement("style")).innerHTML=styles;
-
-
-
-

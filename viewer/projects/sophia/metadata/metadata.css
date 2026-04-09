@@ -236,7 +236,7 @@ body {
 	border-width: 0px 0px 0px 1px;
 	border-color: rgb(180, 100, 100);
 	border-style: dotted;
-	Padding-bottom:10px;
+	Padding-bottom:0px;
 }
 
 
@@ -463,8 +463,8 @@ body {
 
 
 .division {
-	margin-top: 0px;
-	margin-bottom: 30px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	width: calc(100% + 40px);
 	height: 1px;
 	border-color: rgb(180, 100, 100);

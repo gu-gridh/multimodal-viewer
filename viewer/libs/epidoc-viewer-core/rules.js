@@ -198,9 +198,9 @@ const rules = {
     },
     'ex': node => {
         const cert = node.getAttribute('cert')
-        node.prepend('('); 
+       // node.prepend('('); 
         if (cert === 'low') node.append('?')
-        node.append(')')
+       // node.append(')')
     },
     'abbr': node => {
         if (node.parentNode.nodeName !== 'expan') node.append('(- - -)')

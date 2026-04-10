@@ -50,17 +50,17 @@ body {
 
 .ancient-cyrillic {
 	font-family: "cyrillic-font", sans-serif !important;
-	font-size: 16px !important;
+font-size: 120%;
 }
 
 .ancient-greek {
 	font-family: "greek-font", sans-serif !important;
-	font-size: 16px !important;
+	font-size: 90%;
 }
 
 .modern-font {
 	font-family: "Oswald", sans-serif !important;
-	font-size: 16px !important;
+	font-size: 90%;
 }
 
 .container {
@@ -266,7 +266,7 @@ body {
 .metadata-description-text {
 	width: 100%;
 	font-weight: 300;
-	font-size: 1.1em;
+	font-size: 1.0em;
 	line-height: 1.2;
 	margin-top: 8px;
 	margin-bottom: 0em;

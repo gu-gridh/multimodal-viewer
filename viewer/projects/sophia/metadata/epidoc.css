@@ -67,9 +67,8 @@ supplied:active {
 .epidoc-rendering:hover .lost{
 	color: var(--color-lost);
 	text-decoration-line:line-through;
-	text-decoration-style:solid;
-	text-decoration-color: var(--color-lost);
-	opacity:0.5;
+	text-decoration-color: var(--color-omitted);
+	opacity:0.8;
 }
 
 .epidoc-rendering:hover .undefined{
@@ -123,9 +122,6 @@ display:block;
 .epidoc-rendering:has(.undefined:hover) ~ #legend-empty{
 display:none;
 }
-
-
-
 
 .legend{
 	font-family: "Oswald", sans-serif !important;

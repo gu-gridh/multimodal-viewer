@@ -10,7 +10,7 @@ const projectName = process.env.PROJECT || 'default';
 const hardcodedThreejsModelUrl = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb';
 const hardcodedThreejsModelTitle = 'Three.js model';
 
-/* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud */
+/* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/model */
 
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
@@ -98,7 +98,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   let apiUrl;
 
-  if (viewerType === 'pointcloud' || viewerType === 'threejs') {
+  if (viewerType === 'pointcloud' || viewerType === 'model') {
     apiUrl = `${config.panel}${queryName}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
@@ -115,7 +115,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
     let metadata;
 
-    if (viewerType === 'pointcloud' || viewerType === 'threejs') {
+    if (viewerType === 'pointcloud' || viewerType === 'model') {
       metadata = apiResponse.data.results?.[0];
     } else if (viewerType === 'image') {
       metadata = apiResponse.data;
@@ -135,7 +135,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
       let modifiedHtml;
 
-      if (viewerType === 'pointcloud' || viewerType === 'threejs') {
+      if (viewerType === 'pointcloud' || viewerType === 'model') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.[0]?.dataset?.short_name && metadata.tomb?.[0]?.name
             ? `${metadata.tomb?.[0]?.dataset?.short_name ?? ''} ${metadata.tomb?.[0]?.name ?? ''}`
@@ -245,7 +245,7 @@ app.get('*', async (req, res) => {
   let apiUrl;
 
   //fetch the backbutton data from the appropriate API if image, pointcloud or ThreeJS
-  if (viewerType === 'pointcloud' || viewerType === 'threejs') {
+  if (viewerType === 'pointcloud' || viewerType === 'model') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
@@ -263,7 +263,7 @@ app.get('*', async (req, res) => {
     let metadata;
     let backButtonValue = '';
 
-    if (viewerType === 'pointcloud' || viewerType === 'threejs') {
+    if (viewerType === 'pointcloud' || viewerType === 'model') {
       metadata = apiResponse.data.results?.[0];
       if (metadata && metadata.tomb && metadata.tomb[0]) {
         const tomb = metadata.tomb[0];

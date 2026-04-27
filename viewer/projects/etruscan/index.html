@@ -191,8 +191,8 @@
                     return 'image';
                 } else if (viewerType === 'pointcloud') {
                     return 'pointcloud';
-                } else if (viewerType === 'threejs') {
-                    return 'threejs';
+                } else if (viewerType === 'model') {
+                    return 'model';
                 }
             }
 
@@ -223,9 +223,9 @@
                     src = `/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY`;
                     newPath = `/viewer/?q=${qValue}/pointcloud${hashFragment}`;
                     break;
-                case 'threejs':
-                    src = `/viewer/modules/threejs/threejs.html?q=${qValue}/threejs${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/threejs${hashFragment}`;
+                case 'model':
+                    src = `/viewer/modules/threejs/threejs.html?q=${qValue}/model${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/model${hashFragment}`;
                     break;
             }
             if (iframe) {

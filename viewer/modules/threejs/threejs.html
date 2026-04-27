@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Three.js Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: #303030;
+        }
+
+        #viewer {
+            width: 100%;
+            height: 100%;
+        }
+
+        #viewer canvas {
+            cursor: grab;
+        }
+
+        #viewer canvas:active {
+            cursor: grabbing;
+        }
+
+        #bottomToolbar .SwitchButton {
+            border: 0;
+            background-color: transparent;
+            padding: 0;
+        }
+
+        #bottomToolbar .button-icon {
+            margin-top: 0;
+            width: 30px !important;
+            height: 30px !important;
+        }
+
+        .rotate-left,
+        .rotate-right {
+            background-size: 45%;
+            background-repeat: no-repeat;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .rotate-left {
+            background-image: url(https://data.dh.gu.se/ui-icons/rotate_left_white.png);
+        }
+
+        .rotate-right {
+            background-image: url(https://data.dh.gu.se/ui-icons/rotate_right_white.png);
+        }
+
+        #ZoomIn,
+        #ZoomOut {
+            width: 30px !important;
+            height: 30px !important;
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        #ZoomIn {
+            background-image: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
+        }
+
+        #ZoomOut {
+            background-image: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
+        }
+
+        .auto-rotate,
+        .wireframe {
+            width: 30px !important;
+            height: 30px !important;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            overflow: hidden;
+            opacity: 0.6;
+        }
+
+        .auto-rotate {
+            background-image: url(https://data.dh.gu.se/ui-icons/autorotate_white.svg);
+        }
+
+        .auto-rotate-active {
+            background-image: url(https://data.dh.gu.se/ui-icons/autorotate_active.svg);
+            opacity: 1;
+        }
+
+        .wireframe {
+            background-image: url(https://data.dh.gu.se/ui-icons/wireframe_white.svg);
+        }
+
+        .wireframe-active {
+            background-image: url(https://data.dh.gu.se/ui-icons/wireframe_active.svg);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toolButtonsContainerVertical">
+        <button id="rotL" class="toolButtonVertical compact rotate-left" title="Rotate left"
+            aria-label="Rotate left"></button>
+        <button id="rotR" class="toolButtonVertical compact rotate-right" title="Rotate right"
+            aria-label="Rotate right"></button>
+    </div>
+
+    <div class="interface-area">
+        <div class="toolbar-bottom" id="bottomToolbar" aria-label="Viewer toolbar">
+            <button id="fit" class="SwitchButton" title="Fit to view" aria-label="Fit to view">
+                <img class="button-icon" src="https://data.dh.gu.se/ui-icons/frame_white.png" alt="">
+            </button>
+            <button id="ZoomIn" class="SwitchButton zoom-btn" title="Zoom in" aria-label="Zoom in"></button>
+            <button id="ZoomOut" class="SwitchButton zoom-btn" title="Zoom out" aria-label="Zoom out"></button>
+            <button id="auto" class="SwitchButton auto-rotate auto-rotate-active" title="Toggle auto-rotate"
+                aria-label="Toggle auto-rotate"></button>
+            <button id="wire" class="SwitchButton wireframe" title="Toggle wireframe"
+                aria-label="Toggle wireframe"></button>
+        </div>
+    </div>
+
+    <div id="viewer"></div>
+
+    <script type="module">
+        import * as THREE from '/viewer/modules/pointcloud/libs/three.js/build/three.module.js';
+        import { GLTFLoader } from '/viewer/modules/pointcloud/libs/three.js/loaders/GLTFLoader.js';
+
+        const modelUrl = 'PLACEHOLDER_MODEL_URL';
+        const viewer = document.getElementById('viewer');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, viewer.clientWidth / viewer.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const fitButton = document.getElementById('fit');
+        const zoomInButton = document.getElementById('ZoomIn');
+        const zoomOutButton = document.getElementById('ZoomOut');
+        const autoButton = document.getElementById('auto');
+        const wireButton = document.getElementById('wire');
+        const rotateLeftButton = document.getElementById('rotL');
+        const rotateRightButton = document.getElementById('rotR');
+        const target = new THREE.Vector3(0, 0, 0);
+
+        let model = null;
+        let modelSize = 1;
+        let autoRotate = true;
+        let wireframeEnabled = false;
+        let rotationInterval = null;
+        let pointerDown = false;
+        let lastPointer = { x: 0, y: 0 };
+
+        renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        viewer.appendChild(renderer.domElement);
+
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
+
+        const light = new THREE.DirectionalLight(0xffffff, 2);
+        light.position.set(3, 5, 4);
+        scene.add(light);
+
+        function fitToView() {
+            if (!model) {
+                return;
+            }
+
+            model.updateWorldMatrix(true, true);
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            if (!Number.isFinite(maxDim) || maxDim === 0) {
+                return;
+            }
+
+            const fitHeightDistance = maxDim / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
+            const fitWidthDistance = fitHeightDistance / camera.aspect;
+            const distance = Math.max(fitHeightDistance, fitWidthDistance) * 1.2;
+
+            target.copy(center);
+            camera.position.copy(center).add(new THREE.Vector3(0, maxDim * 0.25, distance));
+            camera.near = Math.max(distance / 100, 0.01);
+            camera.far = Math.max(distance * 100, 1000);
+            camera.updateProjectionMatrix();
+            camera.lookAt(target);
+        }
+
+        function zoomBy(scale) {
+            const offset = camera.position.clone().sub(target);
+            const nextDistance = THREE.MathUtils.clamp(offset.length() * scale, modelSize * 0.15, modelSize * 5);
+
+            offset.setLength(nextDistance);
+            camera.position.copy(target).add(offset);
+            camera.lookAt(target);
+        }
+
+        function rotateModel(radians) {
+            if (model) {
+                model.rotation.y += radians;
+            }
+        }
+
+        function startRotation(direction) {
+            stopRotation();
+            rotateModel(direction * 0.04);
+            rotationInterval = window.setInterval(() => rotateModel(direction * 0.04), 30);
+        }
+
+        function stopRotation() {
+            if (rotationInterval) {
+                window.clearInterval(rotationInterval);
+                rotationInterval = null;
+            }
+        }
+
+        function setWireframe(enabled) {
+            wireframeEnabled = enabled;
+            wireButton.classList.toggle('wireframe-active', wireframeEnabled);
+
+            if (!model) {
+                return;
+            }
+
+            model.traverse((node) => {
+                if (!node.isMesh) {
+                    return;
+                }
+
+                if (!node.userData.originalMaterial) {
+                    node.userData.originalMaterial = node.material;
+                }
+
+                if (wireframeEnabled) {
+                    const wireframeMaterial = new THREE.MeshBasicMaterial({
+                        color: 0xffffff,
+                        wireframe: true,
+                        side: THREE.DoubleSide
+                    });
+
+                    node.material = Array.isArray(node.userData.originalMaterial)
+                        ? node.userData.originalMaterial.map(() => wireframeMaterial.clone())
+                        : wireframeMaterial;
+                } else {
+                    node.material = node.userData.originalMaterial;
+                }
+            });
+        }
+
+        fitButton.addEventListener('click', fitToView);
+        zoomInButton.addEventListener('click', () => zoomBy(0.85));
+        zoomOutButton.addEventListener('click', () => zoomBy(1.15));
+        autoButton.addEventListener('click', () => {
+            autoRotate = !autoRotate;
+            autoButton.classList.toggle('auto-rotate-active', autoRotate);
+        });
+        wireButton.addEventListener('click', () => setWireframe(!wireframeEnabled));
+
+        rotateLeftButton.addEventListener('mousedown', () => startRotation(1));
+        rotateRightButton.addEventListener('mousedown', () => startRotation(-1));
+        rotateLeftButton.addEventListener('dblclick', () => rotateModel(Math.PI / 2));
+        rotateRightButton.addEventListener('dblclick', () => rotateModel(-Math.PI / 2));
+        window.addEventListener('mouseup', stopRotation);
+        window.addEventListener('mouseleave', stopRotation);
+        rotateLeftButton.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            startRotation(1);
+        }, { passive: false });
+        rotateRightButton.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            startRotation(-1);
+        }, { passive: false });
+        window.addEventListener('touchend', stopRotation);
+        window.addEventListener('touchcancel', stopRotation);
+
+        renderer.domElement.addEventListener('pointerdown', (event) => {
+            pointerDown = true;
+            lastPointer = { x: event.clientX, y: event.clientY };
+            renderer.domElement.setPointerCapture(event.pointerId);
+        });
+
+        renderer.domElement.addEventListener('pointermove', (event) => {
+            if (!pointerDown || !model) {
+                return;
+            }
+
+            const dx = event.clientX - lastPointer.x;
+            const dy = event.clientY - lastPointer.y;
+            model.rotation.y += dx * 0.01;
+            model.rotation.x += dy * 0.01;
+            lastPointer = { x: event.clientX, y: event.clientY };
+        });
+
+        renderer.domElement.addEventListener('pointerup', (event) => {
+            pointerDown = false;
+            renderer.domElement.releasePointerCapture(event.pointerId);
+        });
+
+        renderer.domElement.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            zoomBy(event.deltaY < 0 ? 0.9 : 1.1);
+        }, { passive: false });
+
+        new GLTFLoader().load(modelUrl, (gltf) => {
+            model = gltf.scene;
+            scene.add(model);
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3()).length();
+            const center = box.getCenter(new THREE.Vector3());
+
+            modelSize = size || 1;
+            model.position.sub(center);
+            setWireframe(wireframeEnabled);
+            fitToView();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if (autoRotate) {
+                    rotateModel(0.001);
+                }
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        }, undefined, (error) => {
+            console.error(error);
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = viewer.clientWidth / viewer.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+        });
+    </script>
+</body>
+
+</html>

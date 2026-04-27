@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const hardcodedThreejsModelUrl = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb';
+const hardcodedThreejsModelTitle = 'Three.js model';
 
 /* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud */
 
@@ -17,6 +19,14 @@ try {
 } catch (error) {
   console.error(`Failed to load config for project ${projectName}:`, error);
   process.exit(1);
+}
+
+function escapeHtmlAttribute(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
@@ -52,6 +62,28 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
+app.get('/viewer/modules/threejs/threejs.html', async (req, res) => {
+  const fullQuery = req.query.q;
+  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
+
+  if (!queryName) {
+    return res.status(400).send('Query parameter is missing');
+  }
+
+  fs.readFile(path.join(__dirname, 'viewer', 'modules', 'threejs', 'threejs.html'), 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    const modifiedData = data
+      .replace(/PLACEHOLDER_MODEL_URL/g, escapeHtmlAttribute(hardcodedThreejsModelUrl))
+      .replace(/PLACEHOLDER_MODEL_TITLE/g, escapeHtmlAttribute(hardcodedThreejsModelTitle));
+
+    res.send(modifiedData);
+  });
+});
+
 app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res) => {
   const { projectName } = req.params;
   const fullQuery = req.query.q;
@@ -66,7 +98,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   let apiUrl;
 
-  if (viewerType === 'pointcloud') {
+  if (viewerType === 'pointcloud' || viewerType === 'threejs') {
     apiUrl = `${config.panel}${queryName}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
@@ -83,7 +115,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
     let metadata;
 
-    if (viewerType === 'pointcloud') {
+    if (viewerType === 'pointcloud' || viewerType === 'threejs') {
       metadata = apiResponse.data.results?.[0];
     } else if (viewerType === 'image') {
       metadata = apiResponse.data;
@@ -103,7 +135,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
       let modifiedHtml;
 
-      if (viewerType === 'pointcloud') {
+      if (viewerType === 'pointcloud' || viewerType === 'threejs') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.[0]?.dataset?.short_name && metadata.tomb?.[0]?.name
             ? `${metadata.tomb?.[0]?.dataset?.short_name ?? ''} ${metadata.tomb?.[0]?.name ?? ''}`
@@ -191,6 +223,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 });
 
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
+app.use('/viewer/modules/threejs', express.static(path.join(__dirname, 'viewer', 'modules', 'threejs')));
 app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
 app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
 app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
@@ -211,8 +244,8 @@ app.get('*', async (req, res) => {
   const viewerType = querySegments[1];
   let apiUrl;
 
-  //fetch the backbutton data from the appropriate API if image or pointcloud
-  if (viewerType === 'pointcloud') {
+  //fetch the backbutton data from the appropriate API if image, pointcloud or ThreeJS
+  if (viewerType === 'pointcloud' || viewerType === 'threejs') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
@@ -230,7 +263,7 @@ app.get('*', async (req, res) => {
     let metadata;
     let backButtonValue = '';
 
-    if (viewerType === 'pointcloud') {
+    if (viewerType === 'pointcloud' || viewerType === 'threejs') {
       metadata = apiResponse.data.results?.[0];
       if (metadata && metadata.tomb && metadata.tomb[0]) {
         const tomb = metadata.tomb[0];

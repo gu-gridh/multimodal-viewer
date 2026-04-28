@@ -62,7 +62,7 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/modules/threejs/threejs.html', async (req, res) => {
+app.get('/viewer/modules/model/model.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
 
@@ -70,7 +70,7 @@ app.get('/viewer/modules/threejs/threejs.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  fs.readFile(path.join(__dirname, 'viewer', 'modules', 'threejs', 'threejs.html'), 'utf8', (err, data) => {
+  fs.readFile(path.join(__dirname, 'viewer', 'modules', 'model', 'model.html'), 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return res.status(500).send('Internal Server Error');
@@ -223,7 +223,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 });
 
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
-app.use('/viewer/modules/threejs', express.static(path.join(__dirname, 'viewer', 'modules', 'threejs')));
+app.use('/viewer/modules/model', express.static(path.join(__dirname, 'viewer', 'modules', 'model')));
 app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
 app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
 app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
@@ -244,7 +244,7 @@ app.get('*', async (req, res) => {
   const viewerType = querySegments[1];
   let apiUrl;
 
-  //fetch the backbutton data from the appropriate API if image, pointcloud or ThreeJS
+  //fetch the backbutton data from the appropriate API if image, pointcloud or model
   if (viewerType === 'pointcloud' || viewerType === 'model') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
   } else if (viewerType === 'image') {

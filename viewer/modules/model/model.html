@@ -20,6 +20,7 @@
         #viewer {
             width: 100%;
             height: 100%;
+             z-index:10;
         }
 
         #viewer canvas {
@@ -28,6 +29,7 @@
 
         #viewer canvas:active {
             cursor: grabbing;
+           
         }
 
         #bottomToolbar .SwitchButton {
@@ -104,15 +106,48 @@
             background-image: url(https://data.dh.gu.se/ui-icons/wireframe_active.svg);
             opacity: 1;
         }
+
+        #loader {
+            position: relative;
+            top: calc(50% - 25px);
+            left: calc(50% - 25px);
+            background: url(/viewer/shared/interface/6-dots-rotate_white.svg);
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 50px;
+            height: 50px;
+            transition: all 0.5s ease-in-out;
+            z-index: 0;
+        }
+
+    #loading-screen {
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 1;
+ 	transition: 1s opacity;
+    pointer-events: none;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+}
+
+
     </style>
 </head>
 
 <body>
+     
     <div id="toolButtonsContainerVertical">
         <button id="rotL" class="toolButtonVertical compact rotate-left" title="Rotate left"
             aria-label="Rotate left"></button>
         <button id="rotR" class="toolButtonVertical compact rotate-right" title="Rotate right"
             aria-label="Rotate right"></button>
+
     </div>
 
     <div class="interface-area">
@@ -129,11 +164,16 @@
         </div>
     </div>
 
+<section id="loading-screen">
+	<div id="loader"></div>
+</section>
+
     <div id="viewer"></div>
 
     <script type="module">
         import * as THREE from '/viewer/modules/pointcloud/libs/three.js/build/three.module.js';
         import { GLTFLoader } from '/viewer/modules/pointcloud/libs/three.js/loaders/GLTFLoader.js';
+        
 
         const modelUrl = 'PLACEHOLDER_MODEL_URL';
         const viewer = document.getElementById('viewer');
@@ -148,6 +188,7 @@
         const rotateLeftButton = document.getElementById('rotL');
         const rotateRightButton = document.getElementById('rotR');
         const target = new THREE.Vector3(0, 0, 0);
+    
 
         let model = null;
         let modelSize = 1;
@@ -163,6 +204,16 @@
         viewer.appendChild(renderer.domElement);
 
         scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
+
+	const loadingManager = new THREE.LoadingManager( () => {
+	
+		const loadingScreen = document.getElementById( 'loading-screen' );
+		loadingScreen.classList.add( 'fade-out' );
+		
+		// optional: remove loader from DOM via event listener
+		loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+		
+	} );
 
         const light = new THREE.DirectionalLight(0xffffff, 2);
         light.position.set(3, 5, 4);
@@ -310,7 +361,7 @@
             zoomBy(event.deltaY < 0 ? 0.9 : 1.1);
         }, { passive: false });
 
-        new GLTFLoader().load(modelUrl, (gltf) => {
+        new GLTFLoader( loadingManager ).load(modelUrl, (gltf) => {
             model = gltf.scene;
             scene.add(model);
 
@@ -342,6 +393,7 @@
             renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         });
     </script>
+    
 </body>
 
 </html>

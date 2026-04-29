@@ -1,0 +1,126 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #303030;
+}
+
+#viewer {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+#viewer canvas {
+    cursor: grab;
+}
+
+#viewer canvas:active {
+    cursor: grabbing;
+}
+
+#bottomToolbar .SwitchButton {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+}
+
+#bottomToolbar .button-icon {
+    margin-top: 0;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.rotate-left,
+.rotate-right {
+    background-size: 45%;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+}
+
+.rotate-left {
+    background-image: url(https://data.dh.gu.se/ui-icons/rotate_left_white.png);
+}
+
+.rotate-right {
+    background-image: url(https://data.dh.gu.se/ui-icons/rotate_right_white.png);
+}
+
+#ZoomIn,
+#ZoomOut {
+    width: 30px !important;
+    height: 30px !important;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+}
+
+#ZoomIn {
+    background-image: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
+}
+
+#ZoomOut {
+    background-image: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
+}
+
+.auto-rotate,
+.wireframe {
+    width: 30px !important;
+    height: 30px !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+    opacity: 0.6;
+}
+
+.auto-rotate {
+    background-image: url(https://data.dh.gu.se/ui-icons/autorotate_white.svg);
+}
+
+.auto-rotate-active {
+    background-image: url(https://data.dh.gu.se/ui-icons/autorotate_active.svg);
+    opacity: 1;
+}
+
+.wireframe {
+    background-image: url(https://data.dh.gu.se/ui-icons/wireframe_white.svg);
+}
+
+.wireframe-active {
+    background-image: url(https://data.dh.gu.se/ui-icons/wireframe_active.svg);
+    opacity: 1;
+}
+
+#loader {
+    position: relative;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+    background: url(/viewer/shared/interface/6-dots-rotate_white.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 50px;
+    height: 50px;
+    transition: all 0.5s ease-in-out;
+    z-index: 0;
+}
+
+#loading-screen {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: 1s opacity;
+    pointer-events: none;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+}

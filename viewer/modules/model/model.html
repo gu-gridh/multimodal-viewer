@@ -7,10 +7,55 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/guide.css">
     <link rel="stylesheet" href="/viewer/modules/model/css/style.css">
 </head>
 
 <body>
+    <div id="guide" onclick="hideModelGuide();">
+        <div class="guide-content">
+            <div class="guide-instructions">
+                <div class="guide-instructions-intro">
+                    Use the tools below to inspect the 3D model.
+                </div>
+
+                <div id="guide-instructions-tools">
+                    <h2>Tools</h2>
+
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
+                        <div class="guide-instructions-item-label"><b>Frame Object.</b> Fit the model to the camera view.</div>
+                    </div>
+
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png)"></div>
+                        <div class="guide-instructions-item-label"><b>Zoom Controls.</b> Zoom the camera in and out.</div>
+                    </div>
+
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/autorotate_white.svg)"></div>
+                        <div class="guide-instructions-item-label"><b>Auto-Rotate.</b> Enable automatic rotation of the model.</div>
+                    </div>
+
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg)"></div>
+                        <div class="guide-instructions-item-label"><b>Wireframe.</b> Enable wireframe rendering to see the model's structure.</div>
+                    </div>
+
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon model-guide-walk-icon"></div>
+                        <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle to first-person navigation from orbit controls.</div>
+                    </div>
+
+                    <div class="guide-closer">Close</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="toolButtonsContainerVertical">
         <button id="rotL" class="toolButtonVertical compact rotate-left" title="Rotate left"
@@ -33,6 +78,8 @@
             <button id="firstPerson" class="SwitchButton first-person" title="Toggle first-person controls"
                 aria-label="Toggle first-person controls"></button>
         </div>
+
+        <div class="guide-button compact" title="User Guide" onclick="showModelGuide();">?</div>
     </div>
 
     <section id="loading-screen">
@@ -46,6 +93,18 @@
             modelUrl: 'PLACEHOLDER_MODEL_URL',
             title: 'PLACEHOLDER_MODEL_TITLE'
         };
+
+        function showModelGuide() {
+            document.getElementById('guide').style.pointerEvents = 'auto';
+            document.getElementById('guide').style.opacity = '1.0';
+            document.getElementById('guide-instructions-tools').style.transform = 'scale(1.0)';
+        }
+
+        function hideModelGuide() {
+            document.getElementById('guide').style.pointerEvents = 'none';
+            document.getElementById('guide').style.opacity = '0.0';
+            document.getElementById('guide-instructions-tools').style.transform = 'scale(0.5)';
+        }
     </script>
     <script type="module" src="/viewer/modules/model/js/viewer.js"></script>
     <script type="module" src="/viewer/modules/model/js/ui.js"></script>

@@ -108,6 +108,12 @@ body {
     opacity: 1;
 }
 
+.model-guide-walk-icon {
+    background-color: #ffffff;
+    mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
+    -webkit-mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
+}
+
 #loader {
     position: relative;
     top: calc(50% - 25px);

@@ -326,6 +326,20 @@ export function createViewer(opts = {}) {
         },
         toggleFirstPerson: (enabled = !firstPersonEnabled) => setFirstPersonControls(enabled),
         getFirstPersonEnabled: () => firstPersonEnabled,
+        setFirstPersonMovement: (direction, active) => {
+            const propertyByDirection = {
+                forward: 'moveForward',
+                backward: 'moveBackward',
+                left: 'moveLeft',
+                right: 'moveRight',
+                up: 'moveUp',
+                down: 'moveDown'
+            };
+            const property = propertyByDirection[direction];
+            if (property) {
+                firstPersonControls[property] = active;
+            }
+        },
         dispose: () => {
             window.removeEventListener('resize', resize);
             firstPersonControls.dispose();

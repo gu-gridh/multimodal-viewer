@@ -45,6 +45,7 @@ $('auto')?.addEventListener('click', (event) => {
     if (viewer.getFirstPersonEnabled()) {
         viewer.toggleFirstPerson(false);
         $('firstPerson')?.classList.remove('first-person-active');
+        $('firstPersonControlButtons')?.classList.remove('first-person-controls-visible');
     }
 
     const enabled = viewer.toggleAuto();
@@ -59,11 +60,41 @@ $('wire')?.addEventListener('click', (event) => {
 $('firstPerson')?.addEventListener('click', (event) => {
     const enabled = viewer.toggleFirstPerson();
     event.currentTarget.classList.toggle('first-person-active', enabled);
+    $('firstPersonControlButtons')?.classList.toggle('first-person-controls-visible', enabled);
 
     if (enabled) {
         $('auto')?.classList.remove('auto-rotate-active');
     }
 });
+
+function bindMovementButton(id, direction) {
+    const button = $(id);
+    if (!button) {
+        return;
+    }
+
+    const start = (event) => {
+        event.preventDefault();
+        viewer.setFirstPersonMovement(direction, true);
+    };
+
+    const stop = (event) => {
+        event.preventDefault();
+        viewer.setFirstPersonMovement(direction, false);
+    };
+
+    button.addEventListener('mousedown', start);
+    button.addEventListener('mouseup', stop);
+    button.addEventListener('mouseleave', stop);
+    button.addEventListener('touchstart', start, { passive: false });
+    button.addEventListener('touchend', stop);
+    button.addEventListener('touchcancel', stop);
+}
+
+bindMovementButton('moveForward', 'forward');
+bindMovementButton('moveBackward', 'backward');
+bindMovementButton('moveLeft', 'left');
+bindMovementButton('moveRight', 'right');
 
 $('rotL')?.addEventListener('dblclick', () => viewer.rotateLeft(ROT_NUDGE));
 $('rotR')?.addEventListener('dblclick', () => viewer.rotateRight(ROT_NUDGE));

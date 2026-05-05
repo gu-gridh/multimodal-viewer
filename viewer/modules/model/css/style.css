@@ -114,6 +114,54 @@ body {
     -webkit-mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
 }
 
+.model-control-buttons {
+    position: absolute;
+    bottom: 90px;
+    left: calc(50% - 85px);
+    width: 160px;
+    z-index: 1000;
+    user-select: none;
+    -webkit-user-select: none;
+    display: none;
+    flex-direction: row;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.model-control-buttons.first-person-controls-visible {
+    display: flex;
+}
+
+.model-control-buttons .control-buttons-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.model-control-buttons button {
+    border: 0;
+    cursor: pointer;
+    width: 60px;
+    height: 32px;
+    background-color: rgba(0, 0, 0, 0.4);
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.model-control-buttons button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.model-control-buttons img {
+    width: 25px;
+    height: 25px;
+}
+
 #loader {
     position: relative;
     top: calc(50% - 25px);

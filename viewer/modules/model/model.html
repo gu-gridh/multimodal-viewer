@@ -25,30 +25,35 @@
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
-                        <div class="guide-instructions-item-label"><b>Frame Object.</b> Fit the model to the camera view.</div>
+                        <div class="guide-instructions-item-label"><b>Frame Object.</b> Fit the model to the camera
+                            view.</div>
                     </div>
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png)"></div>
-                        <div class="guide-instructions-item-label"><b>Zoom Controls.</b> Zoom the camera in and out.</div>
+                        <div class="guide-instructions-item-label"><b>Zoom Controls.</b> Zoom the camera in and out.
+                        </div>
                     </div>
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/autorotate_white.svg)"></div>
-                        <div class="guide-instructions-item-label"><b>Auto-Rotate.</b> Enable automatic rotation of the model.</div>
+                        <div class="guide-instructions-item-label"><b>Auto-Rotate.</b> Enable automatic rotation of the
+                            model.</div>
                     </div>
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg)"></div>
-                        <div class="guide-instructions-item-label"><b>Wireframe.</b> Enable wireframe rendering to see the model's structure.</div>
+                        <div class="guide-instructions-item-label"><b>Wireframe.</b> Enable wireframe rendering to see
+                            the model's structure.</div>
                     </div>
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon model-guide-walk-icon"></div>
-                        <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle to first-person navigation from orbit controls.</div>
+                        <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle to first-person
+                            navigation from orbit controls.</div>
                     </div>
 
                     <div class="guide-closer">Close</div>
@@ -80,6 +85,33 @@
         </div>
 
         <div class="guide-button compact" title="User Guide" onclick="showModelGuide();">?</div>
+    </div>
+
+    <div id="firstPersonControlButtons" class="control-buttons model-control-buttons"
+        aria-label="First-person movement controls">
+        <div class="control-buttons-group">
+            <button id="moveLeft" title="Move left" style="border-radius:10px 0 0 10px; margin-right:0;">
+                <img src="/viewer/modules/pointcloud/build/potree/resources/icons/movement.svg" alt="Move left"
+                    style="transform:rotate(-90deg);">
+            </button>
+        </div>
+        <div class="control-buttons-group">
+            <button id="moveForward" title="Move forward"
+                style="border-radius:10px 10px 0 0; border-width:0; margin-bottom:0;">
+                <img src="/viewer/modules/pointcloud/build/potree/resources/icons/movement.svg" alt="Move forward">
+            </button>
+
+            <button id="moveBackward" title="Move backward" style="border-radius:0; border-width:0;">
+                <img src="/viewer/modules/pointcloud/build/potree/resources/icons/movement.svg" alt="Move backward"
+                    style="transform:rotate(180deg);">
+            </button>
+        </div>
+        <div class="control-buttons-group">
+            <button id="moveRight" title="Move right" style="border-radius:0 10px 10px 0; margin-left:0;">
+                <img src="/viewer/modules/pointcloud/build/potree/resources/icons/movement.svg" alt="Move right"
+                    style="transform:rotate(90deg);">
+            </button>
+        </div>
     </div>
 
     <section id="loading-screen">

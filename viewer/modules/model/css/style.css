@@ -68,7 +68,8 @@ body {
 }
 
 .auto-rotate,
-.wireframe {
+.wireframe,
+.first-person {
     width: 30px !important;
     height: 30px !important;
     background-size: contain;
@@ -93,6 +94,17 @@ body {
 
 .wireframe-active {
     background-image: url(https://data.dh.gu.se/ui-icons/wireframe_active.svg);
+    opacity: 1;
+}
+
+.first-person {
+    background-color: #ffffff !important;
+    mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
+    -webkit-mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
+}
+
+.first-person-active {
+    background-color: #ffd84d !important;
     opacity: 1;
 }
 

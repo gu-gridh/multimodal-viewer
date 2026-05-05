@@ -1,5 +1,6 @@
 import * as THREE from '/viewer/modules/pointcloud/libs/three.js/build/three.module.js';
 import { GLTFLoader } from '/viewer/modules/pointcloud/libs/three.js/loaders/GLTFLoader.js';
+import { FirstPersonControls } from './FirstPersonControls.js';
 
 export function createViewer(opts = {}) {
     const {
@@ -21,6 +22,8 @@ export function createViewer(opts = {}) {
         minZoomScale = 0.15,
         maxZoomScale = 5,
         dragRotationSpeed = 0.01,
+        firstPersonMovementSpeed = 1.0,
+        firstPersonLookSpeed = 0.002,
         initialRotation = [0, 0, 0],
         recenterModel = true,
     } = opts;
@@ -71,8 +74,15 @@ export function createViewer(opts = {}) {
     let modelSize = 1;
     let autoRotateEnabled = autoRotate;
     let wireframeEnabled = false;
+    let firstPersonEnabled = false;
     let pointerDown = false;
     let lastPointer = { x: 0, y: 0 };
+    const clock = new THREE.Clock();
+    const firstPersonControls = new FirstPersonControls(camera, renderer.domElement);
+    firstPersonControls.enabled = false;
+    firstPersonControls.disconnect();
+    firstPersonControls.movementSpeed = firstPersonMovementSpeed;
+    firstPersonControls.lookSpeed = firstPersonLookSpeed;
 
     const loadingManager = new THREE.LoadingManager(() => {
         const loadingScreen = document.getElementById(loadingScreenId);
@@ -90,7 +100,10 @@ export function createViewer(opts = {}) {
 
     function animate() {
         requestAnimationFrame(animate);
-        if (autoRotateEnabled) {
+        const delta = clock.getDelta();
+        if (firstPersonEnabled) {
+            firstPersonControls.update(delta);
+        } else if (autoRotateEnabled) {
             rotateY(autoRotateStep);
         }
         render();
@@ -182,13 +195,17 @@ export function createViewer(opts = {}) {
 
     function bindPointerControls() {
         renderer.domElement.addEventListener('pointerdown', (event) => {
+            if (firstPersonEnabled) {
+                return;
+            }
+
             pointerDown = true;
             lastPointer = { x: event.clientX, y: event.clientY };
             renderer.domElement.setPointerCapture(event.pointerId);
         });
 
         renderer.domElement.addEventListener('pointermove', (event) => {
-            if (!pointerDown || !root) {
+            if (firstPersonEnabled || !pointerDown || !root) {
                 return;
             }
 
@@ -200,11 +217,19 @@ export function createViewer(opts = {}) {
         });
 
         renderer.domElement.addEventListener('pointerup', (event) => {
+            if (firstPersonEnabled) {
+                return;
+            }
+
             pointerDown = false;
             renderer.domElement.releasePointerCapture(event.pointerId);
         });
 
         renderer.domElement.addEventListener('wheel', (event) => {
+            if (firstPersonEnabled) {
+                return;
+            }
+
             event.preventDefault();
             zoomBy(event.deltaY < 0 ? 0.9 : 1.1);
         }, { passive: false });
@@ -215,6 +240,31 @@ export function createViewer(opts = {}) {
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
         render();
+    }
+
+    function clearFirstPersonInput() {
+        firstPersonControls.reset();
+    }
+
+    function setFirstPersonControls(enabled) {
+        if (firstPersonEnabled === enabled) {
+            return firstPersonEnabled;
+        }
+
+        firstPersonEnabled = enabled;
+        firstPersonControls.enabled = enabled;
+        pointerDown = false;
+        clearFirstPersonInput();
+
+        if (enabled) {
+            autoRotateEnabled = false;
+            firstPersonControls.connect(renderer.domElement);
+            renderer.domElement.focus();
+        } else {
+            firstPersonControls.disconnect();
+        }
+
+        return firstPersonEnabled;
     }
 
     function loadModel(url) {
@@ -274,8 +324,11 @@ export function createViewer(opts = {}) {
             setWireframe(enabled);
             return wireframeEnabled;
         },
+        toggleFirstPerson: (enabled = !firstPersonEnabled) => setFirstPersonControls(enabled),
+        getFirstPersonEnabled: () => firstPersonEnabled,
         dispose: () => {
             window.removeEventListener('resize', resize);
+            firstPersonControls.dispose();
             renderer.dispose();
         },
     };

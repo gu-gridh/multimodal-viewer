@@ -27,6 +27,7 @@ const options = {
     cameraPosition: [0, 0, 1],
 
     autoRotate: true,
+    firstPersonMovementSpeed: 1.0,
 };
 
 export const viewer = createViewer(options);

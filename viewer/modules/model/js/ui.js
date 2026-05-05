@@ -42,6 +42,11 @@ $('ZoomIn')?.addEventListener('click', () => viewer.zoomIn(ZOOM_IN));
 $('ZoomOut')?.addEventListener('click', () => viewer.zoomOut(ZOOM_OUT));
 
 $('auto')?.addEventListener('click', (event) => {
+    if (viewer.getFirstPersonEnabled()) {
+        viewer.toggleFirstPerson(false);
+        $('firstPerson')?.classList.remove('first-person-active');
+    }
+
     const enabled = viewer.toggleAuto();
     event.currentTarget.classList.toggle('auto-rotate-active', enabled);
 });
@@ -49,6 +54,15 @@ $('auto')?.addEventListener('click', (event) => {
 $('wire')?.addEventListener('click', (event) => {
     const enabled = viewer.toggleWireframe();
     event.currentTarget.classList.toggle('wireframe-active', enabled);
+});
+
+$('firstPerson')?.addEventListener('click', (event) => {
+    const enabled = viewer.toggleFirstPerson();
+    event.currentTarget.classList.toggle('first-person-active', enabled);
+
+    if (enabled) {
+        $('auto')?.classList.remove('auto-rotate-active');
+    }
 });
 
 $('rotL')?.addEventListener('dblclick', () => viewer.rotateLeft(ROT_NUDGE));

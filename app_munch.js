@@ -42,6 +42,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const annotationPath = config.annotationPath ? `${config.annotationPath}${queryName}` : '';
     const basePathIiif = `${config.basePath}`;
     const basePathDownload = `${config.downloadPath}`;
+    const localMunchImageUrl = '/viewer/projects/munch/Solen_av_Edvard_Munch.jpg';
+    const localMunchTileSource = { type: 'image', url: localMunchImageUrl };
 
     if (queryType === 'iiif' || queryType === 'photo') {
       const photo = modelData?.[0]?.properties?.attached_photograph?.[0];
@@ -54,7 +56,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       const downloadUrl = `"${basePathDownload}${photo.file || ''}"`;
 
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, iiifUrl)
+        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(localMunchTileSource))
         .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadUrl))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
@@ -83,7 +85,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       const topographyImagesJpg = sortedTopography.map(topography => `${basePathDownload}${topography.file}`);
 
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
+        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify([localMunchTileSource]))
         .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(topographyImagesJpg))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
@@ -199,23 +201,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
   try {
-    const [apiResponse, htmlData] = await Promise.all([
-      axios.get(`${config.metadata}${queryName}&depth=1`),
-      fs.promises.readFile(metadataPath, 'utf8')
-    ]);
-
-    const metadata = apiResponse.data?.results?.[0];
-    if (!metadata) {
-      return res.status(404).send('No metadata found');
-    }
-
-    const $ = cheerio.load(htmlData);
-    const documentation = Array.isArray(metadata.documentation) && metadata.documentation.length > 0
-      ? metadata.documentation.map(item => item?.observation).filter(Boolean).join(', ')
-      : 'Unknown';
-
-    $('#panel-title').text(metadata.title || queryName);
-    res.send($.html());
+    const htmlData = await fs.promises.readFile(metadataPath, 'utf8');
+    res.send(htmlData);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

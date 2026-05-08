@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/viewer/shared/barlow_font.css" rel="stylesheet">
+    <link href="/viewer/shared/barlow_condensed.css" rel="stylesheet">
+    <link href="/viewer/shared/alumni_sans_pinstripe_font.css" rel="stylesheet">
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
     <link rel="stylesheet" href="metadata.css">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
@@ -13,7 +15,79 @@
 
 <body>
     <div class="container">
-        <div class="metadata-title" id="panel-title">TITLE</div>
+        <header class="metadata-header">
+            <div>
+                <h1 class="metadata-title" id="panel-title">SOLEN</h1>
+                <div class="metadata-artist">Edvard Munch</div>
+            </div>
+            <a class="database-link" href="#" aria-label="Open database">Database</a>
+        </header>
+
+        <p class="metadata-copy">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam volutpat libero eu felis semper,
+            vel viverra orci ultricies. Donec eget imperdiet mi. In mi odio, scelerisque dictum urna non,
+            sodales iaculis nibh. Sed dapibus tempus diam nec faucibus. Proin in ullamcorper sapien,
+            eu maximus arcu. Maecenas eros urna, eleifend ut leo eu, lacinia faucibus felis.
+            Aliquam pharetra lobortis magna, quis posuere massa dapibus eu.
+        </p>
+
+        <section class="filtering" aria-labelledby="filtering-title">
+            <h2 id="filtering-title">Filtering</h2>
+
+            <div class="filter-group" data-filter-group="year">
+                <h3>Year</h3>
+                <div class="filter-options" role="list" aria-label="Year filters">
+                    <button class="filter-button active" type="button" data-filter-value="all">All</button>
+                    <button class="filter-button" type="button" data-filter-value="2026">2026</button>
+                    <button class="filter-button" type="button" data-filter-value="2023">2023</button>
+                    <button class="filter-button" type="button" data-filter-value="2020">2020</button>
+                    <button class="filter-button" type="button" data-filter-value="2017">2017</button>
+                    <button class="filter-button" type="button" data-filter-value="2011">2011</button>
+                    <button class="filter-button" type="button" data-filter-value="2005">2005</button>
+                    <button class="filter-button" type="button" data-filter-value="2002">2002</button>
+                    <button class="filter-button" type="button" data-filter-value="2000">2000</button>
+                </div>
+            </div>
+
+            <div class="filter-group" data-filter-group="category">
+                <h3>Category</h3>
+                <div class="filter-options" role="list" aria-label="Category filters">
+                    <button class="filter-button active" type="button" data-filter-value="all">All</button>
+                    <button class="filter-button" type="button" data-filter-value="damages">Damages</button>
+                    <button class="filter-button" type="button" data-filter-value="colour-degrading">Colour
+                        degrading</button>
+                    <button class="filter-button" type="button" data-filter-value="fluglort">Fluglort</button>
+                </div>
+            </div>
+
+            <div class="filter-group" data-filter-group="tag">
+                <h3>Tag</h3>
+                <div class="filter-options" role="list" aria-label="Tag filters">
+                    <button class="filter-button active" type="button" data-filter-value="all">All</button>
+                    <button class="filter-button" type="button" data-filter-value="xrf-208">XRF 208</button>
+                    <button class="filter-button" type="button" data-filter-value="foto-2018-samlat">Foto 2018
+                        samlat</button>
+                    <button class="filter-button" type="button" data-filter-value="tidigare-ingrepp">Tidigare
+                        ingrepp</button>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <script>
+        document.querySelectorAll('.filter-group').forEach((group) => {
+            group.addEventListener('click', (event) => {
+                const button = event.target.closest('.filter-button');
+                if (!button) {
+                    return;
+                }
+
+                group.querySelectorAll('.filter-button').forEach((filterButton) => {
+                    filterButton.classList.toggle('active', filterButton === button);
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

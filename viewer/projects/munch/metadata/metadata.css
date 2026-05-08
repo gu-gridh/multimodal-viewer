@@ -3,57 +3,130 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
-    background: rgb(236, 232, 226);
-    font-family: "Barlow", sans-serif !important;
-    color: rgb(28, 28, 28);
+    min-height: 100%;
+    background: #fff;
+    color: #000;
+    font-family: "Barlow Condensed", "Oswald", sans-serif !important;
 }
 
 .container {
     box-sizing: border-box;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     overflow: auto;
-    padding: 34px 34px 24px;
+    padding: clamp(36px, 6.8vw, 72px) clamp(28px, 6.8vw, 72px);
+}
+
+.metadata-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
 .metadata-title {
-    font-family: "Oswald", sans-serif !important;
-    font-size: clamp(2rem, 3vw, 3.1rem);
+    margin: 0 0 8px;
+    font-family: "Alumni Sans Pinstripe", "Barlow Condensed", sans-serif !important;
+    font-size: clamp(3.8rem, 7.4vw, 5.6rem);
+    font-weight: 400;
+    line-height: 0.82;
+    letter-spacing: 0;
+}
+
+.metadata-artist,
+.database-link,
+.metadata-copy,
+.filtering h2,
+.filter-group h3,
+.filter-button {
+    font-family: "Barlow Condensed", "Oswald", sans-serif !important;
+}
+
+.metadata-artist {
+    font-size: clamp(1.9rem, 3vw, 2.75rem);
+    font-weight: 500;
     line-height: 1;
-    margin-bottom: 24px;
-    color: rgb(24, 24, 24);
 }
 
-.metadata-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin-bottom: 22px;
+.database-link {
+    color: #000;
+    display: inline-flex;
+    font-size: clamp(1.45rem, 2vw, 2.1rem);
+    font-weight: 300;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
-.metadata-card,
 .metadata-copy {
-    background: rgba(255, 255, 255, 0.78);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    padding: 16px 18px;
+    max-width: 880px;
+    margin: 0 0 48px;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.12;
 }
 
-.label {
-    font-family: "Oswald", sans-serif !important;
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: rgb(118, 118, 118);
-    margin-bottom: 8px;
+.filtering h2 {
+    margin: 0 0 16px;
+    font-size: clamp(2.1rem, 3.2vw, 3rem);
+    font-weight: 500;
+    line-height: 1.15;
 }
 
-.value {
-    font-size: 1.02rem;
-    line-height: 1.45;
+.filter-group {
+    margin-bottom: 28px;
 }
 
-.value-copy {
-    white-space: pre-wrap;
+.filter-group h3 {
+    margin: 0 0 10px;
+    font-size: clamp(1.35rem, 2vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+}
+
+.filter-button {
+    appearance: none;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    color: #000;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: clamp(1.4rem, 2.15vw, 2rem);
+    font-weight: 500;
+    justify-content: center;
+    line-height: 1;
+    min-height: 48px;
+    min-width: 92px;
+    padding: 7px 16px 8px;
+}
+
+.filter-button.active {
+    background: #000;
+    color: #fff;
+}
+
+.filter-button:focus-visible {
+    outline: 3px solid #777;
+    outline-offset: 2px;
+}
+
+@media (max-width: 620px) {
+    .container {
+        padding: 36px 26px;
+    }
+
+    .metadata-header {
+        flex-direction: column;
+    }
+
+    .filter-button {
+        min-width: 74px;
+    }
 }

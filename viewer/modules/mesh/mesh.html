@@ -287,7 +287,7 @@
 	var currentPage = 1;
 	var totalPages = 2;
 	var presenter = null;
-	var rotationAngle = 0; //current rotation angle
+	var rotationAngle = PLACEHOLDER_BASEMODELROTATION; //current model roll angle
 
 	// <-- Language Control -->
 	const savedLang = localStorage.getItem('i18nextLang') || 'en';
@@ -319,42 +319,28 @@
 		});
 
 	function rotateMesh(degrees) {
-		const position = getCurrentTrackballState();
-		const currentYaw = position && Number.isFinite(position[0]) ? position[0] : rotationAngle;
-		setTrackballYaw(currentYaw + degrees);
+		setMeshRoll(rotationAngle + degrees);
 	}
 
 	function getBaseModelMatrix() {
 		var matrix = SglMat4.identity();
 		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELTHETA), [1.0, 0.0, 0.0]));
 		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELPHI), [0.0, -1.0, 0.0]));
-		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELROTATION), [0.0, 0.0, 1.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(rotationAngle), [0.0, 0.0, 1.0]));
 		return matrix;
 	}
 
-	function getCurrentTrackballState() {
-		if (!presenter || !presenter.getTrackballPosition) {
-			return null;
-		}
-
-		return presenter.getTrackballPosition().slice();
-	}
-
-	function setTrackballYaw(degrees) {
-		const position = getCurrentTrackballState();
-		if (!position) {
+	function setMeshRoll(degrees) {
+		if (!presenter || !presenter._scene || !presenter._scene.modelInstances) {
 			return;
 		}
 
 		rotationAngle = Number.isFinite(degrees) ? degrees : 0;
-		position[0] = rotationAngle;
-		presenter.setTrackballPosition(position);
-	}
-
-	function onTrackballUpdate(state) {
-		if (Array.isArray(state) && Number.isFinite(state[0])) {
-			rotationAngle = state[0];
-		}
+		const matrix = getBaseModelMatrix();
+		Object.keys(presenter._scene.modelInstances).forEach(function (name) {
+			presenter._scene.modelInstances[name].transform.matrix = matrix.slice();
+		});
+		presenter.repaint();
 	}
 
 	document.addEventListener("DOMContentLoaded", function () {
@@ -455,13 +441,14 @@
 		const defaultCameraState = PLACEHOLDER_CAMERASTARTSTATE;
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
-			rotationAngle = !isNaN(rotation) ? rotation : phi;
-			presenter.animateToTrackballPosition([rotationAngle, theta, panX, panY, panZ, zoom]);
+			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
+			if (!isNaN(rotation)) {
+				setMeshRoll(rotation);
+			}
 		} else if (Array.isArray(defaultCameraState) && defaultCameraState.some(value => value !== 0.0)) {
-			rotationAngle = Number.isFinite(defaultCameraState[0]) ? defaultCameraState[0] : 0.0;
 			presenter.animateToTrackballPosition(defaultCameraState);
 		} else {
-			rotationAngle = 0.0;
+			rotationAngle = PLACEHOLDER_BASEMODELROTATION;
 		}
 
 		for (inst in presenter._scene.modelInstances) {
@@ -536,7 +523,7 @@
 			queryParams.set('panY', position[3].toFixed(12));
 			queryParams.set('panZ', position[4].toFixed(12));
 			queryParams.set('zoom', position[5].toFixed(2));
-			queryParams.set('rotation', position[0].toFixed(2)); //store the current yaw
+			queryParams.set('rotation', rotationAngle.toFixed(2));
 
 			const newUrl = `${currentUrl.origin}/viewer/?${queryParams.toString()}`;
 
@@ -553,7 +540,7 @@
 		// This one needs to be the same one as the above start position fetched from backend
 		if (action == 'home' || action == 'home_m') {
 			presenter.animateToTrackballPosition(PLACEHOLDER_CAMERASTARTSTATE);
-			rotationAngle = Number.isFinite(PLACEHOLDER_CAMERASTARTSTATE[0]) ? PLACEHOLDER_CAMERASTARTSTATE[0] : 0.0;
+			setMeshRoll(PLACEHOLDER_BASEMODELROTATION);
 		}
 
 		//--FULLSCREEN--

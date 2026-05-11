@@ -107,6 +107,20 @@ body {
     padding: 7px 16px 8px;
 }
 
+.filter-swatch {
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+    display: inline-block;
+    flex: 0 0 auto;
+    height: 16px;
+    margin-right: 9px;
+    width: 16px;
+}
+
+.filter-button.active .filter-swatch {
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
 .filter-button.active {
     background: #000;
     color: #fff;

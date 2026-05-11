@@ -201,8 +201,27 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
   try {
-    const htmlData = await fs.promises.readFile(metadataPath, 'utf8');
-    res.send(htmlData);
+    const [htmlData, categories, tags, years] = await Promise.all([
+      fs.promises.readFile(metadataPath, 'utf8'),
+      axios.get('https://munch.dh.gu.se/api/annotation-categories/'),
+      axios.get('https://munch.dh.gu.se/api/tags/'),
+      axios.get('https://munch.dh.gu.se/api/years/')
+    ]);
+    const yearFilters = years.data.results
+      .map(year => `<button class="filter-button" type="button" data-filter-value="${year.id}">${year.year}</button>`)
+      .join('');
+    const categoryFilters = categories.data.results
+      .map(category => `<button class="filter-button" type="button" data-filter-value="${category.id}"><span class="filter-swatch" style="background-color: ${category.color};"></span>${category.name}</button>`)
+      .join('');
+    const tagFilters = tags.data.results
+      .map(tag => `<button class="filter-button" type="button" data-filter-value="${tag.id}">${tag.text}</button>`)
+      .join('');
+    const modifiedHtml = htmlData
+      .replace('PLACEHOLDER_YEAR_FILTERS', yearFilters)
+      .replace('PLACEHOLDER_CATEGORY_FILTERS', categoryFilters)
+      .replace('PLACEHOLDER_TAG_FILTERS', tagFilters);
+
+    res.send(modifiedHtml);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

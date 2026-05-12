@@ -25,9 +25,9 @@ body {
 
 .metadata-title {
     margin: 0 0 8px;
-    font-family: "Alumni Sans Pinstripe", "Barlow Condensed", sans-serif !important;
-    font-size: clamp(3.8rem, 7.4vw, 5.6rem);
-    font-weight: 400;
+    font-family: "Barlow Condensed", sans-serif !important;
+    font-size: clamp(3.0rem, 7.4vw, 5.6rem);
+    font-weight: 300;
     line-height: 0.82;
     letter-spacing: 0;
 }
@@ -35,16 +35,39 @@ body {
 .metadata-artist,
 .database-link,
 .metadata-copy,
+.metadata,
 .filtering h2,
 .filter-group h3,
 .filter-button {
-    font-family: "Barlow Condensed", "Oswald", sans-serif !important;
+    font-family: "Barlow Condensed", sans-serif !important;
 }
 
 .metadata-artist {
     font-size: clamp(1.9rem, 3vw, 2.75rem);
-    font-weight: 500;
+    font-weight: 300;
     line-height: 1;
+    margin-bottom:10px;
+}
+
+.metadata{
+    display:flex;
+    flex-direction: row;
+         flex-wrap: wrap;
+    margin-top:0px;
+}
+
+.metadata-item{
+    display:flex;
+    flex-direction: row;
+ 
+  margin-right:20px;
+      font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.metadata-item span{
+font-weight:600;
+margin-left:4px;
 }
 
 .database-link {
@@ -59,34 +82,35 @@ body {
 
 .metadata-copy {
     max-width: 880px;
-    margin: 0 0 48px;
-    font-size: 1.5rem;
-    font-weight: 300;
+    margin: 0px 0 30px;
+    font-size: 1.1rem;
+    font-weight: 400;
     line-height: 1.12;
 }
 
 .filtering h2 {
     margin: 0 0 16px;
-    font-size: clamp(2.1rem, 3.2vw, 3rem);
+    font-size: clamp(1.5rem, 3.2vw, 10rem);
     font-weight: 500;
     line-height: 1.15;
 }
 
 .filter-group {
-    margin-bottom: 28px;
+    margin-bottom: 30px;
 }
 
 .filter-group h3 {
     margin: 0 0 10px;
-    font-size: clamp(1.35rem, 2vw, 1.9rem);
+    font-size: clamp(1.2rem, 1.5vw, 1.2rem);
     font-weight: 500;
     line-height: 1;
+    padding:0px;
 }
 
 .filter-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 12px;
+    gap: 8px 8px;
 }
 
 .filter-button {
@@ -94,27 +118,31 @@ body {
     align-items: center;
     background: #fff;
     border: 1px solid #000;
-    border-radius: 5px;
+    border-radius: 3px;
     color: #000;
     cursor: pointer;
     display: inline-flex;
-    font-size: clamp(1.4rem, 2.15vw, 2rem);
+    font-size: clamp(1.0rem, 2.15vw, 2rem);
     font-weight: 500;
     justify-content: center;
     line-height: 1;
-    min-height: 48px;
-    min-width: 92px;
-    padding: 7px 16px 8px;
+    padding: 6px 10px;
+}
+
+.filter-button:hover {
+ color:grey;
+ transform:scale(0.97);
 }
 
 .filter-swatch {
-    border: 1px solid rgba(0, 0, 0, 0.35);
+    border: 0px solid rgba(0, 0, 0, 0.35);
     box-sizing: border-box;
     display: inline-block;
     flex: 0 0 auto;
     height: 16px;
-    margin-right: 9px;
+    margin-right: 8px;
     width: 16px;
+     border-radius: 3px;
 }
 
 .filter-button.active .filter-swatch {

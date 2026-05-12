@@ -28,10 +28,11 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 
   try {
-    const { data } = await axios.get(`${config.panel}${queryName}`);
-    const modelData = data.features;
+    const encodedQueryName = encodeURIComponent(queryName);
+    const { data } = await axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`);
+    const images = data.results;
 
-    if (!modelData || modelData.length === 0) {
+    if (!images || images.length === 0) {
       return res.status(404).send('No data available.');
     }
 
@@ -40,24 +41,19 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       'utf8'
     );
     const annotationPath = config.annotationPath ? `${config.annotationPath}${queryName}` : '';
-    const basePathIiif = `${config.basePath}`;
-    const basePathDownload = `${config.downloadPath}`;
-    const localMunchImageUrl = '/viewer/projects/munch/Solen_av_Edvard_Munch.jpg';
-    const localMunchTileSource = { type: 'image', url: localMunchImageUrl };
 
     if (queryType === 'iiif' || queryType === 'photo') {
-      const photo = modelData?.[0]?.properties?.attached_photograph?.[0];
+      const photo = images.find(image => image.image_type === 'orthophoto');
 
-      if (!photo?.iiif_file) {
+      if (!photo?.file) {
         return res.status(404).send('No attached photograph found.');
       }
 
-      const iiifUrl = `"${basePathIiif}${photo.iiif_file}/info.json"`;
-      const downloadUrl = `"${basePathDownload}${photo.file || ''}"`;
+      const tileSource = { type: 'image', url: photo.file };
 
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(localMunchTileSource))
-        .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadUrl))
+        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSource))
+        .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify([]))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
@@ -71,29 +67,26 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     }
 
     if (queryType === 'topography') {
-      const sortedTopography = (modelData?.[0]?.properties?.attached_topography || []).sort((a, b) => {
-        const order = ['blended', 'texture', 'normal'];
-        const getOrder = (file) => order.findIndex(keyword => file.includes(keyword));
-        return getOrder(a.file) - getOrder(b.file);
-      });
+      const sortedTopography = images
+        .filter(image => image.image_type === 'topographical')
+        .sort((a, b) => a.sort_order - b.sort_order);
 
       if (!sortedTopography.length) {
         return res.status(404).send('No attached topography images found.');
       }
 
-      const topographyImagesIiif = sortedTopography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-      const topographyImagesJpg = sortedTopography.map(topography => `${basePathDownload}${topography.file}`);
+      const topographyTileSources = sortedTopography.map(topography => ({ type: 'image', url: topography.file }));
 
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify([localMunchTileSource]))
-        .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(topographyImagesJpg))
+        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
+        .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify([]))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')
-        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true)
+        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
         .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
 
       return res.send(updatedHtmlContent);
@@ -198,15 +191,16 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     return res.status(400).send('Query parameter is missing');
   }
 
+  const encodedQueryName = encodeURIComponent(queryName);
   const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
   try {
     const [htmlData, panel, categories, tags, years] = await Promise.all([
       fs.promises.readFile(metadataPath, 'utf8'),
-      axios.get(`https://munch.dh.gu.se/api/panel/?title=${queryName}`),
-      axios.get('https://munch.dh.gu.se/api/annotation-categories/'),
-      axios.get('https://munch.dh.gu.se/api/tags/'),
-      axios.get('https://munch.dh.gu.se/api/years/')
+      axios.get(`https://munch.dh.gu.se/api/panel/?title=${encodedQueryName}`),
+      axios.get(`https://munch.dh.gu.se/api/annotation-categories/?panel=${encodedQueryName}`),
+      axios.get(`https://munch.dh.gu.se/api/tags/?panel=${encodedQueryName}`),
+      axios.get(`https://munch.dh.gu.se/api/years/?panel=${encodedQueryName}`)
     ]);
     const painting = panel.data.results[0];
     const yearFilters = years.data.results

@@ -133,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <iframe id="left-iframe" class="iframes" style="width:100%;"></iframe>
+            <iframe id="left-Iframe" class="iframes" style="width:100%;"></iframe>
         </div>
         <div id="right-pane">
             <iframe id="right-iframe" class="iframes" style="width:100%;"></iframe>
@@ -160,7 +160,7 @@
                 event.data.type === 'annotationFiltersChange' &&
                 ['photo', 'topography'].includes(activeLeftViewer)
             ) {
-                document.getElementById('left-iframe').contentWindow.postMessage(event.data, '*');
+                document.getElementById('left-Iframe').contentWindow.postMessage(event.data, '*');
             }
         }, false);
 
@@ -207,7 +207,7 @@
 
         function changeLeftViewer(viewerType) {
             activeLeftViewer = viewerType;
-            const iframe = document.getElementById('left-iframe');
+            const iframe = document.getElementById('left-Iframe');
             const queryString = window.location.search;
             const currentUrl = new URL(window.location.href);
             const hashFragment = currentUrl.hash || '';

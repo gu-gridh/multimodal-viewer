@@ -378,7 +378,15 @@
             // Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {
                 // Additional configuration options
-                disableEditor: true
+                disableEditor: true,
+                formatters: [
+                    function (annotation) {
+                        const color = annotation?.body?.category?.color;
+                        return color ? {
+                            style: `stroke:${color}; fill:transparent; stroke-width:2;`
+                        } : null;
+                    }
+                ]
             });
 
             const loadAnnotationsPromise = displayInscriptions

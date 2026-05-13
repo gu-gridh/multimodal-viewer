@@ -14,8 +14,7 @@ body {
     width: 100%;
     min-height: 100%;
     overflow: auto;
-    padding: clamp(36px, 6.8vw, 72px) clamp(36px, 6.8vw, 72px)!important;
-    
+    padding: clamp(36px, 6.8vw, 72px) clamp(36px, 6.8vw, 72px) !important;
 }
 
 .metadata-header {
@@ -47,51 +46,57 @@ body {
     font-size: clamp(1.9rem, 3vw, 2.75rem);
     font-weight: 300;
     line-height: 1;
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
-.metadata{
-    display:flex;
+.metadata {
+    display: flex;
     flex-direction: row;
-         flex-wrap: wrap;
-    margin-top:0px;
+    flex-wrap: wrap;
+    margin-top: 0px;
 }
 
-.metadata-item{
-    display:flex;
+.metadata-item {
+    display: flex;
     flex-direction: row;
-  margin-right:20px;
-      font-size: 1.1rem;
+    margin-right: 20px;
+    font-size: 1.1rem;
     font-weight: 400;
 }
 
-.metadata-item span{
-font-weight:600;
-margin-left:4px;
+.metadata-item span {
+    font-weight: 600;
+    margin-left: 4px;
 }
 
 .database-link {
-    position:absolute;
-    right:36px;
-    top:36px;
-    color: #000!important;;
+    position: absolute;
+    right: 36px;
+    top: 36px;
+    color: #000 !important;
     display: inline-flex;
     font-size: clamp(1.1rem, 2vw, 2.1rem);
     font-weight: 600;
     line-height: 1;
     text-decoration: none;
     white-space: nowrap;
-      border: 1px solid #000;
+    border: 1px solid #000;
     border-radius: 3px;
     color: #000;
     cursor: pointer;
-        padding: 4px 8px;
-}
-.database-link:hover {
- color:grey;
- transform:scale(0.97);
+    padding: 4px 8px;
 }
 
+.database-link:hover {
+    color: grey;
+    transform: scale(0.97);
+}
+
+a.database-link,
+a.database-link:link,
+a.database-link:visited {
+    color: #000 !important;
+}
 
 .metadata-copy {
     max-width: 880px;
@@ -117,7 +122,7 @@ margin-left:4px;
     font-size: clamp(1.2rem, 1.5vw, 1.2rem);
     font-weight: 500;
     line-height: 1;
-    padding:0px;
+    padding: 0px;
 }
 
 .filter-options {
@@ -143,8 +148,8 @@ margin-left:4px;
 }
 
 .filter-button:hover {
- color:grey;
- transform:scale(0.97);
+    color: grey;
+    transform: scale(0.97);
 }
 
 .filter-swatch {
@@ -155,7 +160,7 @@ margin-left:4px;
     height: 16px;
     margin-right: 8px;
     width: 16px;
-     border-radius: 3px;
+    border-radius: 3px;
 }
 
 .filter-button.active .filter-swatch {

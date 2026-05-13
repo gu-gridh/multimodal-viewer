@@ -242,15 +242,15 @@
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
                 // hide annotations
-                const annotations = anno.getAnnotations();
-                annotations.forEach(annotation => {
-                    anno.removeAnnotation(annotation.id);
-                });
+                anno.setVisible(false);
                 annotationsVisible = false;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
                 // show annotations
-                loadCurrentAnnotations(activeAnnotationFilters);
+                anno.setVisible(true);
+                if (anno.getAnnotations().length === 0) {
+                    loadCurrentAnnotations(activeAnnotationFilters).catch(error => console.error(error));
+                }
                 annotationsVisible = true;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)";
             }
@@ -345,7 +345,9 @@
 
             //show annotations after rotation
             viewer.addHandler('animation-finish', function () {
-                anno.setVisible(true);
+                if (annotationsVisible) {
+                    anno.setVisible(true);
+                }
             });
 
             viewer.addHandler('open', function () {

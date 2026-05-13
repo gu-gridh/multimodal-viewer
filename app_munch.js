@@ -40,7 +40,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'),
       'utf8'
     );
-    const annotationPath = config.annotationPath ? `${config.annotationPath}${queryName}` : '';
+    const annotationPath = `/viewer/modules/iiif/visual-annotations?q=${encodedQueryName}`;
 
     if (queryType === 'iiif' || queryType === 'photo') {
       const photo = images.find(image => image.image_type === 'orthophoto');
@@ -56,8 +56,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify([]))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, true)
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, 'flex')
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
@@ -82,8 +82,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify([]))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, true)
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, 'flex')
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
@@ -96,6 +96,31 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
+  const title = req.query.q;
+
+  if (!title) {
+    return res.status(400).json({ error: 'Query parameter not found!' });
+  }
+
+  try {
+    const params = new URLSearchParams();
+    params.set('title', title);
+    params.set('category', req.query.category || 'all');
+    params.set('tags', req.query.tag || req.query.tags || 'all');
+
+    if (req.query.annotation_year && req.query.annotation_year !== 'all') {
+      params.set('annotation_year', req.query.annotation_year);
+    }
+
+    const { data } = await axios.get(`https://munch.dh.gu.se/api/annotation/?${params.toString()}`);
+    res.json(data.results || []);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load annotations' });
   }
 });
 

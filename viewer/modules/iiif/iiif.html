@@ -149,7 +149,9 @@
         OpenSeadragon.supportsFullPage = true;
 
         const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
+        const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
+        let activeAnnotationFilters = {};
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');
@@ -248,7 +250,7 @@
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
                 // show annotations
-                anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH');
+                loadCurrentAnnotations(activeAnnotationFilters);
                 annotationsVisible = true;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)";
             }
@@ -380,7 +382,7 @@
             });
 
             const loadAnnotationsPromise = displayInscriptions
-                ? anno.loadAnnotations('PLACEHOLDER_ANNOTATION_PATH').then(function (annotations) {
+                ? loadCurrentAnnotations().then(function (annotations) {
                     if (annotations.length > 0 && currentAnnotationId) {
                         openAnnotationById(currentAnnotationId);
                     }
@@ -412,6 +414,32 @@
                         console.error('Annotation not found:', annotationId);
                     }
                 });
+            }
+
+            function getAnnotationUrl(filters) {
+                if (!displayInscriptions || !annotationPath || isPlaceholder(annotationPath)) {
+                    return '';
+                }
+
+                const url = new URL(annotationPath, window.location.origin);
+                Object.entries(filters || {}).forEach(([key, value]) => {
+                    if (value && value !== 'all') {
+                        url.searchParams.set(key, value);
+                    }
+                });
+
+                return url.toString();
+            }
+
+            function loadCurrentAnnotations(filters = activeAnnotationFilters) {
+                activeAnnotationFilters = filters || {};
+                const annotationUrl = getAnnotationUrl(activeAnnotationFilters);
+
+                if (!annotationUrl) {
+                    return Promise.resolve([]);
+                }
+
+                return anno.loadAnnotations(annotationUrl);
             }
 
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
@@ -655,6 +683,8 @@
                             applyTranslations();
                         }
                     });
+                } else if (event.data.type === 'annotationFiltersChange') {
+                    loadCurrentAnnotations(event.data.filters).catch(error => console.error(error));
                 }
             });
         }

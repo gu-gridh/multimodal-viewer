@@ -142,6 +142,8 @@
     </div>
 
     <script>
+        let activeLeftViewer = 'photo';
+
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
             const viewerType = determineInitialViewer(urlParams);
@@ -154,6 +156,11 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
+            } else if (
+                event.data.type === 'annotationFiltersChange' &&
+                ['photo', 'topography'].includes(activeLeftViewer)
+            ) {
+                document.getElementById('left-iframe').contentWindow.postMessage(event.data, '*');
             }
         }, false);
 
@@ -199,6 +206,7 @@
         }
 
         function changeLeftViewer(viewerType) {
+            activeLeftViewer = viewerType;
             const iframe = document.getElementById('left-iframe');
             const queryString = window.location.search;
             const currentUrl = new URL(window.location.href);

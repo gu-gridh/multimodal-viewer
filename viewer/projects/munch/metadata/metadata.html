@@ -40,7 +40,7 @@
     <section class="filtering" aria-labelledby="filtering-title">
         <h2 id="filtering-title">Filtering</h2>
 
-        <div class="filter-group" data-filter-group="year">
+        <div class="filter-group" data-filter-group="annotation_year">
             <h3>Year</h3>
             <div class="filter-options" role="list" aria-label="Year filters">
                 <button class="filter-button active" type="button" data-filter-value="all">All</button>
@@ -67,6 +67,22 @@
     </div>
 
     <script>
+        function getActiveAnnotationFilters() {
+            const filters = {};
+            document.querySelectorAll('.filter-group').forEach((group) => {
+                const activeButton = group.querySelector('.filter-button.active');
+                filters[group.dataset.filterGroup] = activeButton?.dataset.filterValue || 'all';
+            });
+            return filters;
+        }
+
+        function notifyAnnotationFiltersChanged() {
+            window.parent.postMessage({
+                type: 'annotationFiltersChange',
+                filters: getActiveAnnotationFilters()
+            }, '*');
+        }
+
         document.querySelectorAll('.filter-group').forEach((group) => {
             group.addEventListener('click', (event) => {
                 const button = event.target.closest('.filter-button');
@@ -77,6 +93,8 @@
                 group.querySelectorAll('.filter-button').forEach((filterButton) => {
                     filterButton.classList.toggle('active', filterButton === button);
                 });
+
+                notifyAnnotationFiltersChanged();
             });
         });
     </script>

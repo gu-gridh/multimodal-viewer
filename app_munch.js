@@ -198,12 +198,23 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   try {
     const [htmlData, panel, categories, tags, years] = await Promise.all([
       fs.promises.readFile(metadataPath, 'utf8'),
-      axios.get(`https://munch.dh.gu.se/api/panel/?title=${encodedQueryName}`),
+      axios.get(`https://munch.dh.gu.se/api/panel/?title=${encodedQueryName}&depth=2`),
       axios.get(`https://munch.dh.gu.se/api/annotation-categories/?panel=${encodedQueryName}`),
       axios.get(`https://munch.dh.gu.se/api/tags/?panel=${encodedQueryName}`),
       axios.get(`https://munch.dh.gu.se/api/years/?panel=${encodedQueryName}`)
     ]);
-    const painting = panel.data.results[0];
+    const painting = panel.data.results[0] || {};
+    const formatDimensions = (width, height) => {
+      if (!width || !height) {
+        return '';
+      }
+
+      return `${Number(width)} cm x ${Number(height)} cm`;
+    };
+    const artist = painting.artist?.name || '';
+    const dimensions = formatDimensions(painting.width, painting.height);
+    const techniques = (painting.techniques || []).map(technique => technique.name).join(', ');
+    const materials = (painting.materials || []).map(material => material.name).join(', ');
     const yearFilters = years.data.results
       .map(year => `<button class="filter-button" type="button" data-filter-value="${year.id}">${year.year}</button>`)
       .join('');
@@ -214,9 +225,13 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       .map(tag => `<button class="filter-button" type="button" data-filter-value="${tag.id}">${tag.text}</button>`)
       .join('');
     const modifiedHtml = htmlData
-      .replace('PLACEHOLDER_TITLE', painting.title)
-      .replace('PLACEHOLDER_ARTIST', painting.artist)
-      .replace('PLACEHOLDER_DESCRIPTION', painting.description)
+      .replace('PLACEHOLDER_TITLE', painting.title || '')
+      .replace('PLACEHOLDER_ARTIST', artist)
+      .replace('PLACEHOLDER_YEAR', painting.creation_year || '')
+      .replace('PLACEHOLDER_DIMENSIONS', dimensions)
+      .replace('PLACEHOLDER_TECHNIQUE', techniques)
+      .replace('PLACEHOLDER_SUPPORT', materials)
+      .replace('PLACEHOLDER_DESCRIPTION', painting.description || '')
       .replace('PLACEHOLDER_YEAR_FILTERS', yearFilters)
       .replace('PLACEHOLDER_CATEGORY_FILTERS', categoryFilters)
       .replace('PLACEHOLDER_TAG_FILTERS', tagFilters);

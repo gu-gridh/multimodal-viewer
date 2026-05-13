@@ -25,7 +25,7 @@ Sample URLs for testing:
 Sophia: http://localhost:8095/viewer/?q=120-19c/orthophoto   
 SHFA: http://localhost:8097/viewer/?q=Tanum_1_1-2019_06_13/orthophoto  
 Etruscan: http://localhost:8094/viewer/?q=2683/image  
-Munch: http://localhost:8098/viewer/?q=115-01/photo //Work in progress
+Munch: http://localhost:8098/viewer/?q=solen/photo 
 
 ## Installation
 

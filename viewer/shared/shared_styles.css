@@ -153,7 +153,7 @@ body {
 
 .annotate-button {
     pointer-events: auto;
-    background: url(https://data.dh.gu.se/ui-icons/pen_white.png);
+    background: url(https://data.dh.gu.se/ui-icons/pen_white.svg);
     background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
@@ -163,7 +163,7 @@ body {
 
 .polygon-annotate-button {
     pointer-events: auto;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpolygon points='7,9 22,6 29,18 20,29 8,24' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3Ccircle cx='7' cy='9' r='2' fill='white'/%3E%3Ccircle cx='22' cy='6' r='2' fill='white'/%3E%3Ccircle cx='29' cy='18' r='2' fill='white'/%3E%3Ccircle cx='20' cy='29' r='2' fill='white'/%3E%3Ccircle cx='8' cy='24' r='2' fill='white'/%3E%3C/svg%3E");
+    background-image: url(https://data.dh.gu.se/ui-icons/polygon_white.svg);
     background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;

@@ -56,7 +56,12 @@
   "shfa-site-link": "Se fornlämingen i SHFA-arkivet",
   "translation-ai": "Översatt med AI",
   "romanisation-ai": "Romaniserad med AI",
-    "plain": "Enkel",
+  "plain": "Enkel",
   "pointcloud-menu-instructions": "<b>Menyknapp.</b> Menyknappen visas i helskärmsläge och på stora skärmar. Klicka på den för att få tillgång till fler verktyg.",
-  "epidoc": "Epidoc"
+  "epidoc": "Epidoc",
+  "annotate": "Annotate",
+  "guide-annotate-instructions": "<b>Annotate.</b> Annotate the image by clicking and dragging a rectangle around the desired area.",
+  "annotate-instructions": "Click-and-drag to mark <br> the section you wish to annotate.",
+  "guide-annotate-instructions-polygon": "<b>Polygon annotation.</b> Annotate the image by clicking to place polygon points. Double-click to finish the polygon.",
+  "annotate-instructions-polygon": "Click to place polygon points. <br> Double-click to finish the polygon."
 }

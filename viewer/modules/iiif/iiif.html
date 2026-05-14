@@ -205,12 +205,13 @@
                 document.getElementById('4').textContent = i18next.t('tools');
                 document.getElementById('5').textContent = i18next.t('close');
                 document.getElementById('6').innerHTML = i18next.t('help-text-iiif');
-                document.getElementById('7').innerHTML = i18next.t('annotate-instructions');
+                document.getElementById('7').innerHTML = i18next.t('guide-annotate-instructions');
                 document.getElementById('8').innerHTML = i18next.t('satisfiedwithselection');
                 document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
                 document.getElementById('11').innerHTML = i18next.t('createdwith');
+                 document.getElementById('12').innerHTML = i18next.t('guide-annotate-instructions-polygon');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
-                document.getElementById('saveNo').innerHTML = i18next.t('redoselection');
+                document.getElementById('saveNo').innerHTML = i18next.t('discardselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
                 setAnnotationInstructions(currentAnnotationTool);
                 updatePageInfo();
@@ -221,7 +222,7 @@
             currentAnnotationTool = tool;
             const translationKey = tool === 'polygon'
                 ? 'annotate-instructions-polygon'
-                : 'annotate-instructions-2';
+                : 'annotate-instructions';
             document.getElementById('9').innerHTML = i18next.t(translationKey);
         }
 
@@ -756,8 +757,16 @@
                     <div class="guide-instructions-item annotate-option"
                         style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
                         <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.png)"></div>
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/pen_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="7">
+                        </div>
+                    </div>
+
+                        <div class="guide-instructions-item annotate-option"
+                        style="display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/polygon_white.svg)"></div>
+                        <div class="guide-instructions-item-label" id="12">
                         </div>
                     </div>
 

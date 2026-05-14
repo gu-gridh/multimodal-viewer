@@ -13,6 +13,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     min-height: 100%;
+    min-width:300px;
     overflow: auto;
     padding: clamp(36px, 6.8vw, 72px) clamp(36px, 6.8vw, 72px) !important;
 }
@@ -100,25 +101,28 @@ a.database-link:visited {
 
 .metadata-copy {
     max-width: 880px;
-    margin: 20px 0 0;
-    font-size: 1.1rem;
+    margin: 10px 0 0;
+    font-size: 1.0rem;
     font-weight: 400;
     line-height: 1.12;
+    padding-bottom:25px;
+    border-width: 0 0 1px 0;
+    border-style: dotted;
 }
 
 .filtering h2 {
-    margin: 0 0 16px;
+    margin: 0 0 10px;
     font-size: clamp(1.5rem, 3.2vw, 10rem);
     font-weight: 500;
     line-height: 1.15;
 }
 
 .filter-group {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .filter-group h3 {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     font-size: clamp(1.2rem, 1.5vw, 1.2rem);
     font-weight: 500;
     line-height: 1;
@@ -140,7 +144,7 @@ a.database-link:visited {
     color: #000;
     cursor: pointer;
     display: inline-flex;
-    font-size: clamp(1.0rem, 2.15vw, 2rem);
+    font-size: clamp(0.95rem, 2.0vw, 2rem);
     font-weight: 500;
     justify-content: center;
     line-height: 1;

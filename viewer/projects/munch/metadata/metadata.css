@@ -105,12 +105,13 @@ a.database-link:visited {
     font-size: 1.0rem;
     font-weight: 400;
     line-height: 1.12;
-    padding-bottom:25px;
-    border-width: 0 0 0px 0;
-    border-style: dotted;
+    padding-bottom:20px;
+
 }
 
 .filtering {
+    margin-left:-10px;
+    width:calc(100% - 20px);
    padding:0px 20px 5px 20px;
    border-radius:12px;
  background: rgb(245,245,245);

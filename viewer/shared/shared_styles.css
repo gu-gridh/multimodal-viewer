@@ -153,8 +153,8 @@ body {
 
 .annotate-button {
     pointer-events: auto;
-    background: url(https://data.dh.gu.se/ui-icons/pen_white.svg);
-    background-size: 80%;
+    background: url(https://data.dh.gu.se/ui-icons/annotate_white.svg);
+    background-size: 70%;
     background-repeat: no-repeat;
     background-position: center;
     bottom: 100px;

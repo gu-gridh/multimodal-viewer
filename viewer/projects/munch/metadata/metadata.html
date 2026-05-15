@@ -82,7 +82,7 @@
             </div>
 
             <div class="annotation-detail-row">
-                <div class="annotation-detail-label">Tag</div>
+                <div class="annotation-detail-label">Tags</div>
                 <div class="annotation-detail-value" id="annotation-tag"></div>
             </div>
             <div class="annotation-detail-row">
@@ -102,6 +102,28 @@
             return value || '—';
         }
 
+        function renderPills(elementId, items, field) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '';
+
+            if (!Array.isArray(items) || !items.length) {
+                element.textContent = '—';
+                return;
+            }
+
+            items.forEach((item) => {
+                const value = item[field];
+                if (!value) {
+                    return;
+                }
+
+                const pill = document.createElement('span');
+                pill.className = 'annotation-pill';
+                pill.textContent = value;
+                element.appendChild(pill);
+            });
+        }
+
         function showFilters() {
             filteringSection.style.display = '';
             annotationDetail.style.display = 'none';
@@ -110,7 +132,8 @@
         function showAnnotationDetail(annotation) {
             document.getElementById('annotation-title').textContent = getText(annotation.title);
             document.getElementById('annotation-alt-title').textContent = getText(annotation.alt_title);
-            document.getElementById('annotation-type').textContent = getText(annotation.shape_type);
+            renderPills('annotation-type', annotation.category_detail || annotation.category, 'name');
+            renderPills('annotation-tag', annotation.tags_detail || annotation.tags, 'text');
             document.getElementById('annotation-notes').textContent = getText(annotation.notes);
             document.getElementById('annotation-edit-button').href =
                 `https://munch.dh.gu.se/admin/munch/visualannotation/${annotation.id}/change/`;

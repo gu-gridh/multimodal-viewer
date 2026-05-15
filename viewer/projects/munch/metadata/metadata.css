@@ -228,6 +228,14 @@ a.database-link:visited {
     line-height: 1.15;
 }
 
+.annotation-pill {
+    background: rgb(240,240,240);
+    border-radius: 4px;
+    display: inline-flex;
+    margin: 0 6px 6px 0;
+    padding: 3px 8px;
+}
+
 .annotation-edit-button {
     appearance: none;
     background: #000;

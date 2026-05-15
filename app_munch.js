@@ -145,7 +145,7 @@ app.get('/viewer/modules/iiif/visual-annotation-detail', async (req, res) => {
   }
 
   try {
-    const { data } = await axios.get(`https://munch.dh.gu.se/api/visual-annotations/?id=${encodeURIComponent(id)}`);
+    const { data } = await axios.get(`https://munch.dh.gu.se/api/visual-annotations/?id=${encodeURIComponent(id)}&depth=2`);
     res.json(data.results?.[0] || null);
   } catch (error) {
     console.error(error);

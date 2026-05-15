@@ -124,6 +124,8 @@ body {
 
 #coordinate-instructions {
 font-family: "Oswald", sans-serif !important;
+margin-top:-2px;
+font-weight:300;
 }
 
 .coordinate-toggle {

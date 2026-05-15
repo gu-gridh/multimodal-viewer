@@ -75,7 +75,7 @@
             }
         }
 
-         /* Small screen adaption */
+        /* Small screen adaption */
         @media screen and (max-width: 950px) {
             #main-content {
                 height: calc(100% - 0px) !important;
@@ -161,6 +161,11 @@
                 ['photo', 'topography'].includes(activeLeftViewer)
             ) {
                 document.getElementById('left-Iframe').contentWindow.postMessage(event.data, '*');
+            } else if (event.data.type === 'annotationClick' || event.data.type === 'annotationLoaded') {
+                document.getElementById('right-iframe').contentWindow.postMessage({
+                    type: 'annotationSelectionChange',
+                    value: event.data.value
+                }, '*');
             }
         }, false);
 

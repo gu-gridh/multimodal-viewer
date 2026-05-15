@@ -189,6 +189,62 @@ a.database-link:visited {
     outline-offset: 2px;
 }
 
+
+.annotation-detail {
+    display: none;
+    position: relative;
+    margin-left: -10px;
+    width: calc(100% - 20px);
+    padding: 0px 20px 20px 20px;
+    border-radius: 12px;
+    background: rgb(245, 245, 245);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
+
+.annotation-detail h2 {
+    padding: 15px 0 5px 0px;
+    font-size: 20px;
+    font-weight: 380;
+    line-height: 1.2;
+}
+
+.annotation-detail-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.annotation-detail-label {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0px;
+}
+
+.annotation-detail-value {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.15;
+}
+
+.annotation-edit-button {
+    appearance: none;
+    background: #000;
+    border-radius: 3px;
+    color: #fff !important;
+    display: inline-flex;
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    font-size: clamp(0.9rem, 2.0vw, 2rem);
+    font-weight: 500;
+    line-height: 1;
+    padding: 6px 10px;
+    text-decoration: none;
+}
+
 @media (max-width: 620px) {
     .container {
         padding: 36px 26px;

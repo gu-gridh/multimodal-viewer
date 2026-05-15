@@ -22,52 +22,118 @@
                 <div class="metadata">
                     <div class="metadata-item">Year:<span>PLACEHOLDER_YEAR</span> </div>
                     <div class="metadata-item">Dimensions: <span>PLACEHOLDER_DIMENSIONS</span></div>
+                </div>
+                <div class="metadata">
+                    <!-- The technique -->
+                    <div class="metadata-item">Technique: <span>PLACEHOLDER_TECHNIQUE</span></div>
+                    <!-- The material -->
+                    <div class="metadata-item">Support: <span>PLACEHOLDER_SUPPORT</span></div>
+                </div>
+            </div>
+            <a class="database-link" href="https://munch.dh.gu.se/admin/" target="_blank" rel="noopener">Database</a>
+        </header>
+
+        <p class="metadata-copy">
+            PLACEHOLDER_DESCRIPTION
+        </p>
+
+        <section class="filtering" aria-labelledby="filtering-title">
+            <h2 id="filtering-title">Filtering</h2>
+            <div class="filter-box">
+                <div class="filter-group" data-filter-group="annotation_year">
+                    <h3>Year</h3>
+                    <div class="filter-options" role="list" aria-label="Year filters">
+                        <button class="filter-button active" type="button" data-filter-value="all">All</button>
+                        PLACEHOLDER_YEAR_FILTERS
                     </div>
-        <div class="metadata">
-            <!-- The technique -->
-            <div class="metadata-item">Technique: <span>PLACEHOLDER_TECHNIQUE</span></div>
-            <!-- The material -->
-            <div class="metadata-item">Support: <span>PLACEHOLDER_SUPPORT</span></div>       
-            </div>
-    </div>
-    <a class="database-link" href="https://munch.dh.gu.se/admin/" target="_blank" rel="noopener" aria-label="Open database">Database</a>
-    </header>
+                </div>
 
-    <p class="metadata-copy">
-        PLACEHOLDER_DESCRIPTION
-    </p>
+                <div class="filter-group" data-filter-group="category">
+                    <h3>Category</h3>
+                    <div class="filter-options" role="list" aria-label="Category filters">
+                        <button class="filter-button active" type="button" data-filter-value="all">All</button>
+                        PLACEHOLDER_CATEGORY_FILTERS
+                    </div>
+                </div>
 
-    <section class="filtering" aria-labelledby="filtering-title">
-        <h2 id="filtering-title">Filtering</h2>
-<div class="filter-box">
-        <div class="filter-group" data-filter-group="annotation_year">
-            <h3>Year</h3>
-            <div class="filter-options" role="list" aria-label="Year filters">
-                <button class="filter-button active" type="button" data-filter-value="all">All</button>
-                PLACEHOLDER_YEAR_FILTERS
+                <div class="filter-group" data-filter-group="tag">
+                    <h3>Tag</h3>
+                    <div class="filter-options" role="list" aria-label="Tag filters">
+                        <button class="filter-button active" type="button" data-filter-value="all">All</button>
+                        PLACEHOLDER_TAG_FILTERS
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="filter-group" data-filter-group="category">
-            <h3>Category</h3>
-            <div class="filter-options" role="list" aria-label="Category filters">
-                <button class="filter-button active" type="button" data-filter-value="all">All</button>
-                PLACEHOLDER_CATEGORY_FILTERS
+        <section class="annotation-detail" id="annotation-detail">
+            <h2 id="annotation-detail-title">Visual Annotation</h2>
+            <div class="annotation-detail-row">
+                <div class="annotation-detail-label">Title</div>
+                <div class="annotation-detail-value" id="annotation-title"></div>
             </div>
-        </div>
-
-        <div class="filter-group" data-filter-group="tag">
-            <h3>Tag</h3>
-            <div class="filter-options" role="list" aria-label="Tag filters">
-                <button class="filter-button active" type="button" data-filter-value="all">All</button>
-                PLACEHOLDER_TAG_FILTERS
+            <div class="annotation-detail-row">
+                <div class="annotation-detail-label">Alternative annotation</div>
+                <div class="annotation-detail-value" id="annotation-alt-title"></div>
             </div>
-        </div>
-        </div>
-    </section>
+            <div class="annotation-detail-row">
+                <div class="annotation-detail-label">Type of annotation</div>
+                <div class="annotation-detail-value" id="annotation-type"></div>
+            </div>
+            <div class="annotation-detail-row">
+                <div class="annotation-detail-label">Notes</div>
+                <div class="annotation-detail-value" id="annotation-notes"></div>
+            </div>
+            <a class="annotation-edit-button" id="annotation-edit-button" href="#" target="_blank"
+                rel="noopener">Edit</a>
+        </section>
     </div>
 
     <script>
+        const filteringSection = document.querySelector('.filtering');
+        const annotationDetail = document.getElementById('annotation-detail');
+
+        function getText(value) {
+            return value || '—';
+        }
+
+        function showFilters() {
+            filteringSection.style.display = '';
+            annotationDetail.style.display = 'none';
+        }
+
+        function showAnnotationDetail(annotation) {
+            document.getElementById('annotation-title').textContent = getText(annotation.title);
+            document.getElementById('annotation-alt-title').textContent = getText(annotation.alt_title);
+            document.getElementById('annotation-type').textContent = getText(annotation.shape_type);
+            document.getElementById('annotation-notes').textContent = getText(annotation.notes);
+            document.getElementById('annotation-edit-button').href =
+                `https://munch.dh.gu.se/admin/munch/visualannotation/${annotation.id}/change/`;
+            filteringSection.style.display = 'none';
+            annotationDetail.style.display = 'block';
+        }
+
+        async function loadAnnotationDetail(annotationId) {
+            if (!annotationId) {
+                showFilters();
+                return;
+            }
+
+            try {
+                const response = await fetch(`/viewer/modules/iiif/visual-annotation-detail?id=${encodeURIComponent(annotationId)}`);
+                const annotation = await response.json();
+
+                if (annotation) {
+                    showAnnotationDetail(annotation);
+                } else {
+                    showFilters();
+                }
+            } catch (error) {
+                console.error(error);
+                showFilters();
+            }
+        }
+
         function getActiveAnnotationFilters() {
             const filters = {};
             document.querySelectorAll('.filter-group').forEach((group) => {
@@ -112,6 +178,12 @@
 
                 notifyAnnotationFiltersChanged();
             });
+        });
+
+        window.addEventListener('message', function (event) {
+            if (event.data.type === 'annotationSelectionChange') {
+                loadAnnotationDetail(event.data.value);
+            }
         });
     </script>
 </body>

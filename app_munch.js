@@ -137,6 +137,22 @@ app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
   }
 });
 
+app.get('/viewer/modules/iiif/visual-annotation-detail', async (req, res) => {
+  const id = req.query.id;
+
+  if (!id) {
+    return res.status(400).json({ error: 'Annotation ID not foundd' });
+  }
+
+  try {
+    const { data } = await axios.get(`https://munch.dh.gu.se/api/visual-annotations/?id=${encodeURIComponent(id)}`);
+    res.json(data.results?.[0] || null);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error loading annotation details' });
+  }
+});
+
 app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';

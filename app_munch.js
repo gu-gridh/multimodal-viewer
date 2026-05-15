@@ -121,7 +121,7 @@ app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
 
   try {
     const params = new URLSearchParams();
-    params.set('title', title);
+    params.set('panel', title);
     params.set('category', req.query.category || 'all');
     params.set('tags', req.query.tag || req.query.tags || 'all');
 

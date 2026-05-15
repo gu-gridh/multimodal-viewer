@@ -437,7 +437,7 @@
                 disableEditor: true,
                 formatters: [
                     function (annotation) {
-                        const color = annotation?.body?.category?.color;
+                        const color = annotation?.body?.category?.color || annotation?.body?.categories?.[0]?.color;
                         return color ? {
                             style: `stroke:${color}; fill:transparent; stroke-width:2;`
                         } : null;

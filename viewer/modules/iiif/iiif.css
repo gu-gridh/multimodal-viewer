@@ -107,7 +107,7 @@ body {
 
 .coordinate-row {
 	display: none;
-	margin: 0 auto 8px;
+	margin: 0 auto 12px;
 	padding: 6px 12px 6px 12px;
 	border-radius: 4px;
 	background: rgba(0, 0, 0, 0.78);

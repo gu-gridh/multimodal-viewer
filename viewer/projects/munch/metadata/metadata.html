@@ -71,8 +71,11 @@
         function getActiveAnnotationFilters() {
             const filters = {};
             document.querySelectorAll('.filter-group').forEach((group) => {
-                const activeButton = group.querySelector('.filter-button.active');
-                filters[group.dataset.filterGroup] = activeButton?.dataset.filterValue || 'all';
+                const activeButtons = Array.from(group.querySelectorAll('.filter-button.active'));
+                const values = activeButtons
+                    .map((button) => button.dataset.filterValue)
+                    .filter((value) => value && value !== 'all');
+                filters[group.dataset.filterGroup] = values.length ? values.join(',') : 'all';
             });
             return filters;
         }
@@ -91,9 +94,21 @@
                     return;
                 }
 
-                group.querySelectorAll('.filter-button').forEach((filterButton) => {
-                    filterButton.classList.toggle('active', filterButton === button);
-                });
+                const isAllButton = button.dataset.filterValue === 'all';
+                const allowsMultiple = ['annotation_year', 'category', 'tag'].includes(group.dataset.filterGroup);
+
+                if (isAllButton || !allowsMultiple) {
+                    group.querySelectorAll('.filter-button').forEach((filterButton) => {
+                        filterButton.classList.toggle('active', filterButton === button);
+                    });
+                } else {
+                    button.classList.toggle('active');
+                    group.querySelector('.filter-button[data-filter-value="all"]')?.classList.remove('active');
+
+                    if (!group.querySelector('.filter-button.active')) {
+                        group.querySelector('.filter-button[data-filter-value="all"]')?.classList.add('active');
+                    }
+                }
 
                 notifyAnnotationFiltersChanged();
             });

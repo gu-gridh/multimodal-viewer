@@ -480,6 +480,7 @@
                 });
             }
 
+            //<---Metadata panel filter selections-->
             function getAnnotationUrl(filters) {
                 if (!displayInscriptions || !annotationPath || isPlaceholder(annotationPath)) {
                     return '';
@@ -488,7 +489,7 @@
                 const url = new URL(annotationPath, window.location.origin);
                 Object.entries(filters || {}).forEach(([key, value]) => {
                     if (value && value !== 'all') {
-                        url.searchParams.set(key, value);
+                        url.searchParams.set(key === 'tag' ? 'tags' : key, value);
                     }
                 });
 
@@ -505,6 +506,7 @@
 
                 return anno.loadAnnotations(annotationUrl);
             }
+            //<!---Metadata panel filter selections-->
 
             const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
             if (prevBaseQuery !== currentBaseQuery) {
@@ -593,6 +595,7 @@
                 });
             }
 
+            //create Polygon annotation
             function copyPolygonSvg(annotation) {
                 const selectorValue = annotation?.target?.selector?.value || '';
                 const polygonMatch = selectorValue.match(/<polygon[^>]*points="([^"]+)"/i);

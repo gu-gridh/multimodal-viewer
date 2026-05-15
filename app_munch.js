@@ -141,7 +141,7 @@ app.get('/viewer/modules/iiif/visual-annotation-detail', async (req, res) => {
   const id = req.query.id;
 
   if (!id) {
-    return res.status(400).json({ error: 'Annotation ID not foundd' });
+    return res.status(400).json({ error: 'Annotation ID not found' });
   }
 
   try {

@@ -693,7 +693,6 @@
             //deselect
             anno.on('cancelSelected', function () {
                 currentAnnotationId = null;
-                window.parent.postMessage({ type: 'annotationClick', value: null }, "*");
             });
 
             let isDragging = false;

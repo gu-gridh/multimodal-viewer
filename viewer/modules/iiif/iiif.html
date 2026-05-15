@@ -79,7 +79,7 @@
 
     <div class="interface-area">
 
-        <div id="coordinate-row" class="coordinate-row">Hover over image</div>
+        <div id="coordinate-row" class="coordinate-row"><div id="coordinate-instructions">Hover over image</div></div>
 
         <!-- Toolbar -->
         <div class="toolbar-bottom">
@@ -106,7 +106,7 @@
                 onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Click to start polygon annotation."></div>
 
-            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Show coordinates"></div>
+            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"></div>
 
             <a id="full-page1" class="full-screen-option" title="Toggle full screen" href="#full-page"
                 onclick="togglePane()">
@@ -204,7 +204,7 @@
                 const x = clamp((imagePoint.x / imageSize.x) * coordinateWidthCm, coordinateWidthCm);
                 const y = clamp(((imageSize.y - imagePoint.y) / imageSize.y) * coordinateHeightCm, coordinateHeightCm);
 
-                row.textContent = `${x.toFixed(0)}cm ${y.toFixed(0)}cm`;
+                row.textContent = `${x.toFixed(0)} cm  ||  ${y.toFixed(0)} cm`;
             });
         }
 

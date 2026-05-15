@@ -108,7 +108,7 @@ body {
 .coordinate-row {
 	display: none;
 	margin: 0 auto 8px;
-	padding: 4px 14px;
+	padding: 6px 12px 6px 12px;
 	border-radius: 4px;
 	background: rgba(0, 0, 0, 0.78);
 	color: white;
@@ -116,6 +116,14 @@ body {
 	line-height: 1.2;
 	text-align: center;
 	pointer-events: none;
+	font-weight:200;
+	word-spacing: 2px;
+	
+	font-family: monospace;
+}
+
+#coordinate-instructions {
+font-family: "Oswald", sans-serif !important;
 }
 
 .coordinate-toggle {
@@ -126,6 +134,7 @@ body {
 	background-size: 80%;
 	background-repeat: no-repeat;
 	background-position: center;
+	margin-top:6px;
 }
 
 .openseadragon-canvas {

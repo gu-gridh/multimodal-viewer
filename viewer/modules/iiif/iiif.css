@@ -23,13 +23,11 @@ body {
 	height: 80px;
 	margin-top: 10px;
 	margin-right: 10px;
-
 }
 
 #CenterNav {
 	margin: auto;
 }
-
 
 .full-page {
 	background: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
@@ -85,7 +83,6 @@ body {
 	height: 30px;
 	cursor: pointer;
 	overflow: hidden;
-
 }
 
 .NavButton {
@@ -103,51 +100,71 @@ body {
 	-webkit-user-select: none;
 }
 
-
-
 .NavButton:hover {
 	opacity: 1;
 	cursor: pointer;
 }
-.openseadragon-canvas{
-	display:flex!important;
-	flex-direction: row!important;
-	justify-content:center!important;
+
+.coordinate-row {
+	display: none;
+	margin: 0 auto 8px;
+	padding: 4px 14px;
+	border-radius: 4px;
+	background: rgba(0, 0, 0, 0.78);
+	color: white;
+	font-size: 15px;
+	line-height: 1.2;
+	text-align: center;
+	pointer-events: none;
 }
 
-.referencestrip{
-	position:absolute!important;
-	bottom:100px!important;
-	width:800px!important;
-	max-width:800px!important;
-	overflow:hidden;
-	border-radius:8px;
-	height:100px!important;
-	margin: 0px 0px 50px!important;
-	opacity:1.0!important;
-	background-color:black!important;
-	object-fit: contain!important;
-	text-align:center!important;
+.coordinate-toggle {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	background: url(https://data.dh.gu.se/ui-icons/coordinate_white.svg);
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
-
-
-.referencestrip .img:hover{
-	opacity:0;
+.openseadragon-canvas {
+	display: flex !important;
+	flex-direction: row !important;
+	justify-content: center !important;
 }
 
-.referencestrip:Hover{
-	
-	bottom:100px!important;
+.referencestrip {
+	position: absolute !important;
+	bottom: 100px !important;
+	width: 800px !important;
+	max-width: 800px !important;
+	overflow: hidden;
+	border-radius: 8px;
+	height: 100px !important;
+	margin: 0px 0px 50px !important;
+	opacity: 1.0 !important;
+	background-color: black !important;
+	object-fit: contain !important;
+	text-align: center !important;
+}
+
+.referencestrip .img:hover {
+	opacity: 0;
+}
+
+.referencestrip:Hover {
+
+	bottom: 100px !important;
 }
 
 @media screen and (max-width: 500px) {
-#toolButtonsContainerVertical{
-display:none!important;
-}
-.toolButtonVertical{
-	display:none!important;
-}
-}
+	#toolButtonsContainerVertical {
+		display: none !important;
+	}
 
+	.toolButtonVertical {
+		display: none !important;
+	}
 
+}

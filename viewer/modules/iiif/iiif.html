@@ -79,6 +79,8 @@
 
     <div class="interface-area">
 
+        <div id="coordinate-row" class="coordinate-row">Hover over image</div>
+
         <!-- Toolbar -->
         <div class="toolbar-bottom">
             <a id="home" href="#home">
@@ -104,6 +106,7 @@
                 onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Click to start polygon annotation."></div>
 
+            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Show coordinates"></div>
 
             <a id="full-page1" class="full-screen-option" title="Toggle full screen" href="#full-page"
                 onclick="togglePane()">
@@ -152,9 +155,57 @@
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         let activeAnnotationFilters = {};
+        const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
+        const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
+        const coordinateHeightCm = Number('PLACEHOLDER_COORDINATE_HEIGHT_CM');
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');
+        }
+
+        function initializeCoordinateTool() {
+            if (!coordinateToolEnabled || !coordinateWidthCm || !coordinateHeightCm) {
+                return;
+            }
+
+            const row = document.getElementById('coordinate-row');
+            const button = document.getElementById('coordinate-toggle');
+            if (!row || !button) {
+                return;
+            }
+
+            let enabled = false;
+            button.style.display = 'flex';
+
+            function clamp(value, max) {
+                return Math.max(0, Math.min(max, value));
+            }
+
+            button.addEventListener('click', function () {
+                enabled = !enabled;
+                row.style.display = enabled ? 'block' : 'none';
+            });
+
+            viewer.canvas.addEventListener('mousemove', function (event) {
+                if (!enabled) {
+                    return;
+                }
+
+                const imageSize = viewer.world.getItemAt(0)?.getContentSize();
+                if (!imageSize) {
+                    return;
+                }
+
+                const mouse = OpenSeadragon
+                    .getMousePosition(event)
+                    .minus(OpenSeadragon.getElementPosition(viewer.canvas));
+                const viewportPoint = viewer.viewport.pointFromPixel(mouse);
+                const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
+                const x = clamp((imagePoint.x / imageSize.x) * coordinateWidthCm, coordinateWidthCm);
+                const y = clamp(((imageSize.y - imagePoint.y) / imageSize.y) * coordinateHeightCm, coordinateHeightCm);
+
+                row.textContent = `${x.toFixed(0)}cm ${y.toFixed(0)}cm`;
+            });
         }
 
         function saveViewerState(viewer) {
@@ -377,6 +428,8 @@
             viewer.addHandler("page", function (data) {
                 updatePageInfo();
             });
+
+            initializeCoordinateTool();
 
             // Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {

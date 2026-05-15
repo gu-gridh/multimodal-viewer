@@ -4,6 +4,7 @@
   "displayAnnotations": false,
   "displayIIIFAnnotations": false,
   "displayPolygonTool": true,
+  "displayCoordinateTool": true,
   "backButton": "",
   "panel": "",
   "metadata": "",

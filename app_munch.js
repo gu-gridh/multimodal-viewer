@@ -29,8 +29,15 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
   try {
     const encodedQueryName = encodeURIComponent(queryName);
-    const { data } = await axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`);
-    const images = data.results;
+    const [imagesResponse, panelResponse] = await Promise.all([
+      axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`),
+      axios.get(`https://munch.dh.gu.se/api/panel/?title=${encodedQueryName}&depth=2`).catch(() => ({ data: { results: [] } }))
+    ]);
+    const images = imagesResponse.data.results;
+    const painting = panelResponse.data.results[0] || {};
+    const coordinateWidthCm = Number(painting.width) || 0;
+    const coordinateHeightCm = Number(painting.height) || 0;
+    const displayCoordinateTool = Boolean(config.displayCoordinateTool && coordinateWidthCm && coordinateHeightCm);
 
     if (!images || images.length === 0) {
       return res.status(404).send('No data available.');
@@ -61,6 +68,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
+        .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
+        .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
+        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
         .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
 
       return res.send(updatedHtmlContent);
@@ -87,6 +97,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
+        .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
+        .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
+        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
         .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
 
       return res.send(updatedHtmlContent);

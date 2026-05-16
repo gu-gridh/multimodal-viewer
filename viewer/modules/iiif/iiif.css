@@ -117,8 +117,6 @@ body {
 	text-align: center;
 	pointer-events: none;
 	font-weight:200;
-	word-spacing: 2px;
-	
 	font-family: monospace;
 }
 
@@ -126,6 +124,7 @@ body {
 font-family: "Oswald", sans-serif !important;
 margin-top:-2px;
 font-weight:300;
+height:20px;
 }
 
 .coordinate-toggle {

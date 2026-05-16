@@ -137,5 +137,6 @@
   "romanisation-ai": "Romanised with AI",
   "plain": "Plain",
   "pointcloud-menu-instructions": "<b>Menu button.</b> The menu button appears in full screen mode and on large displays. Click it to access more tools.",
-  "epidoc": "Epidoc"
+  "epidoc": "Epidoc",
+  "coordinate-instructions": "Move cursor over the image"
 }

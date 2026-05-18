@@ -123,9 +123,6 @@ a.database-link:visited {
     font-size: clamp(1.3rem, 3.2vw, 10rem);
     font-weight: 500;
     line-height: 1.2;
-    border-width:0 0 0.5px 0;
-    border-style:solid;
-    border-color:rgb(200,200,200);
 }
 
 .filter-box {
@@ -209,9 +206,9 @@ display:block;
     position: relative;
     margin-left: -10px;
     width: calc(100% + 20px);
-   
     border-radius: 12px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    background-color:white;
 }
 
 .annotation-detail h2 {
@@ -219,7 +216,10 @@ display:block;
     font-size: 20px;
     font-weight: 380;
     line-height: 1.2;
-        border-width:0 0 0.5px 0;
+}
+
+.widget-title-space{
+    border-width:0 0 0.5px 0;
     border-style:solid;
     border-color:rgb(200,200,200);
 }

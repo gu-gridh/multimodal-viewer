@@ -106,7 +106,7 @@
                 onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Polygon annotation tool."></div>
 
-            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"></div>
+            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates" style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
 
             <a id="full-page1" class="full-screen-option" title="Toggle full screen" href="#full-page"
                 onclick="togglePane()">
@@ -261,6 +261,7 @@
                 document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
                 document.getElementById('11').innerHTML = i18next.t('createdwith');
                  document.getElementById('12').innerHTML = i18next.t('guide-annotate-instructions-polygon');
+                  document.getElementById('13').innerHTML = i18next.t('guide-coordinate-instructions');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('discardselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
@@ -823,6 +824,14 @@
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/polygon_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="12">
+                        </div>
+                    </div>
+
+                            <div class="guide-instructions-item annotate-option"
+                        style="display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/coordinate_white.svg)"></div>
+                        <div class="guide-instructions-item-label" id="13">
                         </div>
                     </div>
 

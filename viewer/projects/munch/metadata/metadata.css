@@ -111,18 +111,32 @@ a.database-link:visited {
 
 .filtering {
     margin-left:-10px;
-    width:calc(100% - 20px);
-   padding:0px 20px 5px 20px;
+    width:calc(100% + 20px);
+ 
    border-radius:12px;
  background: rgb(255,255,255);
  box-shadow: 0px 0px 20px rgba(0,0,0, 0.15);
 }
 
 .filtering h2 {
-    padding: 15px 0 5px 0px;
+    padding: 10px 0 10px 20px;
     font-size: clamp(1.3rem, 3.2vw, 10rem);
     font-weight: 500;
     line-height: 1.2;
+    border-width:0 0 0.5px 0;
+    border-style:solid;
+    border-color:rgb(200,200,200);
+}
+
+.filter-box {
+  padding:0px 20px 5px 20px;
+}
+
+.filter-title{
+width:60px;
+text-align: left;
+padding-bottom:5px;
+display:block;
 }
 
 .filter-group {
@@ -146,7 +160,7 @@ a.database-link:visited {
 .filter-button {
     appearance: none;
     align-items: center;
-    background: rgb(240,240,240);
+    background: rgb(230,230,230);
     border: 0px solid #000;
     border-radius: 3px;
     color: #000;
@@ -194,17 +208,20 @@ a.database-link:visited {
     display: none;
     position: relative;
     margin-left: -10px;
-    width: calc(100% - 20px);
-    padding: 0px 20px 20px 20px;
+    width: calc(100% + 20px);
+   
     border-radius: 12px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
 }
 
 .annotation-detail h2 {
-    padding: 15px 0 5px 0px;
+    padding: 10px 0 10px 20px;
     font-size: 20px;
     font-weight: 380;
     line-height: 1.2;
+        border-width:0 0 0.5px 0;
+    border-style:solid;
+    border-color:rgb(200,200,200);
 }
 
 .annotation-detail-row {
@@ -229,11 +246,12 @@ a.database-link:visited {
 }
 
 .annotation-pill {
-    background: rgb(240,240,240);
+    background: rgb(230,230,230);
     border-radius: 4px;
     display: inline-flex;
     margin: 0 6px 6px 0;
-    padding: 3px 8px;
+    padding: 5px 10px;
+    font-weight:400;
 }
 
 .annotation-edit-button {
@@ -243,8 +261,8 @@ a.database-link:visited {
     color: #fff !important;
     display: inline-flex;
     position: absolute;
-    right: 20px;
-    top: 18px;
+    right: 15px;
+    top: 10px;
     font-size: clamp(0.9rem, 2.0vw, 2rem);
     font-weight: 500;
     line-height: 1;

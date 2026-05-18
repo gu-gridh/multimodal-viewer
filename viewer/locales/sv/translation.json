@@ -64,5 +64,6 @@
   "annotate-instructions": "Click-and-drag to mark <br> the section you wish to annotate.",
   "guide-annotate-instructions-polygon": "<b>Polygon annotation.</b> Annotate the image by clicking to place polygon points. Double-click to finish the polygon.",
   "annotate-instructions-polygon": "Click to place polygon points. <br> Double-click to finish the polygon.",
-  "coordinate-instructions": "Move cursor over the image"
+  "coordinate-instructions": "Move cursor over the image",
+  "guide-coordinate-instructions": "<b>Coordinates toggle.</b> Move cursor over the image to display distance to lower left corner in centimetres."
 }

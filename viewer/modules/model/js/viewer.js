@@ -12,8 +12,8 @@ const options = {
 
     //lights
     background: null,
-    hemisphereLight: { skyColor: 0xffffff, groundColor: 0x444444, intensity: 1.5 },
-    directionalLight: { color: 0xffffff, intensity: 2, position: [3, 5, 4] },
+    hemisphereLight: { skyColor: 0xffffff, groundColor: 0x444444, intensity: 0.8 },
+    directionalLight: { color: 0xffffff, intensity: 1.0, position: [3, 5, 4] },
 
     //model
     modelUrl: dynamicOptions.modelUrl,

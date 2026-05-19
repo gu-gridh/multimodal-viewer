@@ -90,6 +90,7 @@ body {
 
 .wireframe {
     background-image: url(https://data.dh.gu.se/ui-icons/wireframe_white.svg);
+    background-size: 80%;
 }
 
 .wireframe-active {

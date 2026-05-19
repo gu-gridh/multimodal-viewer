@@ -7,8 +7,6 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
-const hardcodedThreejsModelUrl = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb';
-const hardcodedThreejsModelTitle = 'Three.js model';
 
 /* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/model */
 
@@ -19,14 +17,6 @@ try {
 } catch (error) {
   console.error(`Failed to load config for project ${projectName}:`, error);
   process.exit(1);
-}
-
-function escapeHtmlAttribute(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
 }
 
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
@@ -70,18 +60,33 @@ app.get('/viewer/modules/model/model.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  fs.readFile(path.join(__dirname, 'viewer', 'modules', 'model', 'model.html'), 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Internal Server Error');
+  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/object3js/?id=${queryName}&depth=2`;
+
+  try {
+    const apiResponse = await axios.get(apiUrl);
+    const modelData = apiResponse.data.results?.[0];
+
+    if (!modelData?.url_public) {
+      return res.status(404).send('No 3D model');
     }
 
-    const modifiedData = data
-      .replace(/PLACEHOLDER_MODEL_URL/g, escapeHtmlAttribute(hardcodedThreejsModelUrl))
-      .replace(/PLACEHOLDER_MODEL_TITLE/g, escapeHtmlAttribute(hardcodedThreejsModelTitle));
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'model', 'model.html'), 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Internal Server Error');
+      }
 
-    res.send(modifiedData);
-  });
+      const modelTitle = modelData.title || modelData.tomb?.[0]?.name || '3D model';
+      const modifiedData = data
+        .replace(/'PLACEHOLDER_MODEL_URL'/g, JSON.stringify(modelData.url_public))
+        .replace(/'PLACEHOLDER_MODEL_TITLE'/g, JSON.stringify(modelTitle));
+
+      res.send(modifiedData);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res) => {
@@ -98,8 +103,10 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   let apiUrl;
 
-  if (viewerType === 'pointcloud' || viewerType === 'model') {
+  if (viewerType === 'pointcloud') {
     apiUrl = `${config.panel}${queryName}&depth=2`;
+  } else if (viewerType === 'model') {
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/object3js/?id=${queryName}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
   } else {
@@ -142,9 +149,13 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             : 'Unknown')
           .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
           .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.preview_image?.tomb?.description ?? '')
-          .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
-          .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
           .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.[0]?.dataset?.short_name ?? '')
+
+        if (viewerType === 'pointcloud') {
+          modifiedHtml = modifiedHtml
+            .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
+            .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown');
+        }
       } else if (viewerType === 'image') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.dataset?.short_name && metadata.tomb?.name
@@ -247,8 +258,10 @@ app.get('*', async (req, res) => {
   let apiUrl;
 
   //fetch the backbutton data from the appropriate API if image, pointcloud or model
-  if (viewerType === 'pointcloud' || viewerType === 'model') {
+  if (viewerType === 'pointcloud') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
+  } else if (viewerType === 'model') {
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/object3js/?id=${queryId}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
   } else {

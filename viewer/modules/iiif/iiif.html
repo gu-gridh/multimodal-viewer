@@ -97,7 +97,7 @@
                 style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"></div>
 
             <div class="annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"
+                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';"
                 onclick="resetPendingSelection(); setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Area annotation tool."></div>
 
@@ -140,6 +140,7 @@
         let isInitialLoad = true;
         let currentAnnotationTool = 'rect';
         let pendingAnnotationId = null;
+        let activeAnnotationFilters = {};
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -154,7 +155,7 @@
         const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
-        let activeAnnotationFilters = {};
+        const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
         const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
         const coordinateHeightCm = Number('PLACEHOLDER_COORDINATE_HEIGHT_CM');
@@ -533,7 +534,16 @@
                 }
 
                 const pageIndex = viewer.currentPage();
-                const imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
+                let imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
+                    if (filteredAnnotationDownloadEnabled) {
+                        const filteredDownloadUrl = new URL(imageUrl, window.location.origin);
+                        Object.entries(activeAnnotationFilters || {}).forEach(([key, value]) => {
+                            if (value && value !== 'all') {
+                                filteredDownloadUrl.searchParams.set(key === 'tag' ? 'tags' : key, value);
+                            }
+                        });
+                        imageUrl = filteredDownloadUrl.toString();
+                    }
                 const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
                 const locationId = locationIdArray[0];
                 const imgId = imgIdArray[pageIndex];
@@ -812,7 +822,7 @@
                     </div>
 
                     <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
+                        style="display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/annotate_white.svg); background-size: 90%; background-position: center;"></div>
                         <div class="guide-instructions-item-label" id="7">

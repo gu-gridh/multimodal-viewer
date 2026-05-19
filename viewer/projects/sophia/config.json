@@ -3,6 +3,8 @@
   "project": "Sophia",
   "displayAnnotations": true,
   "displayIIIFAnnotations": true,
+  "displayRectangleTool": true,
+  "downloadFilteredIIIFAnnotations": false,
   "displayPolygonTool": false,
   "backButton": "https://saintsophia.dh.gu.se",
   "panel": "https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=",

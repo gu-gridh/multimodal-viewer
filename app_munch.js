@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const sharp = require('sharp');
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
@@ -48,6 +49,11 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       'utf8'
     );
     const annotationPath = `/viewer/modules/iiif/visual-annotations?q=${encodedQueryName}`;
+    const displayIIIFAnnotations = Boolean(config.displayIIIFAnnotations);
+    const filteredDownloadEnabled = Boolean(config.downloadFilteredIIIFAnnotations);
+    const annotationDisplay = displayIIIFAnnotations ? 'flex' : 'none';
+    const rectangleDisplay = config.displayRectangleTool ? 'flex' : 'none';
+    const polygonDisplay = config.displayPolygonTool ? 'flex' : 'none';
 
     if (queryType === 'iiif' || queryType === 'photo') {
       const photo = images.find(image => image.image_type === 'orthophoto');
@@ -57,15 +63,20 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       }
 
       const tileSource = { type: 'image', url: photo.file };
+      const downloadSources = filteredDownloadEnabled
+        ? [`/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=photo&page=0`]
+        : [photo.file];
 
       const updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSource))
-        .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify([]))
+        .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, true)
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, 'flex')
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, annotationDisplay)
+        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
+        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, polygonDisplay)
+        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
@@ -86,15 +97,22 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       }
 
       const topographyTileSources = sortedTopography.map(topography => ({ type: 'image', url: topography.file }));
+      const topographyDownloadSources = filteredDownloadEnabled
+        ? sortedTopography.map((topography, index) =>
+          `/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=topography&page=${index}`
+        )
+        : sortedTopography.map(topography => topography.file);
 
       const updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
-        .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify([]))
+        .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyDownloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, true)
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, 'flex')
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, annotationDisplay)
+        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
+        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, polygonDisplay)
+        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
@@ -134,6 +152,71 @@ app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not load annotations' });
+  }
+});
+
+app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
+  const title = req.query.q;
+  const queryType = req.query.type === 'topography' ? 'topography' : 'photo';
+  const pageIndex = Number.parseInt(req.query.page, 10) || 0;
+
+  if (!title) {
+    return res.status(400).json({ error: 'parameter not found' });
+  }
+
+  try {
+    const encodedTitle = encodeURIComponent(title);
+    const annotationParams = new URLSearchParams();
+    annotationParams.set('panel', title);
+    annotationParams.set('category', req.query.category || 'all');
+    annotationParams.set('tags', req.query.tags || req.query.tag || 'all');
+
+    if (req.query.annotation_year && req.query.annotation_year !== 'all') {
+      annotationParams.set('annotation_year', req.query.annotation_year);
+    }
+
+    const [imagesResponse, annotationsResponse] = await Promise.all([
+      axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedTitle}`),
+      axios.get(`https://munch.dh.gu.se/api/annotation/?${annotationParams.toString()}`)
+    ]);
+    const images = imagesResponse.data.results || [];
+    const image = queryType === 'topography'
+      ? images
+        .filter(item => item.image_type === 'topographical')
+        .sort((a, b) => a.sort_order - b.sort_order)[pageIndex]
+      : images.find(item => item.image_type === 'orthophoto');
+
+    if (!image?.file) {
+      return res.status(404).json({ error: 'image not found' });
+    }
+
+    const imageResponse = await axios.get(image.file, { responseType: 'arraybuffer' });
+    let sharpImage = sharp(Buffer.from(imageResponse.data)).rotate();
+    const annotations = annotationsResponse.data.results || [];
+    const metadata = await sharpImage.metadata();
+
+    if (metadata.width && metadata.height && annotations.length) {
+      const strokeWidth = Math.max(4, Math.round(Math.max(metadata.width, metadata.height) / 1000));
+      const shapes = annotations.map(annotation => {
+        const points = annotation.target.selector.value.match(/points="([^"]+)"/)?.[1];
+        const color = annotation.body.categories[0].color;
+        return points
+          ? `<polygon points="${points}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`
+          : '';
+      }).join('');
+      const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${metadata.width} ${metadata.height}">${shapes}</svg>`;
+      sharpImage = sharpImage.composite([{ input: Buffer.from(overlay), top: 0, left: 0 }]);
+    }
+
+    const output = await sharpImage.jpeg({ quality: 95 }).toBuffer();
+    const safeTitle = title.replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '') || 'munch_image';
+
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${safeTitle}_${queryType}_${pageIndex + 1}_annotated.jpg"`);
+    return res.send(output);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Unable to download' });
   }
 });
 

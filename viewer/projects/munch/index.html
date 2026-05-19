@@ -143,6 +143,7 @@
 
     <script>
         let activeLeftViewer = 'photo';
+        let activeAnnotationFilters = {};
 
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -156,11 +157,11 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
-            } else if (
-                event.data.type === 'annotationFiltersChange' &&
-                ['photo', 'topography'].includes(activeLeftViewer)
-            ) {
-                document.getElementById('left-Iframe').contentWindow.postMessage(event.data, '*');
+            } else if (event.data.type === 'annotationFiltersChange') {
+                activeAnnotationFilters = event.data.filters || {};
+                sendActiveAnnotationFilters();
+            } else if (event.data.type === 'iiifViewerReady') {
+                sendActiveAnnotationFilters();
             } else if (event.data.type === 'annotationClick' || event.data.type === 'annotationLoaded') {
                 document.getElementById('right-iframe').contentWindow.postMessage({
                     type: 'annotationSelectionChange',
@@ -208,6 +209,17 @@
             }
 
             return qValue;
+        }
+
+        function sendActiveAnnotationFilters() {
+            if (!['photo', 'topography'].includes(activeLeftViewer)) {
+                return;
+            }
+
+            document.getElementById('left-Iframe').contentWindow.postMessage({
+                type: 'annotationFiltersChange',
+                filters: activeAnnotationFilters
+            }, '*');
         }
 
         function changeLeftViewer(viewerType) {

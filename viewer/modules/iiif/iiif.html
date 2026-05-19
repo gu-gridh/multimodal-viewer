@@ -141,6 +141,7 @@
         let currentAnnotationTool = 'rect';
         let pendingAnnotationId = null;
         let activeAnnotationFilters = {};
+        let annotationRequestId = 0;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -499,15 +500,23 @@
                 return url.toString();
             }
 
-            function loadCurrentAnnotations(filters = activeAnnotationFilters) {
+            async function loadCurrentAnnotations(filters = activeAnnotationFilters) {
                 activeAnnotationFilters = filters || {};
                 const annotationUrl = getAnnotationUrl(activeAnnotationFilters);
 
                 if (!annotationUrl) {
-                    return Promise.resolve([]);
+                    return [];
                 }
 
-                return anno.loadAnnotations(annotationUrl);
+                const requestId = ++annotationRequestId;
+                const response = await fetch(annotationUrl);
+                const annotations = await response.json();
+
+                if (requestId === annotationRequestId) {
+                    anno.setAnnotations(annotations);
+                }
+
+                return annotations;
             }
             //<!---Metadata panel filter selections-->
 
@@ -765,6 +774,7 @@
                     loadCurrentAnnotations(event.data.filters).catch(error => console.error(error));
                 }
             });
+            window.parent.postMessage({ type: 'iiifViewerReady' }, '*');
         }
 
         function logPosition() {

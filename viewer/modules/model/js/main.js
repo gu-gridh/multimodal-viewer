@@ -10,6 +10,7 @@ export function createViewer(opts = {}) {
         antialias = true,
         pixelRatioCap = Infinity,
         background = null,
+        fog = null,
         fov = 45,
         near = 0.1,
         far = 1000,
@@ -39,6 +40,14 @@ export function createViewer(opts = {}) {
     if (background !== null) {
         scene.background = new THREE.Color(background);
     }
+
+      if (fog) {
+    scene.fog = new THREE.Fog(
+      fog.color ?? background,
+      fog.near ?? 5,
+      fog.far ?? 20
+    );
+  }
 
     const camera = new THREE.PerspectiveCamera(
         fov,

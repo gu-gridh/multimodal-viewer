@@ -11,9 +11,13 @@ const options = {
     pixelRatioCap: Infinity,
 
     //lights
-    background: null,
+    background: 0x2d2d2d,
     hemisphereLight: { skyColor: 0xffffff, groundColor: 0x444444, intensity: 0.8 },
     directionalLight: { color: 0xffffff, intensity: 1.0, position: [3, 5, 4] },
+
+    // Scene settings
+    fog: { color: 0x2d2d2d, near: 2, far: 100 },
+    grid: true,
 
     //model
     modelUrl: dynamicOptions.modelUrl,

@@ -1,6 +1,7 @@
 import * as THREE from '/viewer/modules/pointcloud/libs/three.js/build/three.module.js';
 import { GLTFLoader } from '/viewer/modules/pointcloud/libs/three.js/loaders/GLTFLoader.js';
 import { FirstPersonControls } from './FirstPersonControls.js';
+import { OrbitControls } from './OrbitControls.js';
 
 export function createViewer(opts = {}) {
     const {
@@ -22,7 +23,6 @@ export function createViewer(opts = {}) {
         fitPadding = 1.2,
         minZoomScale = 0.15,
         maxZoomScale = 5,
-        dragRotationSpeed = 0.01,
         firstPersonMovementSpeed = 1.0,
         firstPersonLookSpeed = 0.002,
         initialRotation = [0, 0, 0],
@@ -70,12 +70,17 @@ export function createViewer(opts = {}) {
         scene.add(light);
     }
 
-    const target = new THREE.Vector3(0, 0, 0);
     const floorGrid = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
     floorGrid.material.transparent = true;
     floorGrid.material.opacity = 0.6;
     floorGrid.visible = grid;
     scene.add(floorGrid);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = false;
+    controls.autoRotate = autoRotate;
+    controls.autoRotateSpeed = autoRotateStep / (2 * Math.PI / 60 / 60);
+    const target = controls.target;
 
     let root = null;
     let modelSize = 1;
@@ -83,8 +88,6 @@ export function createViewer(opts = {}) {
     let wireframeEnabled = false;
     let gridEnabled = grid;
     let firstPersonEnabled = false;
-    let pointerDown = false;
-    let lastPointer = { x: 0, y: 0 };
     const clock = new THREE.Clock();
     const firstPersonControls = new FirstPersonControls(camera, renderer.domElement);
     firstPersonControls.enabled = false;
@@ -111,8 +114,8 @@ export function createViewer(opts = {}) {
         const delta = clock.getDelta();
         if (firstPersonEnabled) {
             firstPersonControls.update(delta);
-        } else if (autoRotateEnabled) {
-            rotateY(autoRotateStep);
+        } else {
+            controls.update();
         }
         render();
     }
@@ -142,31 +145,7 @@ export function createViewer(opts = {}) {
         camera.far = Math.max(distance * 100, 1000);
         camera.updateProjectionMatrix();
         camera.lookAt(target);
-    }
-
-    function zoomBy(scale) {
-        const offset = camera.position.clone().sub(target);
-        const nextDistance = THREE.MathUtils.clamp(
-            offset.length() * scale,
-            modelSize * minZoomScale,
-            modelSize * maxZoomScale
-        );
-
-        offset.setLength(nextDistance);
-        camera.position.copy(target).add(offset);
-        camera.lookAt(target);
-    }
-
-    function rotateY(radians) {
-        if (root) {
-            root.rotation.y += radians;
-        }
-    }
-
-    function rotateX(radians) {
-        if (root) {
-            root.rotation.x += radians;
-        }
+        controls.update();
     }
 
     function setWireframe(enabled) {
@@ -201,48 +180,6 @@ export function createViewer(opts = {}) {
         });
     }
 
-    function bindPointerControls() {
-        renderer.domElement.addEventListener('pointerdown', (event) => {
-            if (firstPersonEnabled) {
-                return;
-            }
-
-            pointerDown = true;
-            lastPointer = { x: event.clientX, y: event.clientY };
-            renderer.domElement.setPointerCapture(event.pointerId);
-        });
-
-        renderer.domElement.addEventListener('pointermove', (event) => {
-            if (firstPersonEnabled || !pointerDown || !root) {
-                return;
-            }
-
-            const dx = event.clientX - lastPointer.x;
-            const dy = event.clientY - lastPointer.y;
-            rotateY(dx * dragRotationSpeed);
-            rotateX(dy * dragRotationSpeed);
-            lastPointer = { x: event.clientX, y: event.clientY };
-        });
-
-        renderer.domElement.addEventListener('pointerup', (event) => {
-            if (firstPersonEnabled) {
-                return;
-            }
-
-            pointerDown = false;
-            renderer.domElement.releasePointerCapture(event.pointerId);
-        });
-
-        renderer.domElement.addEventListener('wheel', (event) => {
-            if (firstPersonEnabled) {
-                return;
-            }
-
-            event.preventDefault();
-            zoomBy(event.deltaY < 0 ? 0.9 : 1.1);
-        }, { passive: false });
-    }
-
     function resize() {
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
@@ -254,6 +191,14 @@ export function createViewer(opts = {}) {
         firstPersonControls.reset();
     }
 
+    function syncOrbitTargetToCamera() {
+        const direction = new THREE.Vector3();
+        camera.getWorldDirection(direction);
+
+        target.copy(camera.position).addScaledVector(direction, modelSize || 1);
+        controls.update();
+    }
+
     function setFirstPersonControls(enabled) {
         if (firstPersonEnabled === enabled) {
             return firstPersonEnabled;
@@ -261,15 +206,17 @@ export function createViewer(opts = {}) {
 
         firstPersonEnabled = enabled;
         firstPersonControls.enabled = enabled;
-        pointerDown = false;
+        controls.enabled = !enabled;
         clearFirstPersonInput();
 
         if (enabled) {
             autoRotateEnabled = false;
+            controls.autoRotate = false;
             firstPersonControls.connect(renderer.domElement);
             renderer.domElement.focus();
         } else {
             firstPersonControls.disconnect();
+            syncOrbitTargetToCamera();
         }
 
         return firstPersonEnabled;
@@ -302,6 +249,8 @@ export function createViewer(opts = {}) {
             const floorSize = floorBox.getSize(new THREE.Vector3());
             floorGrid.position.y = floorBox.min.y;
             floorGrid.scale.setScalar(Math.max(floorSize.x, floorSize.z, 10) / 10 * 1.25);
+            controls.minDistance = modelSize * minZoomScale;
+            controls.maxDistance = modelSize * maxZoomScale;
             setWireframe(wireframeEnabled);
             fitToView();
             animate();
@@ -310,7 +259,6 @@ export function createViewer(opts = {}) {
         });
     }
 
-    bindPointerControls();
     window.addEventListener('resize', resize);
     loadModel(modelUrl);
 
@@ -318,18 +266,18 @@ export function createViewer(opts = {}) {
         three: THREE,
         scene,
         camera,
+        controls,
         renderer,
         getRoot: () => root,
         fitToView,
         frameObject: fitToView,
-        zoomBy,
-        zoomIn: (scale = 0.85) => zoomBy(scale),
-        zoomOut: (scale = 1.15) => zoomBy(scale),
-        rotateY,
-        rotateLeft: rotateY,
-        rotateRight: (radians) => rotateY(-radians),
+        zoomIn: (factor = 1.01) => controls.dollyIn(factor),
+        zoomOut: (factor = 1.01) => controls.dollyOut(factor),
+        rotateLeft: (radians) => controls.rotateLeft(radians),
+        rotateRight: (radians) => controls.rotateLeft(-radians),
         toggleAuto: (enabled = !autoRotateEnabled) => {
             autoRotateEnabled = enabled;
+            controls.autoRotate = autoRotateEnabled;
             return autoRotateEnabled;
         },
         toggleWireframe: (enabled = !wireframeEnabled) => {
@@ -359,6 +307,7 @@ export function createViewer(opts = {}) {
         },
         dispose: () => {
             window.removeEventListener('resize', resize);
+            controls.dispose();
             firstPersonControls.dispose();
             renderer.dispose();
         },

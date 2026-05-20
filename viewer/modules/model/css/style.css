@@ -100,13 +100,16 @@ body {
 }
 
 .grid-toggle {
-    background-color: #ffffff !important;
-    mask: url(/viewer/shared/interface/grid.svg) center / contain no-repeat;
-    -webkit-mask: url(/viewer/shared/interface/grid.svg) center / contain no-repeat;
+    background-image: url(https://data.dh.gu.se/ui-icons/grid_white.svg);
+    background-size:80%;
+    background-position:center;
+    opacity:0.5;
+   /*  mask: url(/viewer/shared/interface/grid.svg) center / contain no-repeat;
+    -webkit-mask: url(/viewer/shared/interface/grid.svg) center / contain no-repeat; */
 }
 
 .grid-active {
-    background-color: #ffd84d !important;
+  background-image: url(https://data.dh.gu.se/ui-icons/grid_active.svg);
     opacity: 1;
 }
 

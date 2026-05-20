@@ -22,6 +22,7 @@ body {
 	justify-content: flex-start;
 	-ms-overflow-style: none;
 	scrollbar-width: none;
+	min-width:250px;
 }
 
 @media screen and (max-width: 1050) {

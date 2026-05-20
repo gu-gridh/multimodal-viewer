@@ -84,6 +84,8 @@
                 aria-label="Toggle grid"></button>
             <button id="firstPerson" class="SwitchButton first-person" title="Toggle first-person controls"
                 aria-label="Toggle first-person controls"></button>
+                 <div id="full-page1" class="NavButton full-page" style="margin-top:8px;" title="Toggle full screen"
+                aria-label="Toggle full screen" onclick="classList.toggle('full-page-active'), togglePane()"></div>
         </div>
 
         <div class="guide-button compact" title="User Guide" onclick="showModelGuide();">?</div>
@@ -146,6 +148,11 @@
             document.getElementById('guide').style.opacity = '0.0';
             document.getElementById('guide-instructions-tools').style.transform = 'scale(0.5)';
         }
+
+         function togglePane() {
+            window.parent.postMessage({ type: 'togglePane' }, '*');
+        }
+
     </script>
     <script type="module" src="/viewer/modules/model/js/viewer.js"></script>
     <script type="module" src="/viewer/modules/model/js/ui.js"></script>

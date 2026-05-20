@@ -70,7 +70,7 @@ export function createViewer(opts = {}) {
         scene.add(light);
     }
 
-    const floorGrid = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
+    const floorGrid = new THREE.GridHelper(10, 100, 0x444444, 0x222222);
     floorGrid.material.transparent = true;
     floorGrid.material.opacity = 0.6;
     floorGrid.visible = grid;
@@ -248,7 +248,7 @@ export function createViewer(opts = {}) {
             const floorBox = new THREE.Box3().setFromObject(root);
             const floorSize = floorBox.getSize(new THREE.Vector3());
             floorGrid.position.y = floorBox.min.y;
-            floorGrid.scale.setScalar(Math.max(floorSize.x, floorSize.z, 10) / 10 * 1.25);
+            floorGrid.scale.setScalar(Math.max(floorSize.x, floorSize.z, 10) / 10 * 8);
             controls.minDistance = modelSize * minZoomScale;
             controls.maxDistance = modelSize * maxZoomScale;
             setWireframe(wireframeEnabled);

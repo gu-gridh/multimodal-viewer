@@ -7,6 +7,7 @@ const ROT_STEP = THREE.MathUtils.degToRad(0.8);
 const ROT_NUDGE = ROT_STEP * 10;
 const ZOOM_IN = 1.01;
 const ZOOM_OUT = 1.01;
+const modelOptions = window.MODEL_VIEWER_OPTIONS ?? {};
 
 function hold(el, step) {
     let intervalId = null;
@@ -59,6 +60,18 @@ function hold(el, step) {
 $('fit')?.addEventListener('click', () => viewer.fitToView());
 $('ZoomIn')?.addEventListener('click', () => viewer.zoomIn(ZOOM_IN));
 $('ZoomOut')?.addEventListener('click', () => viewer.zoomOut(ZOOM_OUT));
+
+const downloadLink = $('download');
+const downloadButton = downloadLink?.querySelector('.download-button');
+const downloadUrl = modelOptions.downloadUrl;
+
+if (downloadUrl) {
+    downloadLink?.setAttribute('href', downloadUrl);
+    downloadButton?.classList.remove('deactivated');
+} else {
+    downloadLink?.removeAttribute('href');
+    downloadButton?.classList.add('deactivated');
+}
 
 $('auto')?.addEventListener('click', (event) => {
     if (viewer.getFirstPersonEnabled()) {

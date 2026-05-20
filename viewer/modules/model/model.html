@@ -87,6 +87,10 @@
         </div>
 
         <div class="guide-button compact" title="User Guide" onclick="showModelGuide();">?</div>
+
+        <a id="download" target="_self" aria-label="Download model">
+            <div class="round-button download-button compact deactivated" title="Download model"></div>
+        </a>
     </div>
 
     <div id="firstPersonControlButtons" class="control-buttons model-control-buttons"
@@ -125,7 +129,10 @@
     <script>
         window.MODEL_VIEWER_OPTIONS = {
             modelUrl: 'PLACEHOLDER_MODEL_URL',
-            title: 'PLACEHOLDER_MODEL_TITLE'
+            title: 'PLACEHOLDER_MODEL_TITLE',
+            downloadUrl: 'PLACEHOLDER_MODEL_DOWNLOAD_URL',
+            cameraPosition: 'PLACEHOLDER_CAMERA_POSITION',
+            lookAt: 'PLACEHOLDER_LOOK_AT'
         };
 
         function showModelGuide() {

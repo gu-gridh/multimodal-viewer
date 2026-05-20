@@ -13,7 +13,8 @@ export function createViewer(opts = {}) {
         fov = 45,
         near = 0.1,
         far = 1000,
-        cameraPosition = [0, 0, 1],
+        cameraPosition = null,
+        lookAt = null,
         hemisphereLight = { skyColor: 0xffffff, groundColor: 0x444444, intensity: 1.0 },
         directionalLight = { color: 0xffffff, intensity: 1.0, position: [3, 5, 4] },
         modelUrl = null,
@@ -45,7 +46,7 @@ export function createViewer(opts = {}) {
         near,
         far
     );
-    camera.position.set(...cameraPosition);
+    camera.position.set(...(cameraPosition || [0, 0, 1]));
 
     const renderer = new THREE.WebGLRenderer({ antialias });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -252,7 +253,14 @@ export function createViewer(opts = {}) {
             controls.minDistance = modelSize * minZoomScale;
             controls.maxDistance = modelSize * maxZoomScale;
             setWireframe(wireframeEnabled);
-            fitToView();
+            if (cameraPosition && lookAt) {
+                camera.position.set(...cameraPosition);
+                target.set(...lookAt);
+                camera.lookAt(target);
+                controls.update();
+            } else {
+                fitToView();
+            }
             animate();
         }, undefined, (error) => {
             console.error(error);

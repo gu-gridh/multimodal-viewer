@@ -24,7 +24,8 @@ const options = {
     fov: 45,
     near: 0.1,
     far: 1000,
-    cameraPosition: [0, 0, 1],
+    cameraPosition: dynamicOptions.cameraPosition,
+    lookAt: dynamicOptions.lookAt,
 
     autoRotate: true,
     firstPersonMovementSpeed: 3.0,

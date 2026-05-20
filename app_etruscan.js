@@ -79,7 +79,10 @@ app.get('/viewer/modules/model/model.html', async (req, res) => {
       const modelTitle = modelData.title || modelData.tomb?.[0]?.name || '3D model';
       const modifiedData = data
         .replace(/'PLACEHOLDER_MODEL_URL'/g, JSON.stringify(modelData.url_public))
-        .replace(/'PLACEHOLDER_MODEL_TITLE'/g, JSON.stringify(modelTitle));
+        .replace(/'PLACEHOLDER_MODEL_TITLE'/g, JSON.stringify(modelTitle))
+        .replace(/'PLACEHOLDER_MODEL_DOWNLOAD_URL'/g, JSON.stringify(modelData.url_download || ''))
+        .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(modelData.camera_position || null))
+        .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(modelData.look_at || null));
 
       res.send(modifiedData);
     });

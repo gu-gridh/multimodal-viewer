@@ -17,7 +17,6 @@ const options = {
 
     // Scene settings
     fog: { color: 0x2d2d2d, near: 2, far: 100 },
-    grid: true,
 
     //model
     modelUrl: dynamicOptions.modelUrl,

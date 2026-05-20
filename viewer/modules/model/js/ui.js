@@ -57,6 +57,11 @@ $('wire')?.addEventListener('click', (event) => {
     event.currentTarget.classList.toggle('wireframe-active', enabled);
 });
 
+$('grid')?.addEventListener('click', (event) => {
+    const enabled = viewer.toggleGrid();
+    event.currentTarget.classList.toggle('grid-active', enabled);
+});
+
 $('firstPerson')?.addEventListener('click', (event) => {
     const enabled = viewer.toggleFirstPerson();
     event.currentTarget.classList.toggle('first-person-active', enabled);

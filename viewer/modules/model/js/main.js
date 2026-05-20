@@ -18,6 +18,7 @@ export function createViewer(opts = {}) {
         modelUrl = null,
         autoRotate = true,
         autoRotateStep = 0.001,
+        grid = false,
         fitPadding = 1.2,
         minZoomScale = 0.15,
         maxZoomScale = 5,
@@ -70,10 +71,17 @@ export function createViewer(opts = {}) {
     }
 
     const target = new THREE.Vector3(0, 0, 0);
+    const floorGrid = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
+    floorGrid.material.transparent = true;
+    floorGrid.material.opacity = 0.6;
+    floorGrid.visible = grid;
+    scene.add(floorGrid);
+
     let root = null;
     let modelSize = 1;
     let autoRotateEnabled = autoRotate;
     let wireframeEnabled = false;
+    let gridEnabled = grid;
     let firstPersonEnabled = false;
     let pointerDown = false;
     let lastPointer = { x: 0, y: 0 };
@@ -290,6 +298,10 @@ export function createViewer(opts = {}) {
             if (recenterModel) {
                 root.position.sub(center);
             }
+            const floorBox = new THREE.Box3().setFromObject(root);
+            const floorSize = floorBox.getSize(new THREE.Vector3());
+            floorGrid.position.y = floorBox.min.y;
+            floorGrid.scale.setScalar(Math.max(floorSize.x, floorSize.z, 10) / 10 * 1.25);
             setWireframe(wireframeEnabled);
             fitToView();
             animate();
@@ -323,6 +335,11 @@ export function createViewer(opts = {}) {
         toggleWireframe: (enabled = !wireframeEnabled) => {
             setWireframe(enabled);
             return wireframeEnabled;
+        },
+        toggleGrid: (enabled = !gridEnabled) => {
+            gridEnabled = enabled;
+            floorGrid.visible = gridEnabled;
+            return gridEnabled;
         },
         toggleFirstPerson: (enabled = !firstPersonEnabled) => setFirstPersonControls(enabled),
         getFirstPersonEnabled: () => firstPersonEnabled,

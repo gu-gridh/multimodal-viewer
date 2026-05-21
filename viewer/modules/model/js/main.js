@@ -115,6 +115,13 @@ export function createViewer(opts = {}) {
         event.target.remove();
     }
 
+    function updateLoadingProgress(progress) {
+        const progressEl = document.getElementById('loader-progress');
+        if (progressEl) {
+            progressEl.textContent = progress;
+        }
+    }
+
     function render() {
         renderer.render(scene, camera);
     }
@@ -239,6 +246,7 @@ export function createViewer(opts = {}) {
         }
 
         new GLTFLoader(loadingManager).load(url, (gltf) => {
+            updateLoadingProgress('100%');
             root = gltf.scene;
             root.rotation.set(
                 THREE.MathUtils.degToRad(initialRotation[0] ?? 0),
@@ -271,7 +279,13 @@ export function createViewer(opts = {}) {
                 fitToView();
             }
             animate();
-        }, undefined, (error) => {
+        }, (event) => {
+            if (event.lengthComputable && event.total) {
+                updateLoadingProgress(`${Math.round(event.loaded / event.total * 100)}%`);
+            } else {
+                updateLoadingProgress('Loading');
+            }
+        }, (error) => {
             console.error(error);
         });
     }
@@ -288,8 +302,8 @@ export function createViewer(opts = {}) {
         getRoot: () => root,
         fitToView,
         frameObject: fitToView,
-        zoomIn: (factor = 1.01) => controls.dollyIn(factor),
-        zoomOut: (factor = 1.01) => controls.dollyOut(factor),
+        zoomIn: (factor = 1.01) => controls.dollyOut(factor),
+        zoomOut: (factor = 1.01) => controls.dollyIn(factor),
         rotateLeft: (radians) => controls.rotateLeft(radians),
         rotateRight: (radians) => controls.rotateLeft(-radians),
         toggleAuto: (enabled = !autoRotateEnabled) => {

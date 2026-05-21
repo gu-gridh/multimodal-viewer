@@ -58,8 +58,8 @@ function hold(el, step) {
 }
 
 $('fit')?.addEventListener('click', () => viewer.fitToView());
-$('ZoomIn')?.addEventListener('click', () => viewer.zoomIn(ZOOM_IN));
-$('ZoomOut')?.addEventListener('click', () => viewer.zoomOut(ZOOM_OUT));
+hold($('ZoomIn'), () => viewer.zoomIn(ZOOM_IN)).click(() => viewer.zoomIn(ZOOM_IN));
+hold($('ZoomOut'), () => viewer.zoomOut(ZOOM_OUT)).click(() => viewer.zoomOut(ZOOM_OUT));
 
 const downloadLink = $('download');
 const downloadButton = downloadLink?.querySelector('.download-button');

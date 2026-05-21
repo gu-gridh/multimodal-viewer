@@ -191,6 +191,15 @@ body {
     z-index: 0;
 }
 
+#loader-progress {
+    position: relative;
+    top: calc(50% - 10px);
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-size: 18px;
+    text-align: center;
+}
+
 #loading-screen {
     position: absolute;
     z-index: 2;

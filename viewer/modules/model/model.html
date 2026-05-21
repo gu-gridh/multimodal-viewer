@@ -45,16 +45,23 @@
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg); background-size: 80%; background-position: center;"></div>
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg); background-size: 80%; background-position: center;">
+                        </div>
                         <div class="guide-instructions-item-label"><b>Wireframe.</b> Enable wireframe rendering to see
                             the model's structure.</div>
+                    </div>
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon grid-toggle" style="opacity:1.0"></div>
+                        <div class="guide-instructions-item-label"><b>Grid.</b> Toggle grid visibility.</div>
                     </div>
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon model-guide-walk-icon"></div>
-                        <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle to first-person
-                            navigation from orbit controls.</div>
+                        <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle first-person
+                            navigation.</div>
                     </div>
+
+
 
                     <div class="guide-closer">Close</div>
                 </div>
@@ -80,11 +87,10 @@
                 aria-label="Toggle auto-rotate"></button>
             <button id="wire" class="SwitchButton wireframe" title="Toggle wireframe"
                 aria-label="Toggle wireframe"></button>
-            <button id="grid" class="SwitchButton grid-toggle" title="Toggle grid"
-                aria-label="Toggle grid"></button>
+            <button id="grid" class="SwitchButton grid-toggle" title="Toggle grid" aria-label="Toggle grid"></button>
             <button id="firstPerson" class="SwitchButton first-person" title="Toggle first-person controls"
                 aria-label="Toggle first-person controls"></button>
-                 <div id="full-page1" class="NavButton full-page" style="margin-top:8px;" title="Toggle full screen"
+            <div id="full-page1" class="NavButton full-page" style="margin-top:8px;" title="Toggle full screen"
                 aria-label="Toggle full screen" onclick="classList.toggle('full-page-active'), togglePane()"></div>
         </div>
 
@@ -150,7 +156,7 @@
             document.getElementById('guide-instructions-tools').style.transform = 'scale(0.5)';
         }
 
-         function togglePane() {
+        function togglePane() {
             window.parent.postMessage({ type: 'togglePane' }, '*');
         }
 

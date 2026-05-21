@@ -16,7 +16,7 @@ const options = {
     directionalLight: { color: 0xffffff, intensity: 1.0, position: [3, 5, 4] },
 
     // Scene settings
-    fog: { color: 0x2d2d2d, near: 2, far: 100 },
+    fog: { color: 0x2d2d2d, near: 2, far: 50 },
 
     //model
     modelUrl: dynamicOptions.modelUrl,

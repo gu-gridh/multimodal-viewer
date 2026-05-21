@@ -77,6 +77,8 @@
             </div>
         </section>
 
+        <div class="annotation-count-pill" id="annotation-count-pill"></div>
+
         <section class="annotation-detail" id="annotation-detail">
             <h2 id="annotation-title" class="widget-title-space"></h2>
             <div class="filter-box">
@@ -109,8 +111,10 @@
         const filteringSection = document.querySelector('.filtering');
         const documentList = document.getElementById('document-list');
         const documentListItems = document.getElementById('document-list-items');
+        const annotationCountPill = document.getElementById('annotation-count-pill');
         const annotationDetail = document.getElementById('annotation-detail');
         const panelTitle = new URLSearchParams(window.location.search).get('q') || '';
+        let totalAnnotationCount = null;
 
         function getText(value) {
             return value || '—';
@@ -141,8 +145,10 @@
         function showFilters() {
             filteringSection.style.display = '';
             documentList.style.display = '';
+            annotationCountPill.style.display = '';
             annotationDetail.style.display = 'none';
             loadDocuments();
+            loadAnnotationCount();
         }
 
         function showAnnotationDetail(annotation) {
@@ -155,6 +161,7 @@
                 `https://munch.dh.gu.se/admin/munch/visualannotation/${annotation.id}/change/`;
             filteringSection.style.display = 'none';
             documentList.style.display = 'none';
+            annotationCountPill.style.display = 'none';
             annotationDetail.style.display = 'block';
         }
 
@@ -193,6 +200,7 @@
 
         function notifyAnnotationFiltersChanged() {
             loadDocuments();
+            loadAnnotationCount();
             window.parent.postMessage({
                 type: 'annotationFiltersChange',
                 filters: getActiveAnnotationFilters()
@@ -231,6 +239,23 @@
             }
         }
 
+        async function loadAnnotationCount() {
+            if (!panelTitle || annotationCountPill.style.display === 'none') {
+                return;
+            }
+
+            const count = (filters = {}) => {
+                const params = new URLSearchParams({ q: panelTitle, count: '1' });
+                Object.entries(filters).forEach(([key, value]) => value !== 'all' && params.set(key, value));
+                return fetch(`/viewer/modules/iiif/visual-annotations?${params}`).then((r) => r.json()).then((data) => data.count || 0);
+            };
+            const filters = getActiveAnnotationFilters();
+            const isFiltered = Object.values(filters).some((value) => value !== 'all');
+            totalAnnotationCount ??= await count();
+            const shown = isFiltered ? await count(filters) : totalAnnotationCount;
+            annotationCountPill.textContent = `${shown} shown / ${totalAnnotationCount - shown} hidden`;
+        }
+
         document.querySelectorAll('.filter-group').forEach((group) => {
             group.addEventListener('click', (event) => {
                 const button = event.target.closest('.filter-button');
@@ -265,6 +290,7 @@
         });
 
         loadDocuments();
+        loadAnnotationCount();
     </script>
 </body>
 

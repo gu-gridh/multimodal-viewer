@@ -148,6 +148,11 @@ app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
     }
 
     const { data } = await axios.get(`https://munch.dh.gu.se/api/annotation/?${params.toString()}`);
+
+    if (req.query.count === '1') {
+      return res.json({ count: data.count || 0 });
+    }
+
     res.json(data.results || []);
   } catch (error) {
     console.error(error);

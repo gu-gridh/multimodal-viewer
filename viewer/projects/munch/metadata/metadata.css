@@ -237,6 +237,18 @@ a.database-link:visited {
     width: 22px;
 }
 
+.annotation-count-pill {
+    background: #000;
+    border-radius: 999px;
+    color: #fff;
+    display: table;
+    font-family: "Barlow Condensed", sans-serif !important;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 16px auto 0;
+    padding: 5px 12px;
+}
+
 .annotation-detail {
     display: none;
     position: relative;

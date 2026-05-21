@@ -236,6 +236,29 @@ app.get('/viewer/modules/iiif/visual-annotation-detail', async (req, res) => {
   }
 });
 
+app.get('/viewer/projects/munch/documents', async (req, res) => {
+  const title = req.query.q;
+
+  if (!title) {
+    return res.status(400).json({ error: 'query parameter missing' });
+  }
+
+  try {
+    const params = new URLSearchParams();
+    params.set('panel', title);
+
+    if (req.query.year && req.query.year !== 'all') {
+      params.set('year', req.query.year);
+    }
+
+    const { data } = await axios.get(`https://munch.dh.gu.se/api/documents/?${params.toString()}`);
+    res.json(data.results || []);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error loading documents' });
+  }
+});
+
 app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';

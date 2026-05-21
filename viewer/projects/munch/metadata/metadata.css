@@ -4,7 +4,7 @@ body {
     padding: 0;
     width: 100%;
     min-height: 100%;
-     background: rgb(250,250,250);
+    background: rgb(250, 250, 250);
     color: #000;
     font-family: "Barlow Condensed", "Oswald", sans-serif !important;
 }
@@ -13,7 +13,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     min-height: 100%;
-    min-width:300px;
+    min-width: 300px;
     overflow: auto;
     padding: clamp(36px, 6.8vw, 72px) clamp(36px, 6.8vw, 72px) !important;
 }
@@ -105,35 +105,39 @@ a.database-link:visited {
     font-size: 1.0rem;
     font-weight: 400;
     line-height: 1.12;
-    padding-bottom:20px;
+    padding-bottom: 20px;
 
 }
 
 .filtering {
-    margin-left:-10px;
-    width:calc(100% + 20px);
- 
-   border-radius:12px;
- background: rgb(255,255,255);
- box-shadow: 0px 0px 20px rgba(0,0,0, 0.15);
+    margin-left: -10px;
+    width: calc(100% + 20px);
+    border-radius: 12px;
+    background: rgb(255, 255, 255);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
 }
 
 .filtering h2 {
     padding: 10px 0 10px 20px;
     font-size: clamp(1.3rem, 3.2vw, 10rem);
     font-weight: 500;
-    line-height: 1.2;
+}
+
+.document-list h2 {
+    padding: 10px 0 10px 20px;
+    font-size: clamp(1.3rem, 3.2vw, 10rem);
+    font-weight: 370;
 }
 
 .filter-box {
-  padding:0px 20px 5px 20px;
+    padding: 0px 20px 5px 20px;
 }
 
-.filter-title{
-width:60px;
-text-align: left;
-padding-bottom:5px;
-display:block;
+.filter-title {
+    width: 60px;
+    text-align: left;
+    padding-bottom: 5px;
+    display: block;
 }
 
 .filter-group {
@@ -157,7 +161,7 @@ display:block;
 .filter-button {
     appearance: none;
     align-items: center;
-    background: rgb(230,230,230);
+    background: rgb(230, 230, 230);
     border: 0px solid #000;
     border-radius: 3px;
     color: #000;
@@ -200,6 +204,38 @@ display:block;
     outline-offset: 2px;
 }
 
+.document-list {
+    margin: 20px 0 0 -10px;
+    width: calc(100% + 20px);
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
+
+.document-item {
+    align-items: center;
+    color: #000 !important;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.1;
+    font-family: "Barlow Condensed", sans-serif !important;
+}
+
+.document-item:hover {
+    opacity: 0.75;
+}
+
+.document-icon {
+    background: #000;
+    flex: 0 0 22px;
+    height: 22px;
+    mask: url(/viewer/shared/interface/document-white.svg) center / contain no-repeat;
+    -webkit-mask: url(/viewer/shared/interface/document-white.svg) center / contain no-repeat;
+    width: 22px;
+}
 
 .annotation-detail {
     display: none;
@@ -208,7 +244,7 @@ display:block;
     width: calc(100% + 20px);
     border-radius: 12px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
-    background-color:white;
+    background-color: white;
 }
 
 .annotation-detail h2 {
@@ -218,10 +254,10 @@ display:block;
     line-height: 1.2;
 }
 
-.widget-title-space{
-    border-width:0 0 0.5px 0;
-    border-style:solid;
-    border-color:rgb(200,200,200);
+.widget-title-space {
+    border-width: 0 0 0.5px 0;
+    border-style: solid;
+    border-color: rgb(200, 200, 200);
 }
 
 .annotation-detail-row {
@@ -246,12 +282,12 @@ display:block;
 }
 
 .annotation-pill {
-    background: rgb(230,230,230);
+    background: rgb(230, 230, 230);
     border-radius: 4px;
     display: inline-flex;
     margin: 0 6px 6px 0;
     padding: 5px 10px;
-    font-weight:400;
+    font-weight: 400;
 }
 
 .annotation-edit-button {

@@ -238,7 +238,7 @@ a.database-link:visited {
 }
 
 .annotation-count-pill {
-    background: #000;
+    background: #555;
     border-radius: 999px;
     color: #fff;
     display: table;

@@ -21,10 +21,15 @@
         .a9s-annotation.editable path {
             pointer-events: none;
         }
+
+        body.iiif-initializing .interface-area,
+        body.iiif-initializing .interface-area-top {
+            visibility: hidden;
+        }
     </style>
 </head>
 
-<body>
+<body class="iiif-initializing">
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
 
@@ -79,7 +84,9 @@
 
     <div class="interface-area">
 
-        <div id="coordinate-row" class="coordinate-row"><div id="coordinate-instructions">Hover over the image</div></div>
+        <div id="coordinate-row" class="coordinate-row">
+            <div id="coordinate-instructions">Hover over the image</div>
+        </div>
 
         <!-- Toolbar -->
         <div class="toolbar-bottom">
@@ -106,7 +113,8 @@
                 onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Polygon annotation tool."></div>
 
-            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates" style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
+            <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
+                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
 
             <a id="full-page1" class="full-screen-option" title="Toggle full screen" href="#full-page"
                 onclick="togglePane()">
@@ -157,9 +165,14 @@
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
+        const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS';
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
         const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
         const coordinateHeightCm = Number('PLACEHOLDER_COORDINATE_HEIGHT_CM');
+
+        const featureLoadPromise = displayAnnotationFocus === true
+            ? import('/viewer/modules/iiif/features/annotation-focus.js').catch(error => console.error(error))
+            : Promise.resolve();
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');
@@ -262,12 +275,12 @@
                 document.getElementById('8').innerHTML = i18next.t('satisfiedwithselection');
                 document.getElementById('10').innerHTML = i18next.t('annotationstoggle');
                 document.getElementById('11').innerHTML = i18next.t('createdwith');
-                 document.getElementById('12').innerHTML = i18next.t('guide-annotate-instructions-polygon');
-                  document.getElementById('13').innerHTML = i18next.t('guide-coordinate-instructions');
+                document.getElementById('12').innerHTML = i18next.t('guide-annotate-instructions-polygon');
+                document.getElementById('13').innerHTML = i18next.t('guide-coordinate-instructions');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('discardselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
-                 document.getElementById('coordinate-instructions').textContent = i18next.t('coordinate-instructions');
+                document.getElementById('coordinate-instructions').textContent = i18next.t('coordinate-instructions');
                 setAnnotationInstructions(currentAnnotationTool);
                 updatePageInfo();
             }
@@ -544,15 +557,15 @@
 
                 const pageIndex = viewer.currentPage();
                 let imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
-                    if (filteredAnnotationDownloadEnabled) {
-                        const filteredDownloadUrl = new URL(imageUrl, window.location.origin);
-                        Object.entries(activeAnnotationFilters || {}).forEach(([key, value]) => {
-                            if (value && value !== 'all') {
-                                filteredDownloadUrl.searchParams.set(key === 'tag' ? 'tags' : key, value);
-                            }
-                        });
-                        imageUrl = filteredDownloadUrl.toString();
-                    }
+                if (filteredAnnotationDownloadEnabled) {
+                    const filteredDownloadUrl = new URL(imageUrl, window.location.origin);
+                    Object.entries(activeAnnotationFilters || {}).forEach(([key, value]) => {
+                        if (value && value !== 'all') {
+                            filteredDownloadUrl.searchParams.set(key === 'tag' ? 'tags' : key, value);
+                        }
+                    });
+                    imageUrl = filteredDownloadUrl.toString();
+                }
                 const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
                 const locationId = locationIdArray[0];
                 const imgId = imgIdArray[pageIndex];
@@ -774,6 +787,11 @@
                     loadCurrentAnnotations(event.data.filters).catch(error => console.error(error));
                 }
             });
+
+            featureLoadPromise.finally(function () {
+                document.body.classList.remove('iiif-initializing');
+            });
+
             window.parent.postMessage({ type: 'iiifViewerReady' }, '*');
         }
 
@@ -805,7 +823,6 @@
             }
         }
     </script>
-
     <div id="guide"
         onclick="$('#guide').css('pointer-events', 'none');$('#guide').css('opacity', '0.0');$('#guide-instructions-tools').css('transform', 'scale(0.5)'); $('#instructions').css('transform', 'scale(1.0)');">
         <div class="guide-content">
@@ -834,12 +851,13 @@
                     <div class="guide-instructions-item annotate-option"
                         style="display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';">
                         <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/annotate_white.svg); background-size: 90%; background-position: center;"></div>
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/annotate_white.svg); background-size: 90%; background-position: center;">
+                        </div>
                         <div class="guide-instructions-item-label" id="7">
                         </div>
                     </div>
 
-                        <div class="guide-instructions-item annotate-option"
+                    <div class="guide-instructions-item annotate-option"
                         style="display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/polygon_white.svg)"></div>
@@ -847,7 +865,7 @@
                         </div>
                     </div>
 
-                            <div class="guide-instructions-item annotate-option"
+                    <div class="guide-instructions-item annotate-option"
                         style="display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/coordinate_white.svg)"></div>

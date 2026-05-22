@@ -3,6 +3,7 @@
   "project": "Munch",
   "displayAnnotations": false,
   "displayIIIFAnnotations": true,
+  "displayAnnotationFocus": true, 
   "displayRectangleTool": false,
   "downloadFilteredIIIFAnnotations": true,
   "displayPolygonTool": true,

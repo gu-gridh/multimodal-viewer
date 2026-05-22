@@ -50,6 +50,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     );
     const annotationPath = `/viewer/modules/iiif/visual-annotations?q=${encodedQueryName}`;
     const displayIIIFAnnotations = Boolean(config.displayIIIFAnnotations);
+    const displayAnnotationFocus = Boolean(config.displayAnnotationFocus);
     const filteredDownloadEnabled = Boolean(config.downloadFilteredIIIFAnnotations);
     const annotationDisplay = displayIIIFAnnotations ? 'flex' : 'none';
     const rectangleDisplay = config.displayRectangleTool ? 'flex' : 'none';
@@ -80,6 +81,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
+        .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
         .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
         .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
         .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
@@ -116,6 +118,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
+        .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
         .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
         .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
         .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));

@@ -25,7 +25,7 @@
     --measurement-detail-node-bg-dark: var(--color-2);
     --measurement-detail-area-bg-color: #eee;
 
-    --viewer-bg: rgb(8, 8, 8);
+    --viewer-bg: rgb(48, 48, 48);
     --sidebar-bg: rgba(38, 38, 38, 1);
     --selected: #47cbf6;
 }

@@ -31,7 +31,7 @@ const options = {
     lookAt: dynamicOptions.lookAt,
 
     autoRotate: true,
-    firstPersonMovementSpeed: 3.0,
+    firstPersonMovementSpeed: 1.0,
 };
 
 export const viewer = createViewer(options);

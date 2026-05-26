@@ -89,7 +89,7 @@ export function createViewer(opts = {}) {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = false;
     controls.autoRotate = autoRotate;
-    controls.autoRotateSpeed = autoRotateStep / (2 * Math.PI / 60 / 60);
+    controls.autoRotateSpeed = autoRotateStep / (2 * Math.PI / 45 / 45);
     const target = controls.target;
 
     let root = null;

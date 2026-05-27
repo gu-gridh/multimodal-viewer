@@ -130,7 +130,7 @@ body {
 	padding-top: 0px;
 	font-size: 5.5em !important;
 	padding-bottom: 10px;
-	margin-top:0px;
+	margin-top:-10px;
 }
 
 .metadata-card{
@@ -162,7 +162,7 @@ body {
 
 .metadata-content .dataset {
 	color: rgb(255, 255, 255);
-	padding: 2px 6px;
+	padding: 1px 6px;
 	background-color: var(--color-4);
 	border-radius: 4px;
 }

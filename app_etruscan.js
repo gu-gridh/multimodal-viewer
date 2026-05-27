@@ -148,7 +148,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       if (viewerType === 'pointcloud' || viewerType === 'model') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.[0]?.dataset?.short_name && metadata.tomb?.[0]?.name
-            ? `${metadata.tomb?.[0]?.dataset?.short_name ?? ''} ${metadata.tomb?.[0]?.name ?? ''}`
+            ? `${metadata.tomb?.[0]?.dataset?.short_name ?? ''} - ${metadata.tomb?.[0]?.name ?? ''}`
             : 'Unknown')
           .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
           .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.preview_image?.tomb?.description ?? '')

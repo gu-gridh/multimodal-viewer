@@ -60,7 +60,7 @@ app.get('/viewer/modules/model/model.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/object3js/?id=${queryName}&depth=2`;
+  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -109,7 +109,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   if (viewerType === 'pointcloud') {
     apiUrl = `${config.panel}${queryName}&depth=2`;
   } else if (viewerType === 'model') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/object3js/?id=${queryName}&depth=2`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
   } else {
@@ -264,7 +264,7 @@ app.get('*', async (req, res) => {
   if (viewerType === 'pointcloud') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
   } else if (viewerType === 'model') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/object3js/?id=${queryId}&depth=2`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
   } else {

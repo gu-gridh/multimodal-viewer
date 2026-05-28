@@ -134,13 +134,11 @@ body {
 }
 
 .metadata-card{
-	padding-bottom:20px;
+	padding-bottom:10px;
 	border-color:black;
 	border-width:0 0 1px 0;
 	border-style:dotted;
 }
-
-
 
 .metadata-content .label {
 	display: inline;
@@ -167,6 +165,22 @@ body {
 	border-radius: 4px;
 }
 
+.metadata-button {
+	display: inline-block;
+	color: rgb(255, 255, 255) !important;
+	background-color: var(--color-4);
+	padding: 6px 10px;
+	border-radius: 4px;
+	text-decoration: none;
+}
+
+.metadata-button:hover {
+	background-color: var(--color-5);
+}
+
+.metadata-button[hidden] {
+	display: none;
+}
 
 .metadata-description .metadata-title {
 	font-weight: 200;
@@ -174,8 +188,6 @@ body {
 	line-height: 1.2;
 	margin-bottom: 20px;
 }
-
-
 
 .metadata-content .preview {
 	height: auto;
@@ -271,4 +283,3 @@ body {
 	padding-top: 30px;
 	font-weight: 500;
 }
-

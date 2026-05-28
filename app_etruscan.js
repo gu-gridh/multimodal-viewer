@@ -189,7 +189,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       }
 
       //remove blocks with empty placeholders
-      modifiedHtml = modifiedHtml.replace(/<div[^>]*>\s*<div[^>]*>[^<]+:<\/div>\s*<\/div>/g, '')
+      modifiedHtml = modifiedHtml.replace(/PLACEHOLDER_SOURCE_DOWNLOAD/g, metadata.url_source ? `href="${metadata.url_source}" target="_self"` : 'hidden')
+        .replace(/<div[^>]*>\s*<div[^>]*>[^<]+:<\/div>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Type:<\/div>\s*<span[^>]*>PLACEHOLDER_TYPE<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*class=["']metadata-description["'][^>]*>\s*<div[^>]*class=["']label["'][^>]*>Description<\/div>\s*<div>\s*<p>\s*<\/p>\s*<\/div>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Creator:<\/div>\s*<span[^>]*>PLACEHOLDER_CREATOR<\/span>\s*<\/div>/g, '')

@@ -13,7 +13,7 @@
     <script src="/viewer/libs/i18next.min.js"></script>
     <script src="/viewer/libs/i18next-http-backend.min.js"></script>
     <style>
-        
+
     </style>
 </head>
 
@@ -100,68 +100,68 @@
 
     <div class="metadata-container dark">
 
-      <!--   <div class="language-toggle-buttons">
+        <!--   <div class="language-toggle-buttons">
             <button id="languageButton" title="Change language" onclick="toggleLanguage()"></button>
         </div> -->
-<div class="label" id="metalabel1">Referenced tomb:</div>
+        <div class="label" id="metalabel1">Referenced tomb:</div>
         <div class="metadata-title">
             PLACEHOLDER_TITLE
         </div>
 
 
- <div class="metadata-card">
-        <div class="metadata-content">
-            <div class="label">Dataset: </div> <span class="dataset">PLACEHOLDER_DATASET</span>
-        </div>
-
-        <div class="metadata-content">
-            <div class="label" id="metalabel1">Type:</div> <span class="data">PLACEHOLDER_TYPE</span>
-        </div>
-
-        <div v-if="object.author?.firstname">
+        <div class="metadata-card">
             <div class="metadata-content">
-                <div class="label" id="metalabel2">Creator:</div> <span class="data">PLACEHOLDER_CREATOR</span>
-            </div>
-        </div>
-
-        <div class="metadata-content">
-            <div class="label">Technique:</div> <span class="data">PLACEHOLDER_TECHNIQUE</span>
-        </div>
-
-        <div class="metadata-content">
-            <div class="label">Polygons:</div> <span class="data">PLACEHOLDER_POLYGONS</span>
-        </div>
-
-        <div v-if="object.date">
-            <div class="metadata-content">
-                <div class="label" id="metalabel3">Date:</div> <span class="data">PLACEHOLDER_DATE</span>
-            </div>
-        </div>
-
-        <div class="metadata-content">
-            <div class="label">Author:</div> <span class="data">PLACEHOLDER_AUTHOR</span>
-        </div>
-
-        <div class="metadata-content">
-            <div class="label" id="metalabel4">Points (optimized):</div> <span
-                class="data">PLACEHOLDER_POINTS_OPTIMIZED</span>
-        </div>
-
-        <div class="metadata-content">
-            <div class="label" id="metalabel5">Points (high quality):</div> <span
-                class="data">PLACEHOLDER_POINTS_FULL</span>
-        </div>
-
-      
-            <div class="metadata-content">
-                <div class="label" id="metalabel6">License:</div> 
-                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"><span class="data">CC BY 4.0</span></a>
+                <div class="label">Dataset: </div> <span class="dataset">PLACEHOLDER_DATASET</span>
             </div>
 
-            <a class="metadata-button" PLACEHOLDER_SOURCE_DOWNLOAD><span id="metalabel7">Download source</span></a>
+            <div class="metadata-content">
+                <div class="label" id="metalabel1">Type:</div> <span class="data">PLACEHOLDER_TYPE</span>
+            </div>
 
-             </div>
-  
+            <div v-if="object.author?.firstname">
+                <div class="metadata-content">
+                    <div class="label" id="metalabel2">Creator:</div> <span class="data">PLACEHOLDER_CREATOR</span>
+                </div>
+            </div>
+
+            <div class="metadata-content">
+                <div class="label">Technique:</div> <span class="data">PLACEHOLDER_TECHNIQUE</span>
+            </div>
+
+            <div class="metadata-content">
+                <div class="label">Polygons:</div> <span class="data">PLACEHOLDER_POLYGONS</span>
+            </div>
+
+            <div v-if="object.date">
+                <div class="metadata-content">
+                    <div class="label" id="metalabel3">Date:</div> <span class="data">PLACEHOLDER_DATE</span>
+                </div>
+            </div>
+
+            <div class="metadata-content">
+                <div class="label">Creator:</div> <span class="data">PLACEHOLDER_AUTHOR</span>
+            </div>
+
+            <div class="metadata-content" style="display:none">
+                <div class="label" id="metalabel4">Points (optimized):</div> <span
+                    class="data">PLACEHOLDER_POINTS_OPTIMIZED</span>
+            </div>
+
+            <div class="metadata-content">
+                <div class="label" id="metalabel5">Points:</div> <span class="data">PLACEHOLDER_POINTS_FULL</span>
+            </div>
+
+
+            <div class="metadata-content">
+                <div class="label" id="metalabel6">License:</div>
+                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"><span class="data">CC BY
+                        4.0</span></a>
+            </div>
+
+            <a class="metadata-button" PLACEHOLDER_SOURCE_DOWNLOAD><span id="metalabel7">Download source files</span></a>
+
+        </div>
+
 
         <div class="metadata-description" style="padding-top: 0px;">
             <div>
@@ -178,4 +178,5 @@
     </div>
 
 </body>
+
 </html>

@@ -10,6 +10,15 @@ const projectName = process.env.PROJECT || 'default';
 
 /* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/model */
 
+function formatPeople(people) {
+  const peopleList = Array.isArray(people) ? people : [people];
+  return peopleList
+    .filter(Boolean)
+    .map(person => `${person.firstname ?? ''} ${person.lastname ?? ''}`.trim())
+    .filter(Boolean)
+    .join(', ');
+}
+
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;
 try {
@@ -158,6 +167,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
             .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown');
+        } else if (viewerType === 'model') {
+          modifiedHtml = modifiedHtml
+            .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')
+            .replace(/PLACEHOLDER_POLYGONS/g, metadata.polygons ?? 'Unknown')
+            .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date')
+            .replace(/PLACEHOLDER_AUTHOR/g, formatPeople(metadata.author) || 'Unknown');
         }
       } else if (viewerType === 'image') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
@@ -181,6 +196,9 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         .replace(/<div[^>]*>\s*<div[^>]*>Date:<\/div>\s*<span[^>]*>PLACEHOLDER_DATE<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Points \(optimized\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_OPTIMIZED<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Points \(high quality\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_FULL<\/span>\s*<\/div>/g, '')
+        .replace(/<div[^>]*>\s*<div[^>]*>Technique:<\/div>\s*<span[^>]*>PLACEHOLDER_TECHNIQUE<\/span>\s*<\/div>/g, '')
+        .replace(/<div[^>]*>\s*<div[^>]*>Polygons:<\/div>\s*<span[^>]*>PLACEHOLDER_POLYGONS<\/span>\s*<\/div>/g, '')
+        .replace(/<div[^>]*>\s*<div[^>]*>Author:<\/div>\s*<span[^>]*>PLACEHOLDER_AUTHOR<\/span>\s*<\/div>/g, '')
         .replace(/<p[^>]*>PLACEHOLDER_DESCRIPTION<\/p>/g, '');
       res.send(modifiedHtml);
     });

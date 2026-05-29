@@ -167,7 +167,9 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
             .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
-            .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown');
+            .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown')
+            .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')
+            .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date');
         } else if (viewerType === 'model') {
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')

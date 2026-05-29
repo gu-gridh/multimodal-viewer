@@ -166,13 +166,14 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         if (viewerType === 'pointcloud') {
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
-            .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown');
+            .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
+            .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown');
         } else if (viewerType === 'model') {
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')
             .replace(/PLACEHOLDER_POLYGONS/g, metadata.polygons ?? 'Unknown')
             .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date')
-            .replace(/PLACEHOLDER_AUTHOR/g, formatPeople(metadata.author) || 'Unknown');
+            .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown');
         }
       } else if (viewerType === 'image') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
@@ -181,7 +182,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             : 'Unknown')
           .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb?.description ?? '')
           .replace(/PLACEHOLDER_TYPE/g, metadata.type_of_image?.[0]?.text ?? 'Unknown type')
-          .replace(/PLACEHOLDER_CREATOR/g, `${metadata.author?.firstname ?? ''} ${metadata.author?.lastname ?? ''}`.trim() || 'Unknown')
+          .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown')
           .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date')
           .replace(/PLACEHOLDER_IMAGE_URL/g, metadata.iiif_file ?? '')
           .replace(/PLACEHOLDER_DOWNLOAD_URL/g, metadata.file ?? '')
@@ -193,13 +194,11 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
         .replace(/<div[^>]*>\s*<div[^>]*>[^<]+:<\/div>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Type:<\/div>\s*<span[^>]*>PLACEHOLDER_TYPE<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*class=["']metadata-description["'][^>]*>\s*<div[^>]*class=["']label["'][^>]*>Description<\/div>\s*<div>\s*<p>\s*<\/p>\s*<\/div>\s*<\/div>/g, '')
-        .replace(/<div[^>]*>\s*<div[^>]*>Creator:<\/div>\s*<span[^>]*>PLACEHOLDER_CREATOR<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Date:<\/div>\s*<span[^>]*>PLACEHOLDER_DATE<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Points \(optimized\):<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_OPTIMIZED<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Points:<\/div>\s*<span[^>]*>PLACEHOLDER_POINTS_FULL<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Technique:<\/div>\s*<span[^>]*>PLACEHOLDER_TECHNIQUE<\/span>\s*<\/div>/g, '')
         .replace(/<div[^>]*>\s*<div[^>]*>Polygons:<\/div>\s*<span[^>]*>PLACEHOLDER_POLYGONS<\/span>\s*<\/div>/g, '')
-        .replace(/<div[^>]*>\s*<div[^>]*>Author:<\/div>\s*<span[^>]*>PLACEHOLDER_AUTHOR<\/span>\s*<\/div>/g, '')
         .replace(/<p[^>]*>PLACEHOLDER_DESCRIPTION<\/p>/g, '');
       res.send(modifiedHtml);
     });

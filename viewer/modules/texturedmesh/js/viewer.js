@@ -1,6 +1,6 @@
 import { createViewer } from './main.js';
 
-const dynamicOptions = window.MODEL_VIEWER_OPTIONS ?? {};
+const dynamicOptions = window.TEXTUREDMESH_VIEWER_OPTIONS ?? {};
 
 const options = {
     containerId: 'viewer',
@@ -18,10 +18,10 @@ const options = {
     // Scene settings
     fog: { color: 0x2d2d2d, near: 2, far: 50 },
 
-    //model
-    modelUrl: dynamicOptions.modelUrl,
+    //textured mesh
+    texturedMeshUrl: dynamicOptions.texturedMeshUrl,
     initialRotation: [0, 0, 0],
-    recenterModel: true,
+    recenterTexturedMesh: true,
 
     //camera
     fov: 45,

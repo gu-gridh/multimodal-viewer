@@ -8,7 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 
-/* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/model */
+/* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/texturedmesh */
 
 function formatPeople(people) {
   const peopleList = Array.isArray(people) ? people : [people];
@@ -61,7 +61,7 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/modules/model/model.html', async (req, res) => {
+app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
 
@@ -73,25 +73,25 @@ app.get('/viewer/modules/model/model.html', async (req, res) => {
 
   try {
     const apiResponse = await axios.get(apiUrl);
-    const modelData = apiResponse.data.results?.[0];
+    const texturedMeshData = apiResponse.data.results?.[0];
 
-    if (!modelData?.url_public) {
-      return res.status(404).send('No 3D model');
+    if (!texturedMeshData?.url_public) {
+      return res.status(404).send('No textured mesh');
     }
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'model', 'model.html'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'texturedmesh', 'texturedmesh.html'), 'utf8', (err, data) => {
       if (err) {
         console.error(err);
         return res.status(500).send('Internal Server Error');
       }
 
-      const modelTitle = modelData.title || modelData.tomb?.[0]?.name || '3D model';
+      const texturedMeshTitle = texturedMeshData.title || texturedMeshData.tomb?.[0]?.name || 'Textured mesh';
       const modifiedData = data
-        .replace(/'PLACEHOLDER_MODEL_URL'/g, JSON.stringify(modelData.url_public))
-        .replace(/'PLACEHOLDER_MODEL_TITLE'/g, JSON.stringify(modelTitle))
-        .replace(/'PLACEHOLDER_MODEL_DOWNLOAD_URL'/g, JSON.stringify(modelData.url_download || ''))
-        .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(modelData.camera_position || null))
-        .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(modelData.look_at || null));
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.url_public))
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_TITLE'/g, JSON.stringify(texturedMeshTitle))
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.url_download || ''))
+        .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(texturedMeshData.camera_position || null))
+        .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(texturedMeshData.look_at || null));
 
       res.send(modifiedData);
     });
@@ -117,7 +117,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   if (viewerType === 'pointcloud') {
     apiUrl = `${config.panel}${queryName}&depth=2`;
-  } else if (viewerType === 'model') {
+  } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
@@ -134,7 +134,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
     let metadata;
 
-    if (viewerType === 'pointcloud' || viewerType === 'model') {
+    if (viewerType === 'pointcloud' || viewerType === 'texturedmesh') {
       metadata = apiResponse.data.results?.[0];
     } else if (viewerType === 'image') {
       metadata = apiResponse.data;
@@ -154,7 +154,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
       let modifiedHtml;
 
-      if (viewerType === 'pointcloud' || viewerType === 'model') {
+      if (viewerType === 'pointcloud' || viewerType === 'texturedmesh') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.[0]?.dataset?.short_name && metadata.tomb?.[0]?.name
             ? `${metadata.tomb?.[0]?.dataset?.short_name ?? ''} - ${metadata.tomb?.[0]?.name ?? ''}`
@@ -170,7 +170,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown')
             .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')
             .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date');
-        } else if (viewerType === 'model') {
+        } else if (viewerType === 'texturedmesh') {
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')
             .replace(/PLACEHOLDER_POLYGONS/g, metadata.polygons ?? 'Unknown')
@@ -259,7 +259,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 });
 
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
-app.use('/viewer/modules/model', express.static(path.join(__dirname, 'viewer', 'modules', 'model')));
+app.use('/viewer/modules/texturedmesh', express.static(path.join(__dirname, 'viewer', 'modules', 'texturedmesh')));
 app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
 app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
 app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
@@ -280,10 +280,10 @@ app.get('*', async (req, res) => {
   const viewerType = querySegments[1];
   let apiUrl;
 
-  //fetch the backbutton data from the appropriate API if image, pointcloud or model
+  //fetch the backbutton data from the appropriate API if image, pointcloud or textured mesh
   if (viewerType === 'pointcloud') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
-  } else if (viewerType === 'model') {
+  } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
   } else if (viewerType === 'image') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
@@ -301,8 +301,8 @@ app.get('*', async (req, res) => {
     let metadata;
     let backButtonValue = '';
 
-    if (viewerType === 'pointcloud' || viewerType === 'model') {
-      metadata = apiResponse.data.results?.[0];
+    if (viewerType === 'pointcloud' || viewerType === 'texturedmesh') {
+      metadata = apiResponse.data?.results?.[0];
       if (metadata && metadata.tomb && metadata.tomb[0]) {
         const tomb = metadata.tomb[0];
         if (tomb.dataset && tomb.name) {

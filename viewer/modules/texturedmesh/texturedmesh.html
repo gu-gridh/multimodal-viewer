@@ -2,21 +2,21 @@
 <html lang="en">
 
 <head>
-    <title>Model Viewer</title>
+    <title>Textured Mesh Viewer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="/viewer/shared/guide.css">
-    <link rel="stylesheet" href="/viewer/modules/model/css/style.css">
+    <link rel="stylesheet" href="/viewer/modules/texturedmesh/css/style.css">
 </head>
 
 <body>
-    <div id="guide" onclick="hideModelGuide();" style="opacity:0.0">
+    <div id="guide" onclick="hideTexturedMeshGuide();" style="opacity:0.0">
         <div class="guide-content">
             <div class="guide-instructions">
                 <div class="guide-instructions-intro">
-                    Use the tools below to inspect the 3D model.
+                    Use the tools below to inspect the textured mesh.
                 </div>
 
                 <div id="guide-instructions-tools">
@@ -25,7 +25,7 @@
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
-                        <div class="guide-instructions-item-label"><b>Frame Object.</b> Fit the model to the camera
+                        <div class="guide-instructions-item-label"><b>Frame Object.</b> Fit the textured mesh to the camera
                             view.</div>
                     </div>
 
@@ -40,7 +40,7 @@
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/autorotate_white.svg)"></div>
                         <div class="guide-instructions-item-label"><b>Auto-Rotate.</b> Enable automatic rotation of the
-                            model.</div>
+                            textured mesh.</div>
                     </div>
 
                     <div class="guide-instructions-item">
@@ -48,7 +48,7 @@
                             style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg); background-size: 80%; background-position: center;">
                         </div>
                         <div class="guide-instructions-item-label"><b>Wireframe.</b> Enable wireframe rendering to see
-                            the model's structure.</div>
+                            the textured mesh structure.</div>
                     </div>
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon grid-toggle" style="opacity:1.0"></div>
@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon model-guide-walk-icon"></div>
+                        <div class="guide-instructions-item-icon texturedmesh-guide-walk-icon"></div>
                         <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle first-person
                             navigation.</div>
                     </div>
@@ -94,14 +94,14 @@
                 aria-label="Toggle full screen" onclick="classList.toggle('full-page-active'), togglePane()"></div>
         </div>
 
-        <div class="guide-button compact" title="User Guide" onclick="showModelGuide();">?</div>
+        <div class="guide-button compact" title="User Guide" onclick="showTexturedMeshGuide();">?</div>
 
-        <a id="download" target="_self" aria-label="Download model">
-            <div class="round-button download-button compact deactivated" title="Download model"></div>
+        <a id="download" target="_self" aria-label="Download textured mesh">
+            <div class="round-button download-button compact deactivated" title="Download textured mesh"></div>
         </a>
     </div>
 
-    <div id="firstPersonControlButtons" class="control-buttons model-control-buttons"
+    <div id="firstPersonControlButtons" class="control-buttons texturedmesh-control-buttons"
         aria-label="First-person movement controls">
         <div class="control-buttons-group">
             <button id="moveLeft" title="Move left" style="border-radius:10px 0 0 10px; margin-right:0;">
@@ -136,21 +136,21 @@
     <div id="viewer"></div>
 
     <script>
-        window.MODEL_VIEWER_OPTIONS = {
-            modelUrl: 'PLACEHOLDER_MODEL_URL',
-            title: 'PLACEHOLDER_MODEL_TITLE',
-            downloadUrl: 'PLACEHOLDER_MODEL_DOWNLOAD_URL',
+        window.TEXTUREDMESH_VIEWER_OPTIONS = {
+            texturedMeshUrl: 'PLACEHOLDER_TEXTUREDMESH_URL',
+            title: 'PLACEHOLDER_TEXTUREDMESH_TITLE',
+            downloadUrl: 'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL',
             cameraPosition: 'PLACEHOLDER_CAMERA_POSITION',
             lookAt: 'PLACEHOLDER_LOOK_AT'
         };
 
-        function showModelGuide() {
+        function showTexturedMeshGuide() {
             document.getElementById('guide').style.pointerEvents = 'auto';
             document.getElementById('guide').style.opacity = '1.0';
             document.getElementById('guide-instructions-tools').style.transform = 'scale(1.0)';
         }
 
-        function hideModelGuide() {
+        function hideTexturedMeshGuide() {
             document.getElementById('guide').style.pointerEvents = 'none';
             document.getElementById('guide').style.opacity = '0.0';
             document.getElementById('guide-instructions-tools').style.transform = 'scale(0.5)';
@@ -161,8 +161,8 @@
         }
 
     </script>
-    <script type="module" src="/viewer/modules/model/js/viewer.js"></script>
-    <script type="module" src="/viewer/modules/model/js/ui.js"></script>
+    <script type="module" src="/viewer/modules/texturedmesh/js/viewer.js"></script>
+    <script type="module" src="/viewer/modules/texturedmesh/js/ui.js"></script>
 
 </body>
 

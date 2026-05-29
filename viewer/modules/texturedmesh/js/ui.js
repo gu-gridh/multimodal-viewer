@@ -7,7 +7,7 @@ const ROT_STEP = THREE.MathUtils.degToRad(0.8);
 const ROT_NUDGE = ROT_STEP * 10;
 const ZOOM_IN = 1.01;
 const ZOOM_OUT = 1.01;
-const modelOptions = window.MODEL_VIEWER_OPTIONS ?? {};
+const texturedMeshOptions = window.TEXTUREDMESH_VIEWER_OPTIONS ?? {};
 
 function hold(el, step) {
     let intervalId = null;
@@ -63,7 +63,7 @@ hold($('ZoomOut'), () => viewer.zoomOut(ZOOM_OUT)).click(() => viewer.zoomOut(ZO
 
 const downloadLink = $('download');
 const downloadButton = downloadLink?.querySelector('.download-button');
-const downloadUrl = modelOptions.downloadUrl;
+const downloadUrl = texturedMeshOptions.downloadUrl;
 
 if (downloadUrl) {
     downloadLink?.setAttribute('href', downloadUrl);

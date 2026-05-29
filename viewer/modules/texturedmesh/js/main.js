@@ -18,7 +18,7 @@ export function createViewer(opts = {}) {
         lookAt = null,
         hemisphereLight = { skyColor: 0xffffff, groundColor: 0x444444, intensity: 1.0 },
         directionalLight = { color: 0xffffff, intensity: 1.0, position: [3, 5, 4] },
-        modelUrl = null,
+        texturedMeshUrl = null,
         autoRotate = true,
         autoRotateStep = 0.001,
         grid = false,
@@ -28,12 +28,12 @@ export function createViewer(opts = {}) {
         firstPersonMovementSpeed = 1.0,
         firstPersonLookSpeed = 0.002,
         initialRotation = [0, 0, 0],
-        recenterModel = true,
+        recenterTexturedMesh = true,
     } = opts;
 
     const container = document.getElementById(containerId);
     if (!container) {
-        throw new Error(`Model viewer container not found!`);
+        throw new Error(`Container not found`);
     }
 
     const scene = new THREE.Scene();
@@ -93,7 +93,7 @@ export function createViewer(opts = {}) {
     const target = controls.target;
 
     let root = null;
-    let modelSize = 1;
+    let texturedMeshSize = 1;
     let autoRotateEnabled = autoRotate;
     let wireframeEnabled = false;
     let gridEnabled = grid;
@@ -212,7 +212,7 @@ export function createViewer(opts = {}) {
         const direction = new THREE.Vector3();
         camera.getWorldDirection(direction);
 
-        target.copy(camera.position).addScaledVector(direction, modelSize || 1);
+        target.copy(camera.position).addScaledVector(direction, texturedMeshSize || 1);
         controls.update();
     }
 
@@ -239,7 +239,7 @@ export function createViewer(opts = {}) {
         return firstPersonEnabled;
     }
 
-    function loadModel(url) {
+    function loadTexturedMesh(url) {
         if (!url) {
             animate();
             return;
@@ -259,16 +259,16 @@ export function createViewer(opts = {}) {
             const size = box.getSize(new THREE.Vector3()).length();
             const center = box.getCenter(new THREE.Vector3());
 
-            modelSize = size || 1;
-            if (recenterModel) {
+            texturedMeshSize = size || 1;
+            if (recenterTexturedMesh) {
                 root.position.sub(center);
             }
             const floorBox = new THREE.Box3().setFromObject(root);
             const floorSize = floorBox.getSize(new THREE.Vector3());
             floorGrid.position.y = floorBox.min.y;
             floorGrid.scale.setScalar(Math.max(floorSize.x, floorSize.z, 10) / 10 * 8);
-            controls.minDistance = modelSize * minZoomScale;
-            controls.maxDistance = modelSize * maxZoomScale;
+            controls.minDistance = texturedMeshSize * minZoomScale;
+            controls.maxDistance = texturedMeshSize * maxZoomScale;
             setWireframe(wireframeEnabled);
             if (cameraPosition && lookAt) {
                 camera.position.set(...cameraPosition);
@@ -291,7 +291,7 @@ export function createViewer(opts = {}) {
     }
 
     window.addEventListener('resize', resize);
-    loadModel(modelUrl);
+    loadTexturedMesh(texturedMeshUrl);
 
     return {
         three: THREE,

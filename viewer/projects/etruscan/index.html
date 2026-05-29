@@ -191,8 +191,8 @@
                     return 'image';
                 } else if (viewerType === 'pointcloud') {
                     return 'pointcloud';
-                } else if (viewerType === 'model') {
-                    return 'model';
+                } else if (viewerType === 'texturedmesh') {
+                    return 'texturedmesh';
                 }
             }
 
@@ -223,9 +223,9 @@
                     src = `/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY`;
                     newPath = `/viewer/?q=${qValue}/pointcloud${hashFragment}`;
                     break;
-                case 'model':
-                    src = `/viewer/modules/model/model.html?q=${qValue}/model${hashFragment}`;
-                    newPath = `/viewer/?q=${qValue}/model${hashFragment}`;
+                case 'texturedmesh':
+                    src = `/viewer/modules/texturedmesh/texturedmesh.html?q=${qValue}/texturedmesh${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/texturedmesh${hashFragment}`;
                     break;
             }
             if (iframe) {

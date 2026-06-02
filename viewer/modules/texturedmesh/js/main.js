@@ -28,6 +28,7 @@ export function createViewer(opts = {}) {
         firstPersonMovementSpeed = 1.0,
         firstPersonLookSpeed = 0.002,
         initialRotation = [0, 0, 0],
+        recenterTexturedMesh = true,
     } = opts;
 
     const container = document.getElementById(containerId);
@@ -154,11 +155,9 @@ export function createViewer(opts = {}) {
         const fitHeightDistance = maxDim / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
         const fitWidthDistance = fitHeightDistance / camera.aspect;
         const distance = Math.max(fitHeightDistance, fitWidthDistance) * fitPadding;
-        const targetPoint = center.clone();
-        targetPoint.y = box.min.y;
 
-        target.copy(targetPoint);
-        camera.position.copy(targetPoint).add(new THREE.Vector3(0, 0, distance));
+        target.copy(center);
+        camera.position.copy(center).add(new THREE.Vector3(0, maxDim * 0.25, distance));
         camera.near = Math.max(distance / 100, 0.01);
         camera.far = Math.max(distance * 100, 1000);
         camera.updateProjectionMatrix();
@@ -258,9 +257,17 @@ export function createViewer(opts = {}) {
 
             const box = new THREE.Box3().setFromObject(root);
             const size = box.getSize(new THREE.Vector3()).length();
+            const center = box.getCenter(new THREE.Vector3());
+            const hasCustomView = cameraPosition && lookAt
+                && !(cameraPosition[0] === 0 && cameraPosition[1] === 0 && cameraPosition[2] === 0)
+                && !(lookAt[0] === 0 && lookAt[1] === 0 && lookAt[2] === 0);
 
             texturedMeshSize = size || 1;
-            root.position.y -= box.min.y;
+            if (hasCustomView) {
+                root.position.y -= box.min.y;
+            } else if (recenterTexturedMesh) {
+                root.position.sub(center);
+            }
 
             const floorBox = new THREE.Box3().setFromObject(root);
             const floorSize = floorBox.getSize(new THREE.Vector3());
@@ -269,11 +276,13 @@ export function createViewer(opts = {}) {
             controls.minDistance = texturedMeshSize * minZoomScale;
             controls.maxDistance = texturedMeshSize * maxZoomScale;
             setWireframe(wireframeEnabled);
-            if (cameraPosition && lookAt) {
+            if (hasCustomView) {
                 camera.position.set(...cameraPosition);
                 target.set(...lookAt);
                 camera.lookAt(target);
                 controls.update();
+            } else {
+                fitToView();
             }
             animate();
         }, (event) => {

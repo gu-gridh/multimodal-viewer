@@ -21,6 +21,7 @@ const options = {
     //textured mesh
     texturedMeshUrl: dynamicOptions.texturedMeshUrl,
     initialRotation: [0, 0, 0],
+    recenterTexturedMesh: true,
 
     //camera
     fov: 45,

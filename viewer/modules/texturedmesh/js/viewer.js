@@ -15,13 +15,12 @@ const options = {
     hemisphereLight: { skyColor: 0xffffff, groundColor: 0x444444, intensity: 0.8 },
     directionalLight: { color: 0xffffff, intensity: 1.0, position: [3, 5, 4] },
 
-    // Scene settings
+    //scene settings
     fog: { color: 0x2d2d2d, near: 2, far: 50 },
 
     //textured mesh
     texturedMeshUrl: dynamicOptions.texturedMeshUrl,
     initialRotation: [0, 0, 0],
-    recenterTexturedMesh: true,
 
     //camera
     fov: 45,
@@ -29,7 +28,6 @@ const options = {
     far: 1000,
     cameraPosition: dynamicOptions.cameraPosition,
     lookAt: dynamicOptions.lookAt,
-
     autoRotate: true,
     firstPersonMovementSpeed: 1.0,
 };

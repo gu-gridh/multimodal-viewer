@@ -28,7 +28,6 @@ export function createViewer(opts = {}) {
         firstPersonMovementSpeed = 1.0,
         firstPersonLookSpeed = 0.002,
         initialRotation = [0, 0, 0],
-        recenterTexturedMesh = true,
     } = opts;
 
     const container = document.getElementById(containerId);
@@ -155,9 +154,11 @@ export function createViewer(opts = {}) {
         const fitHeightDistance = maxDim / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
         const fitWidthDistance = fitHeightDistance / camera.aspect;
         const distance = Math.max(fitHeightDistance, fitWidthDistance) * fitPadding;
+        const targetPoint = center.clone();
+        targetPoint.y = box.min.y;
 
-        target.copy(center);
-        camera.position.copy(center).add(new THREE.Vector3(0, maxDim * 0.25, distance));
+        target.copy(targetPoint);
+        camera.position.copy(targetPoint).add(new THREE.Vector3(0, 0, distance));
         camera.near = Math.max(distance / 100, 0.01);
         camera.far = Math.max(distance * 100, 1000);
         camera.updateProjectionMatrix();
@@ -257,12 +258,10 @@ export function createViewer(opts = {}) {
 
             const box = new THREE.Box3().setFromObject(root);
             const size = box.getSize(new THREE.Vector3()).length();
-            const center = box.getCenter(new THREE.Vector3());
 
             texturedMeshSize = size || 1;
-            if (recenterTexturedMesh) {
-                root.position.sub(center);
-            }
+            root.position.y -= box.min.y;
+
             const floorBox = new THREE.Box3().setFromObject(root);
             const floorSize = floorBox.getSize(new THREE.Vector3());
             floorGrid.position.y = floorBox.min.y;
@@ -275,8 +274,6 @@ export function createViewer(opts = {}) {
                 target.set(...lookAt);
                 camera.lookAt(target);
                 controls.update();
-            } else {
-                fitToView();
             }
             animate();
         }, (event) => {

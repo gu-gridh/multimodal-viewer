@@ -258,14 +258,15 @@ export function createViewer(opts = {}) {
             const box = new THREE.Box3().setFromObject(root);
             const size = box.getSize(new THREE.Vector3()).length();
             const center = box.getCenter(new THREE.Vector3());
-            const hasCustomView = cameraPosition && lookAt
+            const hasCustomView = cameraPosition && lookAt;
+            const useWorldStart = hasCustomView
                 && !(cameraPosition[0] === 0 && cameraPosition[1] === 0 && cameraPosition[2] === 0)
                 && !(lookAt[0] === 0 && lookAt[1] === 0 && lookAt[2] === 0);
 
             texturedMeshSize = size || 1;
-            if (hasCustomView) {
+            if (useWorldStart) {
                 root.position.y -= box.min.y;
-            } else if (recenterTexturedMesh) {
+            } else if (!hasCustomView && recenterTexturedMesh) {
                 root.position.sub(center);
             }
 

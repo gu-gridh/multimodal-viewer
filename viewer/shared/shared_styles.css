@@ -727,13 +727,17 @@ h2 {
 #toolButtonsContainerVertical {
     position: absolute;
     background-color: transparent;
-    top: calc(80px);
+    top: 28px;
     left: 30px;
     z-index: 1000;
     display: flex;
     gap: 5px;
     display: flex;
     flex-direction: column;
+}
+
+html.has-parent-back-button #toolButtonsContainerVertical {
+    top: 80px;
 }
 
 

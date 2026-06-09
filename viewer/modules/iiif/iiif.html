@@ -15,6 +15,7 @@
     <script src="/viewer/libs/openseadragon-annotorious.js"></script>
     <script type="text/javascript" src="/viewer/libs/jquery.js"></script>
     <script src="openseadragon-bookmark-url.js"></script>
+    <script src="/viewer/shared/back_button_layout.js"></script>
     <style>
         .a9s-annotation.editable rect,
         .a9s-annotation.editable polygon,
@@ -61,14 +62,6 @@
             <button id="saveNo"></button>
         </div>
     </div>
-
-
-    <!-- This button is only visible if the back-button is missing (to balance things up) -->
-    <a id="full-page1" class="full-screen-option" title="Enter full screen" href="#full-page" onclick="togglePane()">
-        <div id="extra-button" class="toolButtonVertical compact expand-button"
-            style="top:28px; left:30px; position:absolute;">
-        </div>
-    </a>
 
     <!-- rotation buttons -->
     <div id="toolButtonsContainerVertical">

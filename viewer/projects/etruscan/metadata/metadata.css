@@ -163,12 +163,10 @@ body {
 	text-decoration: none;
 }
 
-
 .metadata-content .data a, a:link, a:active, a:visited {
-	color: rgb(180, 100, 100)!important;
+	color: rgb(180, 100, 100);
 	text-decoration: none;
 }
-
 
 .metadata-content .dataset {
 	color: rgb(255, 255, 255);

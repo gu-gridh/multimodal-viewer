@@ -171,6 +171,16 @@ body {
     margin-top: 5px;
 }
 
+.multiline-annotate-button {
+    pointer-events: auto;
+    background-image: url(https://data.dh.gu.se/ui-icons/multiline_white.svg);
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    bottom: 100px;
+    margin-top: 5px;
+}
+
 svg.a9s-annotationlayer .a9s-selection polygon.a9s-inner,
 svg.a9s-annotationlayer .a9s-annotation polygon.a9s-inner {
     stroke: red;

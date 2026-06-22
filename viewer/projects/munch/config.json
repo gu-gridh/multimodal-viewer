@@ -7,6 +7,7 @@
   "displayRectangleTool": false,
   "downloadFilteredIIIFAnnotations": true,
   "displayPolygonTool": true,
+  "displayLineTool": true,
   "displayCoordinateTool": true,
   "backButton": "",
   "panel": "",

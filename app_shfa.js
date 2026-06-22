@@ -53,6 +53,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.displayRectangleTool ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.displayLineTool ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.downloadFilteredIIIFAnnotations))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')

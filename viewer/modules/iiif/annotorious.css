@@ -22,6 +22,33 @@ svg.a9s-annotationlayer .a9s-annotation .a9s-inner {
   stroke-dasharray: 1;
 }
 
+svg.a9s-annotationlayer .a9s-selection polyline,
+svg.a9s-annotationlayer .a9s-annotation polyline {
+  fill: transparent;
+  cursor: pointer;
+  vector-effect: non-scaling-stroke;
+}
+
+svg.a9s-annotationlayer .a9s-selection polyline.a9s-inner,
+svg.a9s-annotationlayer .a9s-annotation polyline.a9s-inner {
+  stroke: var(--annotation-stroke, red) !important;
+  stroke-width: 3;
+  stroke-dasharray: none;
+}
+
+svg.a9s-annotationlayer .a9s-annotation.hover polyline.a9s-inner,
+svg.a9s-annotationlayer .a9s-annotation:hover polyline.a9s-inner,
+svg.a9s-annotationlayer .a9s-annotation polyline.a9s-inner:hover {
+  stroke: var(--annotation-stroke, red) !important;
+}
+
+svg.a9s-annotationlayer .a9s-selection polyline.a9s-outer,
+svg.a9s-annotationlayer .a9s-annotation polyline.a9s-outer {
+  display: block;
+  stroke: transparent;
+  stroke-width: 20px;
+}
+
 /** Disable the hover effect from the default stylesheet **/
 svg.a9s-annotationlayer .a9s-annotation.editable:hover .a9s-inner {
   fill: transparent;

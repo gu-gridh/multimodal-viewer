@@ -19,6 +19,7 @@
     <style>
         .a9s-annotation.editable rect,
         .a9s-annotation.editable polygon,
+        .a9s-annotation.editable polyline,
         .a9s-annotation.editable path {
             pointer-events: none;
         }
@@ -108,8 +109,8 @@
 
                  <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';"
-                onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
-                title="Polygon annotation tool."></div>
+                onclick="resetPendingSelection(); setAnnotationInstructions('line'); anno.setDrawingTool('polyline'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                title="Line annotation tool."></div>
 
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
@@ -287,9 +288,9 @@
 
         function setAnnotationInstructions(tool) {
             currentAnnotationTool = tool;
-            const translationKey = tool === 'polygon'
-                ? 'annotate-instructions-polygon'
-                : 'annotate-instructions';
+            const translationKey = tool === 'line'
+                ? 'annotate-instructions-line'
+                : tool === 'polygon' ? 'annotate-instructions-polygon' : 'annotate-instructions';
             document.getElementById('9').innerHTML = i18next.t(translationKey);
         }
 
@@ -455,11 +456,16 @@
                     function (annotation) {
                         const color = annotation?.body?.category?.color || annotation?.body?.categories?.[0]?.color;
                         return color ? {
-                            style: `stroke:${color}; fill:transparent; stroke-width:3;`
+                            style: `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:3;`
                         } : null;
                     }
                 ]
             });
+
+            const lineToolButton = document.getElementById('multiline-annotate-button');
+            if (lineToolButton.style.display !== 'none' && OpenSeadragon.Annotorious.PolylineTool) {
+                anno.addDrawingTool(OpenSeadragon.Annotorious.PolylineTool);
+            }
 
             const loadAnnotationsPromise = displayInscriptions
                 ? loadCurrentAnnotations().then(function (annotations) {
@@ -628,17 +634,16 @@
                 });
             }
 
-            //create Polygon annotation
-            function copyPolygonSvg(annotation) {
+            function copySvgShape(annotation) {
                 const selectorValue = annotation?.target?.selector?.value || '';
-                const polygonMatch = selectorValue.match(/<polygon[^>]*points="([^"]+)"/i);
+                const shapeMatch = selectorValue.match(/<(polygon|polyline)[^>]*points="([^"]+)"/i);
 
-                if (!polygonMatch) {
-                    console.error('polygon selector not found:', selectorValue);
+                if (!shapeMatch) {
+                    console.error('SVG shape selector not found:', selectorValue);
                     return;
                 }
 
-                const roundedPoints = polygonMatch[1]
+                const roundedPoints = shapeMatch[2]
                     .trim()
                     .split(/\s+/)
                     .map(point => {
@@ -647,10 +652,11 @@
                     })
                     .join(' ');
 
-                const polygonSvg = `<svg><polygon points="${roundedPoints}" /></svg>`;
+                const shape = shapeMatch[1].toLowerCase();
+                const shapeSvg = `<svg><${shape} points="${roundedPoints}" /></svg>`;
 
-                navigator.clipboard.writeText(polygonSvg).then(() => {
-                    console.log('polygon copied to clipboard:', polygonSvg);
+                navigator.clipboard.writeText(shapeSvg).then(() => {
+                    console.log(`${shape} copied to clipboard:`, shapeSvg);
                 }).catch(err => {
                     console.error(err);
                 });
@@ -679,8 +685,8 @@
                 document.getElementById('saveYes').onclick = function () {
                     const selectorValue = annotation?.target?.selector?.value || '';
 
-                    if (selectorValue.includes('<polygon')) {
-                        copyPolygonSvg(annotation);
+                    if (selectorValue.includes('<polygon') || selectorValue.includes('<polyline')) {
+                        copySvgShape(annotation);
                     } else {
                         convertToIIIFRegion(annotation, viewer.source);
                     }

@@ -209,10 +209,12 @@ app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
     if (metadata.width && metadata.height && annotations.length) {
       const strokeWidth = Math.max(4, Math.round(Math.max(metadata.width, metadata.height) / 1000));
       const shapes = annotations.map(annotation => {
-        const points = annotation.target.selector.value.match(/points="([^"]+)"/)?.[1];
-        const color = annotation.body.categories[0].color;
+        const selectorValue = annotation.target.selector.value;
+        const points = selectorValue.match(/points="([^"]+)"/)?.[1];
+        const shape = selectorValue.includes('<polyline') ? 'polyline' : 'polygon';
+        const color = annotation.body.categories?.[0]?.color || '#ff0000';
         return points
-          ? `<polygon points="${points}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`
+          ? `<${shape} points="${points}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`
           : '';
       }).join('');
       const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${metadata.width} ${metadata.height}">${shapes}</svg>`;

@@ -22477,6 +22477,26 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 c = Math.sqrt(l * l + u * u);
             return Math.abs((s - t) * u - (a - e) * l) / c <= o;
         },
+        pointNearSegment = (i, t, e, n) => { //GRIDH DETECT CLICKS ON POLYLINE
+            const r = e[0] - t[0],
+                o = e[1] - t[1],
+                s = r * r + o * o,
+                a = s ? Math.max(0, Math.min(1, ((i[0] - t[0]) * r + (i[1] - t[1]) * o) / s)) : 0,
+                l = i[0] - (t[0] + a * r),
+                u = i[1] - (t[1] + a * o);
+            return Math.sqrt(l * l + u * u) <= n;
+        },
+        polylinePoints = (i) =>
+            Array.from(i.points).map((t) => [t.x, t.y]),
+        polylineLength = (i) => {
+            const t = polylinePoints(i);
+            return t.slice(1).reduce((e, n, r) => {
+                const o = t[r],
+                    s = n[0] - o[0],
+                    a = n[1] - o[1];
+                return e + Math.sqrt(s * s + a * a);
+            }, 0);
+        },
         Uh = (i) => {
             const t = i
                     .getAttribute("d")
@@ -22552,6 +22572,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             const t = Wt(i),
                 e = t.nodeName.toLowerCase();
             if (e === "polygon") return zE(t);
+            if (e === "polyline") return polylineLength(t);
             if (e === "circle") return VE(t);
             if (e === "ellipse") return UE(t);
             if (e == "path") return WE(t);
@@ -22744,6 +22765,123 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             return this.elementGroup;
         }
     }
+    class PolylineRubberband { //GRIDH TEMPORARY LINE USED WHILE DRAWING
+        constructor(t, e, n) {
+            P(this, "setPoints", (t) => {
+                const e = t.map((n) => `${n[0]},${n[1]}`).join(" ");
+                this.outer.setAttribute("points", e), this.inner.setAttribute("points", e);
+            });
+            P(this, "getBoundingClientRect", () => this.outer.getBoundingClientRect());
+            P(this, "dragTo", (t) => {
+                (this.group.style.display = null), (this.mousepos = t), this.setPoints([...this.points, t]);
+            });
+            P(this, "addPoint", () => {
+                const [t, e] = this.mousepos,
+                    n = this.points[this.points.length - 1];
+                Math.pow(t - n[0], 2) + Math.pow(e - n[1], 2) > 4 &&
+                    ((this.points = [...this.points, this.mousepos]), this.setPoints(this.points));
+            });
+            P(this, "destroy", () => {
+                this.group.parentNode.removeChild(this.group), (this.polyline = null), (this.group = null);
+            });
+            P(this, "toSelection", () => new Wn(us(this.group, this.env.image)));
+            (this.points = [t]),
+                (this.env = n),
+                (this.mousepos = t),
+                (this.group = document.createElementNS(ce, "g")),
+                (this.polyline = document.createElementNS(ce, "g")),
+                this.polyline.setAttribute("class", "a9s-selection"),
+                (this.outer = document.createElementNS(ce, "polyline")),
+                this.outer.setAttribute("class", "a9s-outer"),
+                (this.inner = document.createElementNS(ce, "polyline")),
+                this.inner.setAttribute("class", "a9s-inner"),
+                this.setPoints(this.points),
+                this.polyline.appendChild(this.outer),
+                this.polyline.appendChild(this.inner),
+                (this.group.style.display = "none"),
+                this.group.appendChild(this.polyline),
+                e.appendChild(this.group);
+        }
+        get element() {
+            return this.polyline;
+        }
+    }
+    class PolylineEditable extends Hh { //GRIDH EDITING POLYLINE AFTER RENDERED
+        constructor(e, n, r, o) {
+            super(e, n, r, o);
+            P(this, "onScaleChanged", () => this.handles.map(this.scaleHandle));
+            P(this, "setPoints", (e) => {
+                const n = (h) => Math.round(10 * h) / 10,
+                    r = e.map((h) => `${n(h.x)},${n(h.y)}`).join(" ");
+                this.shape.querySelector(".a9s-inner").setAttribute("points", r);
+                const s = this.shape.querySelector(".a9s-outer");
+                s.setAttribute("points", r);
+                const { x: a, y: l, width: u, height: c } = s.getBBox();
+                Vh(this.elementGroup, a, l, u, c);
+            });
+            P(this, "onGrab", (e) => (n) => {
+                n.button === 0 && ((this.grabbedElem = e), (this.grabbedAt = this.getSVGPoint(n)));
+            });
+            P(this, "onMouseMove", (e) => {
+                const n = (r, o, s) => (r + o < 0 ? -r : r + o > s ? s - r : o);
+                if (this.grabbedElem) {
+                    const r = this.getSVGPoint(e);
+                    if (this.grabbedElem === this.shape) {
+                        const { x: o, y: s, width: a, height: l } = GE(this.shape),
+                            { naturalWidth: u, naturalHeight: c } = this.env.image,
+                            h = n(o, r.x - this.grabbedAt.x, u - a),
+                            d = n(s, r.y - this.grabbedAt.y, c - l),
+                            g = cs(this.shape).map((y) => ({ x: y.x + h, y: y.y + d }));
+                        (this.grabbedAt = r),
+                            this.setPoints(g),
+                            g.forEach((y, x) => this.setHandleXY(this.handles[x], y.x, y.y)),
+                            this.emit("update", us(this.shape, this.env.image));
+                    } else {
+                        const o = this.handles.indexOf(this.grabbedElem),
+                            s = cs(this.shape).map((a, l) => (l === o ? r : a));
+                        this.setPoints(s),
+                            this.setHandleXY(this.handles[o], r.x, r.y),
+                            this.emit("update", us(this.shape, this.env.image));
+                    }
+                }
+            });
+            P(this, "onMouseUp", () => {
+                (this.grabbedElem = null), (this.grabbedAt = null);
+            });
+            P(this, "updateState", (e) => {
+                const n = Wt(e)
+                    .getAttribute("points")
+                    .split(" ")
+                    .map((r) => {
+                        const [o, s] = r.split(",").map((a) => parseFloat(a.trim()));
+                        return { x: o, y: s };
+                    });
+                this.setPoints(n), n.forEach((r, o) => this.setHandleXY(this.handles[o], r.x, r.y));
+            });
+            P(this, "destroy", () => {
+                this.elementGroup.parentNode.removeChild(this.elementGroup), super.destroy();
+            });
+            this.svg.addEventListener("mousemove", this.onMouseMove),
+                this.svg.addEventListener("mouseup", this.onMouseUp),
+                (this.shape = jh(e)),
+                this.shape.querySelector(".a9s-inner").addEventListener("mousedown", this.onGrab(this.shape)),
+                (this.elementGroup = document.createElementNS(ce, "g")),
+                this.elementGroup.setAttribute("class", "a9s-annotation editable selected"),
+                this.elementGroup.setAttribute("data-id", e.id),
+                this.elementGroup.appendChild(this.shape),
+                (this.handles = cs(this.shape).map((s) => {
+                    const a = this.drawHandle(s.x, s.y);
+                    return a.addEventListener("mousedown", this.onGrab(a)), this.elementGroup.appendChild(a), a;
+                })),
+                n.appendChild(this.elementGroup),
+                nr(this.shape, e, r.formatters),
+                (this.grabbedElem = null),
+                (this.grabbedAt = null);
+        }
+        get element() {
+            return this.elementGroup;
+        }
+    }
     class hs extends as {
         constructor(e, n, r) {
             super(e, n, r);
@@ -22788,6 +22926,55 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var e;
             const t = i.selector("SvgSelector");
             if (t) return (e = t.value) == null ? void 0 : e.match(/^<svg.*<polygon/g);
+        });
+    class PolylineTool extends as { //GRIDH LINE TOOL
+        constructor(e, n, r) {
+            super(e, n, r);
+            P(this, "startDrawing", (e, n, r) => {
+                (this._isDrawing = !0),
+                    (this._startOnSingleClick = r),
+                    this.attachListeners({
+                        mouseMove: this.onMouseMove,
+                        mouseUp: this.onMouseUp,
+                        dblClick: this.onDblClick,
+                    }),
+                    (this.rubberband = new PolylineRubberband([e, n], this.g, this.env));
+            });
+            P(this, "stop", () => {
+                this.detachListeners(),
+                    (this._isDrawing = !1),
+                    this.rubberband && (this.rubberband.destroy(), (this.rubberband = null));
+            });
+            P(this, "onMouseMove", (e, n) => this.rubberband.dragTo([e, n]));
+            P(this, "onMouseUp", () => {
+                const { width: e, height: n } = this.rubberband.getBoundingClientRect(),
+                    r = this.config.minSelectionWidth || 4,
+                    o = this.config.minSelectionHeight || 4;
+                e >= r || n >= o
+                    ? this.rubberband.addPoint()
+                    : this._startOnSingleClick || (this.emit("cancel"), this.stop());
+            });
+            P(this, "onDblClick", () => {
+                this._isDrawing = !1;
+                const e = this.rubberband.element;
+                (e.annotation = this.rubberband.toSelection()), this.emit("complete", e), this.stop();
+            });
+            P(
+                this,
+                "createEditableShape",
+                (e, n) => new PolylineEditable(e, this.g, { ...this.config, formatters: n }, this.env)
+            );
+            (this._isDrawing = !1), (this._startOnSingleClick = !1);
+        }
+        get isDrawing() {
+            return this._isDrawing;
+        }
+    }
+    (PolylineTool.identifier = "polyline"),
+        (PolylineTool.supports = (i) => {
+            var e;
+            const t = i.selector("SvgSelector");
+            if (t) return (e = t.value) == null ? void 0 : e.match(/^<svg.*<polyline/g);
         });
     class XE extends Qn {
         constructor(e, n, r) {
@@ -23201,6 +23388,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             if (o === "polygon") {
                 const a = Array.from(r.points).map((l) => [l.x, l.y]);
                 return ls(s, a);
+            } else if (o === "polyline") {
+                const a = polylinePoints(r);
+                return ls(s, a) || a.slice(1).some((l, u) => pointNearSegment(s, a[u], l, n * 2));
             } else if (o === "circle") {
                 const a = r.getAttribute("cx"),
                     l = r.getAttribute("cy"),
@@ -23332,7 +23522,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                                 (this.tools.current.start(
                                     u.originalEvent,
                                     (this.drawOnSingleClick ||
-                                        this.tools.current.constructor.identifier === "polygon") &&
+                                        ["polygon", "polyline"].includes(
+                                            this.tools.current.constructor.identifier
+                                        )) &&
                                         !this.hoveredShape
                                 ),
                                 e || this.scaleTool(this.tools.current));
@@ -24604,6 +24796,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
     }
     var Dx = (i, t) => new Ox(i, t);
+    Dx.PolylineTool = PolylineTool;
     return Dx;
 });
 //# sourceMappingURL=annotorious-openseadragon.umd.js.map

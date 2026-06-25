@@ -22976,6 +22976,52 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             const t = i.selector("SvgSelector");
             if (t) return (e = t.value) == null ? void 0 : e.match(/^<svg.*<polyline/g);
         });
+    //GRIDH POINT TOOL
+    class PointTool extends as {
+        constructor(e, n, r) {
+            super(e, n, r);
+            P(this, "startDrawing", (e, n) => {
+                this._isDrawing = !0;
+                const o = document.createElementNS(ce, "g"),
+                    s = document.createElementNS(ce, "polygon"),
+                    a = document.createElementNS(ce, "polygon"),
+                    l = Math.min(3, this.env.image.naturalWidth / 2, this.env.image.naturalHeight / 2),
+                    u = 12, //Increase this for rounder circle
+                    c = (h, d) => Math.max(l, Math.min(d - l, h)),
+                    g = c(e, this.env.image.naturalWidth),
+                    y = c(n, this.env.image.naturalHeight),
+                    x = Array.from({ length: u }, (h, d) => {
+                        const v = (Math.PI * 2 * d) / u,
+                            b = g + Math.cos(v) * l,
+                            S = y + Math.sin(v) * l;
+                        return `${Number(b.toFixed(2))},${Number(S.toFixed(2))}`;
+                    }).join(" ");
+                o.setAttribute("class", "a9s-selection");
+                s.setAttribute("class", "a9s-outer");
+                a.setAttribute("class", "a9s-inner");
+                s.setAttribute("points", x);
+                a.setAttribute("points", x);
+                o.appendChild(s);
+                o.appendChild(a);
+                o.annotation = new Wn(us(o, this.env.image));
+                this.g.appendChild(o);
+                this.emit("complete", o);
+                this._isDrawing = !1;
+            });
+            P(this, "stop", () => {
+                this._isDrawing = !1;
+            });
+            P(this, "createEditableShape", (e, n) => new qE(e, this.g, { ...this.config, formatters: n }, this.env));
+            this._isDrawing = !1;
+        }
+        get isDrawing() {
+            return this._isDrawing;
+        }
+    }
+    (PointTool.identifier = "point"),
+        (PointTool.supports = (i) => {
+            return false;
+        });
     class XE extends Qn {
         constructor(e, n, r) {
             super();
@@ -24797,6 +24843,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
     }
     var Dx = (i, t) => new Ox(i, t);
     Dx.PolylineTool = PolylineTool;
+    Dx.PointTool = PointTool;
     return Dx;
 });
 //# sourceMappingURL=annotorious-openseadragon.umd.js.map

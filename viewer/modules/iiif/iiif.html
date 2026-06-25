@@ -114,7 +114,7 @@
 
             <div id="point-annotate-button" class="point-annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';"
-                onclick="resetPendingSelection(); setAnnotationInstructions('point'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="resetPendingSelection(); setAnnotationInstructions('point'); anno.setDrawingTool('point'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Point annotation tool."></div>
 
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
@@ -475,6 +475,11 @@
                 anno.addDrawingTool(OpenSeadragon.Annotorious.PolylineTool);
             }
 
+            const pointToolButton = document.getElementById('point-annotate-button');
+            if (pointToolButton.style.display !== 'none' && OpenSeadragon.Annotorious.PointTool) {
+                anno.addDrawingTool(OpenSeadragon.Annotorious.PointTool);
+            }
+
             const loadAnnotationsPromise = displayInscriptions
                 ? loadCurrentAnnotations().then(function (annotations) {
                     if (annotations.length > 0 && currentAnnotationId) {
@@ -656,7 +661,7 @@
                     .split(/\s+/)
                     .map(point => {
                         const [x, y] = point.split(',');
-                        return `${Math.round(Number(x))},${Math.round(Number(y))}`;
+                        return `${Number(Number(x).toFixed(2))},${Number(Number(y).toFixed(2))}`;
                     })
                     .join(' ');
 

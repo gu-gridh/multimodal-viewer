@@ -138,6 +138,21 @@ height:20px;
 	margin-top:6px;
 }
 
+.point-annotate-button,
+.point-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: url(/viewer/shared/interface/circle.svg);
+	background-size: 50%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.point-annotate-button {
+	background-position: center 45%;
+}
+
 .openseadragon-canvas {
 	display: flex !important;
 	flex-direction: row !important;

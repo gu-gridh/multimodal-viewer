@@ -8,6 +8,7 @@
   "downloadFilteredIIIFAnnotations": false,
   "displayPolygonTool": false,
   "displayLineTool": false,
+  "displayPointTool": false,
   "backButton": "https://etruscan.dh.gu.se/",
   "panel": "https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=",
   "metadata": "",

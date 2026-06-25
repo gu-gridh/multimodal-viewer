@@ -8,6 +8,7 @@
   "downloadFilteredIIIFAnnotations": true,
   "displayPolygonTool": true,
   "displayLineTool": true,
+  "displayPointTool": true,
   "displayCoordinateTool": true,
   "backButton": "",
   "panel": "",

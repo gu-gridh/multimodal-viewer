@@ -112,6 +112,11 @@
                 onclick="resetPendingSelection(); setAnnotationInstructions('line'); anno.setDrawingTool('polyline'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Line annotation tool."></div>
 
+            <div id="point-annotate-button" class="point-annotate-button NavButton"
+                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';"
+                onclick="resetPendingSelection(); setAnnotationInstructions('point'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                title="Point annotation tool."></div>
+
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
 
@@ -277,6 +282,7 @@
                 document.getElementById('12').innerHTML = i18next.t('guide-annotate-instructions-polygon');
                 document.getElementById('13').innerHTML = i18next.t('guide-coordinate-instructions');
                 document.getElementById('14').innerHTML = i18next.t('guide-annotate-instructions-multiline');
+                document.getElementById('15').innerHTML = i18next.t('guide-annotate-instructions-point');
                 document.getElementById('saveYes').innerHTML = i18next.t('copyposition');
                 document.getElementById('saveNo').innerHTML = i18next.t('discardselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
@@ -290,7 +296,9 @@
             currentAnnotationTool = tool;
             const translationKey = tool === 'line'
                 ? 'annotate-instructions-line'
-                : tool === 'polygon' ? 'annotate-instructions-polygon' : 'annotate-instructions';
+                : tool === 'point'
+                    ? 'annotate-instructions-point'
+                    : tool === 'polygon' ? 'annotate-instructions-polygon' : 'annotate-instructions';
             document.getElementById('9').innerHTML = i18next.t(translationKey);
         }
 
@@ -875,6 +883,13 @@
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/multiline_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="14">
+                        </div>
+                    </div>
+
+                    <div class="guide-instructions-item annotate-option"
+                        style="display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';">
+                        <div class="guide-instructions-item-icon point-icon"></div>
+                        <div class="guide-instructions-item-label" id="15">
                         </div>
                     </div>
 

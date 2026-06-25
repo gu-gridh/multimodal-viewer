@@ -56,6 +56,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const rectangleDisplay = config.displayRectangleTool ? 'flex' : 'none';
     const polygonDisplay = config.displayPolygonTool ? 'flex' : 'none';
     const lineDisplay = config.displayLineTool ? 'flex' : 'none';
+    const pointDisplay = config.displayPointTool ? 'flex' : 'none';
 
     if (queryType === 'iiif' || queryType === 'photo') {
       const photo = images.find(image => image.image_type === 'orthophoto');
@@ -79,6 +80,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, polygonDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, lineDisplay)
+        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
@@ -117,6 +119,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, polygonDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, lineDisplay)
+        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)

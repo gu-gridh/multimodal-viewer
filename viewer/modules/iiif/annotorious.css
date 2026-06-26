@@ -55,6 +55,12 @@ svg.a9s-annotationlayer .a9s-annotation.editable:hover .a9s-inner {
  
 }
 
+svg.a9s-annotationlayer .a9s-selection polygon.a9s-inner[data-point="true"],
+svg.a9s-annotationlayer .a9s-annotation polygon.a9s-inner[data-point="true"] {
+  fill: var(--annotation-stroke, #ffd900) !important;
+  fill-opacity: 0.35;
+}
+
 /** Corner handles **/
 svg.a9s-annotationlayer .a9s-handle .a9s-handle-inner {
   display: none;

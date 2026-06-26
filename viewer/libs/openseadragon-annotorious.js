@@ -22986,7 +22986,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     s = document.createElementNS(ce, "polygon"),
                     a = document.createElementNS(ce, "polygon"),
                     l = Math.min(3, this.env.image.naturalWidth / 2, this.env.image.naturalHeight / 2),
-                    u = 12, //Increase this for rounder circle
+                    u = 16, //Increase this for rounder circle
                     c = (h, d) => Math.max(l, Math.min(d - l, h)),
                     g = c(e, this.env.image.naturalWidth),
                     y = c(n, this.env.image.naturalHeight),
@@ -22999,6 +22999,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                 o.setAttribute("class", "a9s-selection");
                 s.setAttribute("class", "a9s-outer");
                 a.setAttribute("class", "a9s-inner");
+                a.setAttribute("data-point", "true");
                 s.setAttribute("points", x);
                 a.setAttribute("points", x);
                 o.appendChild(s);

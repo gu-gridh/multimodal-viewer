@@ -666,7 +666,8 @@
                     .join(' ');
 
                 const shape = shapeMatch[1].toLowerCase();
-                const shapeSvg = `<svg><${shape} points="${roundedPoints}" /></svg>`;
+                const pointAttribute = selectorValue.includes('data-point="true"') ? ' data-point="true"' : '';
+                const shapeSvg = `<svg><${shape}${pointAttribute} points="${roundedPoints}" /></svg>`;
 
                 navigator.clipboard.writeText(shapeSvg).then(() => {
                     console.log(`${shape} copied to clipboard:`, shapeSvg);

@@ -107,7 +107,7 @@
                 onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Polygon annotation tool."></div>
 
-                 <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
+            <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
                 style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';"
                 onclick="resetPendingSelection(); setAnnotationInstructions('line'); anno.setDrawingTool('polyline'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Line annotation tool."></div>
@@ -174,57 +174,21 @@
         const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
         const coordinateHeightCm = Number('PLACEHOLDER_COORDINATE_HEIGHT_CM');
 
-        const featureLoadPromise = displayAnnotationFocus === true
-            ? import('/viewer/modules/iiif/features/annotation-focus.js').catch(error => console.error(error))
-            : Promise.resolve();
+        const annotationFocusLoadPromise = displayAnnotationFocus === true
+            ? import('/viewer/modules/iiif/features/annotation-focus.js').catch(error => {
+                console.error(error);
+                return null;
+            })
+            : Promise.resolve(null);
+        const coordinateToolLoadPromise = coordinateToolEnabled
+            ? import('/viewer/modules/iiif/features/coordinate-tool.js').catch(error => {
+                console.error(error);
+                return null;
+            })
+            : Promise.resolve(null);
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');
-        }
-
-        function initializeCoordinateTool() {
-            if (!coordinateToolEnabled || !coordinateWidthCm || !coordinateHeightCm) {
-                return;
-            }
-
-            const row = document.getElementById('coordinate-row');
-            const button = document.getElementById('coordinate-toggle');
-            if (!row || !button) {
-                return;
-            }
-
-            let enabled = false;
-            button.style.display = 'flex';
-
-            function clamp(value, max) {
-                return Math.max(0, Math.min(max, value));
-            }
-
-            button.addEventListener('click', function () {
-                enabled = !enabled;
-                row.style.display = enabled ? 'block' : 'none';
-            });
-
-            viewer.canvas.addEventListener('mousemove', function (event) {
-                if (!enabled) {
-                    return;
-                }
-
-                const imageSize = viewer.world.getItemAt(0)?.getContentSize();
-                if (!imageSize) {
-                    return;
-                }
-
-                const mouse = OpenSeadragon
-                    .getMousePosition(event)
-                    .minus(OpenSeadragon.getElementPosition(viewer.canvas));
-                const viewportPoint = viewer.viewport.pointFromPixel(mouse);
-                const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
-                const x = clamp((imagePoint.x / imageSize.x) * coordinateWidthCm, coordinateWidthCm);
-                const y = clamp(((imageSize.y - imagePoint.y) / imageSize.y) * coordinateHeightCm, coordinateHeightCm);
-
-                row.textContent = `${x.toFixed(0)} cm  ||  ${y.toFixed(0)} cm`;
-            });
         }
 
         function saveViewerState(viewer) {
@@ -454,7 +418,22 @@
                 updatePageInfo();
             });
 
-            initializeCoordinateTool();
+            const annotationFocusInitPromise = annotationFocusLoadPromise
+                .then(function (module) {
+                    if (module) {
+                        module.initAnnotationFocus();
+                    }
+                });
+            const coordinateToolInitPromise = coordinateToolLoadPromise
+                .then(function (module) {
+                    if (module) {
+                        module.initCoordinateTool({
+                            heightCm: coordinateHeightCm,
+                            viewer,
+                            widthCm: coordinateWidthCm
+                        });
+                    }
+                });
 
             // Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {
@@ -807,7 +786,7 @@
                 }
             });
 
-            featureLoadPromise.finally(function () {
+            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise]).finally(function () {
                 document.body.classList.remove('iiif-initializing');
             });
 
@@ -884,7 +863,7 @@
                         </div>
                     </div>
 
-                      <div class="guide-instructions-item annotate-option"
+                    <div class="guide-instructions-item annotate-option"
                         style="display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/multiline_white.svg)"></div>

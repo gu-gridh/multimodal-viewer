@@ -65,7 +65,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         return res.status(404).send('No attached photograph found.');
       }
 
-      const tileSource = { type: 'image', url: photo.file };
+      const tileSource = `${photo.iiif_file}/info.json`;
       const downloadSources = filteredDownloadEnabled
         ? [`/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=photo&page=0`]
         : [photo.file];
@@ -102,7 +102,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         return res.status(404).send('No attached topography images found.');
       }
 
-      const topographyTileSources = sortedTopography.map(topography => ({ type: 'image', url: topography.file }));
+      const topographyTileSources = sortedTopography.map(topography => `${topography.iiif_file}/info.json`);
       const topographyDownloadSources = filteredDownloadEnabled
         ? sortedTopography.map((topography, index) =>
           `/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=topography&page=${index}`

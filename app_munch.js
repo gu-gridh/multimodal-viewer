@@ -287,8 +287,9 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     const encodedQueryName = encodeURIComponent(queryName);
     const { data } = await axios.get(`https://munch.dh.gu.se/api/meshes/?panel=${encodedQueryName}`);
     const mesh = (data.results || []).find(item => item.published !== false) || {};
+    const meshUrl = mesh.mesh_url;
 
-    if (!mesh.mesh_file) {
+    if (!meshUrl) {
       return res.status(404).send('No mesh found');
     }
 
@@ -330,7 +331,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
       }
 
       let modified = html
-        .replace(/PLACEHOLDER_MESH/g, JSON.stringify(mesh.mesh_file))
+        .replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
         .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
         .replace(/PLACEHOLDER_BASEMODELPHI/g, JSON.stringify(baseModelPhi))
         .replace(/PLACEHOLDER_BASEMODELTHETA/g, JSON.stringify(baseModelTheta))
@@ -341,10 +342,10 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
         .replace(/PLACEHOLDER_CAMERASTARTSTATE/g, JSON.stringify(cameraStartState))
         .replace(/PLACEHOLDER_BASEMODELROTATION/g, JSON.stringify(baseModelRotation));
 
-      const isDownloadable = Boolean(mesh.mesh_file);
+      const isDownloadable = Boolean(meshUrl);
       const $ = cheerio.load(modified);
       if (isDownloadable) {
-        $('#download').attr('href', mesh.mesh_file);
+        $('#download').attr('href', meshUrl);
         $('#download .download-button').removeClass('deactivated');
       } else {
         $('#download').removeAttr('href');

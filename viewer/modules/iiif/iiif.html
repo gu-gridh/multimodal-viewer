@@ -144,7 +144,7 @@
     <script>
         var anno;
         let urlToCopy = '';
-        let annotationsVisible = true; // track the visibility state of annotations
+        let annotationsVisible = true; //track the visibility state of annotations
         let currentAnnotationId = null;
         let previousAnnotationId = null;
         let annotationClicked = false;
@@ -282,12 +282,12 @@
 
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
-                // hide annotations
+                //hide annotations
                 anno.setVisible(false);
                 annotationsVisible = false;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
-                // show annotations
+                //show annotations
                 anno.setVisible(true);
                 if (anno.getAnnotations().length === 0) {
                     loadCurrentAnnotations(activeAnnotationFilters).catch(error => console.error(error));
@@ -301,13 +301,13 @@
             toggleAnnotations();
         }
 
-        // notify index.html that the panel button has been clicked
+        //Notify index.html that the panel button has been clicked
         function togglePane() {
             window.parent.postMessage({ type: 'togglePane' }, '*');
         }
 
         window.onload = function () {
-            // for restoring the zoom and pan and rotation from the URL
+            //For restoring the zoom and pan and rotation from the URL
             const hash = window.location.hash.substring(1);
             const hashParams = new URLSearchParams(hash);
             const zoom = parseFloat(hashParams.get('zoom'));
@@ -435,9 +435,9 @@
                     }
                 });
 
-            // Initialize the Annotorious plugin
+            //Initialize the Annotorious plugin
             anno = OpenSeadragon.Annotorious(viewer, {
-                // Additional configuration options
+                //additional configuration options
                 disableEditor: true,
                 formatters: [
                     function (annotation) {
@@ -600,7 +600,7 @@
                 const fragmentSelector = annotation.target.selector.value;
                 const [vx, vy, vw, vh] = fragmentSelector.replace('xywh=pixel:', '').split(',').map(Number);
 
-                // Convert viewport coordinates to image coordinates 
+                //convert viewport coordinates to image coordinates 
                 const imageX = Math.round(vx);
                 const imageY = Math.round(vy);
                 const imageWidth = Math.round(vw);
@@ -666,15 +666,15 @@
                 anno.saveSelected();
             });
 
-            // Attach handlers to listen to events
+            //attach handlers to listen to events
             anno.on('createAnnotation', function (annotation) {
                 pendingAnnotationId = annotation.id;
 
-                // Show the popup
+                //Show the popup
                 document.getElementById('savePopup').style.display = 'block';
                 document.getElementById('instructions').style.display = 'none';
 
-                // Handle Yes button click
+                //Handle "Yes" button click
                 document.getElementById('saveYes').onclick = function () {
                     const selectorValue = annotation?.target?.selector?.value || '';
 
@@ -690,7 +690,7 @@
                     document.getElementById('savePopup').style.display = 'none';
                 };
 
-                // Handle No button click
+                //Handle "No" button click
                 document.getElementById('saveNo').onclick = function () {
                     anno.removeAnnotation(annotation.id);
                     pendingAnnotationId = null;
@@ -753,7 +753,7 @@
                     return;
                 }
 
-                // If an annotation was clicked ignore this canvas click event
+                //if an annotation was clicked ignore this canvas click event
                 if (annotationClicked) {
                     annotationClicked = false;
                     return;

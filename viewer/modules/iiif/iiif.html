@@ -510,6 +510,68 @@
                 return url.toString();
             }
 
+            function getCurrentImageSize() {
+                const tiledImage = viewer.world && viewer.world.getItemAt(0);
+                const contentSize = tiledImage && tiledImage.getContentSize();
+                const width = Number(contentSize?.x || viewer.source?.width || viewer.source?.dimensions?.x);
+                const height = Number(contentSize?.y || viewer.source?.height || viewer.source?.dimensions?.y);
+
+                return Number.isFinite(width) && Number.isFinite(height)
+                    ? { width, height }
+                    : null;
+            }
+
+            function waitForCurrentImageSize() {
+                const imageSize = getCurrentImageSize();
+                if (imageSize) {
+                    return Promise.resolve(imageSize);
+                }
+
+                return new Promise(function (resolve) {
+                    viewer.addOnceHandler('open', function () {
+                        resolve(getCurrentImageSize());
+                    });
+                });
+            }
+
+            function scaleNormalizedSvgSelector(selectorValue, imageSize) {
+                if (!selectorValue || !imageSize) {
+                    return selectorValue;
+                }
+
+                return selectorValue.replace(/points="([^"]+)"/g, function (match, pointsValue) {
+                    const points = pointsValue.trim().split(/\s+/).map(function (point) {
+                        const coordinates = point.split(',').map(Number);
+                        return { x: coordinates[0], y: coordinates[1] };
+                    });
+                    const isNormalized = points.every(function (point) {
+                        return Number.isFinite(point.x) && Number.isFinite(point.y) &&
+                            Math.abs(point.x) <= 1 && Math.abs(point.y) <= 1;
+                    });
+
+                    if (!isNormalized) {
+                        return match;
+                    }
+
+                    const scaledPoints = points.map(function (point) {
+                        return `${Number((point.x * imageSize.width).toFixed(2))},${Number((point.y * imageSize.height).toFixed(2))}`;
+                    }).join(' ');
+
+                    return `points="${scaledPoints}"`;
+                });
+            }
+
+            function scaleAnnotationToImage(annotation, imageSize) {
+                const selectorValue = annotation?.target?.selector?.value;
+                if (!selectorValue) {
+                    return annotation;
+                }
+
+                const scaledAnnotation = JSON.parse(JSON.stringify(annotation));
+                scaledAnnotation.target.selector.value = scaleNormalizedSvgSelector(selectorValue, imageSize);
+                return scaledAnnotation;
+            }
+
             async function loadCurrentAnnotations(filters = activeAnnotationFilters) {
                 activeAnnotationFilters = filters || {};
                 const annotationUrl = getAnnotationUrl(activeAnnotationFilters);
@@ -521,12 +583,16 @@
                 const requestId = ++annotationRequestId;
                 const response = await fetch(annotationUrl);
                 const annotations = await response.json();
+                const imageSize = await waitForCurrentImageSize();
+                const scaledAnnotations = Array.isArray(annotations)
+                    ? annotations.map(annotation => scaleAnnotationToImage(annotation, imageSize))
+                    : [];
 
                 if (requestId === annotationRequestId) {
-                    anno.setAnnotations(annotations);
+                    anno.setAnnotations(scaledAnnotations);
                 }
 
-                return annotations;
+                return scaledAnnotations;
             }
             //<!---Metadata panel filter selections-->
 
@@ -629,24 +695,32 @@
             function copySvgShape(annotation) {
                 const selectorValue = annotation?.target?.selector?.value || '';
                 const shapeMatch = selectorValue.match(/<(polygon|polyline)[^>]*points="([^"]+)"/i);
+                const imageSize = getCurrentImageSize();
 
                 if (!shapeMatch) {
                     console.error('SVG shape selector not found:', selectorValue);
                     return;
                 }
 
-                const roundedPoints = shapeMatch[2]
+                if (!imageSize) {
+                    console.error('Image size not available');
+                    return;
+                }
+
+                const normalizedPoints = shapeMatch[2]
                     .trim()
                     .split(/\s+/)
                     .map(point => {
                         const [x, y] = point.split(',');
-                        return `${Number(Number(x).toFixed(2))},${Number(Number(y).toFixed(2))}`;
+                        const normalizedX = Number(x) / imageSize.width;
+                        const normalizedY = Number(y) / imageSize.height;
+                        return `${Number(normalizedX.toFixed(8))},${Number(normalizedY.toFixed(8))}`;
                     })
                     .join(' ');
 
                 const shape = shapeMatch[1].toLowerCase();
                 const pointAttribute = selectorValue.includes('data-point="true"') ? ' data-point="true"' : '';
-                const shapeSvg = `<svg><${shape}${pointAttribute} points="${roundedPoints}" /></svg>`;
+                const shapeSvg = `<svg><${shape}${pointAttribute} points="${normalizedPoints}" /></svg>`;
 
                 navigator.clipboard.writeText(shapeSvg).then(() => {
                     console.log(`${shape} copied to clipboard:`, shapeSvg);

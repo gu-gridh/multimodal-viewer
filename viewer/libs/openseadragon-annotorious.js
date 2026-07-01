@@ -23568,11 +23568,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                             this.tools.current.isDrawing ||
                                 (this.tools.current.start(
                                     u.originalEvent,
-                                    (this.drawOnSingleClick ||
+                                    this.drawOnSingleClick ||
                                         ["polygon", "polyline"].includes(
                                             this.tools.current.constructor.identifier
-                                        )) &&
-                                        !this.hoveredShape
+                                        )
                                 ),
                                 e || this.scaleTool(this.tools.current));
                         },

@@ -51,6 +51,23 @@
             display: none;
         }
 
+        .back-button {
+            display: none;
+            position: absolute;
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 1.0);
+            background-image: url(https://data.dh.gu.se/ui-icons/arrow_back_white.png);
+            background-size: 15px;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-top: 30px;
+            margin-left: 12px;
+            z-index: 1200;
+            cursor: pointer;
+        }
+
         .iframes {
             border: none;
         }
@@ -104,6 +121,10 @@
                 display: block !important;
             }
 
+            #right-pane.mobile-open .back-button {
+                display: block;
+            }
+
             .compact {
                 display: block;
             }
@@ -136,6 +157,7 @@
             <iframe id="left-Iframe" class="iframes" style="width:100%;"></iframe>
         </div>
         <div id="right-pane">
+            <div id="back-to-visuals" class="back-button" title="Back to visuals" onclick="closeMobileMetadata()"></div>
             <iframe id="right-iframe" class="iframes" style="width:100%;"></iframe>
         </div>
         <div id="footer-container"></div>
@@ -279,6 +301,10 @@
             }
 
             document.getElementById('right-pane').classList.toggle('mobile-open');
+        }
+
+        function closeMobileMetadata() {
+            document.getElementById('right-pane').classList.remove('mobile-open');
         }
 
         function toggleRightPane() {

@@ -177,4 +177,8 @@ height:20px;
 		display: none !important;
 	}
 
+	#coordinate-toggle {
+		display: none !important;
+	}
+
 }

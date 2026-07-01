@@ -33,6 +33,24 @@ async function fetchAllPaginatedResults(url) {
   return results;
 }
 
+function scaleNormalizedSvgPoints(pointsValue, width, height) {
+  const points = pointsValue.trim().split(/\s+/).map(point => {
+    const [x, y] = point.split(',').map(Number);
+    return { x, y };
+  });
+  const isNormalized = points.every(({ x, y }) =>
+    Number.isFinite(x) && Number.isFinite(y) && Math.abs(x) <= 1 && Math.abs(y) <= 1
+  );
+
+  return points
+    .map(({ x, y }) => {
+      const scaledX = isNormalized ? x * width : x;
+      const scaledY = isNormalized ? y * height : y;
+      return `${Number(scaledX.toFixed(2))},${Number(scaledY.toFixed(2))}`;
+    })
+    .join(' ');
+}
+
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
@@ -220,8 +238,11 @@ app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
         const points = selectorValue.match(/points="([^"]+)"/)?.[1];
         const shape = selectorValue.includes('<polyline') ? 'polyline' : 'polygon';
         const color = annotation.body.categories?.[0]?.color || '#ff0000';
+        const scaledPoints = points
+          ? scaleNormalizedSvgPoints(points, metadata.width, metadata.height)
+          : '';
         return points
-          ? `<${shape} points="${points}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`
+          ? `<${shape} points="${scaledPoints}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`
           : '';
       }).join('');
       const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${metadata.width} ${metadata.height}">${shapes}</svg>`;

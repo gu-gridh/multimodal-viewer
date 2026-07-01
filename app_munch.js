@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const sharp = require('sharp');
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const munchPhotoTileSource = 'https://data.dh.gu.se/munch/static/munch/iiif/SolenMedium-v3.dzi';
 
 dotenv.config({ path: './.env.local' });
 
@@ -17,6 +18,19 @@ try {
 } catch (error) {
   console.error(`failed to load config for project ${projectName}:`, error);
   process.exit(1);
+}
+
+async function fetchAllPaginatedResults(url) {
+  const results = [];
+  let nextUrl = url;
+
+  while (nextUrl) {
+    const { data } = await axios.get(nextUrl);
+    results.push(...(data.results || []));
+    nextUrl = data.next;
+  }
+
+  return results;
 }
 
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
@@ -30,19 +44,13 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
   try {
     const encodedQueryName = encodeURIComponent(queryName);
-    const [imagesResponse, panelResponse] = await Promise.all([
-      axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`),
-      axios.get(`https://munch.dh.gu.se/api/panel/?title=${encodedQueryName}&depth=2`).catch(() => ({ data: { results: [] } }))
-    ]);
-    const images = imagesResponse.data.results;
+    const panelResponse = await axios
+      .get(`https://munch.dh.gu.se/api/panel/?title=${encodedQueryName}&depth=2`)
+      .catch(() => ({ data: { results: [] } }));
     const painting = panelResponse.data.results[0] || {};
     const coordinateWidthCm = Number(painting.width) || 0;
     const coordinateHeightCm = Number(painting.height) || 0;
     const displayCoordinateTool = Boolean(config.displayCoordinateTool && coordinateWidthCm && coordinateHeightCm);
-
-    if (!images || images.length === 0) {
-      return res.status(404).send('No data available.');
-    }
 
     const htmlContent = fs.readFileSync(
       path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'),
@@ -59,19 +67,12 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const pointDisplay = config.displayPointTool ? 'flex' : 'none';
 
     if (queryType === 'iiif' || queryType === 'photo') {
-      const photo = images.find(image => image.image_type === 'orthophoto');
-
-      if (!photo?.file) {
-        return res.status(404).send('No attached photograph found.');
-      }
-
-      const tileSource = `${photo.iiif_file}/info.json`;
       const downloadSources = filteredDownloadEnabled
         ? [`/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=photo&page=0`]
-        : [photo.file];
+        : [munchPhotoTileSource];
 
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSource))
+        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
@@ -94,6 +95,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     }
 
     if (queryType === 'topography') {
+      const imagesResponse = await axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`);
+      const images = imagesResponse.data.results || [];
       const sortedTopography = images
         .filter(image => image.image_type === 'topographical')
         .sort((a, b) => a.sort_order - b.sort_order);
@@ -156,13 +159,14 @@ app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
       params.set('annotation_year', req.query.annotation_year);
     }
 
-    const { data } = await axios.get(`https://munch.dh.gu.se/api/annotation/?${params.toString()}`);
+    const annotationUrl = `https://munch.dh.gu.se/api/annotation/?${params.toString()}`;
 
     if (req.query.count === '1') {
+      const { data } = await axios.get(annotationUrl);
       return res.json({ count: data.count || 0 });
     }
 
-    res.json(data.results || []);
+    res.json(await fetchAllPaginatedResults(annotationUrl));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not load annotations' });

@@ -2,7 +2,7 @@ export function initAnnotationFocus() {
     const style = document.createElement('style');
     style.textContent = `
         .annotation-focus .openseadragon-canvas img,
-        .annotation-focus .openseadragon-canvas canvas {
+        .annotation-focus .openseadragon-canvas canvas:not(#annotation-canvas) {
             filter: grayscale(1) brightness(0.45);
         }
 

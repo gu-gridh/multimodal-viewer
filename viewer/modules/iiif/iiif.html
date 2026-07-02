@@ -28,12 +28,39 @@
         body.iiif-initializing .interface-area-top {
             visibility: hidden;
         }
+
+        #annotation-canvas {
+            display: block;
+            height: 100%;
+            pointer-events: none;
+            width: 100%;
+            z-index: 20;
+        }
+
+        #annotation-interaction-message {
+            background: rgba(0, 0, 0, 0.78);
+            border-radius: 4px;
+            color: #fff;
+            display: none;
+            font-family: "Oswald", sans-serif;
+            font-size: 15px;
+            left: 50%;
+            max-width: min(300px, calc(100vw - 32px));
+            padding: 10px 12px;
+            pointer-events: none;
+            position: absolute;
+            text-align: center;
+            top: 76px;
+            transform: translateX(-50%);
+            z-index: 1001;
+        }
     </style>
 </head>
 
 <body class="iiif-initializing">
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
+    <div id="annotation-interaction-message">More than 100 annotations are shown. Narrow your search to interact with annotations.</div>
 
     <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;">
         <div id="instructions" style="bottom:20px; width:200px; display:none;">
@@ -156,6 +183,10 @@
         let annotationRequestId = 0;
         const annotationPageCache = new Map();
         const annotationPageCacheMaxEntries = 50;
+        const annotationCanvasThreshold = 100;
+        let annotationCanvas = null;
+        let annotationCanvasOverlayAdded = false;
+        let canvasAnnotationMode = false;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -192,6 +223,147 @@
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');
+        }
+
+        function getAnnotationCanvas() {
+            if (annotationCanvas) {
+                return annotationCanvas;
+            }
+
+            annotationCanvas = document.createElement('canvas');
+            annotationCanvas.id = 'annotation-canvas';
+            annotationCanvas.style.display = 'none';
+            return annotationCanvas;
+        }
+
+        function getAnnotationInteractionMessage() {
+            return document.getElementById('annotation-interaction-message');
+        }
+
+        function setCanvasAnnotationVisible(visible) {
+            if (annotationCanvas) {
+                annotationCanvas.style.display = visible ? 'block' : 'none';
+            }
+            getAnnotationInteractionMessage().style.display = visible ? 'block' : 'none';
+        }
+
+        function clearCanvasAnnotations() {
+            canvasAnnotationMode = false;
+            setCanvasAnnotationVisible(false);
+
+            if (annotationCanvas) {
+                const context = annotationCanvas.getContext('2d');
+                context.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+            }
+        }
+
+        function getAnnotationColor(annotation) {
+            return annotation?.body?.category?.color ||
+                annotation?.body?.categories?.[0]?.color ||
+                annotation?.body?.category_detail?.[0]?.color ||
+                annotation?.category_detail?.[0]?.color ||
+                '#ff0000';
+        }
+
+        function getAnnotationSelectorValue(annotation) {
+            return annotation?.target?.selector?.value || '';
+        }
+
+        function getImageOverlayBounds(imageSize) {
+            if (viewer.viewport.imageToViewportRectangle) {
+                return viewer.viewport.imageToViewportRectangle(0, 0, imageSize.width, imageSize.height);
+            }
+
+            return new OpenSeadragon.Rect(0, 0, 1, imageSize.height / imageSize.width);
+        }
+
+        function drawCanvasAnnotations(annotations, imageSize, resetCanvas = true) {
+            const canvas = getAnnotationCanvas();
+            const maxCanvasSide = 4096; //8192
+            const canvasScale = resetCanvas
+                ? Math.min(1, maxCanvasSide / Math.max(imageSize.width, imageSize.height))
+                : canvas.width / imageSize.width;
+            const width = Math.max(1, Math.round(imageSize.width * canvasScale));
+            const height = Math.max(1, Math.round(imageSize.height * canvasScale));
+            const context = canvas.getContext('2d');
+
+            if (resetCanvas) {
+                canvas.width = width;
+                canvas.height = height;
+                context.clearRect(0, 0, width, height);
+
+                if (!annotationCanvasOverlayAdded) {
+                    viewer.addOverlay({
+                        element: canvas,
+                        location: getImageOverlayBounds(imageSize),
+                        rotationMode: OpenSeadragon.OverlayRotationMode.EXACT
+                    });
+                    annotationCanvasOverlayAdded = true;
+                } else {
+                    viewer.updateOverlay(canvas, getImageOverlayBounds(imageSize));
+                }
+            }
+
+            annotations.forEach(annotation => {
+                const selectorValue = getAnnotationSelectorValue(annotation);
+                const pointsValue = selectorValue.match(/points="([^"]+)"/)?.[1];
+
+                if (!pointsValue) {
+                    const rectValue = selectorValue.match(/xywh=pixel:([^"]+)/)?.[1];
+                    if (!rectValue) {
+                        return;
+                    }
+
+                    const [x, y, width, height] = rectValue.split(',').map(Number);
+                    if (![x, y, width, height].every(Number.isFinite)) {
+                        return;
+                    }
+
+                    context.strokeStyle = getAnnotationColor(annotation);
+                    context.lineWidth = 3;
+                    context.strokeRect(x * canvasScale, y * canvasScale, width * canvasScale, height * canvasScale);
+                    return;
+                }
+
+                const points = pointsValue.trim().split(/\s+/).map(point => {
+                    const [x, y] = point.split(',').map(Number);
+                    return Number.isFinite(x) && Number.isFinite(y)
+                        ? { x: x * canvasScale, y: y * canvasScale }
+                        : null;
+                }).filter(Boolean);
+
+                if (points.length === 1) {
+                    context.beginPath();
+                    context.arc(points[0].x, points[0].y, 5, 0, Math.PI * 2);
+                    context.strokeStyle = getAnnotationColor(annotation);
+                    context.lineWidth = 3;
+                    context.stroke();
+                    return;
+                }
+
+                if (points.length < 2) {
+                    return;
+                }
+
+                const isPolyline = selectorValue.includes('<polyline');
+                context.beginPath();
+                context.moveTo(points[0].x, points[0].y);
+                points.slice(1).forEach(point => context.lineTo(point.x, point.y));
+
+                if (!isPolyline) {
+                    context.closePath();
+                }
+
+                context.strokeStyle = getAnnotationColor(annotation);
+                context.lineWidth = 3;
+                context.lineJoin = 'round';
+                context.lineCap = 'round';
+                context.stroke();
+            });
+
+            canvasAnnotationMode = true;
+            anno.setVisible(false);
+            setCanvasAnnotationVisible(annotationsVisible);
         }
 
         function saveViewerState(viewer) {
@@ -287,15 +459,20 @@
             if (annotationsVisible) {
                 //hide annotations
                 anno.setVisible(false);
+                setCanvasAnnotationVisible(false);
                 annotationsVisible = false;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
                 //show annotations
-                anno.setVisible(true);
-                if (anno.getAnnotations().length === 0) {
+                annotationsVisible = true;
+                if (canvasAnnotationMode) {
+                    setCanvasAnnotationVisible(true);
+                } else {
+                    anno.setVisible(true);
+                }
+                if (!canvasAnnotationMode && anno.getAnnotations().length === 0) {
                     loadCurrentAnnotations(activeAnnotationFilters).catch(error => console.error(error));
                 }
-                annotationsVisible = true;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)";
             }
         }
@@ -621,7 +798,9 @@
                 const annotations = pageData.annotations;
 
                 if (requestId === annotationRequestId) {
+                    clearCanvasAnnotations();
                     anno.setAnnotations(annotations);
+                    anno.setVisible(annotationsVisible);
                 }
 
                 return annotations;
@@ -631,6 +810,7 @@
                 let nextPage = 1;
                 const scaledAnnotations = [];
                 const loadedPages = new Set();
+                let useCanvasAnnotations = false;
 
                 while (nextPage && requestId === annotationRequestId) {
                     if (loadedPages.has(nextPage)) {
@@ -642,18 +822,29 @@
                     const pageUrl = getAnnotationUrl(filters, nextPage);
                     const pageData = await loadAnnotationPage(pageUrl, imageSize);
                     const isFirstPage = loadedPages.size === 1;
+                    useCanvasAnnotations = pageData.count > annotationCanvasThreshold;
                     scaledAnnotations.push(...pageData.annotations);
                     nextPage = pageData.nextPage;
 
-                    if (requestId === annotationRequestId && isFirstPage) {
+                    if (requestId === annotationRequestId && useCanvasAnnotations && isFirstPage) {
+                        anno.setAnnotations([]);
+                        anno.setVisible(false);
+                        drawCanvasAnnotations(pageData.annotations, imageSize, true);
+                    } else if (requestId === annotationRequestId && useCanvasAnnotations) {
+                        drawCanvasAnnotations(pageData.annotations, imageSize, false);
+                    } else if (requestId === annotationRequestId && isFirstPage) {
+                        clearCanvasAnnotations();
                         anno.setAnnotations(scaledAnnotations.slice());
+                        anno.setVisible(annotationsVisible);
                     }
 
                     await yieldToBrowser();
                 }
 
-                if (requestId === annotationRequestId && loadedPages.size > 1) {
+                if (requestId === annotationRequestId && !useCanvasAnnotations && loadedPages.size > 1) {
+                    clearCanvasAnnotations();
                     anno.setAnnotations(scaledAnnotations.slice());
+                    anno.setVisible(annotationsVisible);
                 }
 
                 return scaledAnnotations;
@@ -668,6 +859,7 @@
                 }
 
                 const requestId = ++annotationRequestId;
+                clearCanvasAnnotations();
                 const imageSize = await waitForCurrentImageSize();
                 return pagedAnnotationLoadingEnabled
                     ? loadPagedAnnotations(activeAnnotationFilters, requestId, imageSize)

@@ -154,6 +154,8 @@
         let pendingAnnotationId = null;
         let activeAnnotationFilters = {};
         let annotationRequestId = 0;
+        const annotationPageCache = new Map();
+        const annotationPageCacheMaxEntries = 50;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -169,6 +171,7 @@
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
+        const pagedAnnotationLoadingEnabled = 'PLACEHOLDER_PAGED_ANNOTATION_LOADING' === true;
         const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS';
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
         const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
@@ -474,7 +477,6 @@
                 }
 
                 loadAnnotationsPromise.then(() => {
-                    console.log('opening annotation:', annotationId);
                     const annotation = anno.getAnnotationById(annotationId);
 
                     if (annotation) {
@@ -495,7 +497,7 @@
             }
 
             //<---Metadata panel filter selections-->
-            function getAnnotationUrl(filters) {
+            function getAnnotationUrl(filters, page) {
                 if (!displayInscriptions || !annotationPath || isPlaceholder(annotationPath)) {
                     return '';
                 }
@@ -506,6 +508,10 @@
                         url.searchParams.set(key === 'tag' ? 'tags' : key, value);
                     }
                 });
+
+                if (page) {
+                    url.searchParams.set('page', page);
+                }
 
                 return url.toString();
             }
@@ -572,6 +578,87 @@
                 return scaledAnnotation;
             }
 
+            function setAnnotationPageCache(key, value) {
+                annotationPageCache.set(key, value);
+
+                if (annotationPageCache.size > annotationPageCacheMaxEntries) {
+                    annotationPageCache.delete(annotationPageCache.keys().next().value);
+                }
+            }
+
+            function getAnnotationCacheKey(annotationUrl, imageSize) {
+                return `${annotationUrl}|${imageSize?.width || 0}x${imageSize?.height || 0}`;
+            }
+
+            async function loadAnnotationPage(pageUrl, imageSize) {
+                const cacheKey = getAnnotationCacheKey(pageUrl, imageSize);
+
+                if (annotationPageCache.has(cacheKey)) {
+                    return annotationPageCache.get(cacheKey);
+                }
+
+                const response = await fetch(pageUrl);
+                const data = await response.json();
+                const results = Array.isArray(data) ? data : data.results || [];
+                const pageData = {
+                    count: Array.isArray(data) ? results.length : data.count || results.length,
+                    nextPage: Array.isArray(data) ? null : data.nextPage,
+                    page: Array.isArray(data) ? null : data.page,
+                    annotations: results.map(annotation => scaleAnnotationToImage(annotation, imageSize))
+                };
+
+                setAnnotationPageCache(cacheKey, pageData);
+                return pageData;
+            }
+
+            function yieldToBrowser() {
+                return new Promise(resolve => setTimeout(resolve, 0));
+            }
+
+            async function loadAllAnnotations(filters, requestId, imageSize) {
+                const annotationUrl = getAnnotationUrl(filters);
+                const pageData = await loadAnnotationPage(annotationUrl, imageSize);
+                const annotations = pageData.annotations;
+
+                if (requestId === annotationRequestId) {
+                    anno.setAnnotations(annotations);
+                }
+
+                return annotations;
+            }
+
+            async function loadPagedAnnotations(filters, requestId, imageSize) {
+                let nextPage = 1;
+                const scaledAnnotations = [];
+                const loadedPages = new Set();
+
+                while (nextPage && requestId === annotationRequestId) {
+                    if (loadedPages.has(nextPage)) {
+                        console.error('Same annotation page:', nextPage);
+                        break;
+                    }
+
+                    loadedPages.add(nextPage);
+                    const pageUrl = getAnnotationUrl(filters, nextPage);
+                    const pageData = await loadAnnotationPage(pageUrl, imageSize);
+                    const isFirstPage = loadedPages.size === 1;
+                    scaledAnnotations.push(...pageData.annotations);
+                    nextPage = pageData.nextPage;
+
+                    if (requestId === annotationRequestId && isFirstPage) {
+                        anno.setAnnotations(scaledAnnotations.slice());
+                    }
+
+                    await yieldToBrowser();
+                }
+
+                if (requestId === annotationRequestId && loadedPages.size > 1) {
+                    anno.setAnnotations(scaledAnnotations.slice());
+                }
+
+                return scaledAnnotations;
+            }
+
             async function loadCurrentAnnotations(filters = activeAnnotationFilters) {
                 activeAnnotationFilters = filters || {};
                 const annotationUrl = getAnnotationUrl(activeAnnotationFilters);
@@ -581,18 +668,10 @@
                 }
 
                 const requestId = ++annotationRequestId;
-                const response = await fetch(annotationUrl);
-                const annotations = await response.json();
                 const imageSize = await waitForCurrentImageSize();
-                const scaledAnnotations = Array.isArray(annotations)
-                    ? annotations.map(annotation => scaleAnnotationToImage(annotation, imageSize))
-                    : [];
-
-                if (requestId === annotationRequestId) {
-                    anno.setAnnotations(scaledAnnotations);
-                }
-
-                return scaledAnnotations;
+                return pagedAnnotationLoadingEnabled
+                    ? loadPagedAnnotations(activeAnnotationFilters, requestId, imageSize)
+                    : loadAllAnnotations(activeAnnotationFilters, requestId, imageSize);
             }
             //<!---Metadata panel filter selections-->
 

@@ -8,6 +8,10 @@ const sharp = require('sharp');
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 const munchPhotoTileSource = 'https://data.dh.gu.se/munch/static/munch/iiif/SolenMedium-v3.dzi';
+const apiCache = new Map();
+const apiCacheTtlMs = 60 * 1000;
+const apiCacheMaxEntries = 100;
+const annotationPageLimit = 20;
 
 dotenv.config({ path: './.env.local' });
 
@@ -20,17 +24,52 @@ try {
   process.exit(1);
 }
 
+async function getCachedApiJson(url) {
+  const cached = apiCache.get(url);
+  const now = Date.now();
+
+  if (cached && cached.expiresAt > now) {
+    return cached.data;
+  }
+
+  const { data } = await axios.get(url);
+  apiCache.set(url, { data, expiresAt: now + apiCacheTtlMs });
+
+  if (apiCache.size > apiCacheMaxEntries) {
+    apiCache.delete(apiCache.keys().next().value);
+  }
+
+  return data;
+}
+
 async function fetchAllPaginatedResults(url) {
   const results = [];
   let nextUrl = url;
 
   while (nextUrl) {
-    const { data } = await axios.get(nextUrl);
+    const data = await getCachedApiJson(nextUrl);
     results.push(...(data.results || []));
     nextUrl = data.next;
   }
 
   return results;
+}
+
+function getNextPageNumber(nextUrl) {
+  if (!nextUrl) {
+    return null;
+  }
+
+  try {
+    const params = new URL(nextUrl, 'https://munch.dh.gu.se').searchParams;
+    const offset = Number(params.get('offset'));
+    const limit = Number(params.get('limit')) || annotationPageLimit;
+    return Number.isFinite(offset)
+      ? Math.floor(offset / limit) + 1
+      : null;
+  } catch (error) {
+    return null;
+  }
 }
 
 function scaleNormalizedSvgPoints(pointsValue, width, height) {
@@ -76,6 +115,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     );
     const annotationPath = `/viewer/modules/iiif/visual-annotations?q=${encodedQueryName}`;
     const displayIIIFAnnotations = Boolean(config.displayIIIFAnnotations);
+    const pagedAnnotationLoadingEnabled = Boolean(config.pagedIIIFAnnotations);
     const displayAnnotationFocus = Boolean(config.displayAnnotationFocus);
     const filteredDownloadEnabled = Boolean(config.downloadFilteredIIIFAnnotations);
     const annotationDisplay = displayIIIFAnnotations ? 'flex' : 'none';
@@ -101,6 +141,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, lineDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
+        .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
@@ -142,6 +183,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, lineDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
+        .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
@@ -177,11 +219,30 @@ app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
       params.set('annotation_year', req.query.annotation_year);
     }
 
+    const page = Number.parseInt(req.query.page, 10);
+    const shouldReturnPage = Number.isInteger(page) && page > 0 && req.query.count !== '1';
+
+    if (shouldReturnPage) {
+      params.set('limit', String(annotationPageLimit));
+      params.set('offset', String((page - 1) * annotationPageLimit));
+    }
+
     const annotationUrl = `https://munch.dh.gu.se/api/annotation/?${params.toString()}`;
 
     if (req.query.count === '1') {
-      const { data } = await axios.get(annotationUrl);
+      const data = await getCachedApiJson(annotationUrl);
       return res.json({ count: data.count || 0 });
+    }
+
+    if (shouldReturnPage) {
+      const data = await getCachedApiJson(annotationUrl);
+      const nextPage = getNextPageNumber(data.next);
+      return res.json({
+        count: data.count || 0,
+        page,
+        nextPage,
+        results: data.results || []
+      });
     }
 
     res.json(await fetchAllPaginatedResults(annotationUrl));
@@ -211,9 +272,10 @@ app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
       annotationParams.set('annotation_year', req.query.annotation_year);
     }
 
-    const [imagesResponse, annotationsResponse] = await Promise.all([
+    const annotationUrl = `https://munch.dh.gu.se/api/annotation/?${annotationParams.toString()}`;
+    const [imagesResponse, annotations] = await Promise.all([
       axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedTitle}`),
-      axios.get(`https://munch.dh.gu.se/api/annotation/?${annotationParams.toString()}`)
+      fetchAllPaginatedResults(annotationUrl)
     ]);
     const images = imagesResponse.data.results || [];
     const image = queryType === 'topography'
@@ -228,7 +290,6 @@ app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
 
     const imageResponse = await axios.get(image.file, { responseType: 'arraybuffer' });
     let sharpImage = sharp(Buffer.from(imageResponse.data)).rotate();
-    const annotations = annotationsResponse.data.results || [];
     const metadata = await sharpImage.metadata();
 
     if (metadata.width && metadata.height && annotations.length) {

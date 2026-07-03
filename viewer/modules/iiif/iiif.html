@@ -46,12 +46,14 @@
             font-size: 15px;
             left: 50%;
             max-width: min(300px, calc(100vw - 32px));
+            opacity: 0;
             padding: 10px 12px;
             pointer-events: none;
             position: absolute;
             text-align: center;
             top: 76px;
             transform: translateX(-50%);
+            transition: opacity 250ms ease;
             z-index: 1001;
         }
     </style>
@@ -184,9 +186,7 @@
         const annotationPageCache = new Map();
         const annotationPageCacheMaxEntries = 50;
         const annotationCanvasThreshold = 150;
-        let annotationCanvas = null;
-        let annotationCanvasOverlayAdded = false;
-        let canvasAnnotationMode = false;
+        let annotationCanvasRenderer = null;
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
@@ -220,150 +220,35 @@
                 return null;
             })
             : Promise.resolve(null);
+        const annotationCanvasLoadPromise = import('/viewer/modules/iiif/features/annotation-canvas.js').catch(error => {
+            console.error(error);
+            return null;
+        });
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');
         }
 
-        function getAnnotationCanvas() {
-            if (annotationCanvas) {
-                return annotationCanvas;
-            }
-
-            annotationCanvas = document.createElement('canvas');
-            annotationCanvas.id = 'annotation-canvas';
-            annotationCanvas.style.display = 'none';
-            return annotationCanvas;
-        }
-
-        function getAnnotationInteractionMessage() {
-            return document.getElementById('annotation-interaction-message');
-        }
-
         function setCanvasAnnotationVisible(visible) {
-            if (annotationCanvas) {
-                annotationCanvas.style.display = visible ? 'block' : 'none';
+            if (annotationCanvasRenderer) {
+                annotationCanvasRenderer.setCanvasAnnotationVisible(visible);
             }
-            getAnnotationInteractionMessage().style.display = visible ? 'block' : 'none';
         }
 
         function clearCanvasAnnotations() {
-            canvasAnnotationMode = false;
-            setCanvasAnnotationVisible(false);
-
-            if (annotationCanvas) {
-                const context = annotationCanvas.getContext('2d');
-                context.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+            if (annotationCanvasRenderer) {
+                annotationCanvasRenderer.clearCanvasAnnotations();
             }
-        }
-
-        function getAnnotationColor(annotation) {
-            return annotation?.body?.category?.color ||
-                annotation?.body?.categories?.[0]?.color ||
-                annotation?.body?.category_detail?.[0]?.color ||
-                annotation?.category_detail?.[0]?.color ||
-                '#ff0000';
-        }
-
-        function getAnnotationSelectorValue(annotation) {
-            return annotation?.target?.selector?.value || '';
-        }
-
-        function getImageOverlayBounds(imageSize) {
-            if (viewer.viewport.imageToViewportRectangle) {
-                return viewer.viewport.imageToViewportRectangle(0, 0, imageSize.width, imageSize.height);
-            }
-
-            return new OpenSeadragon.Rect(0, 0, 1, imageSize.height / imageSize.width);
         }
 
         function drawCanvasAnnotations(annotations, imageSize, resetCanvas = true) {
-            const canvas = getAnnotationCanvas();
-            const maxCanvasSide = 4096; //8192
-            const canvasScale = resetCanvas
-                ? Math.min(1, maxCanvasSide / Math.max(imageSize.width, imageSize.height))
-                : canvas.width / imageSize.width;
-            const width = Math.max(1, Math.round(imageSize.width * canvasScale));
-            const height = Math.max(1, Math.round(imageSize.height * canvasScale));
-            const context = canvas.getContext('2d');
-
-            if (resetCanvas) {
-                canvas.width = width;
-                canvas.height = height;
-                context.clearRect(0, 0, width, height);
-
-                if (!annotationCanvasOverlayAdded) {
-                    viewer.addOverlay({
-                        element: canvas,
-                        location: getImageOverlayBounds(imageSize),
-                        rotationMode: OpenSeadragon.OverlayRotationMode.EXACT
-                    });
-                    annotationCanvasOverlayAdded = true;
-                } else {
-                    viewer.updateOverlay(canvas, getImageOverlayBounds(imageSize));
-                }
+            if (annotationCanvasRenderer) {
+                annotationCanvasRenderer.drawCanvasAnnotations(annotations, imageSize, resetCanvas);
             }
+        }
 
-            annotations.forEach(annotation => {
-                const selectorValue = getAnnotationSelectorValue(annotation);
-                const pointsValue = selectorValue.match(/points="([^"]+)"/)?.[1];
-
-                if (!pointsValue) {
-                    const rectValue = selectorValue.match(/xywh=pixel:([^"]+)/)?.[1];
-                    if (!rectValue) {
-                        return;
-                    }
-
-                    const [x, y, width, height] = rectValue.split(',').map(Number);
-                    if (![x, y, width, height].every(Number.isFinite)) {
-                        return;
-                    }
-
-                    context.strokeStyle = getAnnotationColor(annotation);
-                    context.lineWidth = 3;
-                    context.strokeRect(x * canvasScale, y * canvasScale, width * canvasScale, height * canvasScale);
-                    return;
-                }
-
-                const points = pointsValue.trim().split(/\s+/).map(point => {
-                    const [x, y] = point.split(',').map(Number);
-                    return Number.isFinite(x) && Number.isFinite(y)
-                        ? { x: x * canvasScale, y: y * canvasScale }
-                        : null;
-                }).filter(Boolean);
-
-                if (points.length === 1) {
-                    context.beginPath();
-                    context.arc(points[0].x, points[0].y, 5, 0, Math.PI * 2);
-                    context.strokeStyle = getAnnotationColor(annotation);
-                    context.lineWidth = 3;
-                    context.stroke();
-                    return;
-                }
-
-                if (points.length < 2) {
-                    return;
-                }
-
-                const isPolyline = selectorValue.includes('<polyline');
-                context.beginPath();
-                context.moveTo(points[0].x, points[0].y);
-                points.slice(1).forEach(point => context.lineTo(point.x, point.y));
-
-                if (!isPolyline) {
-                    context.closePath();
-                }
-
-                context.strokeStyle = getAnnotationColor(annotation);
-                context.lineWidth = 3;
-                context.lineJoin = 'round';
-                context.lineCap = 'round';
-                context.stroke();
-            });
-
-            canvasAnnotationMode = true;
-            anno.setVisible(false);
-            setCanvasAnnotationVisible(annotationsVisible);
+        function isCanvasAnnotationMode() {
+            return annotationCanvasRenderer && annotationCanvasRenderer.isCanvasAnnotationMode();
         }
 
         function saveViewerState(viewer) {
@@ -465,12 +350,12 @@
             } else {
                 //show annotations
                 annotationsVisible = true;
-                if (canvasAnnotationMode) {
+                if (isCanvasAnnotationMode()) {
                     setCanvasAnnotationVisible(true);
                 } else {
                     anno.setVisible(true);
                 }
-                if (!canvasAnnotationMode && anno.getAnnotations().length === 0) {
+                if (!isCanvasAnnotationMode() && anno.getAnnotations().length === 0) {
                     loadCurrentAnnotations(activeAnnotationFilters).catch(error => console.error(error));
                 }
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)";
@@ -639,8 +524,19 @@
                 anno.addDrawingTool(OpenSeadragon.Annotorious.PointTool);
             }
 
+            const annotationCanvasInitPromise = annotationCanvasLoadPromise
+                .then(function (module) {
+                    if (module) {
+                        annotationCanvasRenderer = module.createAnnotationCanvasRenderer({
+                            anno,
+                            getAnnotationsVisible: () => annotationsVisible,
+                            viewer
+                        });
+                    }
+                });
+
             const loadAnnotationsPromise = displayInscriptions
-                ? loadCurrentAnnotations().then(function (annotations) {
+                ? annotationCanvasInitPromise.then(() => loadCurrentAnnotations()).then(function (annotations) {
                     if (annotations.length > 0 && currentAnnotationId) {
                         openAnnotationById(currentAnnotationId);
                     }
@@ -1131,7 +1027,7 @@
                 }
             });
 
-            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise]).finally(function () {
+            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise, annotationCanvasInitPromise]).finally(function () {
                 document.body.classList.remove('iiif-initializing');
             });
 

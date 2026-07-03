@@ -71,7 +71,7 @@ export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, vi
 
     function drawCanvasAnnotations(annotations, imageSize, resetCanvas = true) {
         const canvas = getAnnotationCanvas();
-        const maxCanvasSide = 4096;
+        const maxCanvasSide = 2048;
         const canvasScale = resetCanvas
             ? Math.min(1, maxCanvasSide / Math.max(imageSize.width, imageSize.height))
             : canvas.width / imageSize.width;

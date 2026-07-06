@@ -23,6 +23,11 @@ body {
 	height: 80px;
 	margin-top: 10px;
 	margin-right: 10px;
+	z-index: 100 !important;
+}
+
+.openseadragon-container .navigator {
+	z-index: 100 !important;
 }
 
 #CenterNav {

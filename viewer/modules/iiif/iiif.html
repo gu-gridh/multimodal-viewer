@@ -217,14 +217,18 @@
                 return null;
             })
             : Promise.resolve(null);
-        const annotationCanvasLoadPromise = import('/viewer/modules/iiif/features/annotation-canvas.js').catch(error => {
-            console.error(error);
-            return null;
-        });
-        const annotationLoaderLoadPromise = import('/viewer/modules/iiif/features/annotation-loader.js').catch(error => {
-            console.error(error);
-            return null;
-        });
+        const annotationCanvasLoadPromise = displayInscriptions === true && pagedAnnotationLoadingEnabled
+            ? import('/viewer/modules/iiif/features/annotation-canvas.js').catch(error => {
+                console.error(error);
+                return null;
+            })
+            : Promise.resolve(null);
+        const annotationLoaderLoadPromise = displayInscriptions === true
+            ? import('/viewer/modules/iiif/features/annotation-loader.js').catch(error => {
+                console.error(error);
+                return null;
+            })
+            : Promise.resolve(null);
 
         function isPlaceholder(value) {
             return value.includes('PLACEHOLDER');

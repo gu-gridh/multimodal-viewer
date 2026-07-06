@@ -244,6 +244,17 @@
             }, '*');
         }
 
+        function getAnnotationFilterQuery() {
+            const params = new URLSearchParams();
+            Object.entries(activeAnnotationFilters).forEach(([key, value]) => {
+                if (value && value !== 'all') {
+                    params.set(key, value);
+                }
+            });
+
+            return params.toString();
+        }
+
         function changeLeftViewer(viewerType) {
             activeLeftViewer = viewerType;
             const iframe = document.getElementById('left-Iframe');
@@ -251,13 +262,15 @@
             const currentUrl = new URL(window.location.href);
             const hashFragment = currentUrl.hash || '';
             const qValue = getBaseQuery();
+            const filterQuery = getAnnotationFilterQuery();
+            const filterSuffix = filterQuery ? `&${filterQuery}` : '';
             let src = '';
             let newPath = `/viewer/?q=${qValue}`;
             let buttonNum = 1;
 
             switch (viewerType) {
                 case 'topography':
-                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/topography${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/topography${filterSuffix}${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/topography`;
                     buttonNum = 2;
                     break;
@@ -268,7 +281,7 @@
                     break;
                 case 'photo':
                 default:
-                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/photo${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/photo${filterSuffix}${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/photo`;
                     buttonNum = 1;
                     break;

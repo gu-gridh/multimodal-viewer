@@ -69,9 +69,13 @@ export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, vi
         return new OpenSeadragon.Rect(0, 0, 1, imageSize.height / imageSize.width);
     }
 
+    function getMaxCanvasSide() {
+        return window.matchMedia('(max-width: 1024px)').matches ? 2048 : 8192;
+    }
+
     function drawCanvasAnnotations(annotations, imageSize, resetCanvas = true) {
         const canvas = getAnnotationCanvas();
-        const maxCanvasSide = 2048;
+        const maxCanvasSide = getMaxCanvasSide();
         const canvasScale = resetCanvas
             ? Math.min(1, maxCanvasSide / Math.max(imageSize.width, imageSize.height))
             : canvas.width / imageSize.width;

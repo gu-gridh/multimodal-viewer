@@ -266,8 +266,6 @@
         }
 
         let pendingAnnotationLoad = null;
-        let hiddenAnnotationFilters = null;
-
         function getAnnotationFilterKey(filters = {}) {
             const normalized = {};
             Object.keys(filters || {}).sort().forEach(function (key) {
@@ -410,27 +408,20 @@
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
                 //hide annotations
-                annotationsVisible = false;
-                annotationLoader?.cancelAnnotationLoad();
-                pendingAnnotationLoad = null;
-                clearCanvasAnnotations();
-                anno.setAnnotations([]);
                 anno.setVisible(false);
                 setCanvasAnnotationVisible(false);
+                annotationsVisible = false;
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
                 //show annotations
                 annotationsVisible = true;
-                const filters = hiddenAnnotationFilters || getActiveAnnotationFilters();
-                hiddenAnnotationFilters = null;
-
                 if (isCanvasAnnotationMode()) {
                     setCanvasAnnotationVisible(true);
                 } else {
                     anno.setVisible(true);
                 }
                 if (!isCanvasAnnotationMode() && anno.getAnnotations().length === 0) {
-                    loadCurrentAnnotations(filters).catch(error => console.error(error));
+                    loadCurrentAnnotations(getActiveAnnotationFilters()).catch(error => console.error(error));
                 }
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)";
             }
@@ -525,7 +516,9 @@
 
             //show annotations after rotation
             viewer.addHandler('animation-finish', function () {
-                anno.setVisible(annotationsVisible && !isCanvasAnnotationMode());
+                if (annotationsVisible) {
+                    anno.setVisible(true);
+                }
             });
 
             viewer.addHandler('open', function () {
@@ -917,14 +910,6 @@
                         }
                     });
                 } else if (event.data.type === 'annotationFiltersChange') {
-                    if (!annotationsVisible) {
-                        hiddenAnnotationFilters = event.data.filters;
-                        annotationLoader?.cancelAnnotationLoad();
-                        pendingAnnotationLoad = null;
-                        return;
-                    }
-
-                    hiddenAnnotationFilters = null;
                     loadCurrentAnnotations(event.data.filters).catch(error => console.error(error));
                 }
             });

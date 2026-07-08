@@ -24,6 +24,16 @@
             pointer-events: none;
         }
 
+        body.annotations-hidden svg.a9s-annotationlayer .a9s-annotation {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        body.annotations-hidden #annotation-canvas,
+        body.annotations-hidden #annotation-interaction-message {
+            display: none !important;
+        }
+
         body.iiif-initializing .interface-area,
         body.iiif-initializing .interface-area-top {
             visibility: hidden;
@@ -408,17 +418,16 @@
             const button = document.getElementById('clear-annotations');
             if (annotationsVisible) {
                 //hide annotations
-                anno.setVisible(false);
-                setCanvasAnnotationVisible(false);
                 annotationsVisible = false;
+                document.body.classList.add('annotations-hidden');
                 button.style.backgroundImage = "url(https://data.dh.gu.se/ui-icons/annotations_inactive_white.png)";
             } else {
                 //show annotations
                 annotationsVisible = true;
+                document.body.classList.remove('annotations-hidden');
+                anno.setVisible(true);
                 if (isCanvasAnnotationMode()) {
                     setCanvasAnnotationVisible(true);
-                } else {
-                    anno.setVisible(true);
                 }
                 if (!isCanvasAnnotationMode() && anno.getAnnotations().length === 0) {
                     loadCurrentAnnotations(getActiveAnnotationFilters()).catch(error => console.error(error));
@@ -511,14 +520,13 @@
             //hide annotations when rotating
             viewer.addHandler('rotate', function () {
                 currentRotation = viewer.viewport.getRotation();
-                anno.setVisible(false);
+                document.body.classList.add('annotations-hidden');
             });
 
             //show annotations after rotation
             viewer.addHandler('animation-finish', function () {
-                if (annotationsVisible) {
-                    anno.setVisible(true);
-                }
+                document.body.classList.toggle('annotations-hidden', !annotationsVisible);
+                anno.setVisible(true);
             });
 
             viewer.addHandler('open', function () {

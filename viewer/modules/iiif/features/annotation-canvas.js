@@ -158,7 +158,6 @@ export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, vi
         });
 
         canvasAnnotationMode = true;
-        anno.setVisible(false);
         setCanvasAnnotationVisible(getAnnotationsVisible());
     }
 

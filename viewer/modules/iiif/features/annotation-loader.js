@@ -141,7 +141,7 @@ export function createAnnotationLoader({
         if (requestId === annotationRequestId) {
             clearCanvasAnnotations();
             anno.setAnnotations(annotations);
-            anno.setVisible(getAnnotationsVisible());
+            anno.setVisible(true);
         }
 
         return annotations;
@@ -169,14 +169,13 @@ export function createAnnotationLoader({
 
             if (requestId === annotationRequestId && useCanvasAnnotations && isFirstPage) {
                 anno.setAnnotations([]);
-                anno.setVisible(false);
                 drawCanvasAnnotations(pageData.annotations, imageSize, true);
             } else if (requestId === annotationRequestId && useCanvasAnnotations) {
                 drawCanvasAnnotations(pageData.annotations, imageSize, false);
             } else if (requestId === annotationRequestId && isFirstPage) {
                 clearCanvasAnnotations();
                 anno.setAnnotations(scaledAnnotations.slice());
-                anno.setVisible(getAnnotationsVisible());
+                anno.setVisible(true);
             }
 
             await yieldToBrowser();
@@ -185,7 +184,7 @@ export function createAnnotationLoader({
         if (requestId === annotationRequestId && !useCanvasAnnotations && loadedPages.size > 1) {
             clearCanvasAnnotations();
             anno.setAnnotations(scaledAnnotations.slice());
-            anno.setVisible(getAnnotationsVisible());
+            anno.setVisible(true);
         }
 
         return scaledAnnotations;

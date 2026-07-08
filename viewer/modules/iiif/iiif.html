@@ -29,6 +29,10 @@
             pointer-events: none !important;
         }
 
+        body.annotations-hidden svg.a9s-annotationlayer .pending-annotation {
+            opacity: 1 !important;
+        }
+
         body.annotations-hidden #annotation-canvas,
         body.annotations-hidden #annotation-interaction-message {
             display: none !important;
@@ -53,7 +57,7 @@
             color: #fff;
             display: none;
             font-family: "Oswald", sans-serif;
-            font-weight:300;
+            font-weight: 300;
             font-size: 15px;
             left: 50%;
             max-width: min(215px, calc(100vw - 32px));
@@ -73,7 +77,8 @@
 <body class="iiif-initializing">
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
-    <div id="annotation-interaction-message">Narrow your search to less than 150 annotations to interact with them.</div>
+    <div id="annotation-interaction-message">Narrow your search to less than 150 annotations to interact with them.
+    </div>
 
     <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;">
         <div id="instructions" style="bottom:20px; width:200px; display:none;">
@@ -579,10 +584,16 @@
                 disableEditor: true,
                 formatters: [
                     function (annotation) {
+                        const bodies = Array.isArray(annotation?.body) ? annotation.body : [annotation?.body].filter(Boolean);
+                        const isPending = bodies.some(body => body?.purpose === 'tagging' && body?.value === 'MyTag');
                         const color = annotation?.body?.category?.color || annotation?.body?.categories?.[0]?.color;
-                        return color ? {
-                            style: `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:3;`
-                        } : null;
+                        const formatted = isPending ? { className: 'pending-annotation' } : {};
+
+                        if (color) {
+                            formatted.style = `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:3;`;
+                        }
+
+                        return Object.keys(formatted).length ? formatted : null;
                     }
                 ]
             });

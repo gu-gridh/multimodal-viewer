@@ -207,7 +207,12 @@ export function createAnnotationLoader({
             : loadAllAnnotations(activeAnnotationFilters, requestId, imageSize);
     }
 
+    function cancelAnnotationLoad() {
+        annotationRequestId++;
+    }
+
     return {
+        cancelAnnotationLoad,
         getActiveAnnotationFilters: () => activeAnnotationFilters,
         getAnnotationUrl,
         getCurrentImageSize,

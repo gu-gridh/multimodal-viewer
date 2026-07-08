@@ -139,6 +139,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     bottom: 50px;
+      z-index:20;
 }
 
 .clear-annotation-button {
@@ -703,7 +704,7 @@ h2 {
     position: fixed;
     color: white;
     left: 50%;
-    bottom: 35px;
+    bottom: 50px;
     transform: translate(-50%, -50%);
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.8);

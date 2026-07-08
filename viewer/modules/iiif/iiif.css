@@ -123,6 +123,7 @@ body {
 	pointer-events: none;
 	font-weight:200;
 	font-family: monospace;
+	z-index:20;
 }
 
 #coordinate-instructions {

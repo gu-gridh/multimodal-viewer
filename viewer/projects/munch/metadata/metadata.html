@@ -145,7 +145,6 @@
 
         function showFilters() {
             filteringSection.style.display = '';
-            documentList.style.display = '';
             annotationCountPill.style.display = '';
             annotationDetail.style.display = 'none';
             loadDocuments();
@@ -161,7 +160,7 @@
             document.getElementById('annotation-edit-button').href =
                 `https://munch.dh.gu.se/admin/munch/visualannotation/${annotation.id}/change/`;
             filteringSection.style.display = 'none';
-            documentList.style.display = 'none';
+            documentList.hidden = true;
             annotationCountPill.style.display = 'none';
             annotationDetail.style.display = 'block';
         }
@@ -209,6 +208,7 @@
         }
 
         function renderDocuments(documents) {
+            documentList.hidden = documents.length === 0;
             documentListItems.innerHTML = documents.length
                 ? documents.map((item) => `
                     <a class="document-item" href="${item.file || '#'}" target="_blank" rel="noopener">
@@ -220,7 +220,7 @@
         }
 
         async function loadDocuments() {
-            if (!panelTitle || documentList.style.display === 'none') {
+            if (!panelTitle || annotationDetail.style.display === 'block') {
                 return;
             }
 

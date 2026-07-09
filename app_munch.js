@@ -107,6 +107,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const painting = panelResponse.data.results[0] || {};
     const coordinateWidthCm = Number(painting.width) || 0;
     const coordinateHeightCm = Number(painting.height) || 0;
+    const annotationCanvasThreshold = Number(painting.interactive_annotations) || 150;
     const displayCoordinateTool = Boolean(config.displayCoordinateTool && coordinateWidthCm && coordinateHeightCm);
 
     const htmlContent = fs.readFileSync(
@@ -142,6 +143,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
+        .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
@@ -184,6 +186,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
+        .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)

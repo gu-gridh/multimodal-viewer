@@ -77,8 +77,7 @@
 <body class="iiif-initializing">
     <!-- Container for OpenSeadragon -->
     <div id="openseadragon" style="width: 100%; height: calc(100vh); background-color:black"></div>
-    <div id="annotation-interaction-message">Narrow your search to less than 150 annotations to interact with them.
-    </div>
+    <div id="annotation-interaction-message"></div>
 
     <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;">
         <div id="instructions" style="bottom:20px; width:200px; display:none;">
@@ -197,9 +196,14 @@
         let isInitialLoad = true;
         let currentAnnotationTool = 'rect';
         let pendingAnnotationId = null;
-        const annotationCanvasThreshold = 150;
+        const annotationCanvasThreshold = Number('PLACEHOLDER_INTERACTIVE_ANNOTATIONS') || 150;
         let annotationCanvasRenderer = null;
         let annotationLoader = null;
+
+        const annotationInteractionMessage = document.getElementById('annotation-interaction-message');
+        if (annotationInteractionMessage) {
+            annotationInteractionMessage.textContent = `Narrow your search to less than ${annotationCanvasThreshold} annotations to interact with them.`;
+        }
 
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;

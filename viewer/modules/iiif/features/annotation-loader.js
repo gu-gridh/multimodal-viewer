@@ -12,8 +12,35 @@ export function createAnnotationLoader({
 }) {
     let activeAnnotationFilters = {};
     let annotationRequestId = 0;
+    let pendingAnnotationLoad = null;
     const annotationPageCache = new Map();
     const annotationPageCacheMaxEntries = 50;
+
+    function getAnnotationFilterKey(filters = {}) {
+        const normalized = {};
+        Object.keys(filters || {}).sort().forEach(function (key) {
+            const value = filters[key];
+            if (value && value !== 'all') {
+                normalized[key === 'tags' ? 'tag' : key] = value;
+            }
+        });
+
+        return JSON.stringify(normalized);
+    }
+
+    function getInitialAnnotationFilters() {
+        const params = new URLSearchParams(window.location.search);
+        const ignoredParams = new Set(['q', 'page', 'count']);
+        const filters = {};
+
+        params.forEach(function (value, key) {
+            if (!ignoredParams.has(key) && value && value !== 'all') {
+                filters[key === 'tags' ? 'tag' : key] = value;
+            }
+        });
+
+        return filters;
+    }
 
     function getAnnotationUrl(filters, page) {
         if (!displayInscriptions || !annotationPath || isPlaceholder(annotationPath)) {
@@ -190,7 +217,7 @@ export function createAnnotationLoader({
         return scaledAnnotations;
     }
 
-    async function loadCurrentAnnotations(filters = activeAnnotationFilters) {
+    async function loadAnnotations(filters = activeAnnotationFilters) {
         activeAnnotationFilters = filters || {};
         const annotationUrl = getAnnotationUrl(activeAnnotationFilters);
 
@@ -206,10 +233,33 @@ export function createAnnotationLoader({
             : loadAllAnnotations(activeAnnotationFilters, requestId, imageSize);
     }
 
+    function loadCurrentAnnotations(filters = activeAnnotationFilters) {
+        const filterKey = getAnnotationFilterKey(filters);
+        if (pendingAnnotationLoad && pendingAnnotationLoad.key === filterKey) {
+            return pendingAnnotationLoad.promise;
+        }
+
+        const promise = loadAnnotations(filters);
+        pendingAnnotationLoad = { key: filterKey, promise };
+
+        promise.then(function () {
+            if (pendingAnnotationLoad && pendingAnnotationLoad.promise === promise) {
+                pendingAnnotationLoad = null;
+            }
+        }, function () {
+            if (pendingAnnotationLoad && pendingAnnotationLoad.promise === promise) {
+                pendingAnnotationLoad = null;
+            }
+        });
+
+        return promise;
+    }
+
     return {
         getActiveAnnotationFilters: () => activeAnnotationFilters,
         getAnnotationUrl,
         getCurrentImageSize,
+        getInitialAnnotationFilters,
         loadCurrentAnnotations
     };
 }

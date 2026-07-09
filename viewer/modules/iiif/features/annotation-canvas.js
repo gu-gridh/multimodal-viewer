@@ -1,4 +1,4 @@
-export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, viewer }) {
+export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno, getAnnotationsVisible, viewer }) {
     let annotationCanvas = null;
     let annotationCanvasOverlayAdded = false;
     let canvasAnnotationMode = false;
@@ -19,6 +19,13 @@ export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, vi
         return document.getElementById('annotation-interaction-message');
     }
 
+    function setAnnotationInteractionMessageText() {
+        const message = getAnnotationInteractionMessage();
+        if (message) {
+            message.textContent = `Narrow your search to less than ${annotationCanvasThreshold} annotations to interact with them.`;
+        }
+    }
+
     function setCanvasAnnotationVisible(visible) {
         if (annotationCanvas) {
             annotationCanvas.style.display = visible ? 'block' : 'none';
@@ -27,13 +34,13 @@ export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, vi
         const message = getAnnotationInteractionMessage();
         clearTimeout(annotationInteractionMessageTimeout);
 
-        if (visible) {
+        if (visible && message) {
             message.style.display = 'block';
             message.style.opacity = '1';
             annotationInteractionMessageTimeout = setTimeout(function () {
                 message.style.opacity = '0';
             }, 10000);
-        } else {
+        } else if (message) {
             message.style.display = 'none';
             message.style.opacity = '0';
         }
@@ -160,6 +167,8 @@ export function createAnnotationCanvasRenderer({ anno, getAnnotationsVisible, vi
         canvasAnnotationMode = true;
         setCanvasAnnotationVisible(getAnnotationsVisible());
     }
+
+    setAnnotationInteractionMessageText();
 
     return {
         clearCanvasAnnotations,

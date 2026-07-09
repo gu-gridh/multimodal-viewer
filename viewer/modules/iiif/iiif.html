@@ -200,11 +200,6 @@
         let annotationCanvasRenderer = null;
         let annotationLoader = null;
 
-        const annotationInteractionMessage = document.getElementById('annotation-interaction-message');
-        if (annotationInteractionMessage) {
-            annotationInteractionMessage.textContent = `Narrow your search to less than ${annotationCanvasThreshold} annotations to interact with them.`;
-        }
-
         //variables for setting download name
         var temp = PLACEHOLDER_PROJECT;
         var creator = 'PLACEHOLDER_CREATORS';
@@ -284,55 +279,10 @@
             return annotationLoader ? annotationLoader.getCurrentImageSize() : null;
         }
 
-        let pendingAnnotationLoad = null;
-        function getAnnotationFilterKey(filters = {}) {
-            const normalized = {};
-            Object.keys(filters || {}).sort().forEach(function (key) {
-                const value = filters[key];
-                if (value && value !== 'all') {
-                    normalized[key === 'tags' ? 'tag' : key] = value;
-                }
-            });
-
-            return JSON.stringify(normalized);
-        }
-
-        function getInitialAnnotationFilters() {
-            const params = new URLSearchParams(window.location.search);
-            const ignoredParams = new Set(['q', 'page', 'count']);
-            const filters = {};
-
-            params.forEach(function (value, key) {
-                if (!ignoredParams.has(key) && value && value !== 'all') {
-                    filters[key === 'tags' ? 'tag' : key] = value;
-                }
-            });
-
-            return filters;
-        }
-
         function loadCurrentAnnotations(filters = getActiveAnnotationFilters()) {
-            const filterKey = getAnnotationFilterKey(filters);
-            if (pendingAnnotationLoad && pendingAnnotationLoad.key === filterKey) {
-                return pendingAnnotationLoad.promise;
-            }
-
-            const promise = annotationLoader
+            return annotationLoader
                 ? annotationLoader.loadCurrentAnnotations(filters)
                 : Promise.resolve([]);
-            pendingAnnotationLoad = { key: filterKey, promise };
-
-            promise.then(function () {
-                if (pendingAnnotationLoad && pendingAnnotationLoad.promise === promise) {
-                    pendingAnnotationLoad = null;
-                }
-            }, function () {
-                if (pendingAnnotationLoad && pendingAnnotationLoad.promise === promise) {
-                    pendingAnnotationLoad = null;
-                }
-            });
-
-            return promise;
         }
 
         function saveViewerState(viewer) {
@@ -616,6 +566,7 @@
                 .then(function (module) {
                     if (module) {
                         annotationCanvasRenderer = module.createAnnotationCanvasRenderer({
+                            annotationCanvasThreshold,
                             anno,
                             getAnnotationsVisible: () => annotationsVisible,
                             viewer
@@ -640,7 +591,7 @@
                     }
                 });
             const loadAnnotationsPromise = displayInscriptions
-                ? Promise.all([annotationCanvasInitPromise, annotationLoaderInitPromise]).then(() => loadCurrentAnnotations(getInitialAnnotationFilters())).then(function (annotations) {
+                ? Promise.all([annotationCanvasInitPromise, annotationLoaderInitPromise]).then(() => loadCurrentAnnotations(annotationLoader ? annotationLoader.getInitialAnnotationFilters() : {})).then(function (annotations) {
                     if (annotations.length > 0 && currentAnnotationId) {
                         openAnnotationById(currentAnnotationId);
                     }

@@ -115,6 +115,7 @@
         const annotationDetail = document.getElementById('annotation-detail');
         const panelTitle = new URLSearchParams(window.location.search).get('q') || '';
         let totalAnnotationCount = null;
+        let annotationCountRequestId = 0;
 
         function getText(value) {
             return value || '—';
@@ -244,6 +245,7 @@
                 return;
             }
 
+            const requestId = ++annotationCountRequestId;
             const count = (filters = {}) => {
                 const params = new URLSearchParams({ q: panelTitle, count: '1' });
                 Object.entries(filters).forEach(([key, value]) => value !== 'all' && params.set(key, value));
@@ -253,6 +255,9 @@
             const isFiltered = Object.values(filters).some((value) => value !== 'all');
             totalAnnotationCount ??= await count();
             const shown = isFiltered ? await count(filters) : totalAnnotationCount;
+            if (requestId !== annotationCountRequestId) {
+                return;
+            }
             annotationCountPill.textContent = `${shown} shown / ${totalAnnotationCount - shown} hidden`;
         }
 

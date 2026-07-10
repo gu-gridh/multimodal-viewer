@@ -159,7 +159,7 @@
 }
 
 .openlime-toolbar svg:not(:root) {
-	width:auto;
+	width: 35px;
 	height: 35px;
 	display: block;
 }

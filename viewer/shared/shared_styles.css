@@ -417,7 +417,48 @@ h2 {
     backdrop-filter: blur(3px);
 }
 
-/* A switcher for multiple media in same module */
+@media (max-width: 500px) {
+    .project-munch #home, /*IIIF*/
+    .project-munch #zoom-in, /*IIIF*/
+    .project-munch #zoom-out, /*IIIF*/
+    .project-munch #zoomin, /*Mesh*/
+    .project-munch #zoomout, /*Mesh*/
+    .project-munch button#ZoomIn, /*Textured Mesh*/
+    .project-munch button#ZoomOut, /*Textured Mesh*/
+    .project-munch .openlime-toolbar svg:has(.openlime-zoomin), /*OpenLime*/
+    .project-munch .openlime-toolbar svg:has(.openlime-zoomout) /*OpenLime*/
+    {
+        display: none !important;
+    }
+
+    .project-sophia #zoomin, /*Mesh*/
+    .project-sophia #zoomout, /*Mesh*/
+    .project-sophia .openlime-toolbar svg:has(.openlime-fullscreen) /*OpenLime*/
+    {
+        display: none !important;
+    }
+
+    .project-shfa #zoomin, /*Mesh*/
+    .project-shfa #zoomout /*Mesh*/
+    {
+        display: none !important;
+    }
+
+    .project-etruscan button#ZoomIn, /*Textured Mesh*/
+    .project-etruscan button#ZoomOut /*Textured Mesh*/
+    {
+        display: none !important;
+    }
+
+    .openlime-toolbar {
+        width: fit-content !important;
+        left: 50%;
+        transform: translateX(-50%);
+        justify-content: center;
+        gap: 8px;
+        padding: 5px 10px 0;
+    }
+}
 
 #ToolbarHorizontal {
     display: flex;
@@ -462,7 +503,6 @@ h2 {
 
 .SwitchButton {
     pointer-events: auto;
-    width: 25px !important;
     height: 35px;
     color: white;
     opacity: 0.8;

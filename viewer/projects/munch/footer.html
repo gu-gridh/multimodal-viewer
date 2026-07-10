@@ -7,6 +7,18 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="/viewer/shared/barlow_condensed_font.css" rel="stylesheet">
     <style>
+        .download-section {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            margin-left: 10px;
+            display: none;
+        }
+
         #footer {
             display: block;
             background-color: #222;
@@ -104,6 +116,14 @@
             padding-left: 25px;
         }
 
+        .download-link {
+            background: url("https://data.dh.gu.se/ui-icons/download_white_circle.png");
+            background-size: 18px;
+            background-position: 0 50%;
+            background-repeat: no-repeat;
+            padding-left: 25px;
+        }
+
         .links-stack {
             margin-right: 20px;
         }
@@ -128,13 +148,16 @@
     <div id="footer">
         <div id="developer-info">
             <div class="links-stack border-style">
-                <a class="site-link link" href="https://github.com/gu-gridh/multimodal-viewer"
-                    target="_blank">GitHub repository</a>
-                                    <a class="site-link link" href="https://github.com/gu-gridh/documentation"
+                <a class="site-link link" href="https://github.com/gu-gridh/multimodal-viewer" target="_blank">GitHub
+                    repository</a>
+                <a class="site-link link" href="https://github.com/gu-gridh/documentation"
                     target="_blank">Documentation</a>
             </div>
             <div class="links-stack">
-                <a class="site-link link" href="https://dh.gu.se/" target="_blank">Export metadata</a>
+                <div class="download-section">
+                    <a class="download-link link" href="#">Download all visual annotations</a>
+                    <img src="/viewer/shared/interface/6-dots-rotate_white.svg" class="spinner" alt="Loading...">
+                </div>
                 <a class="site-link link" href="https://dh.gu.se/" target="_blank">About GU / GRIDH</a>
             </div>
         </div>
@@ -145,6 +168,44 @@
             <div class="link PartnerLogo">OSLO UNIVERSITY</div>
         </div>
     </div>
+    <script>
+        document.querySelector('.download-link').addEventListener('click', async function (event) {
+            event.preventDefault();
+            const spinner = document.querySelector('.spinner');
+            const annotations = [];
+            let url = 'https://munch.dh.gu.se/api/visual-annotations/?format=json';
+            spinner.style.display = 'inline-block';
+
+            try {
+                while (url) {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(response.status);
+                    }
+
+                    const page = await response.json();
+                    annotations.push(...(page.results || []));
+                    url = page.next ? page.next.replace(/^http:/, 'https:') : null;
+                }
+
+                const downloadUrl = URL.createObjectURL(new Blob(
+                    [JSON.stringify(annotations)],
+                    { type: 'application/json' }
+                ));
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = 'VisualAnnotations.json';
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(downloadUrl);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                spinner.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>

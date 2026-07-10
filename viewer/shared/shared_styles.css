@@ -418,6 +418,10 @@ h2 {
 }
 
 @media (max-width: 500px) {
+    .pointcloud-fullscreen {
+        display: none !important;
+    }
+
     .project-munch #home, /*IIIF*/
     .project-munch #zoom-in, /*IIIF*/
     .project-munch #zoom-out, /*IIIF*/

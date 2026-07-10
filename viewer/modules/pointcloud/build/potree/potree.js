@@ -79580,7 +79580,7 @@ ENDSEC
 			));
 
 					// GRIDH: FULLSCREEN
-					elToolbar.append(this.createToolIconExpanded(
+					let fullscreenTool = this.createToolIconExpanded(
 						'https://data.dh.gu.se/ui-icons/expand_white.svg',
 						'',
 						() => {
@@ -79597,7 +79597,9 @@ ENDSEC
 							}
 							window.parent.postMessage({ type: 'togglePane2' }, '*');
 						}
-					)); 
+					);
+					fullscreenTool.addClass('pointcloud-fullscreen');
+					elToolbar.append(fullscreenTool);
 
 
 			/* { // SHOW / HIDE Measurements

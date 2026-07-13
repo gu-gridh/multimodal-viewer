@@ -545,7 +545,7 @@
                         const formatted = isPending ? { className: 'pending-annotation' } : {};
 
                         if (color) {
-                            formatted.style = `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:3;`;
+                            formatted.style = `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:1.5;`;
                         }
 
                         return Object.keys(formatted).length ? formatted : null;

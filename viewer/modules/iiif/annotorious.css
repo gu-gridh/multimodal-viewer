@@ -32,7 +32,7 @@ svg.a9s-annotationlayer .a9s-annotation polyline {
 svg.a9s-annotationlayer .a9s-selection polyline.a9s-inner,
 svg.a9s-annotationlayer .a9s-annotation polyline.a9s-inner {
   stroke: var(--annotation-stroke, red) !important;
-  stroke-width: 3;
+  stroke-width: 1.5;
   stroke-dasharray: none;
 }
 

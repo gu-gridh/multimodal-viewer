@@ -296,7 +296,7 @@ app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
     const metadata = await sharpImage.metadata();
 
     if (metadata.width && metadata.height && annotations.length) {
-      const strokeWidth = Math.max(4, Math.round(Math.max(metadata.width, metadata.height) / 1000));
+      const strokeWidth = Math.max(2, Math.round(Math.max(metadata.width, metadata.height) / 2000));
       const shapes = annotations.map(annotation => {
         const selectorValue = annotation.target.selector.value;
         const points = selectorValue.match(/points="([^"]+)"/)?.[1];

@@ -123,7 +123,7 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
                 }
 
                 context.strokeStyle = getAnnotationColor(annotation);
-                context.lineWidth = 3;
+                context.lineWidth = 1.5;
                 context.strokeRect(x * canvasScale, y * canvasScale, width * canvasScale, height * canvasScale);
                 return;
             }
@@ -139,7 +139,7 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
                 context.beginPath();
                 context.arc(points[0].x, points[0].y, 5, 0, Math.PI * 2);
                 context.strokeStyle = getAnnotationColor(annotation);
-                context.lineWidth = 3;
+                context.lineWidth = 1.5;
                 context.stroke();
                 return;
             }
@@ -158,7 +158,7 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
             }
 
             context.strokeStyle = getAnnotationColor(annotation);
-            context.lineWidth = 3;
+            context.lineWidth = 1.5;
             context.lineJoin = 'round';
             context.lineCap = 'round';
             context.stroke();

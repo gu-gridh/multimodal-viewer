@@ -176,6 +176,11 @@
             <div id="" class="round-button download-button compact" title="Download image"></div>
         </a>
         <div id="download-label" class="label-popup" style="display: none;"></div>
+        <div id="download-resolution" class="download-resolution" hidden>
+            <div id="download-resolution-title">Choose download resolution:</div>
+            <div id="download-resolution-options"></div>
+            <button id="download-resolution-cancel" type="button">Cancel</button>
+        </div>
 
         <div id="trackball_position" class="round-button share-button compact" title="Copy link to view"
             onclick="logPosition();">
@@ -633,62 +638,20 @@
 
             var savedState = getSavedViewerState();
 
-            document.getElementById('download').addEventListener('click', function (event) {
-                var downloadSourceString = 'PLACEHOLDER_DOWNLOAD_PATH';
-
-                event.preventDefault();
-                try {
-                    var downloadSources = isPlaceholder(downloadSourceString) ? [] : JSON.parse(downloadSourceString);
-                    var creators = isPlaceholder(creator) ? [["Unknown Creator"]] : JSON.parse(creator);
-                    var locationIdArray = isPlaceholder(locationIds) ? ["Unknown Location"] : JSON.parse(locationIds);
-                    var imgIdArray = isPlaceholder(imgIds) ? [0] : JSON.parse(imgIds);
-                } catch (error) {
-                    console.error("Error parsing JSON data:", error);
-                    return;
-                }
-
-                const pageIndex = viewer.currentPage();
-                let imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
-                if (filteredAnnotationDownloadEnabled) {
-                    const filteredDownloadUrl = new URL(imageUrl, window.location.origin);
-                    Object.entries(getActiveAnnotationFilters()).forEach(([key, value]) => {
-                        if (value && value !== 'all') {
-                            filteredDownloadUrl.searchParams.set(key === 'tag' ? 'tags' : key, value);
-                        }
-                    });
-                    imageUrl = filteredDownloadUrl.toString();
-                }
-                const creatorName = creators[0][0].replace(/,\s*/g, '_');  //replace commas with underscores
-                const locationId = locationIdArray[0];
-                const imgId = imgIdArray[pageIndex];
-
-                const popup = document.getElementById('download-label');
-                popup.style.display = 'block';
-                popup.classList.add('popup-animation');
-
-                setTimeout(function () {
-                    popup.classList.remove('popup-animation');
-                    popup.style.display = 'none';
-                }, 3000);
-
-                fetch(imageUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        let filename = temp.toLowerCase() === "shfa" ?
-                            `${creatorName}_${locationId}_SHFAid${imgId}.png` :
-                            `image_${pageIndex + 1}.jpg`;
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    })
-                    .catch(() => console.error("Could not download the image"));
-            });
+            import('/viewer/modules/iiif/features/image-download.js').then(module => {
+                module.createImageDownload({
+                    viewer,
+                    tileSources: tileSourcesString,
+                    downloadSourceString: 'PLACEHOLDER_DOWNLOAD_PATH',
+                    project: temp,
+                    creator,
+                    locationIds,
+                    imageIds: imgIds,
+                    filteredAnnotationDownloadEnabled,
+                    getActiveAnnotationFilters,
+                    isPlaceholder
+                });
+            }).catch(console.error);
 
             function convertToIIIFRegion(annotation, imageSize) {
                 //extract viewport coordinates from the annotation

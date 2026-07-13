@@ -313,7 +313,16 @@ app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
       sharpImage = sharpImage.composite([{ input: Buffer.from(overlay), top: 0, left: 0 }]);
     }
 
-    const output = await sharpImage.jpeg({ quality: 95 }).toBuffer();
+    const requestedScale = Number(req.query.scale);
+    const scale = [1, 0.5, 0.25].includes(requestedScale) ? requestedScale : 1;
+    const maxSize = Math.round(Math.max(metadata.width, metadata.height) * scale);
+    const composedImage = await sharpImage.toBuffer();
+    const output = await sharp(composedImage).resize({
+      width: maxSize,
+      height: maxSize,
+      fit: 'inside',
+      withoutEnlargement: true
+    }).jpeg({ quality: 95 }).toBuffer();
     const safeTitle = title.replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '') || 'munch_image';
 
     res.setHeader('Content-Type', 'image/jpeg');

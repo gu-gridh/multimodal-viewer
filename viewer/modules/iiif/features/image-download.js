@@ -34,7 +34,7 @@ export function createImageDownload({
                 button.onclick = () => close(resolution.scale);
                 return button;
             }));
-            title.textContent = 'Choose download resolution:';
+            title.textContent = 'Choose image resolution';
             cancel.textContent = 'Cancel';
             cancel.onclick = () => close(null);
             panel.hidden = false;

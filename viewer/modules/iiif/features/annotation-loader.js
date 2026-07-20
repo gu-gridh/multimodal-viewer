@@ -145,11 +145,12 @@ export function createAnnotationLoader({
         const response = await fetch(pageUrl);
         const data = await response.json();
         const results = Array.isArray(data) ? data : data.results || [];
+        const validResults = results.filter(annotation => annotation?.target?.selector?.value?.trim());
         const pageData = {
             count: Array.isArray(data) ? results.length : data.count || results.length,
             nextPage: Array.isArray(data) ? null : data.nextPage,
             page: Array.isArray(data) ? null : data.page,
-            annotations: results.map(annotation => scaleAnnotationToImage(annotation, imageSize))
+            annotations: validResults.map(annotation => scaleAnnotationToImage(annotation, imageSize))
         };
 
         setAnnotationPageCache(cacheKey, pageData);

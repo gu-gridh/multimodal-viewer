@@ -193,6 +193,8 @@
                     return 'pointcloud';
                 } else if (viewerType === 'texturedmesh') {
                     return 'texturedmesh';
+                } else if (viewerType === 'panorama') {
+                    return 'panorama';
                 }
             }
 
@@ -226,6 +228,10 @@
                 case 'texturedmesh':
                     src = `/viewer/modules/texturedmesh/texturedmesh.html?q=${qValue}/texturedmesh${hashFragment}`;
                     newPath = `/viewer/?q=${qValue}/texturedmesh${hashFragment}`;
+                    break;
+                case 'panorama':
+                    src = '/viewer/modules/panorama/panorama.html';
+                    newPath = `/viewer/?q=${qValue}/panorama${hashFragment}`;
                     break;
             }
             if (iframe) {

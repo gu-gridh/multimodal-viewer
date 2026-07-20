@@ -115,7 +115,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   let apiUrl;
 
-  if (viewerType === 'pointcloud') {
+  if (viewerType === 'pointcloud' || viewerType === 'panorama') {
     apiUrl = `${config.panel}${queryName}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
@@ -134,7 +134,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
     let metadata;
 
-    if (viewerType === 'pointcloud' || viewerType === 'texturedmesh') {
+    if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
       metadata = apiResponse.data.results?.[0];
     } else if (viewerType === 'image') {
       metadata = apiResponse.data;
@@ -154,7 +154,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
       let modifiedHtml;
 
-      if (viewerType === 'pointcloud' || viewerType === 'texturedmesh') {
+      if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.[0]?.dataset?.short_name && metadata.tomb?.[0]?.name
             ? `${metadata.tomb?.[0]?.dataset?.short_name ?? ''} - ${metadata.tomb?.[0]?.name ?? ''}`
@@ -163,7 +163,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb?.[0]?.description ?? metadata.preview_image?.tomb?.description ?? '')
           .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.[0]?.dataset?.short_name ?? '')
 
-        if (viewerType === 'pointcloud') {
+        if (viewerType === 'pointcloud' || viewerType === 'panorama') {
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
             .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
@@ -260,9 +260,22 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 });
 
+app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
+  fs.readFile(path.join(__dirname, 'viewer', 'modules', 'panorama', 'panorama.html'), 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    const panoramaUrl = '/viewer/projects/etruscan/FARO_Scan_289_small.jpg';
+    res.send(data.replace(/'PLACEHOLDER_PANORAMA_URL'/g, JSON.stringify(panoramaUrl)));
+  });
+});
+
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
 app.use('/viewer/modules/texturedmesh', express.static(path.join(__dirname, 'viewer', 'modules', 'texturedmesh')));
 app.use('/viewer/modules/iiif', express.static(path.join(__dirname, 'viewer', 'modules', 'iiif')));
+app.use('/viewer/modules/panorama', express.static(path.join(__dirname, 'viewer', 'modules', 'panorama')));
 app.use('/viewer/shared', express.static(path.join(__dirname, 'viewer', 'shared')));
 app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'projects')));
 app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locales')));
@@ -282,8 +295,8 @@ app.get('*', async (req, res) => {
   const viewerType = querySegments[1];
   let apiUrl;
 
-  //fetch the backbutton data from the appropriate API if image, pointcloud or textured mesh
-  if (viewerType === 'pointcloud') {
+  //fetch the backbutton data from the appropriate API
+  if (viewerType === 'pointcloud' || viewerType === 'panorama') {
     apiUrl = `${config.panel}${queryId}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
@@ -303,7 +316,7 @@ app.get('*', async (req, res) => {
     let metadata;
     let backButtonValue = '';
 
-    if (viewerType === 'pointcloud' || viewerType === 'texturedmesh') {
+    if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
       metadata = apiResponse.data?.results?.[0];
       if (metadata && metadata.tomb && metadata.tomb[0]) {
         const tomb = metadata.tomb[0];

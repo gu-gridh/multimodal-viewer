@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>360 image viewer</title>
     <link rel="stylesheet" href="pannellum.css">
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <style>
         html,
         body,
@@ -14,18 +15,65 @@
             height: 100%;
             margin: 0;
         }
+
+        #ZoomIn,
+        #ZoomOut {
+            width: 30px;
+            height: 30px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        #ZoomIn {
+            background-image: url("https://data.dh.gu.se/ui-icons/zoomin_big_white.png");
+        }
+
+        #ZoomOut {
+            background-image: url("https://data.dh.gu.se/ui-icons/zoomout_big_white.png");
+        }
+
+        .toolbar-bottom {
+            align-items: center;
+        }
+
+        .toolbar-bottom .NavButton {
+            margin: 0 6px;
+        }
+
+        .pnlm-compass {
+            top: 4px;
+            bottom: auto;
+        }
     </style>
 </head>
 
 <body>
     <div id="panorama"></div>
+    <div class="interface-area">
+        <div class="toolbar-bottom">
+            <div id="ZoomIn" class="NavButton" title="Zoom in"></div>
+            <div id="ZoomOut" class="NavButton" title="Zoom out"></div>
+            <div id="FullPage" class="NavButton full-page" title="Toggle full page"></div>
+        </div>
+    </div>
     <script src="pannellum.js"></script>
     <script>
-        pannellum.viewer('panorama', {
+        const viewer = pannellum.viewer('panorama', {
             type: 'equirectangular',
             panorama: 'PLACEHOLDER_PANORAMA_URL',
-            autoLoad: true
+            autoLoad: true,
+            compass: true,
+            showFullscreenCtrl: false,
+            showZoomCtrl: false
         });
+
+        document.getElementById('ZoomIn').onclick = () => viewer.setHfov(viewer.getHfov() - 20);
+        document.getElementById('ZoomOut').onclick = () => viewer.setHfov(viewer.getHfov() + 20);
+        document.getElementById('FullPage').onclick = function () {
+            this.classList.toggle('full-page-active');
+            window.parent.postMessage({ type: 'togglePane' }, '*');
+        };
     </script>
 </body>
 

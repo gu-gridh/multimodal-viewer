@@ -294,7 +294,9 @@
         function saveViewerState(viewer) {
             var zoomLevel = viewer.viewport.getZoom();
             var centerPoint = viewer.viewport.getCenter();
+            var currentQuery = new URLSearchParams(window.location.search).get('q');
             var state = {
+                baseQuery: currentQuery ? currentQuery.split('/')[0] : null,
                 zoom: zoomLevel,
                 center: { x: centerPoint.x, y: centerPoint.y },
                 rotation: currentRotation
@@ -311,9 +313,15 @@
             }
         }
 
-        function getSavedViewerState() {
+        function getSavedViewerState(currentBaseQuery) {
             var state = sessionStorage.getItem('viewerState');
-            return state ? JSON.parse(state) : null;
+            if (!state) {
+                return null;
+            }
+
+            state = JSON.parse(state);
+            var stateBaseQuery = state.baseQuery || sessionStorage.getItem('lastBaseQuery');
+            return stateBaseQuery === currentBaseQuery ? state : null;
         }
 
         i18next
@@ -425,6 +433,9 @@
             const currentQuery = new URLSearchParams(window.location.search).get('q');
             const currentBaseQuery = currentQuery ? currentQuery.split('/')[0] : null;
 
+            const savedState = getSavedViewerState(currentBaseQuery);
+            sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
+
             const parentUrl = new URL(window.parent.location.href);
             const qValue = parentUrl.searchParams.get('q');
 
@@ -514,7 +525,9 @@
             });
 
             viewer.addHandler('viewport-change', function () {
-                saveViewerState(viewer);
+                if (!isInitialLoad) {
+                    saveViewerState(viewer);
+                }
             });
 
             viewer.addHandler("page", function (data) {
@@ -629,14 +642,6 @@
                     }
                 });
             }
-
-            const prevBaseQuery = sessionStorage.getItem('lastBaseQuery');
-            if (prevBaseQuery !== currentBaseQuery) {
-                sessionStorage.clear(); //clear sessionStorage if the base query part has changed
-                sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
-            }
-
-            var savedState = getSavedViewerState();
 
             import('/viewer/modules/iiif/features/image-download.js').then(module => {
                 module.createImageDownload({

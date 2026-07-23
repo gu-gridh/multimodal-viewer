@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sv" data-project="runes">
+
+<head>
+    <title>Runes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="/viewer/shared/barlow_font.css" rel="stylesheet">
+    <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/split-layout.css">
+    <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+    <style>
+        html,
+        body {
+            width: 100vw;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--viewer-bg);
+            font-family: "Oswald", sans-serif;
+        }
+
+        #main-content {
+            height: 100% !important;
+        }
+
+        #left-pane {
+            width: 70%;
+            position: relative;
+        }
+
+        #right-pane {
+            width: 30%;
+            background: rgb(228, 228, 220);
+        }
+
+        .module-placeholder {
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+        }
+
+        .period-switcher {
+            position: absolute;
+            bottom: 28px;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+        }
+
+        .period-switcher .ui-module {
+            position: static;
+            display: flex;
+        }
+
+        .iframes {
+            width: 100%;
+            border: 0;
+        }
+
+        @media screen and (max-width: 1050px) {
+
+            #left-pane,
+            #right-pane {
+                display: block;
+                width: 50%;
+            }
+
+            .ui-module-container {
+                width: 50vw;
+            }
+        }
+
+        @media screen and (max-width: 700px) {
+            #main-content {
+                overflow-x: auto;
+            }
+
+            #left-pane,
+            #right-pane {
+                min-width: 100vw;
+            }
+
+            .ui-module-container {
+                width: 100vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-content">
+        <div id="left-pane">
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <div class="ui-module-item left" id="region-west" onclick="changeRegion('vastra')">Västra Götaland
+                    </div>
+                    <div class="ui-module-item left" id="region-east" onclick="changeRegion('ostra')">Östra Götaland
+                    </div>
+                </div>
+            </div>
+            <div id="left-placeholder" class="module-placeholder"></div>
+            <iframe id="left-iframe" class="iframes" title="Region"></iframe>
+            <div class="period-switcher">
+                <div class="ui-module">
+                    <div class="ui-module-item period" id="period-1" onclick="changePeriod('1')">Period 1</div>
+                    <div class="ui-module-item period" id="period-2" onclick="changePeriod('2')">Period 2</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="right-pane">
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
+                        Metadata</div>
+                    <div class="ui-module-item right" id="viewer-model" onclick="changeRightViewer('model')">3D Model
+                    </div>
+                    <div class="ui-module-item right" id="viewer-panorama" onclick="changeRightViewer('panorama')">
+                        Panorama</div>
+                </div>
+            </div>
+            <iframe id="right-iframe" class="iframes" title="Rune content"></iframe>
+            <div id="right-placeholder" class="module-placeholder"></div>
+        </div>
+
+    </div>
+
+    <script>
+        let activeRegion = 'vastra';
+        let activeViewer = 'metadata';
+        let activePeriod = '1';
+
+        $(document).ready(function () {
+            const params = new URLSearchParams(window.location.search);
+            const region = params.get('region');
+            activeRegion = ['vastra', 'ostra'].includes(region) ? region : activeRegion;
+            render();
+        });
+
+        function changeRegion(region) {
+            activeRegion = region;
+            render();
+        }
+
+        function changeRightViewer(viewer) {
+            activeViewer = viewer;
+            render();
+        }
+
+        function changePeriod(period) {
+            activePeriod = period;
+            render();
+        }
+
+        function render() {
+            const params = new URLSearchParams(window.location.search);
+            const query = new URLSearchParams({
+                region: activeRegion,
+                period: activePeriod,
+                q: params.get('q') || ''
+            });
+            const leftIframe = document.getElementById('left-iframe');
+            const leftPlaceholder = document.getElementById('left-placeholder');
+            const rightIframe = document.getElementById('right-iframe');
+            const rightPlaceholder = document.getElementById('right-placeholder');
+
+            // Region modules will be connected here.
+            leftIframe.removeAttribute('src');
+            leftIframe.style.display = 'none';
+            leftPlaceholder.style.display = 'flex';
+            leftPlaceholder.textContent =
+                activeRegion === 'vastra' ? 'Västra Götaland' : 'Östra Götaland';
+
+            if (activeViewer === 'metadata') {
+                rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
+                rightIframe.style.display = 'block';
+                rightPlaceholder.style.display = 'none';
+            } else {
+                // 3D and panorama modules will be connected here.
+                rightIframe.removeAttribute('src');
+                rightIframe.style.display = 'none';
+                rightPlaceholder.style.display = 'flex';
+                rightPlaceholder.textContent = activeViewer === 'model' ? '3D model' : 'Panorama';
+            }
+
+            $('.left, .right').css('opacity', '0.6');
+            $(`#region-${activeRegion === 'vastra' ? 'west' : 'east'}`).css('opacity', '1');
+            $(`#viewer-${activeViewer}`).css('opacity', '1');
+            $('.period').css('opacity', '0.6');
+            $(`#period-${activePeriod}`).css('opacity', '1');
+        }
+    </script>
+</body>
+
+</html>

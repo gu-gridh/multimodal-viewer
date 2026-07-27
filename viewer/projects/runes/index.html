@@ -141,60 +141,71 @@
             const params = new URLSearchParams(window.location.search);
             const region = params.get('region');
             activeRegion = ['vastra', 'ostra'].includes(region) ? region : activeRegion;
-            render();
+            changeLeftViewer();
+            changeRightViewer(activeViewer);
         });
 
         function changeRegion(region) {
             activeRegion = region;
-            render();
+            changeLeftViewer();
         }
 
         function changeRightViewer(viewer) {
             activeViewer = viewer;
-            render();
-        }
-
-        function changePeriod(period) {
-            activePeriod = period;
-            render();
-        }
-
-        function render() {
             const params = new URLSearchParams(window.location.search);
             const query = new URLSearchParams({
                 region: activeRegion,
                 period: activePeriod,
                 q: params.get('q') || ''
             });
-            const leftIframe = document.getElementById('left-iframe');
-            const leftPlaceholder = document.getElementById('left-placeholder');
             const rightIframe = document.getElementById('right-iframe');
             const rightPlaceholder = document.getElementById('right-placeholder');
-
-            // Region modules will be connected here.
-            leftIframe.removeAttribute('src');
-            leftIframe.style.display = 'none';
-            leftPlaceholder.style.display = 'flex';
-            leftPlaceholder.textContent =
-                activeRegion === 'vastra' ? 'Västra Götaland' : 'Östra Götaland';
 
             if (activeViewer === 'metadata') {
                 rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
             } else {
-                // 3D and panorama modules will be connected here.
-                rightIframe.removeAttribute('src');
-                rightIframe.style.display = 'none';
-                rightPlaceholder.style.display = 'flex';
-                rightPlaceholder.textContent = activeViewer === 'model' ? '3D model' : 'Panorama';
+                const objectId = (params.get('q') || '1').split('/')[0];
+                rightIframe.src = activeViewer === 'model'
+                    ? `/viewer/modules/texturedmesh/texturedmesh.html?q=${encodeURIComponent(objectId)}/texturedmesh`
+                    : '/viewer/modules/panorama/panorama.html';
+                rightIframe.style.display = 'block';
+                rightPlaceholder.style.display = 'none';
             }
 
-            $('.left, .right').css('opacity', '0.6');
+            moduleSwitcherRight();
+        }
+
+        function changePeriod(period) {
+            activePeriod = period;
+            changeLeftViewer();
+        }
+
+        function changeLeftViewer() {
+            const leftIframe = document.getElementById('left-iframe');
+            const leftPlaceholder = document.getElementById('left-placeholder');
+
+            //TODO: Implement venn diagram here.
+            leftIframe.removeAttribute('src');
+            leftIframe.style.display = 'none';
+            leftPlaceholder.style.display = 'flex';
+            leftPlaceholder.textContent =
+                activeRegion === 'vastra' ? 'Västra Götaland' : 'Östra Götaland';
+
+            moduleSwitcherLeft();
+        }
+
+        function moduleSwitcherLeft() {
+            $('.left').css('opacity', '0.6');
             $(`#region-${activeRegion === 'vastra' ? 'west' : 'east'}`).css('opacity', '1');
-            $(`#viewer-${activeViewer}`).css('opacity', '1');
             $('.period').css('opacity', '0.6');
             $(`#period-${activePeriod}`).css('opacity', '1');
+        }
+
+        function moduleSwitcherRight() {
+            $('.right').css('opacity', '0.6');
+            $(`#viewer-${activeViewer}`).css('opacity', '1');
         }
     </script>
 </body>

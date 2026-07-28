@@ -60,6 +60,20 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
   });
 });
 
+app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
+  try {
+    const apiResponse = await axios.get('https://diana.dh.gu.se/api/etruscantombs/image/2870/?depth=2');
+    const templatePath = path.join(projectPath, 'metadata', 'metadata.html');
+    const template = await fs.promises.readFile(templatePath, 'utf8');
+    const iiifUrl = `${apiResponse.data.iiif_file}/info.json`;
+
+    res.send(template.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifUrl)));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 app.use('/viewer', express.static(path.join(__dirname, 'viewer')));
 
 app.get(['/viewer', '/viewer/'], (req, res) => {

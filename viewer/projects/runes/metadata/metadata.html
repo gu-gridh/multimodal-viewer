@@ -8,15 +8,43 @@
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="metadata.css">
+    <script src="/viewer/libs/openseadragon.min.js"></script>
 </head>
 
 <body>
     <div class="metadata-container">
-        <div class="metadata-title">Metadata</div>
-        <div class="metadata-description">
-            Metadata visas här.
+        <div class="metadata-card">
+            <div class="metadata-content">
+                <div class="label">Titel</div>
+                <h1 class="metadata-title"></h1>
+            </div>
+            <div class="metadata-content">
+                <div class="label">Beskrivning</div>
+                <p class="metadata-description"></p>
+            </div>
+            <div class="metadata-content">
+                <div class="label">Datum</div>
+                <div class="data"></div>
+            </div>
+            <div class="metadata-content">
+                <div class="label">Forfynd</div>
+                <div class="data"></div>
+            </div>
+            <div class="metadata-content">
+                <div class="label">Lantmäteriet</div>
+                <div class="data"></div>
+            </div>
         </div>
+        <div id="rune-viewer"></div>
     </div>
+
+    <script>
+        OpenSeadragon({
+            id: 'rune-viewer',
+            prefixUrl: '/viewer/libs/openseadragon/images/',
+            tileSources: []
+        });
+    </script>
 </body>
 
 </html>

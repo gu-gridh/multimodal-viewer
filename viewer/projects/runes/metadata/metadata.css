@@ -1,6 +1,5 @@
 html,
 body {
-    width: 100%;
     height: 100%;
     margin: 0;
     overflow: hidden;
@@ -27,10 +26,6 @@ body {
     padding: 20px 0 10px;
 }
 
-.metadata-section .label {
-    font-weight: 400;
-}
-
 .metadata-content {
     display: flex;
     padding-bottom: 10px;
@@ -54,9 +49,123 @@ body {
     font-weight: 300;
 }
 
-#rune-viewer {
-    width: 100%;
+.rune-viewer-shell {
     height: 420px;
     margin-top: 30px;
     background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+#rune-viewer {
+    width: 100%;
+    height: 100%;
+}
+
+.rune-viewer-top,
+.rune-viewer-bottom {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 6px;
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 0, 0.8);
+    border-radius: 8px;
+    border-style: solid;
+    border-color: grey;
+    border-width: 0.5px 0 0;
+    box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    user-select: none;
+    touch-action: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+.rune-viewer-top {
+    top: 24px;
+    height: 33px;
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.rune-viewer-bottom {
+    bottom: 24px;
+    height: 42px;
+}
+
+.rune-viewer-shell .NavButton,
+.rune-page-button {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.rune-viewer-shell .NavButton {
+    width: 35px;
+    height: 35px;
+    margin: 3px 6px;
+    overflow: hidden;
+}
+
+.rune-page-button {
+    width: 25px;
+    height: 15px;
+    margin: 0 6px;
+    background-size: 35px !important;
+}
+
+.rune-viewer-shell button:hover {
+    opacity: 1;
+}
+
+.rune-viewer-shell button:disabled {
+    cursor: default;
+    opacity: 0.25;
+}
+
+.rune-home {
+    background-image: url(https://data.dh.gu.se/ui-icons/frame_small_white.png);
+    background-size: 28px;
+}
+
+.rune-zoom-in {
+    background-image: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png);
+    background-size: 28px;
+}
+
+.rune-zoom-out {
+    background-image: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png);
+    background-size: 28px;
+}
+
+.rune-fullscreen {
+    background-image: url(https://data.dh.gu.se/ui-icons/expand_white.svg);
+    background-size: 28px;
+}
+
+.rune-previous {
+    background-image: url(https://data.dh.gu.se/ui-icons/arrow_prev_white.png);
+}
+
+.rune-next {
+    background-image: url(https://data.dh.gu.se/ui-icons/arrow_next_white.png);
+    margin-left: 10px;
+}
+
+.rune-viewer-shell:fullscreen {
+    height: 100%;
+    margin: 0;
 }

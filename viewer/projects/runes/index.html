@@ -64,6 +64,11 @@
             border: 0;
         }
 
+        .mobile-metadata-tab,
+        .mobile-back-button {
+            display: none;
+        }
+
         @media screen and (max-width: 1050px) {
 
             #left-pane,
@@ -77,18 +82,47 @@
             }
         }
 
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 1050px) {
             #main-content {
-                overflow-x: auto;
+                overflow: hidden;
             }
 
             #left-pane,
             #right-pane {
-                min-width: 100vw;
+                width: 100%;
             }
 
             .ui-module-container {
                 width: 100vw;
+            }
+
+            #right-pane {
+                display: none;
+            }
+
+            #main-content.mobile-metadata-open #left-pane {
+                display: none;
+            }
+
+            #main-content.mobile-metadata-open #right-pane {
+                display: block;
+            }
+
+            .mobile-metadata-tab {
+                display: block;
+            }
+
+            .mobile-back-button {
+                position: absolute;
+                display: block;
+                width: 30px;
+                height: 30px;
+                top: 28px;
+                left: 12px;
+                border-radius: 50%;
+                background: #000 url(https://data.dh.gu.se/ui-icons/arrow_back_white.png) center / 15px no-repeat;
+                z-index: 1100;
+                cursor: pointer;
             }
         }
     </style>
@@ -103,6 +137,7 @@
                     </div>
                     <div class="ui-module-item left" id="region-east" onclick="changeRegion('ostra')">Östra Götaland
                     </div>
+                    <div class="ui-module-item left mobile-metadata-tab" onclick="showMobileMetadata()">About</div>
                 </div>
             </div>
             <div id="left-placeholder" class="module-placeholder"></div>
@@ -116,6 +151,7 @@
         </div>
 
         <div id="right-pane">
+            <div class="mobile-back-button" title="Back to visuals" onclick="showMobileVisuals()"></div>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
@@ -148,6 +184,15 @@
         function changeRegion(region) {
             activeRegion = region;
             changeLeftViewer();
+        }
+
+        function showMobileMetadata() {
+            changeRightViewer('metadata');
+            document.getElementById('main-content').classList.add('mobile-metadata-open');
+        }
+
+        function showMobileVisuals() {
+            document.getElementById('main-content').classList.remove('mobile-metadata-open');
         }
 
         function changeRightViewer(viewer) {

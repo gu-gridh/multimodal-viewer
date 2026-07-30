@@ -3,6 +3,11 @@ const path = require('path');
 const { exec } = require('child_process');
 const dotenv = require('dotenv');
 
+if (Number(process.versions.node.split('.')[0]) < 20) {
+    console.error('Node.js 20 or newer is required.');
+    process.exit(1);
+}
+
 //load environment variables from .env.local
 dotenv.config({ path: './.env.local' });
 

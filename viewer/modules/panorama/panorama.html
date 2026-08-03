@@ -17,7 +17,9 @@
         }
 
         #ZoomIn,
-        #ZoomOut {
+        #ZoomOut,
+        #ResetView,
+        #CompassToggle {
             width: 30px;
             height: 30px;
             background-position: center;
@@ -31,6 +33,22 @@
 
         #ZoomOut {
             background-image: url("https://data.dh.gu.se/ui-icons/zoomout_big_white.png");
+        }
+
+        #ResetView {
+            background-image: url("/viewer/shared/interface/frame.png");
+        }
+
+        #CompassToggle {
+            background-image: url("/viewer/shared/interface/compass.svg");
+        }
+
+        #CompassToggle.compass-hidden {
+            opacity: 0.45;
+        }
+
+        .pnlm-compass.compass-hidden {
+            display: none !important;
         }
 
         .toolbar-bottom {
@@ -52,8 +70,10 @@
     <div id="panorama"></div>
     <div class="interface-area">
         <div class="toolbar-bottom">
+            <div id="ResetView" class="NavButton" title="Reset view"></div>
             <div id="ZoomIn" class="NavButton" title="Zoom in"></div>
             <div id="ZoomOut" class="NavButton" title="Zoom out"></div>
+            <div id="CompassToggle" class="NavButton" title="Toggle compass"></div>
             <div id="FullPage" class="NavButton full-page" title="Toggle full page"></div>
         </div>
     </div>
@@ -68,8 +88,24 @@
             showZoomCtrl: false
         });
 
+        const initialView = {
+            pitch: viewer.getPitch(),
+            yaw: viewer.getYaw(),
+            hfov: viewer.getHfov()
+        };
+
+        document.getElementById('ResetView').onclick = () => {
+            viewer.setPitch(initialView.pitch);
+            viewer.setYaw(initialView.yaw);
+            viewer.setHfov(initialView.hfov);
+        };
         document.getElementById('ZoomIn').onclick = () => viewer.setHfov(viewer.getHfov() - 20);
         document.getElementById('ZoomOut').onclick = () => viewer.setHfov(viewer.getHfov() + 20);
+        document.getElementById('CompassToggle').onclick = function () {
+            const compass = document.querySelector('.pnlm-compass');
+            const hidden = compass.classList.toggle('compass-hidden');
+            this.classList.toggle('compass-hidden', hidden);
+        };
         document.getElementById('FullPage').onclick = function () {
             this.classList.toggle('full-page-active');
             window.parent.postMessage({ type: 'togglePane' }, '*');

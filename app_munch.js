@@ -114,7 +114,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'),
       'utf8'
     );
-    const annotationPath = `/viewer/modules/iiif/visual-annotations?q=${encodedQueryName}`;
+    const annotationPath = `/viewer/modules/iiif/annotation?q=${encodedQueryName}`;
     const displayIIIFAnnotations = Boolean(config.displayIIIFAnnotations);
     const pagedAnnotationLoadingEnabled = Boolean(config.pagedIIIFAnnotations);
     const displayAnnotationFocus = Boolean(config.displayAnnotationFocus);
@@ -205,7 +205,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/modules/iiif/visual-annotations', async (req, res) => {
+app.get('/viewer/modules/iiif/annotation', async (req, res) => {
   const title = req.query.q;
 
   if (!title) {

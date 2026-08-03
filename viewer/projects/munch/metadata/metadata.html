@@ -249,7 +249,7 @@
             const count = (filters = {}) => {
                 const params = new URLSearchParams({ q: panelTitle, count: '1' });
                 Object.entries(filters).forEach(([key, value]) => value !== 'all' && params.set(key, value));
-                return fetch(`/viewer/modules/iiif/visual-annotations?${params}`).then((r) => r.json()).then((data) => data.count || 0);
+                return fetch(`/viewer/modules/iiif/annotation?${params}`).then((r) => r.json()).then((data) => data.count || 0);
             };
             const filters = getActiveAnnotationFilters();
             const isFiltered = Object.values(filters).some((value) => value !== 'all');

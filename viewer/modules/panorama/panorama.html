@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>360 image viewer</title>
+    <link rel="stylesheet" href="/viewer/shared/oswald_font.css">
     <link rel="stylesheet" href="pannellum.css">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="/viewer/shared/guide.css">
     <style>
         html,
         body,
@@ -72,6 +74,42 @@
 </head>
 
 <body>
+    <div id="guide" onclick="hidePanoramaGuide();">
+        <div class="guide-content">
+            <div class="guide-instructions">
+                <div class="guide-instructions-intro">
+                    Click and drag to look around. Scroll to zoom in and out.
+                </div>
+                <div id="guide-instructions-tools">
+                    <h2>Tools</h2>
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(/viewer/shared/interface/frame.png)"></div>
+                        <div class="guide-instructions-item-label"><b>Reset View.</b> Return to the initial
+                            position and zoom level.</div>
+                    </div>
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png)"></div>
+                        <div class="guide-instructions-item-label"><b>Zoom Controls.</b> Zoom in and out.
+                        </div>
+                    </div>
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon"
+                            style="background-image:url(/viewer/shared/interface/compass.svg)"></div>
+                        <div class="guide-instructions-item-label"><b>Compass.</b> Show or hide the direction compass.
+                        </div>
+                    </div>
+                    <div class="guide-instructions-item">
+                        <div class="guide-instructions-item-icon full-page"></div>
+                        <div class="guide-instructions-item-label"><b>Full Page.</b> Expand or restore the panorama
+                            viewer.</div>
+                    </div>
+                    <div class="guide-closer">Close</div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="panorama"></div>
     <div class="interface-area">
         <div class="toolbar-bottom">
@@ -81,6 +119,7 @@
             <div id="CompassToggle" class="NavButton" title="Toggle compass"></div>
             <div id="FullPage" class="NavButton full-page" title="Toggle full page"></div>
         </div>
+        <div class="guide-button compact" title="User Guide" onclick="showPanoramaGuide();">?</div>
     </div>
     <script src="pannellum.js"></script>
     <script>
@@ -98,6 +137,18 @@
             yaw: viewer.getYaw(),
             hfov: viewer.getHfov()
         };
+
+        function showPanoramaGuide() {
+            document.getElementById('guide').style.pointerEvents = 'auto';
+            document.getElementById('guide').style.opacity = '1';
+            document.getElementById('guide-instructions-tools').style.transform = 'scale(1)';
+        }
+
+        function hidePanoramaGuide() {
+            document.getElementById('guide').style.pointerEvents = 'none';
+            document.getElementById('guide').style.opacity = '0';
+            document.getElementById('guide-instructions-tools').style.transform = 'scale(0.5)';
+        }
 
         document.getElementById('ResetView').onclick = () => {
             viewer.setPitch(initialView.pitch);

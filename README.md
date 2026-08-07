@@ -5,8 +5,8 @@ A Node.js application built with Express for visualizing and interacting with me
 
 ```nvm use 22``` <br>
 ```npm install``` <br>
-Define a .env.local variable with PROJECT=etruscan/shfa/sophia + npm start: <br>
 
+Define a .env.local variable with PROJECT=etruscan/shfa/sophia + npm start: <br>
 PROJECT=sophia npm start  
 PROJECT=shfa npm start  
 PROJECT=etruscan npm start  

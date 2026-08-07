@@ -1,11 +1,5 @@
 # Multimodal Viewer
-A Node.js application built with Express for visualizing and interacting with meshes, pointclouds, RTI, Panorama, and IIIF images. It uses the <a href="https://3dhop.net">3DHOP</a>, <a href="https://github.com/potree/potree">Potree</a>, <a href="https://github.com/cnr-isti-vclab/openlime">OpenLime</a>, <a href="https://openseadragon.github.io">Openseadragon</a>, and <a href="https://annotorious.github.io">Annotorious</a> libraries, with additions, adaptations, and custom user interface by <a href="mailto:jonathan.westin@lir.gu.se">Jonathan Westin</a> and <a href="mailto:tristan.bridge@lir.gu.se">Tristan Bridge</a>.
-
-## Table of Contents
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Installation](#installation)
-- [Database and API Documentation](#database-and-api-documentation)
+A Node.js application built with Express for visualizing and interacting with meshes, pointclouds, RTI, Panorama, and IIIF images. It uses the <a href="https://3dhop.net">3DHOP</a>, <a href="https://github.com/potree/potree">Potree</a>, <a href="https://github.com/cnr-isti-vclab/openlime">OpenLime</a>, <a href="https://openseadragon.github.io">Openseadragon</a>, <a href="https://github.com/annotorious/annotorious">Annotorious</a>, and <a href="https://github.com/mpetroff/pannellum">Pannellum</a> libraries, with additions, adaptations, and custom user interface by <a href="mailto:jonathan.westin@lir.gu.se">Jonathan Westin</a> and <a href="mailto:tristan.bridge@lir.gu.se">Tristan Bridge</a>.
 
 ## Getting Started
 

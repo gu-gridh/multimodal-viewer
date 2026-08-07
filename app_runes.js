@@ -1,5 +1,3 @@
-/* http://localhost:8099/viewer/?q=5 For testing */
-
 const express = require('express');
 const path = require('path');
 const fs = require('fs');

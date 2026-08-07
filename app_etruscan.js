@@ -267,8 +267,20 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
       return res.status(500).send('Internal Server Error');
     }
 
-    const panoramaUrl = '/viewer/projects/etruscan/FARO_Scan_289_small.jpg';
-    res.send(data.replace(/'PLACEHOLDER_PANORAMA_URL'/g, JSON.stringify(panoramaUrl)));
+    const panoramaConfig = {
+      hfov: 100,
+      type: 'multires',
+      multiRes: {
+        basePath: '/viewer/projects/etruscan/panorama-289',
+        path: '/%l/%s%y_%x',
+        fallbackPath: '/fallback/%s',
+        extension: 'jpg',
+        tileResolution: 512,
+        maxLevel: 5,
+        cubeResolution: 6456
+      }
+    };
+    res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
   });
 });
 

@@ -127,8 +127,7 @@
     <script src="pannellum.js"></script>
     <script>
         const viewer = pannellum.viewer('panorama', {
-            type: 'equirectangular',
-            panorama: 'PLACEHOLDER_PANORAMA_URL',
+            ...'PLACEHOLDER_PANORAMA_CONFIG',
             autoLoad: true,
             compass: true,
             showFullscreenCtrl: false,

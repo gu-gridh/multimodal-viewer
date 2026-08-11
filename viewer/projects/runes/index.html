@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="/viewer/shared/split-layout.css">
     <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script>   
     <style>
         html,
         body {
@@ -38,9 +40,9 @@
         .module-placeholder {
             height: 100%;
             display: none;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.6);
+            align-items: stretch;
+            justify-content: stretch;
+            color: #111;
             font-weight: 300;
         }
 
@@ -67,6 +69,61 @@
         .mobile-metadata-tab,
         .mobile-back-button {
             display: none;
+        }
+
+        .venn-panel {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            right: 20px;
+            bottom: 90px;
+        }
+
+        .venn-panel h2 {
+            margin: 0 0 20px;
+            font-weight: 300;
+            font-size: 28px;
+        }
+
+        #venn-diagram {
+            width: 100%;
+            height: 100%;
+        }
+
+        #venn-diagram svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #venn-diagram text {
+            fill: white;
+        }
+
+        #venn-diagram .venn-area path {
+            fill: none !important;
+            fill-opacity: 0 !important;
+            stroke: #999;
+            stroke-width: 2px;
+        }
+
+        .venn-label {
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .runestone {
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        .runestone:hover {
+            opacity: 0.7;
+        }
+
+        .runestone-label {
+            font-size: 16px;
+            dominant-baseline: middle;
         }
 
         @media screen and (max-width: 1050px) {
@@ -140,7 +197,11 @@
                     <div class="ui-module-item left mobile-metadata-tab" onclick="showMobileMetadata()">About</div>
                 </div>
             </div>
-            <div id="left-placeholder" class="module-placeholder"></div>
+            <div id="left-placeholder" class="module-placeholder">
+                <div class="venn-panel">
+                    <div id="venn-diagram"></div>
+                </div>
+            </div>
             <iframe id="left-iframe" class="iframes" title="Region"></iframe>
             <div class="period-switcher">
                 <div class="ui-module">
@@ -227,17 +288,337 @@
             changeLeftViewer();
         }
 
+        function getVennData(region, period) {
+            // Mock data
+            if (region === 'vastra' && period === '1') {
+                return [
+                    { sets: ['Väg'], size: 40 },
+                    { sets: ['Gravfält'], size: 32 },
+                    { sets: ['Gräns'], size: 24 },
+
+                    { sets: ['Väg', 'Gravfält'], size: 14 },
+                    { sets: ['Väg', 'Gräns'], size: 8 },
+                    { sets: ['Gravfält', 'Gräns'], size: 6 },
+
+                    { sets: ['Väg', 'Gravfält', 'Gräns'], size: 3 }
+                ];
+            }
+
+            if (region === 'vastra' && period === '2') {
+                return [
+                    { sets: ['Väg'], size: 32 },
+                    { sets: ['Gravfält'], size: 26 },
+                    { sets: ['Gräns'], size: 30 },
+
+                    { sets: ['Väg', 'Gravfält'], size: 10 },
+                    { sets: ['Väg', 'Gräns'], size: 15 },
+                    { sets: ['Gravfält', 'Gräns'], size: 8 },
+
+                    { sets: ['Väg', 'Gravfält', 'Gräns'], size: 5 }
+                ];
+            }
+
+            if (region === 'ostra' && period === '1') {
+                return [
+                    { sets: ['Väg'], size: 30 },
+                    { sets: ['Gravfält'], size: 38 },
+                    { sets: ['Gräns'], size: 20 },
+
+                    { sets: ['Väg', 'Gravfält'], size: 16 },
+                    { sets: ['Väg', 'Gräns'], size: 5 },
+                    { sets: ['Gravfält', 'Gräns'], size: 7 },
+
+                    { sets: ['Väg', 'Gravfält', 'Gräns'], size: 2 }
+                ];
+            }
+
+            return [
+                { sets: ['Väg'], size: 35 },
+                { sets: ['Gravfält'], size: 28 },
+                { sets: ['Gräns'], size: 25 },
+
+                { sets: ['Väg', 'Gravfält'], size: 12 },
+                { sets: ['Väg', 'Gräns'], size: 10 },
+                { sets: ['Gravfält', 'Gräns'], size: 9 },
+
+                { sets: ['Väg', 'Gravfält', 'Gräns'], size: 4 }
+            ];
+        }
+
+        //mock data for runestones in each region and period
+        function getMockRunestones(region, period) {
+            const variations = {
+                'vastra-1': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Väg'] },
+
+                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r6', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r7', sets: ['Väg', 'Gravfält'] },
+
+                    { id: 'r8', sets: ['Väg', 'Gräns'] },
+                    { id: 'r9', sets: ['Väg', 'Gräns'] },
+                    { id: 'r10', sets: ['Väg', 'Gräns'] },
+                    { id: 'r11', sets: ['Väg', 'Gräns'] },
+
+                    { id: 'r12', sets: ['Väg', 'Gravfält', 'Gräns'] },
+                    { id: 'r13', sets: ['Väg', 'Gravfält', 'Gräns'] },
+
+                    { id: 'r14', sets: ['Gravfält'] },
+
+                    {
+                        id: 'r15',
+                        sets: ['Gräns'],
+                        selected: true,
+                        title: 'Title'
+                    }
+                ],
+
+                'vastra-2': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r4', sets: ['Väg', 'Gräns'] },
+                    { id: 'r5', sets: ['Väg', 'Gräns'] },
+                    { id: 'r6', sets: ['Väg', 'Gräns'] },
+                    { id: 'r7', sets: ['Gravfält'] },
+                    { id: 'r8', sets: ['Gräns'] },
+                    { id: 'r9', sets: ['Väg', 'Gravfält', 'Gräns'] }
+                ],
+
+                'ostra-1': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Gravfält'] },
+                    { id: 'r3', sets: ['Gravfält'] },
+                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r6', sets: ['Väg', 'Gräns'] },
+                    { id: 'r7', sets: ['Gravfält', 'Gräns'] },
+                    { id: 'r8', sets: ['Väg', 'Gravfält', 'Gräns'] }
+                ],
+
+                'ostra-2': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Väg'] },
+                    { id: 'r3', sets: ['Gräns'] },
+                    { id: 'r4', sets: ['Väg', 'Gräns'] },
+                    { id: 'r5', sets: ['Gravfält', 'Gräns'] },
+                    { id: 'r6', sets: ['Väg', 'Gravfält', 'Gräns'] }
+                ]
+            };
+
+            return variations[`${region}-${period}`] || [];
+        }
+
+        //mock positions for the runestones
+        function getRunestonePosition(sets, index, width, height) {
+            const key = [...sets].sort().join('|');
+
+            const positions = {
+                'Väg': {
+                    x: width * 0.50,
+                    y: height * 0.25
+                },
+
+                'Gravfält': {
+                    x: width * 0.27,
+                    y: height * 0.67
+                },
+
+                'Gräns': {
+                    x: width * 0.73,
+                    y: height * 0.67
+                },
+
+                'Gravfält|Väg': {
+                    x: width * 0.40,
+                    y: height * 0.47
+                },
+
+                'Gräns|Väg': {
+                    x: width * 0.60,
+                    y: height * 0.47
+                },
+
+                'Gravfält|Gräns': {
+                    x: width * 0.50,
+                    y: height * 0.67
+                },
+
+                'Gravfält|Gräns|Väg': {
+                    x: width * 0.50,
+                    y: height * 0.55
+                }
+            };
+
+            const base = positions[key] || {
+                x: width / 2,
+                y: height / 2
+            };
+
+            /*
+            * Simple deterministic spread around each region.
+            * This avoids stacking all stones on top of each other.
+            */
+            const columns = 4;
+            const spacing = 34;
+
+            const col = index % columns;
+            const row = Math.floor(index / columns);
+
+            return {
+                x: base.x + (col - 1.5) * spacing,
+                y: base.y + row * spacing
+            };
+        }
+
+        function renderVenn() {
+            const diagram = document.getElementById('venn-diagram');
+
+            if (!diagram) {
+                return;
+            }
+
+            diagram.innerHTML = '';
+
+            const width = diagram.clientWidth;
+            const height = diagram.clientHeight;
+
+            const vennData = [
+                { sets: ['Väg'], size: 40 },
+                { sets: ['Gravfält'], size: 40 },
+                { sets: ['Gräns'], size: 40 },
+
+                { sets: ['Väg', 'Gravfält'], size: 14 },
+                { sets: ['Väg', 'Gräns'], size: 14 },
+                { sets: ['Gravfält', 'Gräns'], size: 8 },
+
+                { sets: ['Väg', 'Gravfält', 'Gräns'], size: 5 }
+            ];
+
+            const chart = venn.VennDiagram()
+                .width(width)
+                .height(height);
+
+            const container = d3
+                .select('#venn-diagram')
+                .datum(vennData)
+                .call(chart);
+
+            const svg = container.select('svg');
+
+            /*
+            * We only want venn.js for the circle geometry,
+            * so remove its automatically generated text.
+            */
+            svg.selectAll('text').remove();
+
+            svg.selectAll('.venn-area path')
+                .style('fill', 'none')
+                .style('fill-opacity', 0)
+                .style('stroke', '#999')
+                .style('stroke-width', '2px');
+
+            /*
+            * Custom labels matching the mockup.
+            */
+            svg.append('text')
+                .attr('class', 'venn-label')
+                .attr('x', width * 0.50)
+                .attr('y', 30)
+                .attr('text-anchor', 'middle')
+                .text('Väg');
+
+            svg.append('text')
+                .attr('class', 'venn-label')
+                .attr('x', 0)
+                .attr('y', height * 0.64)
+                .attr('text-anchor', 'start')
+                .text('Gravfält');
+
+            svg.append('text')
+                .attr('class', 'venn-label')
+                .attr('x', width)
+                .attr('y', height * 0.64)
+                .attr('text-anchor', 'end')
+                .text('Gräns');
+
+            const runestones = getMockRunestones(
+                activeRegion,
+                activePeriod
+            );
+
+            /*
+            * Track how many stones have already been placed
+            * inside each combination.
+            */
+            const combinationIndexes = {};
+
+            runestones.forEach(stone => {
+                const key = [...stone.sets].sort().join('|');
+
+                const index = combinationIndexes[key] || 0;
+                combinationIndexes[key] = index + 1;
+
+                const position = getRunestonePosition(
+                    stone.sets,
+                    index,
+                    width,
+                    height
+                );
+
+                const markerSize = 24;
+
+                const group = svg
+                    .append('g')
+                    .attr('class', 'runestone')
+                    .attr(
+                        'transform',
+                        `translate(${position.x}, ${position.y})`
+                    )
+                    .on('click', () => {
+                        selectRunestone(stone);
+                    });
+
+                group.append('rect')
+                    .attr('x', -markerSize / 2)
+                    .attr('y', -markerSize / 2)
+                    .attr('width', markerSize)
+                    .attr('height', markerSize)
+                    .attr(
+                        'fill',
+                        stone.selected
+                            ? '#ffa500'
+                            : '#ffc76a'
+                    );
+
+                if (stone.selected && stone.title) {
+                    group.append('text')
+                        .attr('class', 'runestone-label')
+                        .attr('x', markerSize / 2 + 8)
+                        .attr('y', 1)
+                        .attr('text-anchor', 'start')
+                        .text(stone.title);
+                }
+            });
+        }
+
+        //TODO: on runestone select
+        function selectRunestone(stone) {
+            console.log('Selected runestone:', stone);
+        }
+
         function changeLeftViewer() {
             const leftIframe = document.getElementById('left-iframe');
             const leftPlaceholder = document.getElementById('left-placeholder');
 
-            //TODO: Implement venn diagram here.
             leftIframe.removeAttribute('src');
             leftIframe.style.display = 'none';
             leftPlaceholder.style.display = 'flex';
-            leftPlaceholder.textContent =
-                activeRegion === 'vastra' ? 'Västra Götaland' : 'Östra Götaland';
 
+            renderVenn()
             moduleSwitcherLeft();
         }
 

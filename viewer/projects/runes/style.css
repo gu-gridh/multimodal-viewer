@@ -1,0 +1,188 @@
+        html,
+        body {
+            width: 100vw;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--viewer-bg);
+            font-family: "Oswald", sans-serif;
+        }
+
+        #main-content {
+            height: 100% !important;
+        }
+
+        #left-pane {
+            width: 70%;
+            position: relative;
+        }
+
+        #right-pane {
+            width: 30%;
+            background: rgb(228, 228, 220);
+        }
+
+        .module-placeholder {
+            height: 100%;
+            display: none;
+            align-items: stretch;
+            justify-content: stretch;
+            color: #111;
+            font-weight: 300;
+        }
+
+        .period-switcher {
+            position: absolute;
+            bottom: 28px;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+        }
+
+        .period-switcher .ui-module {
+            position: static;
+            display: flex;
+        }
+
+        .iframes {
+            width: 100%;
+            border: 0;
+        }
+
+        .mobile-metadata-tab,
+        .mobile-back-button {
+            display: none;
+        }
+
+        .venn-panel {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            right: 20px;
+            bottom: 90px;
+        }
+
+        .venn-panel h2 {
+            margin: 0 0 20px;
+            font-weight: 300;
+            font-size: 28px;
+        }
+
+        #venn-diagram {
+            width: 100%;
+            height: 100%;
+        }
+
+        #venn-diagram svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #venn-diagram text {
+            fill: white;
+        }
+
+        #venn-diagram .venn-area path {
+            fill: none !important;
+            fill-opacity: 0 !important;
+            stroke: #999;
+            stroke-width: 2px;
+        }
+
+        .venn-label {
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .runestone {
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        .runestone:hover {
+            opacity: 0.7;
+        }
+
+        .runestone-label {
+            font-size: 16px;
+            dominant-baseline: middle;
+        }
+
+        .runestone {
+            cursor: pointer;
+        }
+
+        .runestone-tooltip {
+            pointer-events: none;
+        }
+
+        .runestone-tooltip rect {
+            fill: #222;
+            opacity: 0.9;
+        }
+
+        .runestone-tooltip text {
+            fill: #fff !important;
+            font-family: "Oswald", sans-serif;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 1050px) {
+
+            #left-pane,
+            #right-pane {
+                display: block;
+                width: 50%;
+            }
+
+            .ui-module-container {
+                width: 50vw;
+            }
+        }
+
+        @media screen and (max-width: 1050px) {
+            #main-content {
+                overflow: hidden;
+            }
+
+            #left-pane,
+            #right-pane {
+                width: 100%;
+            }
+
+            .ui-module-container {
+                width: 100vw;
+            }
+
+            #right-pane {
+                display: none;
+            }
+
+            #main-content.mobile-metadata-open #left-pane {
+                display: none;
+            }
+
+            #main-content.mobile-metadata-open #right-pane {
+                display: block;
+            }
+
+            .mobile-metadata-tab {
+                display: block;
+            }
+
+            .mobile-back-button {
+                position: absolute;
+                display: block;
+                width: 30px;
+                height: 30px;
+                top: 28px;
+                left: 12px;
+                border-radius: 50%;
+                background: #000 url(https://data.dh.gu.se/ui-icons/arrow_back_white.png) center / 15px no-repeat;
+                z-index: 1100;
+                cursor: pointer;
+            }
+        }

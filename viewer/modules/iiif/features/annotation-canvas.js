@@ -1,8 +1,8 @@
 export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno, getAnnotationsVisible, viewer }) {
     let annotationCanvas = null;
-    let annotationCanvasOverlayAdded = false;
     let canvasAnnotationMode = false;
     let annotationInteractionMessageTimeout = null;
+    let annotationShapes = [];
 
     function getAnnotationCanvas() {
         if (annotationCanvas) {
@@ -11,7 +11,8 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
 
         annotationCanvas = document.createElement('canvas');
         annotationCanvas.id = 'annotation-canvas';
-        annotationCanvas.style.display = 'none';
+        annotationCanvas.style.cssText = 'display:none;position:absolute;inset:0;pointer-events:none;z-index:2;';
+        viewer.container.appendChild(annotationCanvas);
         return annotationCanvas;
     }
 
@@ -48,11 +49,12 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
 
     function clearCanvasAnnotations() {
         canvasAnnotationMode = false;
+        annotationShapes = [];
         setCanvasAnnotationVisible(false);
 
         if (annotationCanvas) {
-            const context = annotationCanvas.getContext('2d');
-            context.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+            annotationCanvas.width = 1;
+            annotationCanvas.height = 1;
         }
     }
 
@@ -68,106 +70,100 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
         return annotation?.target?.selector?.value || '';
     }
 
-    function getImageOverlayBounds(imageSize) {
-        if (viewer.viewport.imageToViewportRectangle) {
-            return viewer.viewport.imageToViewportRectangle(0, 0, imageSize.width, imageSize.height);
+    function parseAnnotation(annotation) {
+        const selectorValue = getAnnotationSelectorValue(annotation);
+        const pointsValue = selectorValue.match(/points="([^"]+)"/)?.[1];
+        let points;
+
+        if (pointsValue) {
+            points = pointsValue.trim().split(/\s+/).map(point => {
+                const [x, y] = point.split(',').map(Number);
+                return { x, y };
+            }).filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
+        } else {
+            const rect = selectorValue.match(/xywh=pixel:([^"]+)/)?.[1]?.split(',').map(Number);
+            if (!rect || !rect.every(Number.isFinite)) {
+                return null;
+            }
+            const [x, y, width, height] = rect;
+            points = [
+                { x, y },
+                { x: x + width, y },
+                { x: x + width, y: y + height },
+                { x, y: y + height }
+            ];
         }
 
-        return new OpenSeadragon.Rect(0, 0, 1, imageSize.height / imageSize.width);
+        if (!points.length) {
+            return null;
+        }
+
+        return {
+            points,
+            color: getAnnotationColor(annotation),
+            closed: !selectorValue.includes('<polyline')
+        };
     }
 
-    function getMaxCanvasSide() {
-        return window.matchMedia('(max-width: 1024px)').matches ? 2048 : 8192;
+    function redrawCanvasAnnotations() {
+        if (!canvasAnnotationMode || !annotationCanvas) {
+            return;
+        }
+
+        const width = viewer.container.clientWidth;
+        const height = viewer.container.clientHeight;
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        const backingWidth = Math.max(1, Math.round(width * pixelRatio));
+        const backingHeight = Math.max(1, Math.round(height * pixelRatio));
+
+        if (annotationCanvas.width !== backingWidth || annotationCanvas.height !== backingHeight) {
+            annotationCanvas.width = backingWidth;
+            annotationCanvas.height = backingHeight;
+            annotationCanvas.style.width = `${width}px`;
+            annotationCanvas.style.height = `${height}px`;
+        }
+
+        const context = annotationCanvas.getContext('2d');
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        context.clearRect(0, 0, width, height);
+        context.lineWidth = 1.5;
+        context.lineJoin = 'round';
+        context.lineCap = 'round';
+
+        annotationShapes.forEach(shape => {
+            const points = shape.points.map(point => viewer.viewport.imageToViewerElementCoordinates(
+                new OpenSeadragon.Point(point.x, point.y)
+            ));
+            context.beginPath();
+
+            if (points.length === 1) {
+                context.arc(points[0].x, points[0].y, 5, 0, Math.PI * 2);
+            } else {
+                context.moveTo(points[0].x, points[0].y);
+                points.slice(1).forEach(point => context.lineTo(point.x, point.y));
+                if (shape.closed) {
+                    context.closePath();
+                }
+            }
+
+            context.strokeStyle = shape.color;
+            context.stroke();
+        });
     }
 
     function drawCanvasAnnotations(annotations, imageSize, resetCanvas = true) {
-        const canvas = getAnnotationCanvas();
-        const maxCanvasSide = getMaxCanvasSide();
-        const canvasScale = resetCanvas
-            ? Math.min(1, maxCanvasSide / Math.max(imageSize.width, imageSize.height))
-            : canvas.width / imageSize.width;
-        const width = Math.max(1, Math.round(imageSize.width * canvasScale));
-        const height = Math.max(1, Math.round(imageSize.height * canvasScale));
-        const context = canvas.getContext('2d');
-
-        if (resetCanvas) {
-            canvas.width = width;
-            canvas.height = height;
-            context.clearRect(0, 0, width, height);
-
-            if (!annotationCanvasOverlayAdded) {
-                viewer.addOverlay({
-                    element: canvas,
-                    location: getImageOverlayBounds(imageSize),
-                    rotationMode: OpenSeadragon.OverlayRotationMode.EXACT
-                });
-                annotationCanvasOverlayAdded = true;
-            } else {
-                viewer.updateOverlay(canvas, getImageOverlayBounds(imageSize));
-            }
-        }
-
-        annotations.forEach(annotation => {
-            const selectorValue = getAnnotationSelectorValue(annotation);
-            const pointsValue = selectorValue.match(/points="([^"]+)"/)?.[1];
-
-            if (!pointsValue) {
-                const rectValue = selectorValue.match(/xywh=pixel:([^"]+)/)?.[1];
-                if (!rectValue) {
-                    return;
-                }
-
-                const [x, y, width, height] = rectValue.split(',').map(Number);
-                if (![x, y, width, height].every(Number.isFinite)) {
-                    return;
-                }
-
-                context.strokeStyle = getAnnotationColor(annotation);
-                context.lineWidth = 1.5;
-                context.strokeRect(x * canvasScale, y * canvasScale, width * canvasScale, height * canvasScale);
-                return;
-            }
-
-            const points = pointsValue.trim().split(/\s+/).map(point => {
-                const [x, y] = point.split(',').map(Number);
-                return Number.isFinite(x) && Number.isFinite(y)
-                    ? { x: x * canvasScale, y: y * canvasScale }
-                    : null;
-            }).filter(Boolean);
-
-            if (points.length === 1) {
-                context.beginPath();
-                context.arc(points[0].x, points[0].y, 5, 0, Math.PI * 2);
-                context.strokeStyle = getAnnotationColor(annotation);
-                context.lineWidth = 1.5;
-                context.stroke();
-                return;
-            }
-
-            if (points.length < 2) {
-                return;
-            }
-
-            const isPolyline = selectorValue.includes('<polyline');
-            context.beginPath();
-            context.moveTo(points[0].x, points[0].y);
-            points.slice(1).forEach(point => context.lineTo(point.x, point.y));
-
-            if (!isPolyline) {
-                context.closePath();
-            }
-
-            context.strokeStyle = getAnnotationColor(annotation);
-            context.lineWidth = 1.5;
-            context.lineJoin = 'round';
-            context.lineCap = 'round';
-            context.stroke();
-        });
-
+        getAnnotationCanvas();
+        const shapes = annotations.map(parseAnnotation).filter(Boolean);
+        annotationShapes = resetCanvas ? shapes : annotationShapes.concat(shapes);
         canvasAnnotationMode = true;
         setCanvasAnnotationVisible(getAnnotationsVisible());
+        redrawCanvasAnnotations();
     }
 
+    viewer.addHandler('animation', redrawCanvasAnnotations);
+    viewer.addHandler('animation-finish', redrawCanvasAnnotations);
+    viewer.addHandler('resize', redrawCanvasAnnotations);
+    viewer.addHandler('rotate', redrawCanvasAnnotations);
     setAnnotationInteractionMessageText();
 
     return {

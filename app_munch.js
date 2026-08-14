@@ -6,14 +6,15 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 const sharp = require('sharp');
 const app = express();
+
+dotenv.config({ path: './.env.local' });
+
 const projectName = process.env.PROJECT || 'default';
 const munchPhotoTileSource = 'https://data.dh.gu.se/munch/static/munch/iiif/SolenMedium-v3.dzi';
 const apiCache = new Map();
 const apiCacheTtlMs = 60 * 1000;
 const apiCacheMaxEntries = 100;
 const annotationPageLimit = 20;
-
-dotenv.config({ path: './.env.local' });
 
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
 let config;

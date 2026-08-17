@@ -264,7 +264,7 @@
                     {
                         id: 'r15',
                         sets: ['Gräns'],
-                        selected: true,
+                        //selected: true,
                         title: 'Title'
                     }
                 ],
@@ -307,7 +307,7 @@
 
         function addRunestones(svg, stones, circles, width, height) {
             const positions = [];
-            const markerSize = 24;
+            const markerSize = 18;
 
             //hover tooltip for runestones
             const tooltip = svg.append('g')
@@ -396,6 +396,7 @@
                 .attr('class', 'venn-label')
                 .attr('x', width * 0.50)
                 .attr('y', height * 0.055)
+                .attr('dy', -15) // move 15px upward
                 .attr('text-anchor', 'middle')
                 .text('Väg');
 
@@ -403,6 +404,7 @@
                 .attr('class', 'venn-label')
                 .attr('x', 5)
                 .attr('y', height * 0.63)
+                .attr('dx', 150)  // move right
                 .attr('text-anchor', 'start')
                 .text('Gravfält');
 
@@ -410,6 +412,7 @@
                 .attr('class', 'venn-label')
                 .attr('x', width - 5)
                 .attr('y', height * 0.63)
+                .attr('dx', -150)  // move left
                 .attr('text-anchor', 'end')
                 .text('Gräns');
         }

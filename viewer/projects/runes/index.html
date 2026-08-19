@@ -265,7 +265,7 @@
                         id: 'r15',
                         sets: ['Gräns'],
                         //selected: true,
-                        title: 'Title'
+                        //title: 'Title'
                     }
                 ],
 
@@ -453,6 +453,15 @@
         //TODO: on runestone select
         function selectRunestone(stone) {
             console.log('Selected runestone:', stone);
+            try {
+                const params = new URLSearchParams(window.location.search);
+                params.set('q', 5);
+                window.history.pushState({},'',`${window.location.pathname}?${params.toString()}`);
+                changeRightViewer(activeViewer);
+                renderVenn(); //so it can update the selected state of the stone
+            } catch (error) {
+                console.error('Error updating right viewer:', error);
+            }
         }
 
         function changeLeftViewer() {

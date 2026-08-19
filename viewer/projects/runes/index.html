@@ -457,6 +457,7 @@
 
                 const group = svg.append('g')
                     .attr('class', 'runestone')
+                    .attr('data-id', stone.id)
                     .attr(
                         'transform',
                         `translate(${position.x}, ${position.y})`
@@ -568,18 +569,24 @@
             );
         }
 
-        //TODO: on runestone select
+        
         function selectRunestone(stone) {
-            console.log('Selected runestone:', stone);
-            try {
-                const params = new URLSearchParams(window.location.search);
-                params.set('q', 5);
-                window.history.pushState({},'',`${window.location.pathname}?${params.toString()}`);
-                changeRightViewer(activeViewer);
-                renderVenn(); //so it can update the selected state of the stone
-            } catch (error) {
-                console.error('Error updating right viewer:', error);
-            }
+            const params = new URLSearchParams(window.location.search);
+            params.set('q', 5); //todo: change to stone.id 
+
+            window.history.pushState(
+                {},
+                '',
+                `${window.location.pathname}?${params.toString()}`
+            );
+
+            changeRightViewer(activeViewer);
+
+            d3.selectAll('.runestone rect')
+                .attr('fill', '#ffc76a');
+
+            d3.select(`.runestone[data-id="${stone.id}"] rect`)
+                .attr('fill', '#ffa500');
         }
 
         function changeLeftViewer() {

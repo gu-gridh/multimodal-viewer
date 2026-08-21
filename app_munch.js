@@ -11,12 +11,13 @@ dotenv.config({ path: './.env.local' });
 
 const projectName = process.env.PROJECT || 'default';
 const munchPhotoTileSource = 'https://data.dh.gu.se/munch/static/munch/iiif/SolenMedium-v3.dzi';
+const inscriptionAdminUrl = 'https://munch.dh.gu.se/admin/munch/visualannotation/add/';
 const apiCache = new Map();
 const apiCacheTtlMs = 60 * 1000;
 const apiCacheMaxEntries = 100;
 const annotationPageLimit = 20;
 
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
   config = require(configPath);
@@ -109,22 +110,22 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const coordinateWidthCm = Number(painting.width) || 0;
     const coordinateHeightCm = Number(painting.height) || 0;
     const annotationCanvasThreshold = Number(painting.interactive_annotations) || 150;
-    const displayCoordinateTool = Boolean(config.displayCoordinateTool && coordinateWidthCm && coordinateHeightCm);
+    const displayCoordinateTool = Boolean(config.enableCoordinateTool && coordinateWidthCm && coordinateHeightCm);
 
     const htmlContent = fs.readFileSync(
       path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'),
       'utf8'
     );
     const annotationPath = `/viewer/modules/iiif/annotation?q=${encodedQueryName}`;
-    const displayIIIFAnnotations = Boolean(config.displayIIIFAnnotations);
-    const pagedAnnotationLoadingEnabled = Boolean(config.pagedIIIFAnnotations);
-    const displayAnnotationFocus = Boolean(config.displayAnnotationFocus);
-    const filteredDownloadEnabled = Boolean(config.downloadFilteredIIIFAnnotations);
+    const displayIIIFAnnotations = Boolean(config.enableIIIFAnnotations);
+    const pagedAnnotationLoadingEnabled = Boolean(config.enablePagedAnnotationLoading);
+    const displayAnnotationFocus = Boolean(config.enableAnnotationFocus);
+    const filteredDownloadEnabled = Boolean(config.enableFilteredAnnotationDownload);
     const annotationDisplay = displayIIIFAnnotations ? 'flex' : 'none';
-    const rectangleDisplay = config.displayRectangleTool ? 'flex' : 'none';
-    const polygonDisplay = config.displayPolygonTool ? 'flex' : 'none';
-    const lineDisplay = config.displayLineTool ? 'flex' : 'none';
-    const pointDisplay = config.displayPointTool ? 'flex' : 'none';
+    const rectangleDisplay = config.enableRectangleTool ? 'flex' : 'none';
+    const polygonDisplay = config.enablePolygonTool ? 'flex' : 'none';
+    const lineDisplay = config.enableLineTool ? 'flex' : 'none';
+    const pointDisplay = config.enablePointTool ? 'flex' : 'none';
 
     if (queryType === 'iiif' || queryType === 'photo') {
       const downloadSources = filteredDownloadEnabled
@@ -135,7 +136,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
-        .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
+        .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(inscriptionAdminUrl))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, annotationDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
@@ -151,7 +152,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
         .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
         .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
+        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName));
 
       return res.send(updatedHtmlContent);
     }
@@ -178,7 +179,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyDownloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
-        .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionUrl || ''))
+        .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(inscriptionAdminUrl))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, annotationDisplay)
         .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
@@ -194,7 +195,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
         .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
         .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
+        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName));
 
       return res.send(updatedHtmlContent);
     }

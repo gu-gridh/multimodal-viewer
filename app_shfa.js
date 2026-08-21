@@ -7,8 +7,9 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
 
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
   config = require(configPath);
@@ -23,7 +24,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
-  const apiUrl = `${config.panel}${queryName}&depth=2`;
+  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=2`;
   try {
     const apiResponse = await axios.get(apiUrl);
 
@@ -46,17 +47,17 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       let updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
+        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName))
         .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
         .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
         .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs))
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.displayRectangleTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.displayLineTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.displayPointTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.downloadFilteredIIIFAnnotations))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
+        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.enableIIIFAnnotations ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.enableRectangleTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.enablePolygonTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.enableLineTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.enablePointTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
         .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')
       res.send(updatedHtmlContent);
     } else {
@@ -78,7 +79,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.metadata}${queryName}&depth=3`;
+  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=3`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -269,7 +270,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.panel}${queryName}&depth=2`;
+  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=2`;
 
   try {
     const apiResponse = await axios.get(apiUrl);

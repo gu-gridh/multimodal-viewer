@@ -9,11 +9,6 @@ const app = express();
 const projectName = process.env.PROJECT || 'default';
 const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
 
-const normalizeShfaAssetUrl = url => url?.replace(
-  'https://data.dh.gu.se/diana/static/shfa/',
-  'https://data.dh.gu.se/shfa/static/'
-);
-
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
@@ -292,8 +287,8 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     if (!modelData.three_d_mesh || !modelData.three_d_mesh.mesh_url) {
       return res.status(404).send('No three_d_mesh or mesh_url found');
     }
-    const meshUrl = normalizeShfaAssetUrl(modelData.three_d_mesh.mesh_url);
-    const qualityUrl = normalizeShfaAssetUrl(modelData.three_d_mesh.quality_url) || '';
+    const meshUrl = modelData.three_d_mesh.mesh_url;
+    const qualityUrl = modelData.three_d_mesh.quality_url || '';
 
     fs.readFile(path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'), 'utf8', (err, data) => {
       if (err) {

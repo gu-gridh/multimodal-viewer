@@ -372,10 +372,11 @@
 		}
 		// <-- Control Buttons -->
 
-		const displayAnnotations = 'PLACEHOLDER_DISPLAY_ANNOTATIONS';
+			const annotationsUrl = 'PLACEHOLDER_POINTCLOUD_ANNOTATIONS';
+			const displayAnnotations = Boolean(annotationsUrl) && !annotationsUrl.includes('PLACEHOLDER');
 
 		async function loadAnnotations() {
-			const response = await fetch('PLACEHOLDER_POINTCLOUD_ANNOTATIONS');
+				const response = await fetch(annotationsUrl);
 			const data = await response.json();
 
 			if (Array.isArray(data.annotations)) {
@@ -410,10 +411,8 @@
 		});
 
 		/* The link to the model. URL and name of cloud must be fetched from the backend */
-		// const queryName = 'PLACEHOLDER_QUERY';
 		const pointCloudUrl = 'PLACEHOLDER_URL_PUBLIC';
 
-		// document.querySelector('.title').textContent = PLACEHOLDER_TITLE;
 		Potree.loadPointCloud(
 			pointCloudUrl,
 			"NameOfCloud",

@@ -121,11 +121,12 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const pagedAnnotationLoadingEnabled = Boolean(config.enablePagedAnnotationLoading);
     const displayAnnotationFocus = Boolean(config.enableAnnotationFocus);
     const filteredDownloadEnabled = Boolean(config.enableFilteredAnnotationDownload);
-    const annotationDisplay = displayIIIFAnnotations ? 'flex' : 'none';
-    const rectangleDisplay = config.enableRectangleTool ? 'flex' : 'none';
-    const polygonDisplay = config.enablePolygonTool ? 'flex' : 'none';
-    const lineDisplay = config.enableLineTool ? 'flex' : 'none';
-    const pointDisplay = config.enablePointTool ? 'flex' : 'none';
+    const annotationTools = {
+      rectangle: Boolean(config.enableRectangleTool),
+      polygon: Boolean(config.enablePolygonTool),
+      line: Boolean(config.enableLineTool),
+      point: Boolean(config.enablePointTool)
+    };
 
     if (queryType === 'iiif' || queryType === 'photo') {
       const downloadSources = filteredDownloadEnabled
@@ -136,23 +137,18 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
-        .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(inscriptionAdminUrl))
+        .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, annotationDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, polygonDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, lineDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
+        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify(annotationTools))
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
         .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
-        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
         .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
-        .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
-        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName));
+        .replace(/'PLACEHOLDER_COORDINATE_WIDTH'/g, JSON.stringify(coordinateWidthCm))
+        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT'/g, JSON.stringify(coordinateHeightCm))
+        .replace(/'PLACEHOLDER_COORDINATE_UNIT'/g, JSON.stringify('cm'));
 
       return res.send(updatedHtmlContent);
     }
@@ -179,23 +175,18 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyDownloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
-        .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(inscriptionAdminUrl))
+        .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, annotationDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, rectangleDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, polygonDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, lineDisplay)
-        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, pointDisplay)
+        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify(annotationTools))
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
         .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
-        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, topographyTileSources.length > 1 ? 'flex' : 'none')
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
         .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
         .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
-        .replace(/'PLACEHOLDER_COORDINATE_WIDTH_CM'/g, JSON.stringify(coordinateWidthCm))
-        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT_CM'/g, JSON.stringify(coordinateHeightCm))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName));
+        .replace(/'PLACEHOLDER_COORDINATE_WIDTH'/g, JSON.stringify(coordinateWidthCm))
+        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT'/g, JSON.stringify(coordinateHeightCm))
+        .replace(/'PLACEHOLDER_COORDINATE_UNIT'/g, JSON.stringify('cm'));
 
       return res.send(updatedHtmlContent);
     }

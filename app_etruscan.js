@@ -53,8 +53,10 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, `${url}`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DISPLAY_ANNOTATIONS'/g, Boolean(config.enablePointCloudAnnotations));
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g, `'${config.pointCloudAnnotationsUrl || ''}'`);
+      modifiedData = modifiedData.replace(
+        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
+        JSON.stringify(config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : '')
+      );
       res.send(modifiedData);
     });
   } catch (error) {
@@ -238,18 +240,16 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const downloadFilePath = `"${downloadFile}"`;
 
         let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName))
-          .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.sharedImageFileName))
           .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
-          .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
+          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
-          .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.enableIIIFAnnotations ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.enableRectangleTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.enablePolygonTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.enableLineTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.enablePointTool ? 'flex' : 'none')
+          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+            rectangle: Boolean(config.enableRectangleTool),
+            polygon: Boolean(config.enablePolygonTool),
+            line: Boolean(config.enableLineTool),
+            point: Boolean(config.enablePointTool)
+          }))
           .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
-          .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
           .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false);
         res.send(modifiedData);
       });

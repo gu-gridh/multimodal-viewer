@@ -2,10 +2,7 @@ export function createImageDownload({
     viewer,
     tileSources,
     downloadSourceString,
-    project,
-    creator,
-    locationIds,
-    imageIds,
+    downloadNamesString,
     filteredAnnotationDownloadEnabled,
     getActiveAnnotationFilters,
     isPlaceholder
@@ -57,6 +54,7 @@ export function createImageDownload({
     }
 
     function parse(value, fallback) {
+        if (typeof value !== 'string') return value;
         return isPlaceholder(value) ? fallback : JSON.parse(value);
     }
 
@@ -65,9 +63,7 @@ export function createImageDownload({
 
         try {
             const downloadSources = parse(downloadSourceString, []);
-            const creators = parse(creator, [['Unknown Creator']]);
-            const locationIdArray = parse(locationIds, ['Unknown Location']);
-            const imgIdArray = parse(imageIds, [0]);
+            const downloadNames = parse(downloadNamesString, []);
             const pageIndex = viewer.currentPage();
             const scale = await chooseResolution();
             if (scale === null) return;
@@ -90,10 +86,7 @@ export function createImageDownload({
             if (!response.ok) throw new Error(`Download failed: ${response.status}`);
             const blob = await response.blob();
             const objectUrl = URL.createObjectURL(blob);
-            const creatorName = creators[0][0].replace(/,\s*/g, '_');
-            const filename = project.toLowerCase() === 'shfa'
-                ? `${creatorName}_${locationIdArray[0]}_SHFAid${imgIdArray[pageIndex]}.jpg`
-                : `image_${pageIndex + 1}.jpg`;
+            const filename = downloadNames[pageIndex] || `image_${pageIndex + 1}.jpg`;
             const link = document.createElement('a');
             link.href = objectUrl;
             link.download = filename;

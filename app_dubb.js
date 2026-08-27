@@ -64,8 +64,10 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, urlPublic || 'default-url');
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DISPLAY_ANNOTATIONS'/g, Boolean(config.enablePointCloudAnnotations));
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g, `'${config.pointCloudAnnotationsUrl || ''}'`);
+      modifiedData = modifiedData.replace(
+        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
+        JSON.stringify(config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : '')
+      );
       res.send(modifiedData);
     });
   } catch (error) {

@@ -1,9 +1,6 @@
 module.exports = {
-  //Node.js server file started for the Munch project
+  //Node.js server file started for the munch project
   serverEntry: 'app_munch.js',
-
-  //project label exposed to shared viewer modules
-  projectName: 'Munch',
 
   //if IIIF annotations are displayed
   enableIIIFAnnotations: true,
@@ -13,13 +10,12 @@ module.exports = {
   enableAnnotationFocus: true,
   //if users can download the currently filtered annotations
   enableFilteredAnnotationDownload: true,
-
   //if polygon annotation drawing is available
   enablePolygonTool: true,
   //if line annotation drawing is available
   enableLineTool: true,
   //if point annotation drawing is available
   enablePointTool: true,
-  //if the physical-coordinate measurement tool is available
+  //if the physical coordinate measurement tool is available
   enableCoordinateTool: true
 };

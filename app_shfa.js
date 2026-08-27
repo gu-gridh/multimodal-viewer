@@ -41,24 +41,25 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       const creators = modelData[0].shfa_3d_data.map(data => data.creators.map(creator => creator.name));
       const locationID = modelData[0].shfa_3d_data.map(data => data.site.lamning_id || data.site.raa_id || data.site.placename);
       const imageIDs = modelData[0].colour_images.map(image => image.id);
+      const creatorName = creators[0]?.[0]?.replace(/,\s*/g, '_') || 'Unknown_Creator';
+      const locationName = locationID[0] || 'Unknown_Location';
+      const downloadNames = imageIDs.map(id => `${creatorName}_${locationName}_SHFAid${id}.jpg`);
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const downloadableFiles = modelData[0].colour_images.map(image => image.file);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
       let updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.projectName))
-        .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
-        .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
-        .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs))
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.enableIIIFAnnotations ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.enableRectangleTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.enablePolygonTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.enableLineTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.enablePointTool ? 'flex' : 'none')
+        .replace(/'PLACEHOLDER_DOWNLOAD_NAMES'/g, JSON.stringify(downloadNames))
+        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+          rectangle: Boolean(config.enableRectangleTool),
+          polygon: Boolean(config.enablePolygonTool),
+          line: Boolean(config.enableLineTool),
+          point: Boolean(config.enablePointTool)
+        }))
         .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
-        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')
+        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true)
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');

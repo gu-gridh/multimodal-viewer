@@ -90,7 +90,7 @@
     </div>
 
     <!--These are hidden if there is only one image-->
-    <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_SHOW';">
+    <div id="sequence-controls" class="interface-area-top" style="display: none;">
         <div id="ToolbarHorizontal">
             <a id="prev-button">
                 <div id="Prev" title="Previous image" class="SwitchButton"></div>
@@ -142,30 +142,30 @@
             </a>
 
             <div id="clear-annotations" class="clear-annotation-button NavButton" title="Toggle annotation visibility"
-                style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"></div>
+                style="display: none;"></div>
 
-            <div class="annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';"
+            <div id="rectangle-annotate-button" class="annotate-button NavButton"
+                style="line-height:1.0; display: none;"
                 onclick="resetPendingSelection(); setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Area annotation tool."></div>
 
             <div id="polygon-annotate-button" class="polygon-annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';"
+                style="line-height:1.0; display: none;"
                 onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Polygon annotation tool."></div>
 
             <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';"
+                style="line-height:1.0; display: none;"
                 onclick="resetPendingSelection(); setAnnotationInstructions('line'); anno.setDrawingTool('polyline'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Line annotation tool."></div>
 
             <div id="point-annotate-button" class="point-annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';"
+                style="line-height:1.0; display: none;"
                 onclick="resetPendingSelection(); setAnnotationInstructions('point'); anno.setDrawingTool('point'); anno.setDrawingEnabled(true); $('#instructions').show();"
                 title="Point annotation tool."></div>
 
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
+                style="line-height:1.0; display: none;"></div>
 
             <a id="full-page1" class="full-screen-option" title="Toggle full screen" href="#full-page"
                 onclick="togglePane()">
@@ -209,24 +209,43 @@
         let annotationLoader = null;
 
         //variables for setting download name
-        var temp = PLACEHOLDER_PROJECT;
-        var creator = 'PLACEHOLDER_CREATORS';
-        var locationIds = 'PLACEHOLDER_LOCATION_ID';
-        var imgIds = 'PLACEHOLDER_IMAGE_IDS';
+        var downloadNamesString = 'PLACEHOLDER_DOWNLOAD_NAMES';
         var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URL';
 
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
         const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
+        const sequenceEnabled = 'PLACEHOLDER_SEQUENCE_ENABLE';
+        const configuredAnnotationTools = 'PLACEHOLDER_ANNOTATION_TOOLS';
+        const annotationTools = typeof configuredAnnotationTools === 'object' ? configuredAnnotationTools : {};
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
+        const annotationEditorUrl = 'PLACEHOLDER_ANNOTATION_EDITOR_URL';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
         const pagedAnnotationLoadingEnabled = 'PLACEHOLDER_PAGED_ANNOTATION_LOADING' === true;
         const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS';
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
-        const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
-        const coordinateHeightCm = Number('PLACEHOLDER_COORDINATE_HEIGHT_CM');
+        const coordinateWidth = Number('PLACEHOLDER_COORDINATE_WIDTH');
+        const coordinateHeight = Number('PLACEHOLDER_COORDINATE_HEIGHT');
+        const coordinateUnitValue = 'PLACEHOLDER_COORDINATE_UNIT';
+        const coordinateUnit = isPlaceholder(coordinateUnitValue) ? '' : coordinateUnitValue;
+
+        document.getElementById('clear-annotations').style.display = displayInscriptions ? 'flex' : 'none';
+        document.getElementById('sequence-controls').style.display = sequenceEnabled ? 'flex' : 'none';
+        document.getElementById('coordinate-toggle').style.display = coordinateToolEnabled ? 'flex' : 'none';
+        document.getElementById('rectangle-annotate-button').style.display = annotationTools.rectangle ? 'flex' : 'none';
+        document.getElementById('polygon-annotate-button').style.display = annotationTools.polygon ? 'flex' : 'none';
+        document.getElementById('multiline-annotate-button').style.display = annotationTools.line ? 'flex' : 'none';
+        document.getElementById('point-annotate-button').style.display = annotationTools.point ? 'flex' : 'none';
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('annotation-visibility-guide').style.display = displayInscriptions ? 'flex' : 'none';
+            document.getElementById('coordinate-guide').style.display = coordinateToolEnabled ? 'flex' : 'none';
+            document.getElementById('rectangle-tool-guide').style.display = annotationTools.rectangle ? 'flex' : 'none';
+            document.getElementById('polygon-tool-guide').style.display = annotationTools.polygon ? 'flex' : 'none';
+            document.getElementById('line-tool-guide').style.display = annotationTools.line ? 'flex' : 'none';
+            document.getElementById('point-tool-guide').style.display = annotationTools.point ? 'flex' : 'none';
+        });
 
         const annotationFocusLoadPromise = displayAnnotationFocus === true
             ? import('/viewer/modules/iiif/features/annotation-focus.js').catch(error => {
@@ -464,8 +483,7 @@
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
-                preserveViewport: true,
-                sequenceMode: 'PLACEHOLDER_SEQUENCE_ENABLE',
+                sequenceMode: sequenceEnabled,
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 fullPageButton: "full-page",
@@ -546,9 +564,10 @@
                 .then(function (module) {
                     if (module) {
                         module.initCoordinateTool({
-                            heightCm: coordinateHeightCm,
+                            height: coordinateHeight,
+                            unit: coordinateUnit,
                             viewer,
-                            widthCm: coordinateWidthCm
+                            width: coordinateWidth
                         });
                     }
                 });
@@ -650,10 +669,7 @@
                     viewer,
                     tileSources: tileSourcesString,
                     downloadSourceString: 'PLACEHOLDER_DOWNLOAD_PATH',
-                    project: temp,
-                    creator,
-                    locationIds,
-                    imageIds: imgIds,
+                    downloadNamesString,
                     filteredAnnotationDownloadEnabled,
                     getActiveAnnotationFilters,
                     isPlaceholder
@@ -759,7 +775,9 @@
 
                     anno.removeAnnotation(annotation.id);
                     pendingAnnotationId = null;
-                    window.open('PLACEHOLDER_INSCRIPTION_URL', '_blank');
+                    if (annotationEditorUrl && !isPlaceholder(annotationEditorUrl)) {
+                        window.open(annotationEditorUrl, '_blank');
+                    }
                     document.getElementById('savePopup').style.display = 'none';
                 };
 
@@ -910,8 +928,8 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
+                    <div id="annotation-visibility-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)">
                         </div>
@@ -919,8 +937,8 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';">
+                    <div id="rectangle-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/annotate_white.svg); background-size: 90%; background-position: center;">
                         </div>
@@ -928,31 +946,31 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';">
+                    <div id="polygon-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/polygon_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="12">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';">
+                    <div id="line-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/multiline_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="14">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';">
+                    <div id="point-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon point-icon"></div>
                         <div class="guide-instructions-item-label" id="15">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';">
+                    <div id="coordinate-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/coordinate_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="13">

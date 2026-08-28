@@ -437,14 +437,18 @@
             const savedState = getSavedViewerState(currentBaseQuery);
             sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
 
-            const parentUrl = new URL(window.parent.location.href);
-            const qValue = parentUrl.searchParams.get('q');
+            const annotationId = new URLSearchParams(window.location.search).get('annotationId');
+            if (annotationId && !isNaN(annotationId)) {
+                initialAnnotationId = annotationId;
+            } else {
+                const parentUrl = new URL(window.parent.location.href);
+                const qValue = parentUrl.searchParams.get('q');
 
-            if (qValue && qValue.includes('/')) {
-                const parts = qValue.split('/');
-                const potentialId = parts[1];
-                if (!isNaN(potentialId)) {
-                    initialAnnotationId = potentialId;
+                if (qValue && qValue.includes('/')) {
+                    const potentialId = qValue.split('/')[1];
+                    if (!isNaN(potentialId)) {
+                        initialAnnotationId = potentialId;
+                    }
                 }
             }
 

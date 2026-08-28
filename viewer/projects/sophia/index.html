@@ -384,6 +384,7 @@
             const params = new URLSearchParams(queryString);
             const currentUrl = new URL(window.location.href);
             const hashFragment = currentUrl.hash || '';
+            const annotationId = getAnnotationIdFromUrl(params);
 
             let qValue = params.get('q');
             if (qValue && qValue.includes('/')) {
@@ -414,7 +415,7 @@
                     buttonNum = 4;
                     break;
                 case 'annotation':
-                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto&annotationId=${encodeURIComponent(annotationId)}${hashFragment}`;
                     buttonNum = 1;
                     break;
                 default:
@@ -428,7 +429,9 @@
                 iframe.src = src;
                 moduleSwitcherLeft(buttonNum);
                 //update browser URL
-                window.history.pushState({}, '', newPath);
+                if (newPath) {
+                    window.history.pushState({}, '', newPath);
+                }
             }
 
             // pointcloud url logics

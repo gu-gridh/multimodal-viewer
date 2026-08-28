@@ -146,22 +146,22 @@
 
             <div id="rectangle-annotate-button" class="annotate-button NavButton"
                 style="line-height:1.0; display: none;"
-                onclick="resetPendingSelection(); setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="annotationInteractions.startDrawing('rect')"
                 title="Area annotation tool."></div>
 
             <div id="polygon-annotate-button" class="polygon-annotate-button NavButton"
                 style="line-height:1.0; display: none;"
-                onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="annotationInteractions.startDrawing('polygon')"
                 title="Polygon annotation tool."></div>
 
             <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
                 style="line-height:1.0; display: none;"
-                onclick="resetPendingSelection(); setAnnotationInstructions('line'); anno.setDrawingTool('polyline'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="annotationInteractions.startDrawing('line', 'polyline')"
                 title="Line annotation tool."></div>
 
             <div id="point-annotate-button" class="point-annotate-button NavButton"
                 style="line-height:1.0; display: none;"
-                onclick="resetPendingSelection(); setAnnotationInstructions('point'); anno.setDrawingTool('point'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                onclick="annotationInteractions.startDrawing('point')"
                 title="Point annotation tool."></div>
 
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
@@ -197,13 +197,10 @@
         var anno;
         let urlToCopy = '';
         let annotationsVisible = true; //track the visibility state of annotations
-        let currentAnnotationId = null;
-        let previousAnnotationId = null;
-        let annotationClicked = false;
+        let initialAnnotationId = null;
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
-        let currentAnnotationTool = 'rect';
-        let pendingAnnotationId = null;
+        let annotationInteractions = null;
         const annotationCanvasThreshold = Number('PLACEHOLDER_INTERACTIVE_ANNOTATIONS') || 150;
         let annotationCanvasRenderer = null;
         let annotationLoader = null;
@@ -380,27 +377,10 @@
                 document.getElementById('saveNo').innerHTML = i18next.t('discardselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
                 document.getElementById('coordinate-instructions').textContent = i18next.t('coordinate-instructions');
-                setAnnotationInstructions(currentAnnotationTool);
+                if (annotationInteractions) {
+                    annotationInteractions.updateInstructions();
+                }
                 updatePageInfo();
-            }
-        }
-
-        function setAnnotationInstructions(tool) {
-            currentAnnotationTool = tool;
-            const translationKey = tool === 'line'
-                ? 'annotate-instructions-line'
-                : tool === 'point'
-                    ? 'annotate-instructions-point'
-                    : tool === 'polygon' ? 'annotate-instructions-polygon' : 'annotate-instructions';
-            document.getElementById('9').innerHTML = i18next.t(translationKey);
-        }
-
-        function resetPendingSelection() {
-            document.getElementById('savePopup').style.display = 'none';
-
-            if (pendingAnnotationId) {
-                anno.removeAnnotation(pendingAnnotationId);
-                pendingAnnotationId = null;
             }
         }
 
@@ -464,7 +444,7 @@
                 const parts = qValue.split('/');
                 const potentialId = parts[1];
                 if (!isNaN(potentialId)) {
-                    currentAnnotationId = potentialId;
+                    initialAnnotationId = potentialId;
                 }
             }
 
@@ -592,16 +572,6 @@
                 ]
             });
 
-            const lineToolButton = document.getElementById('multiline-annotate-button');
-            if (lineToolButton.style.display !== 'none' && OpenSeadragon.Annotorious.PolylineTool) {
-                anno.addDrawingTool(OpenSeadragon.Annotorious.PolylineTool);
-            }
-
-            const pointToolButton = document.getElementById('point-annotate-button');
-            if (pointToolButton.style.display !== 'none' && OpenSeadragon.Annotorious.PointTool) {
-                anno.addDrawingTool(OpenSeadragon.Annotorious.PointTool);
-            }
-
             const annotationCanvasInitPromise = annotationCanvasLoadPromise
                 .then(function (module) {
                     if (module) {
@@ -632,37 +602,24 @@
                 });
             const loadAnnotationsPromise = displayInscriptions
                 ? Promise.all([annotationCanvasInitPromise, annotationLoaderInitPromise]).then(() => loadCurrentAnnotations(annotationLoader ? annotationLoader.getInitialAnnotationFilters() : {})).then(function (annotations) {
-                    if (annotations.length > 0 && currentAnnotationId) {
-                        openAnnotationById(currentAnnotationId);
-                    }
                     return annotations;
                 })
                 : Promise.resolve([]);
 
-            function openAnnotationById(annotationId) {
-                if (!displayInscriptions) {
-                    return;
-                }
-
-                loadAnnotationsPromise.then(() => {
-                    const annotation = anno.getAnnotationById(annotationId);
-
-                    if (annotation) {
-                        anno.selectAnnotation(annotationId);
-                        anno.fitBounds(annotationId, {
-                            immediately: false,
-                            padding: 200
-                        });
-                        const annotationData = {
-                            type: 'annotationLoaded',
-                            value: annotationId
-                        };
-                        window.parent.postMessage(annotationData, "*");
-                    } else {
-                        console.error('Annotation not found:', annotationId);
-                    }
+            const annotationInteractionsInitPromise = import('/viewer/modules/iiif/features/annotation-interactions.js')
+                .then(function (module) {
+                    annotationInteractions = module.createAnnotationInteractions({
+                        anno,
+                        annotationEditorUrl,
+                        displayInscriptions,
+                        getCurrentImageSize,
+                        initialAnnotationId,
+                        isPlaceholder,
+                        loadAnnotationsPromise,
+                        viewer
+                    });
+                    annotationInteractions.updateInstructions();
                 });
-            }
 
             import('/viewer/modules/iiif/features/image-download.js').then(module => {
                 module.createImageDownload({
@@ -676,190 +633,6 @@
                 });
             }).catch(console.error);
 
-            function convertToIIIFRegion(annotation, imageSize) {
-                //extract viewport coordinates from the annotation
-                const fragmentSelector = annotation.target.selector.value;
-                const [vx, vy, vw, vh] = fragmentSelector.replace('xywh=pixel:', '').split(',').map(Number);
-
-                //convert viewport coordinates to image coordinates 
-                const imageX = Math.round(vx);
-                const imageY = Math.round(vy);
-                const imageWidth = Math.round(vw);
-                const imageHeight = Math.round(vh);
-
-                const imgWidth = imageSize.width;
-                const imgHeight = imageSize.height;
-                const xPercentage = (imageX / imgWidth) * 100;
-                const yPercentage = (imageY / imgHeight) * 100;
-                const widthPercentage = (imageWidth / imgWidth) * 100;
-                const heightPercentage = (imageHeight / imgHeight) * 100;
-
-                //form the IIIF Image Region
-                const region = `${imageX},${imageY},${imageWidth},${imageHeight}`;
-                const percentageRegion = `pct:${xPercentage.toFixed(2)},${yPercentage.toFixed(2)},${widthPercentage.toFixed(2)},${heightPercentage.toFixed(2)}`;
-                const iiifUrl = `${imageSize['@id']}/${percentageRegion}/!${300},${700}/0/default.jpg`;
-
-                //copy the IIIF region URL to the clipboard
-                navigator.clipboard.writeText(percentageRegion).then(() => {
-                    console.log('IIIF region copied to clipboard:', region);
-                }).catch(err => {
-                    console.error('Failed to copy IIIF region to clipboard:', err);
-                });
-            }
-
-            function copySvgShape(annotation) {
-                const selectorValue = annotation?.target?.selector?.value || '';
-                const shapeMatch = selectorValue.match(/<(polygon|polyline)[^>]*points="([^"]+)"/i);
-                const imageSize = getCurrentImageSize();
-
-                if (!shapeMatch) {
-                    console.error('SVG shape selector not found:', selectorValue);
-                    return;
-                }
-
-                if (!imageSize) {
-                    console.error('Image size not available');
-                    return;
-                }
-
-                const normalizedPoints = shapeMatch[2]
-                    .trim()
-                    .split(/\s+/)
-                    .map(point => {
-                        const [x, y] = point.split(',');
-                        const normalizedX = Number(x) / imageSize.width;
-                        const normalizedY = Number(y) / imageSize.height;
-                        return `${Number(normalizedX.toFixed(8))},${Number(normalizedY.toFixed(8))}`;
-                    })
-                    .join(' ');
-
-                const shape = shapeMatch[1].toLowerCase();
-                const pointAttribute = selectorValue.includes('data-point="true"') ? ' data-point="true"' : '';
-                const shapeSvg = `<svg><${shape}${pointAttribute} points="${normalizedPoints}" /></svg>`;
-
-                navigator.clipboard.writeText(shapeSvg).then(() => {
-                    console.log(`${shape} copied to clipboard:`, shapeSvg);
-                }).catch(err => {
-                    console.error(err);
-                });
-            }
-
-            anno.on('createSelection', async function (selection) {
-                selection.body = [{
-                    type: 'TextualBody',
-                    purpose: 'tagging',
-                    value: 'MyTag'
-                }];
-
-                await anno.updateSelected(selection);
-                anno.saveSelected();
-            });
-
-            //attach handlers to listen to events
-            anno.on('createAnnotation', function (annotation) {
-                pendingAnnotationId = annotation.id;
-
-                //Show the popup
-                document.getElementById('savePopup').style.display = 'block';
-                document.getElementById('instructions').style.display = 'none';
-
-                //Handle "Yes" button click
-                document.getElementById('saveYes').onclick = function () {
-                    const selectorValue = annotation?.target?.selector?.value || '';
-
-                    if (selectorValue.includes('<polygon') || selectorValue.includes('<polyline')) {
-                        copySvgShape(annotation);
-                    } else {
-                        convertToIIIFRegion(annotation, viewer.source);
-                    }
-
-                    anno.removeAnnotation(annotation.id);
-                    pendingAnnotationId = null;
-                    if (annotationEditorUrl && !isPlaceholder(annotationEditorUrl)) {
-                        window.open(annotationEditorUrl, '_blank');
-                    }
-                    document.getElementById('savePopup').style.display = 'none';
-                };
-
-                //Handle "No" button click
-                document.getElementById('saveNo').onclick = function () {
-                    anno.removeAnnotation(annotation.id);
-                    pendingAnnotationId = null;
-                    document.getElementById('savePopup').style.display = 'none';
-                };
-            });
-
-
-            anno.on('clickAnnotation', function (annotation, element) {
-                annotationClicked = true;
-
-                //handle annotation click
-                previousAnnotationId = currentAnnotationId;
-                currentAnnotationId = annotation.id;
-
-                //pan locally on click
-                anno.selectAnnotation(annotation.id);
-                anno.fitBounds(annotation.id, {
-                    immediately: false,
-                    padding: 200
-                });
-
-                const annotationData = {
-                    type: 'annotationClick',
-                    value: annotation.id
-                };
-
-                //send a message to the parent window (index.html) with the annotation data
-                window.parent.postMessage(annotationData, "*");
-            });
-
-            //deselect
-            anno.on('cancelSelected', function () {
-                currentAnnotationId = null;
-            });
-
-            let isDragging = false;
-            let startX, startY;
-            const dragThreshold = 1; //drag threshold
-
-            viewer.addHandler('canvas-press', function (event) {
-                isDragging = false;
-                startX = event.position.x;
-                startY = event.position.y;
-            });
-
-            viewer.addHandler('canvas-drag', function (event) {
-                const currentX = event.position.x;
-                const currentY = event.position.y;
-
-                //drag detection
-                if (Math.abs(currentX - startX) > dragThreshold || Math.abs(currentY - startY) > dragThreshold) {
-                    isDragging = true;
-                }
-            });
-
-            viewer.addHandler('canvas-click', function (event) {
-                //if it was a drag do not treat it as a click
-                if (isDragging) {
-                    return;
-                }
-
-                //if an annotation was clicked ignore this canvas click event
-                if (annotationClicked) {
-                    annotationClicked = false;
-                    return;
-                }
-
-                const annotationData = {
-                    type: 'annotationClick',
-                    value: null
-                };
-
-                //send a message to the parent window (index.html) with the annotation data
-                window.parent.postMessage(annotationData, "*");
-
-                currentAnnotationId = null;
-            });
             updatePageInfo();
 
             window.addEventListener('message', function (event) {
@@ -877,7 +650,7 @@
                 }
             });
 
-            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise, annotationCanvasInitPromise, annotationLoaderInitPromise]).finally(function () {
+            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise, annotationCanvasInitPromise, annotationLoaderInitPromise, annotationInteractionsInitPromise]).finally(function () {
                 document.body.classList.remove('iiif-initializing');
             });
 

@@ -13,12 +13,12 @@
         }
 
         #left-pane {
-            width: 70%;
+            width: 50%;
             position: relative;
         }
 
         #right-pane {
-            width: 30%;
+            width: 50%;
             background: rgb(228, 228, 220);
         }
 

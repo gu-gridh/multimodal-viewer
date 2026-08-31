@@ -124,8 +124,9 @@
             changeLeftViewer();
         }
 
+        //get circle size
         function getCircleGeometry(width, height) {
-            const radius = Math.min(width, height) * 0.29;
+            const radius = Math.min(width, height) * 0.32; //change to get smaller/bigger circles
 
             return {
                 'Väg': {
@@ -167,13 +168,21 @@
 
             return Math.sqrt(dx * dx + dy * dy) < circle.r;
         }
-        //then check if the point is in the required sets
+        //then check if the point is in the required circle-sets
         function pointMatchesSets(x, y, requiredSets, circles) {
+            const margin = 14; //margin to avoid points being too close to the edge of the circle
             return Object.entries(circles).every(([name, circle]) => {
-                const inside = pointInsideCircle(x, y, circle);
+                const dx = x - circle.x;
+                const dy = y - circle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
                 const required = requiredSets.includes(name);
 
-                return inside === required;
+                if (required) {
+                    return distance < circle.r - margin;
+                } else {
+                    return distance > circle.r + margin;
+                }
             });
         }
 
@@ -181,7 +190,7 @@
         function findPosition(sets, circles, width, height) {
             const padding = 25;
 
-            for (let attempt = 0; attempt < 5000; attempt++) {
+            for (let attempt = 0; attempt < 10000; attempt++) {
                 const x =
                     padding +
                     Math.random() * (width - padding * 2);

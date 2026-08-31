@@ -8,7 +8,7 @@ body {
 	justify-content: flex-start;
 	width: 100%;
 	overflow: hidden !important;
-	background-color: rgb(228, 228, 220);
+	background-color: rgb(245, 245, 245);
 	/* background-color: rgb(40, 40, 40); */
 	height: calc(100vh) !important;
 }

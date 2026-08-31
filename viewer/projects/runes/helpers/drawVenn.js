@@ -41,24 +41,21 @@ function addVennLabels(svg, width, height) {
     svg.append('text')
         .attr('class', 'venn-label')
         .attr('x', width * 0.50)
-        .attr('y', height * 0.055)
-        .attr('dy', -20) // move  up
+        .attr('y', height * 0.02)
         .attr('text-anchor', 'middle')
         .text('Väg');
 
     svg.append('text')
         .attr('class', 'venn-label')
-        .attr('x', 5)
+        .attr('x', width * 0.09)
         .attr('y', height * 0.63)
-        .attr('dx', 32)  // move 'gravfält''
-        .attr('text-anchor', 'start')
+        .attr('text-anchor', 'middle')
         .text('Gravfält');
 
     svg.append('text')
         .attr('class', 'venn-label')
-        .attr('x', width - 5)
+        .attr('x', width * 0.90)
         .attr('y', height * 0.63)
-        .attr('dx', -44)  // move 'gräns'
-        .attr('text-anchor', 'end')
+        .attr('text-anchor', 'middle')
         .text('Gräns');
 }

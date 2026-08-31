@@ -56,10 +56,16 @@
             <iframe id="right-iframe" class="iframes" title="Rune content"></iframe>
             <div id="right-placeholder" class="module-placeholder"></div>
         </div>
-
+        <div id="footer-container"></div>
     </div>
 
     <script>
+        //load footer
+        $(document).ready(function () {
+            $("#footer-container").load("/viewer/projects/runes/footer.html");
+                changeRightViewer('pointcloud');
+        });
+
         let activeRegion = 'vastra';
         let activeViewer = 'metadata';
         let activePeriod = '1';

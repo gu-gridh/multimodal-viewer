@@ -126,7 +126,7 @@
 
         //get circle size
         function getCircleGeometry(width, height) {
-            const radius = Math.min(width, height) * 0.32; //change to get smaller/bigger circles
+            const radius = Math.min(width, height) * 0.30; //change to get smaller/bigger circles
 
             return {
                 'Väg': {
@@ -530,7 +530,7 @@
                 .attr('class', 'venn-label')
                 .attr('x', width * 0.50)
                 .attr('y', height * 0.055)
-                .attr('dy', -15) // move 15px upward
+                .attr('dy', -20) // move  up
                 .attr('text-anchor', 'middle')
                 .text('Väg');
 
@@ -538,7 +538,7 @@
                 .attr('class', 'venn-label')
                 .attr('x', 5)
                 .attr('y', height * 0.63)
-                .attr('dx', 150)  // move right
+                .attr('dx', 32)  // move 'gravfält''
                 .attr('text-anchor', 'start')
                 .text('Gravfält');
 
@@ -546,7 +546,7 @@
                 .attr('class', 'venn-label')
                 .attr('x', width - 5)
                 .attr('y', height * 0.63)
-                .attr('dx', -150)  // move left
+                .attr('dx', -44)  // move 'gräns'
                 .attr('text-anchor', 'end')
                 .text('Gräns');
         }

@@ -58,7 +58,7 @@
 
         .venn-panel {
             position: absolute;
-            top: 120px;
+            top: 80px;
             left: 20px;
             right: 20px;
             bottom: 90px;
@@ -93,8 +93,8 @@
         }
 
         .venn-label {
-            font-size: 20px;
-            font-weight: 400;
+            font-size: 18px;
+            font-weight: 300;
         }
 
         .runestone {

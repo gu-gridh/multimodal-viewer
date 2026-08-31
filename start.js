@@ -14,7 +14,7 @@ dotenv.config({ path: './.env.local' });
 const projectName = process.env.PROJECT || 'default';
 
 //path to the configuration file for the specified project
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 
 let config;
 try {
@@ -25,7 +25,7 @@ try {
 }
 
 //determine which app file to run based on the config
-const appToRun = config.appFile || 'app.js';
+const appToRun = config.serverEntry || 'app.js';
 
 console.log(`Using application file: ${appToRun}`);
 

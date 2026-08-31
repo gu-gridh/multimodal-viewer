@@ -8,8 +8,17 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const panelApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=';
+const metadataApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=';
+const annotationApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/annotation/?surface=';
+const imageBaseUrl = 'https://img.dh.gu.se/saintsophia/static/';
+const downloadBaseUrl = 'https://data.dh.gu.se/saintsophia/static/';
+const pointCloudUrl = 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js';
+const pointCloudAnnotationsUrl = '/viewer/projects/sophia/annotations/pointcloud_annotations.json';
+const backButtonUrl = 'https://saintsophia.dh.gu.se';
+const inscriptionAdminBaseUrl = 'https://saintsophia.dh.gu.se/admin/inscriptions/inscription/';
 
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
   config = require(configPath);
@@ -22,7 +31,7 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   //fetch RTI image data from the API
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${panelApiBaseUrl}${queryName}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -70,7 +79,7 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${panelApiBaseUrl}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
     const position = apiResponse.data?.features?.[0]?.properties?.spatial_position;
@@ -85,11 +94,13 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       const positionStr = position ? position.join(',') : '';
       const directionStr = direction ? direction.join(',') : '';
 
-      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, `${config.pointcloud}`);
+      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, pointCloudUrl);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DISPLAY_ANNOTATIONS'/g, config.displayAnnotations);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g, `'${config.pointcoudAnnotations}'`);
+      modifiedData = modifiedData.replace(
+        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
+        JSON.stringify(config.enablePointCloudAnnotations ? pointCloudAnnotationsUrl : '')
+      );
       res.send(modifiedData);
     });
   } catch (error) {
@@ -107,7 +118,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing or incorrect');
   }
 
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${panelApiBaseUrl}${queryName}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -121,29 +132,27 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       if (modelData?.[0]?.properties?.attached_photograph?.length) {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = false;
-        const displayStyle = sequenceEnabled ? 'flex' : 'none';
-        const basePath = `${config.basePath}`;
-        const basePathDownload = `${config.downloadPath}`;
+        const basePath = imageBaseUrl;
+        const basePathDownload = downloadBaseUrl;
         const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
         const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
-        const annotationPath = `${config.annotationPath}`;
+        const annotationPath = annotationApiBaseUrl;
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
         const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
         let updatedHtmlContent = htmlContent
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
           .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
-          .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
-          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-          .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.displayRectangleTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.displayLineTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.displayPointTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.downloadFilteredIIIFAnnotations))
-          .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled)
-          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
+          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
+          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
+          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+            rectangle: Boolean(config.enableRectangleTool),
+            polygon: Boolean(config.enablePolygonTool),
+            line: Boolean(config.enableLineTool),
+            point: Boolean(config.enablePointTool)
+          }))
+          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
         res.send(updatedHtmlContent);
       } else {
         res.send('No attached photographs found.');
@@ -152,10 +161,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       if (modelData?.[0]?.properties?.attached_topography?.length) {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = true;
-        const displayStyle = sequenceEnabled ? 'flex' : 'none';
-        const basePathIiif = `${config.basePath}`;
-        const basePathDownload = `${config.downloadPath}`;
-        const annotationPath = `${config.annotationPath}`;
+        const basePathIiif = imageBaseUrl;
+        const basePathDownload = downloadBaseUrl;
+        const annotationPath = annotationApiBaseUrl;
 
         //sort the attached_topography array based on the file name
         const sortedTopography = (modelData?.[0]?.properties?.attached_topography || []).sort((a, b) => {
@@ -172,18 +180,17 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         let updatedHtmlContent = htmlContent
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
-          .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.displayRectangleTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.displayLineTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.displayPointTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.downloadFilteredIIIFAnnotations))
-          .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
+          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+            rectangle: Boolean(config.enableRectangleTool),
+            polygon: Boolean(config.enablePolygonTool),
+            line: Boolean(config.enableLineTool),
+            point: Boolean(config.enablePointTool)
+          }))
+          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
+          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
-          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-          .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, displayStyle)
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled)
-          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project));
+          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
         res.send(updatedHtmlContent);
       } else {
         res.send('No attached topography images found.');
@@ -208,7 +215,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.metadata}${queryName}&depth=1`;
+  const apiUrl = `${metadataApiBaseUrl}${queryName}&depth=1`;
   const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
   try {
@@ -588,7 +595,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   }
 
   try {
-    const { data } = await axios.get(`${config.panel}${queryName}`);
+    const { data } = await axios.get(`${panelApiBaseUrl}${queryName}`);
     const mesh = data.features?.[0]?.properties?.attached_3Dmesh?.[0] || {};
     const isDownloadable = mesh.is_downloadable && mesh.url_for_download;
     const parseStartValue = (value, fallback = 0.0) => {
@@ -692,7 +699,7 @@ app.get('*', async (req, res) => {
   }
 
   try {
-    const apiUrl = `${config.panel}${queryId}`;
+    const apiUrl = `${panelApiBaseUrl}${queryId}`;
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data?.features?.[0]?.properties?.attached_RTI || [];
 
@@ -705,7 +712,7 @@ app.get('*', async (req, res) => {
       let modifiedData = data
         .replace(/PLACEHOLDER_QUERY/g, queryName)
         .replace(/PLACEHOLDER_ID/g, queryId)
-        .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+        .replace('PLACEHOLDER_BACKBUTTON', backButtonUrl)
         .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
         .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);
 

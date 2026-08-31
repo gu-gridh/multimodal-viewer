@@ -7,8 +7,9 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
 
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
   config = require(configPath);
@@ -23,7 +24,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
-  const apiUrl = `${config.panel}${queryName}&depth=2`;
+  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=2`;
   try {
     const apiResponse = await axios.get(apiUrl);
 
@@ -40,24 +41,25 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       const creators = modelData[0].shfa_3d_data.map(data => data.creators.map(creator => creator.name));
       const locationID = modelData[0].shfa_3d_data.map(data => data.site.lamning_id || data.site.raa_id || data.site.placename);
       const imageIDs = modelData[0].colour_images.map(image => image.id);
+      const creatorName = creators[0]?.[0]?.replace(/,\s*/g, '_') || 'Unknown_Creator';
+      const locationName = locationID[0] || 'Unknown_Location';
+      const downloadNames = imageIDs.map(id => `${creatorName}_${locationName}_SHFAid${id}.jpg`);
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const downloadableFiles = modelData[0].colour_images.map(image => image.file);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
       let updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
         .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
-        .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
-        .replace('PLACEHOLDER_CREATORS', JSON.stringify(creators))
-        .replace('PLACEHOLDER_LOCATION_ID', JSON.stringify(locationID))
-        .replace('PLACEHOLDER_IMAGE_IDS', JSON.stringify(imageIDs))
-        .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.displayRectangleTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.displayLineTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.displayPointTool ? 'flex' : 'none')
-        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.downloadFilteredIIIFAnnotations))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'flex')
+        .replace(/'PLACEHOLDER_DOWNLOAD_NAMES'/g, JSON.stringify(downloadNames))
+        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+          rectangle: Boolean(config.enableRectangleTool),
+          polygon: Boolean(config.enablePolygonTool),
+          line: Boolean(config.enableLineTool),
+          point: Boolean(config.enablePointTool)
+        }))
+        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
+        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
+        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true)
       res.send(updatedHtmlContent);
     } else {
       console.log('No colour images found.');
@@ -78,7 +80,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.metadata}${queryName}&depth=3`;
+  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=3`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -269,7 +271,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${config.panel}${queryName}&depth=2`;
+  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=2`;
 
   try {
     const apiResponse = await axios.get(apiUrl);

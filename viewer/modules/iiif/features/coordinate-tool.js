@@ -1,5 +1,5 @@
-export function initCoordinateTool({ heightCm, viewer, widthCm }) {
-    if (!viewer || !widthCm || !heightCm) {
+export function initCoordinateTool({ height, unit = '', viewer, width }) {
+    if (!viewer || !width || !height) {
         return;
     }
 
@@ -32,10 +32,11 @@ export function initCoordinateTool({ heightCm, viewer, widthCm }) {
             .minus(OpenSeadragon.getElementPosition(viewer.canvas));
         const viewportPoint = viewer.viewport.pointFromPixel(mouse);
         const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
-        const x = clamp((imagePoint.x / imageSize.x) * widthCm, widthCm);
-        const y = clamp(((imageSize.y - imagePoint.y) / imageSize.y) * heightCm, heightCm);
+        const x = clamp((imagePoint.x / imageSize.x) * width, width);
+        const y = clamp(((imageSize.y - imagePoint.y) / imageSize.y) * height, height);
 
-        row.textContent = `${x.toFixed(0)} cm  ||  ${y.toFixed(0)} cm`;
+        const suffix = unit ? ` ${unit}` : '';
+        row.textContent = `${x.toFixed(0)}${suffix}  ||  ${y.toFixed(0)}${suffix}`;
     });
 }
 

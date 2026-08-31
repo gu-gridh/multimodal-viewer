@@ -7,8 +7,9 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const pointCloudApiBaseUrl = 'https://diana.dh.gu.se/api/mediaarchive/objectpointcloud/?title=';
 
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
     config = require(configPath);
@@ -30,7 +31,7 @@ app.get('/', (req, res) => {
       
       let modifiedData = data
       .replace(/PLACEHOLDER_QUERY/g, queryName)
-      .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+      .replace('PLACEHOLDER_BACKBUTTON', '')
       res.send(modifiedData);
     });
   } else {
@@ -43,7 +44,7 @@ app.get('/', (req, res) => {
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${pointCloudApiBaseUrl}${queryName}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -63,8 +64,10 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, urlPublic || 'default-url');
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DISPLAY_ANNOTATIONS'/g, config.displayAnnotations);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g, `'${config.pointcoudAnnotations}'`);
+      modifiedData = modifiedData.replace(
+        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
+        JSON.stringify(config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : '')
+      );
       res.send(modifiedData);
     });
   } catch (error) {
@@ -101,7 +104,7 @@ app.get('*', (req, res) => {
     
     let modifiedData = data
     .replace(/PLACEHOLDER_QUERY/g, queryName)
-    .replace('PLACEHOLDER_BACKBUTTON', config.backButton)
+    .replace('PLACEHOLDER_BACKBUTTON', '')
     res.send(modifiedData);
   });
 });

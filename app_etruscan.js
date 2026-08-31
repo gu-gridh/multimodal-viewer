@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
+const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=';
+const backButtonBaseUrl = 'https://etruscan.dh.gu.se/';
 
 /* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/texturedmesh */
 
@@ -19,7 +21,7 @@ function formatPeople(people) {
     .join(', ');
 }
 
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.json');
+const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
 try {
   config = require(configPath);
@@ -31,7 +33,7 @@ try {
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  const apiUrl = `${config.panel}${queryName}`;
+  const apiUrl = `${contentApiBaseUrl}${queryName}`;
   try {
     const apiResponse = await axios.get(apiUrl);
     const result = apiResponse.data.results?.[0];
@@ -51,8 +53,10 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
       modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, `${url}`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
       modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DISPLAY_ANNOTATIONS'/g, config.displayAnnotations);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g, `'${config.pointcoudAnnotations}'`);
+      modifiedData = modifiedData.replace(
+        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
+        JSON.stringify(config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : '')
+      );
       res.send(modifiedData);
     });
   } catch (error) {
@@ -116,7 +120,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   let apiUrl;
 
   if (viewerType === 'pointcloud' || viewerType === 'panorama') {
-    apiUrl = `${config.panel}${queryName}&depth=2`;
+    apiUrl = `${contentApiBaseUrl}${queryName}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
   } else if (viewerType === 'image') {
@@ -236,18 +240,16 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const downloadFilePath = `"${downloadFile}"`;
 
         let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-          .replace('PLACEHOLDER_PROJECT', JSON.stringify(config.project))
-          .replace(/'PLACEHOLDER_FILE_NAME'/g, JSON.stringify(config.fileNameUsedWhenSharingIIIF))
           .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
-          .replace(/'PLACEHOLDER_INSCRIPTION_URL'/g, JSON.stringify(`${config.inscriptionUrl}`))
-          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations)
-          .replace(/'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS'/g, config.displayIIIFAnnotations ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL'/g, config.displayRectangleTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POLYGON_TOOL'/g, config.displayPolygonTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_LINE_TOOL'/g, config.displayLineTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_DISPLAY_POINT_TOOL'/g, config.displayPointTool ? 'flex' : 'none')
-          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.downloadFilteredIIIFAnnotations))
-          .replace(/'PLACEHOLDER_SEQUENCE_SHOW'/g, 'none')
+          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
+          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
+          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+            rectangle: Boolean(config.enableRectangleTool),
+            polygon: Boolean(config.enablePolygonTool),
+            line: Boolean(config.enableLineTool),
+            point: Boolean(config.enablePointTool)
+          }))
+          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
           .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false);
         res.send(modifiedData);
       });
@@ -309,7 +311,7 @@ app.get('*', async (req, res) => {
 
   //fetch the backbutton data from the appropriate API
   if (viewerType === 'pointcloud' || viewerType === 'panorama') {
-    apiUrl = `${config.panel}${queryId}&depth=2`;
+    apiUrl = `${contentApiBaseUrl}${queryId}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
   } else if (viewerType === 'image') {
@@ -349,7 +351,7 @@ app.get('*', async (req, res) => {
       }
     }
 
-    const backButtonUrl = `${config.backButton}${backButtonValue}`;
+    const backButtonUrl = `${backButtonBaseUrl}${backButtonValue}`;
 
     const indexPath = path.join(__dirname, 'viewer', 'projects', projectName, 'index.html');
     fs.readFile(indexPath, 'utf8', (err, data) => {

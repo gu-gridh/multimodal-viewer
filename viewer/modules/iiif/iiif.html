@@ -25,7 +25,9 @@
             pointer-events: none;
         }
 
-        body.annotations-hidden svg.a9s-annotationlayer .a9s-annotation {
+        body.annotations-hidden svg.a9s-annotationlayer .a9s-annotation,
+        body.annotations-hidden svg.a9s-annotationlayer .a9s-selection,
+        body.annotations-hidden svg.a9s-annotationlayer .a9s-selection-mask {
             opacity: 0 !important;
             pointer-events: none !important;
         }
@@ -88,7 +90,7 @@
     </div>
 
     <!--These are hidden if there is only one image-->
-    <div class="interface-area-top" style="display: 'PLACEHOLDER_SEQUENCE_SHOW';">
+    <div id="sequence-controls" class="interface-area-top" style="display: none;">
         <div id="ToolbarHorizontal">
             <a id="prev-button">
                 <div id="Prev" title="Previous image" class="SwitchButton"></div>
@@ -140,30 +142,30 @@
             </a>
 
             <div id="clear-annotations" class="clear-annotation-button NavButton" title="Toggle annotation visibility"
-                style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';"></div>
+                style="display: none;"></div>
 
-            <div class="annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';"
-                onclick="resetPendingSelection(); setAnnotationInstructions('rect'); anno.setDrawingTool('rect'); anno.setDrawingEnabled(true); $('#instructions').show();"
+            <div id="rectangle-annotate-button" class="annotate-button NavButton"
+                style="line-height:1.0; display: none;"
+                onclick="annotationInteractions.startDrawing('rect')"
                 title="Area annotation tool."></div>
 
             <div id="polygon-annotate-button" class="polygon-annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';"
-                onclick="resetPendingSelection(); setAnnotationInstructions('polygon'); anno.setDrawingTool('polygon'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                style="line-height:1.0; display: none;"
+                onclick="annotationInteractions.startDrawing('polygon')"
                 title="Polygon annotation tool."></div>
 
             <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';"
-                onclick="resetPendingSelection(); setAnnotationInstructions('line'); anno.setDrawingTool('polyline'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                style="line-height:1.0; display: none;"
+                onclick="annotationInteractions.startDrawing('line', 'polyline')"
                 title="Line annotation tool."></div>
 
             <div id="point-annotate-button" class="point-annotate-button NavButton"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';"
-                onclick="resetPendingSelection(); setAnnotationInstructions('point'); anno.setDrawingTool('point'); anno.setDrawingEnabled(true); $('#instructions').show();"
+                style="line-height:1.0; display: none;"
+                onclick="annotationInteractions.startDrawing('point')"
                 title="Point annotation tool."></div>
 
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
-                style="line-height:1.0; display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';"></div>
+                style="line-height:1.0; display: none;"></div>
 
             <a id="full-page1" class="full-screen-option" title="Toggle full screen" href="#full-page"
                 onclick="togglePane()">
@@ -195,36 +197,52 @@
         var anno;
         let urlToCopy = '';
         let annotationsVisible = true; //track the visibility state of annotations
-        let currentAnnotationId = null;
-        let previousAnnotationId = null;
-        let annotationClicked = false;
+        let initialAnnotationId = null;
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
-        let currentAnnotationTool = 'rect';
-        let pendingAnnotationId = null;
+        let annotationInteractions = null;
         const annotationCanvasThreshold = Number('PLACEHOLDER_INTERACTIVE_ANNOTATIONS') || 150;
         let annotationCanvasRenderer = null;
         let annotationLoader = null;
 
         //variables for setting download name
-        var temp = PLACEHOLDER_PROJECT;
-        var creator = 'PLACEHOLDER_CREATORS';
-        var locationIds = 'PLACEHOLDER_LOCATION_ID';
-        var imgIds = 'PLACEHOLDER_IMAGE_IDS';
+        var downloadNamesString = 'PLACEHOLDER_DOWNLOAD_NAMES';
         var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URL';
 
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
         const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
+        const sequenceEnabled = 'PLACEHOLDER_SEQUENCE_ENABLE';
+        const configuredAnnotationTools = 'PLACEHOLDER_ANNOTATION_TOOLS';
+        const annotationTools = typeof configuredAnnotationTools === 'object' ? configuredAnnotationTools : {};
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
+        const annotationEditorUrl = 'PLACEHOLDER_ANNOTATION_EDITOR_URL';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
         const pagedAnnotationLoadingEnabled = 'PLACEHOLDER_PAGED_ANNOTATION_LOADING' === true;
         const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS';
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
-        const coordinateWidthCm = Number('PLACEHOLDER_COORDINATE_WIDTH_CM');
-        const coordinateHeightCm = Number('PLACEHOLDER_COORDINATE_HEIGHT_CM');
+        const coordinateWidth = Number('PLACEHOLDER_COORDINATE_WIDTH');
+        const coordinateHeight = Number('PLACEHOLDER_COORDINATE_HEIGHT');
+        const coordinateUnitValue = 'PLACEHOLDER_COORDINATE_UNIT';
+        const coordinateUnit = isPlaceholder(coordinateUnitValue) ? '' : coordinateUnitValue;
+
+        document.getElementById('clear-annotations').style.display = displayInscriptions ? 'flex' : 'none';
+        document.getElementById('sequence-controls').style.display = sequenceEnabled ? 'flex' : 'none';
+        document.getElementById('coordinate-toggle').style.display = coordinateToolEnabled ? 'flex' : 'none';
+        document.getElementById('rectangle-annotate-button').style.display = annotationTools.rectangle ? 'flex' : 'none';
+        document.getElementById('polygon-annotate-button').style.display = annotationTools.polygon ? 'flex' : 'none';
+        document.getElementById('multiline-annotate-button').style.display = annotationTools.line ? 'flex' : 'none';
+        document.getElementById('point-annotate-button').style.display = annotationTools.point ? 'flex' : 'none';
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('annotation-visibility-guide').style.display = displayInscriptions ? 'flex' : 'none';
+            document.getElementById('coordinate-guide').style.display = coordinateToolEnabled ? 'flex' : 'none';
+            document.getElementById('rectangle-tool-guide').style.display = annotationTools.rectangle ? 'flex' : 'none';
+            document.getElementById('polygon-tool-guide').style.display = annotationTools.polygon ? 'flex' : 'none';
+            document.getElementById('line-tool-guide').style.display = annotationTools.line ? 'flex' : 'none';
+            document.getElementById('point-tool-guide').style.display = annotationTools.point ? 'flex' : 'none';
+        });
 
         const annotationFocusLoadPromise = displayAnnotationFocus === true
             ? import('/viewer/modules/iiif/features/annotation-focus.js').catch(error => {
@@ -359,27 +377,10 @@
                 document.getElementById('saveNo').innerHTML = i18next.t('discardselection');
                 document.getElementById('andLabel').textContent = i18next.t('and');
                 document.getElementById('coordinate-instructions').textContent = i18next.t('coordinate-instructions');
-                setAnnotationInstructions(currentAnnotationTool);
+                if (annotationInteractions) {
+                    annotationInteractions.updateInstructions();
+                }
                 updatePageInfo();
-            }
-        }
-
-        function setAnnotationInstructions(tool) {
-            currentAnnotationTool = tool;
-            const translationKey = tool === 'line'
-                ? 'annotate-instructions-line'
-                : tool === 'point'
-                    ? 'annotate-instructions-point'
-                    : tool === 'polygon' ? 'annotate-instructions-polygon' : 'annotate-instructions';
-            document.getElementById('9').innerHTML = i18next.t(translationKey);
-        }
-
-        function resetPendingSelection() {
-            document.getElementById('savePopup').style.display = 'none';
-
-            if (pendingAnnotationId) {
-                anno.removeAnnotation(pendingAnnotationId);
-                pendingAnnotationId = null;
             }
         }
 
@@ -436,14 +437,18 @@
             const savedState = getSavedViewerState(currentBaseQuery);
             sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
 
-            const parentUrl = new URL(window.parent.location.href);
-            const qValue = parentUrl.searchParams.get('q');
+            const annotationId = new URLSearchParams(window.location.search).get('annotationId');
+            if (annotationId && !isNaN(annotationId)) {
+                initialAnnotationId = annotationId;
+            } else {
+                const parentUrl = new URL(window.parent.location.href);
+                const qValue = parentUrl.searchParams.get('q');
 
-            if (qValue && qValue.includes('/')) {
-                const parts = qValue.split('/');
-                const potentialId = parts[1];
-                if (!isNaN(potentialId)) {
-                    currentAnnotationId = potentialId;
+                if (qValue && qValue.includes('/')) {
+                    const potentialId = qValue.split('/')[1];
+                    if (!isNaN(potentialId)) {
+                        initialAnnotationId = potentialId;
+                    }
                 }
             }
 
@@ -462,8 +467,7 @@
                 showNavigator: true,
                 navigatorAutoFade: true,
                 preserveViewport: true,
-                preserveViewport: true,
-                sequenceMode: 'PLACEHOLDER_SEQUENCE_ENABLE',
+                sequenceMode: sequenceEnabled,
                 nextButton: "next-button",
                 previousButton: "prev-button",
                 fullPageButton: "full-page",
@@ -544,9 +548,10 @@
                 .then(function (module) {
                     if (module) {
                         module.initCoordinateTool({
-                            heightCm: coordinateHeightCm,
+                            height: coordinateHeight,
+                            unit: coordinateUnit,
                             viewer,
-                            widthCm: coordinateWidthCm
+                            width: coordinateWidth
                         });
                     }
                 });
@@ -570,16 +575,6 @@
                     }
                 ]
             });
-
-            const lineToolButton = document.getElementById('multiline-annotate-button');
-            if (lineToolButton.style.display !== 'none' && OpenSeadragon.Annotorious.PolylineTool) {
-                anno.addDrawingTool(OpenSeadragon.Annotorious.PolylineTool);
-            }
-
-            const pointToolButton = document.getElementById('point-annotate-button');
-            if (pointToolButton.style.display !== 'none' && OpenSeadragon.Annotorious.PointTool) {
-                anno.addDrawingTool(OpenSeadragon.Annotorious.PointTool);
-            }
 
             const annotationCanvasInitPromise = annotationCanvasLoadPromise
                 .then(function (module) {
@@ -611,235 +606,37 @@
                 });
             const loadAnnotationsPromise = displayInscriptions
                 ? Promise.all([annotationCanvasInitPromise, annotationLoaderInitPromise]).then(() => loadCurrentAnnotations(annotationLoader ? annotationLoader.getInitialAnnotationFilters() : {})).then(function (annotations) {
-                    if (annotations.length > 0 && currentAnnotationId) {
-                        openAnnotationById(currentAnnotationId);
-                    }
                     return annotations;
                 })
                 : Promise.resolve([]);
 
-            function openAnnotationById(annotationId) {
-                if (!displayInscriptions) {
-                    return;
-                }
-
-                loadAnnotationsPromise.then(() => {
-                    const annotation = anno.getAnnotationById(annotationId);
-
-                    if (annotation) {
-                        anno.selectAnnotation(annotationId);
-                        anno.fitBounds(annotationId, {
-                            immediately: false,
-                            padding: 200
-                        });
-                        const annotationData = {
-                            type: 'annotationLoaded',
-                            value: annotationId
-                        };
-                        window.parent.postMessage(annotationData, "*");
-                    } else {
-                        console.error('Annotation not found:', annotationId);
-                    }
+            const annotationInteractionsInitPromise = import('/viewer/modules/iiif/features/annotation-interactions.js')
+                .then(function (module) {
+                    annotationInteractions = module.createAnnotationInteractions({
+                        anno,
+                        annotationEditorUrl,
+                        displayInscriptions,
+                        getCurrentImageSize,
+                        initialAnnotationId,
+                        isPlaceholder,
+                        loadAnnotationsPromise,
+                        viewer
+                    });
+                    annotationInteractions.updateInstructions();
                 });
-            }
 
             import('/viewer/modules/iiif/features/image-download.js').then(module => {
                 module.createImageDownload({
                     viewer,
                     tileSources: tileSourcesString,
                     downloadSourceString: 'PLACEHOLDER_DOWNLOAD_PATH',
-                    project: temp,
-                    creator,
-                    locationIds,
-                    imageIds: imgIds,
+                    downloadNamesString,
                     filteredAnnotationDownloadEnabled,
                     getActiveAnnotationFilters,
                     isPlaceholder
                 });
             }).catch(console.error);
 
-            function convertToIIIFRegion(annotation, imageSize) {
-                //extract viewport coordinates from the annotation
-                const fragmentSelector = annotation.target.selector.value;
-                const [vx, vy, vw, vh] = fragmentSelector.replace('xywh=pixel:', '').split(',').map(Number);
-
-                //convert viewport coordinates to image coordinates 
-                const imageX = Math.round(vx);
-                const imageY = Math.round(vy);
-                const imageWidth = Math.round(vw);
-                const imageHeight = Math.round(vh);
-
-                const imgWidth = imageSize.width;
-                const imgHeight = imageSize.height;
-                const xPercentage = (imageX / imgWidth) * 100;
-                const yPercentage = (imageY / imgHeight) * 100;
-                const widthPercentage = (imageWidth / imgWidth) * 100;
-                const heightPercentage = (imageHeight / imgHeight) * 100;
-
-                //form the IIIF Image Region
-                const region = `${imageX},${imageY},${imageWidth},${imageHeight}`;
-                const percentageRegion = `pct:${xPercentage.toFixed(2)},${yPercentage.toFixed(2)},${widthPercentage.toFixed(2)},${heightPercentage.toFixed(2)}`;
-                const iiifUrl = `${imageSize['@id']}/${percentageRegion}/!${300},${700}/0/default.jpg`;
-
-                //copy the IIIF region URL to the clipboard
-                navigator.clipboard.writeText(percentageRegion).then(() => {
-                    console.log('IIIF region copied to clipboard:', region);
-                }).catch(err => {
-                    console.error('Failed to copy IIIF region to clipboard:', err);
-                });
-            }
-
-            function copySvgShape(annotation) {
-                const selectorValue = annotation?.target?.selector?.value || '';
-                const shapeMatch = selectorValue.match(/<(polygon|polyline)[^>]*points="([^"]+)"/i);
-                const imageSize = getCurrentImageSize();
-
-                if (!shapeMatch) {
-                    console.error('SVG shape selector not found:', selectorValue);
-                    return;
-                }
-
-                if (!imageSize) {
-                    console.error('Image size not available');
-                    return;
-                }
-
-                const normalizedPoints = shapeMatch[2]
-                    .trim()
-                    .split(/\s+/)
-                    .map(point => {
-                        const [x, y] = point.split(',');
-                        const normalizedX = Number(x) / imageSize.width;
-                        const normalizedY = Number(y) / imageSize.height;
-                        return `${Number(normalizedX.toFixed(8))},${Number(normalizedY.toFixed(8))}`;
-                    })
-                    .join(' ');
-
-                const shape = shapeMatch[1].toLowerCase();
-                const pointAttribute = selectorValue.includes('data-point="true"') ? ' data-point="true"' : '';
-                const shapeSvg = `<svg><${shape}${pointAttribute} points="${normalizedPoints}" /></svg>`;
-
-                navigator.clipboard.writeText(shapeSvg).then(() => {
-                    console.log(`${shape} copied to clipboard:`, shapeSvg);
-                }).catch(err => {
-                    console.error(err);
-                });
-            }
-
-            anno.on('createSelection', async function (selection) {
-                selection.body = [{
-                    type: 'TextualBody',
-                    purpose: 'tagging',
-                    value: 'MyTag'
-                }];
-
-                await anno.updateSelected(selection);
-                anno.saveSelected();
-            });
-
-            //attach handlers to listen to events
-            anno.on('createAnnotation', function (annotation) {
-                pendingAnnotationId = annotation.id;
-
-                //Show the popup
-                document.getElementById('savePopup').style.display = 'block';
-                document.getElementById('instructions').style.display = 'none';
-
-                //Handle "Yes" button click
-                document.getElementById('saveYes').onclick = function () {
-                    const selectorValue = annotation?.target?.selector?.value || '';
-
-                    if (selectorValue.includes('<polygon') || selectorValue.includes('<polyline')) {
-                        copySvgShape(annotation);
-                    } else {
-                        convertToIIIFRegion(annotation, viewer.source);
-                    }
-
-                    anno.removeAnnotation(annotation.id);
-                    pendingAnnotationId = null;
-                    window.open('PLACEHOLDER_INSCRIPTION_URL', '_blank');
-                    document.getElementById('savePopup').style.display = 'none';
-                };
-
-                //Handle "No" button click
-                document.getElementById('saveNo').onclick = function () {
-                    anno.removeAnnotation(annotation.id);
-                    pendingAnnotationId = null;
-                    document.getElementById('savePopup').style.display = 'none';
-                };
-            });
-
-
-            anno.on('clickAnnotation', function (annotation, element) {
-                annotationClicked = true;
-
-                //handle annotation click
-                previousAnnotationId = currentAnnotationId;
-                currentAnnotationId = annotation.id;
-
-                //pan locally on click
-                anno.selectAnnotation(annotation.id);
-                anno.fitBounds(annotation.id, {
-                    immediately: false,
-                    padding: 200
-                });
-
-                const annotationData = {
-                    type: 'annotationClick',
-                    value: annotation.id
-                };
-
-                //send a message to the parent window (index.html) with the annotation data
-                window.parent.postMessage(annotationData, "*");
-            });
-
-            //deselect
-            anno.on('cancelSelected', function () {
-                currentAnnotationId = null;
-            });
-
-            let isDragging = false;
-            let startX, startY;
-            const dragThreshold = 1; //drag threshold
-
-            viewer.addHandler('canvas-press', function (event) {
-                isDragging = false;
-                startX = event.position.x;
-                startY = event.position.y;
-            });
-
-            viewer.addHandler('canvas-drag', function (event) {
-                const currentX = event.position.x;
-                const currentY = event.position.y;
-
-                //drag detection
-                if (Math.abs(currentX - startX) > dragThreshold || Math.abs(currentY - startY) > dragThreshold) {
-                    isDragging = true;
-                }
-            });
-
-            viewer.addHandler('canvas-click', function (event) {
-                //if it was a drag do not treat it as a click
-                if (isDragging) {
-                    return;
-                }
-
-                //if an annotation was clicked ignore this canvas click event
-                if (annotationClicked) {
-                    annotationClicked = false;
-                    return;
-                }
-
-                const annotationData = {
-                    type: 'annotationClick',
-                    value: null
-                };
-
-                //send a message to the parent window (index.html) with the annotation data
-                window.parent.postMessage(annotationData, "*");
-
-                currentAnnotationId = null;
-            });
             updatePageInfo();
 
             window.addEventListener('message', function (event) {
@@ -857,7 +654,7 @@
                 }
             });
 
-            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise, annotationCanvasInitPromise, annotationLoaderInitPromise]).finally(function () {
+            Promise.all([annotationFocusInitPromise, coordinateToolInitPromise, annotationCanvasInitPromise, annotationLoaderInitPromise, annotationInteractionsInitPromise]).finally(function () {
                 document.body.classList.remove('iiif-initializing');
             });
 
@@ -908,8 +705,8 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_IIIF_ANNOTATIONS';">
+                    <div id="annotation-visibility-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/annotations_active_white.png)">
                         </div>
@@ -917,8 +714,8 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_RECTANGLE_TOOL';">
+                    <div id="rectangle-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/annotate_white.svg); background-size: 90%; background-position: center;">
                         </div>
@@ -926,31 +723,31 @@
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_POLYGON_TOOL';">
+                    <div id="polygon-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/polygon_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="12">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_LINE_TOOL';">
+                    <div id="line-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/multiline_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="14">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_POINT_TOOL';">
+                    <div id="point-tool-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon point-icon"></div>
                         <div class="guide-instructions-item-label" id="15">
                         </div>
                     </div>
 
-                    <div class="guide-instructions-item annotate-option"
-                        style="display: 'PLACEHOLDER_DISPLAY_COORDINATE_TOOL';">
+                    <div id="coordinate-guide" class="guide-instructions-item annotate-option"
+                        style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/coordinate_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="13">

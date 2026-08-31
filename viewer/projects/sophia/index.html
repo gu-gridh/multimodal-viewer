@@ -98,7 +98,7 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item left orthophoto" id="btn1" title="Explore photographic documentation"
-                        onclick="changeLeftViewer('inscription');" style="opacity:1.0;"></div>
+                        onclick="changeLeftViewer('orthophoto');" style="opacity:1.0;"></div>
                     <div class="ui-module-item left" id="btn2" title="Explore topographical documentation"
                         onclick="changeLeftViewer('topography');"></div>
                     <div class="ui-module-item left" id="btn3" title="Explore 3D documentation"
@@ -114,13 +114,13 @@
         </div>
         <div id="right-pane">
             <div id="back-to-visuals" class="back-button" title="Back to visuals"
-                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block'); $('#main-back').css('display', 'block'); changeLeftViewer('inscription');"
+                onclick="$('#right-pane').css('display', 'none'); $('#left-pane').css('display', 'block'); $('#main-back').css('display', 'block'); changeLeftViewer('orthophoto');"
                 style="display:none; margin-left:12px;">
             </div>
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="btn6" title="Explore the metadata"
-                        onclick="if (isFullscreenMode) { resetPanels(); } changeRightViewer('metadata'); moduleSwitcherRight(6);"
+                        onclick="if (isFullscreenMode) { resetPanels(); } showCurrentMetadata(); moduleSwitcherRight(6);"
                         style="opacity:1.0"></div>
 
                     <div class="ui-module-item right" id="btn7" title="Explore the spatial context"
@@ -133,7 +133,6 @@
     </div>
 
     <script>
-        let shouldShowUIModuleContainer = true;
         let currentAnnotationId = null;
         let isFullscreenMode = false;
         let uiModules = $('.ui-module-container');
@@ -146,7 +145,7 @@
             changeLeftViewer(viewerType);
 
             // different metadata modes when the pointcloud module is not linked
-            if (viewerType != 'pointcloud' && annotationId === null || annotationId === '') {
+            if (viewerType !== 'pointcloud' && !annotationId) {
                 changeRightViewer('metadata');
             }
             else if (viewerType != 'pointcloud') {
@@ -218,42 +217,36 @@
         }
 
         function toggleRightPane() {
-            var leftPane = document.getElementById('left-pane');
-            var rightPane = document.getElementById('right-pane');
-            var uiModuleContainer = rightPane.querySelector('.ui-module-container');
-            var backButton = document.getElementById('back-button');
+            const leftPane = document.getElementById('left-pane');
+            const rightPane = document.getElementById('right-pane');
+            const uiModuleContainer = rightPane.querySelector('.ui-module-container');
             if (rightPane.style.width === '0px') {
                 rightPane.style.width = '50%';
                 leftPane.style.width = '50%';
-                if (shouldShowUIModuleContainer && uiModuleContainer) {
+                if (uiModuleContainer) {
                     uiModuleContainer.style.display = 'flex';
                 }
-                if (backButton) backButton.style.display = 'block';
             } else {
                 rightPane.style.width = '0px';
                 leftPane.style.width = '100%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'none';
-                if (backButton) backButton.style.display = 'block';
             }
         }
 
         function toggleLeftPane() {
-            var leftPane = document.getElementById('left-pane');
-            var rightPane = document.getElementById('right-pane');
-            var uiModuleContainer = leftPane.querySelector('.ui-module-container');
-            var backButton = document.getElementById('back-button');
+            const leftPane = document.getElementById('left-pane');
+            const rightPane = document.getElementById('right-pane');
+            const uiModuleContainer = leftPane.querySelector('.ui-module-container');
 
             if (leftPane.style.width === '1px') {
                 leftPane.style.width = '50%';
                 rightPane.style.width = '50%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
-                if (backButton) backButton.style.display = 'block';
                 isFullscreenMode = false;
             } else {
                 leftPane.style.width = '1px';
                 rightPane.style.width = '100%';
                 if (uiModuleContainer) uiModuleContainer.style.display = 'none';
-                if (backButton) backButton.style.display = 'none';
                 isFullscreenMode = true;
             }
         }
@@ -361,7 +354,6 @@
             const rightPane = document.getElementById('right-pane');
             const leftUIModuleContainer = leftPane.querySelector('.ui-module-container');
             const rightUIModuleContainer = rightPane.querySelector('.ui-module-container');
-            const backButton = document.getElementById('back-button');
 
             leftPane.style.width = '50%';
             rightPane.style.width = '50%';
@@ -372,9 +364,6 @@
             if (rightUIModuleContainer) {
                 rightUIModuleContainer.style.display = 'flex';
             }
-            if (backButton) {
-                backButton.style.display = 'block';
-            }
         }
 
         function changeLeftViewer(viewerType) {
@@ -384,6 +373,7 @@
             const params = new URLSearchParams(queryString);
             const currentUrl = new URL(window.location.href);
             const hashFragment = currentUrl.hash || '';
+            const annotationId = getAnnotationIdFromUrl(params);
 
             let qValue = params.get('q');
             if (qValue && qValue.includes('/')) {
@@ -392,6 +382,7 @@
 
             let src;
             let newPath;
+            let buttonNum;
             switch (viewerType) {
                 case 'orthophoto':
                     src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
@@ -414,7 +405,7 @@
                     buttonNum = 4;
                     break;
                 case 'annotation':
-                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto${hashFragment}`;
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/orthophoto&annotationId=${encodeURIComponent(annotationId)}${hashFragment}`;
                     buttonNum = 1;
                     break;
                 default:
@@ -428,7 +419,9 @@
                 iframe.src = src;
                 moduleSwitcherLeft(buttonNum);
                 //update browser URL
-                window.history.pushState({}, '', newPath);
+                if (newPath) {
+                    window.history.pushState({}, '', newPath);
+                }
             }
 
             // pointcloud url logics
@@ -472,6 +465,14 @@
             }
 
             iframe.src = iframeUrl;
+        }
+
+        function showCurrentMetadata() {
+            if (currentAnnotationId) {
+                changeRightViewer('annotation', currentAnnotationId);
+            } else {
+                changeRightViewer('metadata');
+            }
         }
 
         function moduleSwitcherLeft(num) {

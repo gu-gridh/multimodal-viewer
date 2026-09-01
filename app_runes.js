@@ -53,8 +53,7 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
       return res.status(500).send('Internal Server Error');
     }
 
-    const panoramaConfig = {
-      hfov: 100,
+    const panoramaScene = {
       type: 'multires',
       multiRes: {
         basePath: '/viewer/projects/etruscan/panorama-289',
@@ -65,6 +64,12 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
         maxLevel: 5,
         cubeResolution: 6456
       }
+    };
+    const panoramaConfig = {
+      panoramas: [
+        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], ...panoramaScene },
+        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], ...panoramaScene }
+      ]
     };
     res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
   });

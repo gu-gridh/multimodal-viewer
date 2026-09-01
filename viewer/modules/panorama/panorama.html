@@ -57,6 +57,37 @@
             align-items: center;
         }
 
+        #PanoramaSwitcher {
+            position: absolute;
+            z-index: 10;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 70px;
+            height: 30px;
+            padding: 3px 35px 5px 10px;
+            color: white;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.9);
+            background-image: url("/viewer/shared/dropdown-arrow.png");
+            background-position: calc(100% - 10px) 55%;
+            background-repeat: no-repeat;
+            background-size: 15px;
+            border: 0;
+            border-radius: 6px;
+            box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+            font-family: "Oswald", sans-serif;
+            font-size: 14px;
+            font-weight: 200;
+            user-select: none;
+            -webkit-appearance: none;
+            -webkit-user-select: none;
+        }
+
+        #PanoramaSwitcher:focus {
+            outline: none;
+        }
+
         .toolbar-bottom .NavButton {
             margin: 0 6px;
             opacity: 0.8;
@@ -111,6 +142,7 @@
         </div>
     </div>
     <div id="panorama"></div>
+    <select id="PanoramaSwitcher" title="Select panorama"></select>
     <div class="interface-area">
         <div class="toolbar-bottom">
             <div id="ResetView" class="NavButton" title="Reset view"></div>
@@ -126,18 +158,34 @@
     </div>
     <script src="pannellum.js"></script>
     <script>
+        const panoramaConfig = 'PLACEHOLDER_PANORAMA_CONFIG';
+        const panoramas = panoramaConfig.panoramas;
+        const scenes = Object.fromEntries(panoramas.map(({ id, title, startPos, ...scene }) => {
+            const [yaw, pitch, hfov] = startPos;
+            return [id, { ...scene, yaw, pitch, hfov }];
+        }));
+
         const viewer = pannellum.viewer('panorama', {
-            ...'PLACEHOLDER_PANORAMA_CONFIG',
+            default: { firstScene: panoramas[0].id },
+            scenes,
             autoLoad: true,
             compass: true,
             showFullscreenCtrl: false,
             showZoomCtrl: false
         });
 
-        const initialView = {
-            pitch: viewer.getPitch(),
-            yaw: viewer.getYaw(),
-            hfov: viewer.getHfov()
+        const panoramaSwitcher = document.getElementById('PanoramaSwitcher');
+
+        panoramas.forEach(({ id, title }) => panoramaSwitcher.add(new Option(title, id)));
+        panoramaSwitcher.hidden = panoramas.length < 2;
+
+        panoramaSwitcher.onchange = () => {
+            viewer.loadScene(
+                panoramaSwitcher.value,
+                viewer.getPitch(),
+                viewer.getYaw(),
+                viewer.getHfov()
+            );
         };
 
         function showPanoramaGuide() {
@@ -153,10 +201,12 @@
         }
 
         document.getElementById('ResetView').onclick = () => {
-            viewer.setPitch(initialView.pitch);
-            viewer.setYaw(initialView.yaw);
-            viewer.setHfov(initialView.hfov);
+            const { startPos } = panoramas.find(({ id }) => id === viewer.getScene());
+            viewer.setYaw(startPos[0]);
+            viewer.setPitch(startPos[1]);
+            viewer.setHfov(startPos[2]);
         };
+
         document.getElementById('ZoomIn').onclick = () => viewer.setHfov(viewer.getHfov() - 20);
         document.getElementById('ZoomOut').onclick = () => viewer.setHfov(viewer.getHfov() + 20);
         document.getElementById('CompassToggle').onclick = function () {
@@ -164,6 +214,7 @@
             const hidden = compass.classList.toggle('compass-hidden');
             this.classList.toggle('compass-hidden', hidden);
         };
+        
         document.getElementById('FullPage').onclick = function () {
             this.classList.toggle('full-page-active');
             window.parent.postMessage({ type: 'togglePane' }, '*');

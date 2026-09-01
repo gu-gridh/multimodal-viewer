@@ -23,8 +23,6 @@ function getCircleGeometry(width, height) {
 }
 
 
-
-
 function drawCircles(svg, circles) {
     Object.entries(circles).forEach(([name, circle]) => {
         svg.append('circle')

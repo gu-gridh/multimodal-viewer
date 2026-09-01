@@ -60,7 +60,7 @@
         #PanoramaSwitcher {
             position: absolute;
             z-index: 10;
-            top: 80px;
+            top: 35px;
             left: 50%;
             transform: translateX(-50%);
             min-width: 70px;
@@ -82,6 +82,10 @@
             user-select: none;
             -webkit-appearance: none;
             -webkit-user-select: none;
+        }
+
+        body.has-ui-module #PanoramaSwitcher {
+            top: 80px;
         }
 
         #PanoramaSwitcher:focus {
@@ -176,6 +180,14 @@
 
         const panoramaSwitcher = document.getElementById('PanoramaSwitcher');
 
+        function updateSwitcherPosition() {
+            const uiModule = window.parent.document.querySelector('.ui-module');
+            const isVisible = uiModule && window.parent.getComputedStyle(uiModule).display !== 'none';
+            document.body.classList.toggle('has-ui-module', isVisible);
+        }
+
+        updateSwitcherPosition();
+
         panoramas.forEach(({ id, title }) => panoramaSwitcher.add(new Option(title, id)));
         panoramaSwitcher.hidden = panoramas.length < 2;
 
@@ -214,7 +226,7 @@
             const hidden = compass.classList.toggle('compass-hidden');
             this.classList.toggle('compass-hidden', hidden);
         };
-        
+
         document.getElementById('FullPage').onclick = function () {
             this.classList.toggle('full-page-active');
             window.parent.postMessage({ type: 'togglePane' }, '*');

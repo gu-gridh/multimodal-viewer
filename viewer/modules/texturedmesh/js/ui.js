@@ -99,6 +99,8 @@ function stopAutoRotate() {
     $('auto')?.classList.remove('auto-rotate-active');
 }
 
+viewer.controls.addEventListener('start', stopAutoRotate);
+
 function leaveFirstPerson() {
     if (!viewer.getFirstPersonEnabled()) {
         return;

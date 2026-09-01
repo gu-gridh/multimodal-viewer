@@ -33,6 +33,15 @@ body {
     height: 30px !important;
 }
 
+#bottomToolbar .full-page {
+    margin: 8px;
+    opacity: 0.8;
+}
+
+#bottomToolbar .full-page:hover {
+    opacity: 1;
+}
+
 .rotate-left,
 .rotate-right {
     background-size: 45%;
@@ -115,8 +124,8 @@ body {
 
 .first-person {
     background-color: #ffffff !important;
-    mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
-    -webkit-mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
+    mask: url(/viewer/shared/interface/gamepad.svg) center / contain no-repeat;
+    -webkit-mask: url(/viewer/shared/interface/gamepad.svg) center / contain no-repeat;
 }
 
 .first-person-active {
@@ -126,8 +135,8 @@ body {
 
 .texturedmesh-guide-walk-icon {
     background-color: #ffffff;
-    mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
-    -webkit-mask: url(/viewer/shared/interface/walk.svg) center / contain no-repeat;
+    mask: url(/viewer/shared/interface/gamepad.svg) center / contain no-repeat;
+    -webkit-mask: url(/viewer/shared/interface/gamepad.svg) center / contain no-repeat;
 }
 
 .texturedmesh-control-buttons {

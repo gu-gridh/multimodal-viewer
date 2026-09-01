@@ -287,7 +287,9 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
         { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], ...panoramaScene }
       ]
     };
-    res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
+    res.send(data
+      .replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig))
+      .replace(/'PLACEHOLDER_NORTH_OFFSET'/g, JSON.stringify(0)));
   });
 });
 

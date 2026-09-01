@@ -163,10 +163,11 @@
     <script src="pannellum.js"></script>
     <script>
         const panoramaConfig = 'PLACEHOLDER_PANORAMA_CONFIG';
+        const northOffset = 'PLACEHOLDER_NORTH_OFFSET';
         const panoramas = panoramaConfig.panoramas;
         const scenes = Object.fromEntries(panoramas.map(({ id, title, startPos, ...scene }) => {
             const [yaw, pitch, hfov] = startPos;
-            return [id, { ...scene, yaw, pitch, hfov }];
+            return [id, { ...scene, yaw, pitch, hfov, northOffset }];
         }));
 
         const viewer = pannellum.viewer('panorama', {

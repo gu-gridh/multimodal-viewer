@@ -35,25 +35,29 @@ function drawCircles(svg, circles) {
     });
 }
 
-function addVennLabels(svg, width, height) {
+function addVennLabels(svg, circles) {
+    const offset = 10 //distance to circles
+    const road = circles['Väg'];
+    const graveField = circles['Gravfält'];
+    const border = circles['Gräns'];
     svg.append('text')
         .attr('class', 'venn-label')
-        .attr('x', width * 0.50)
-        .attr('y', height * 0.02)
+        .attr('x', road.x)
+        .attr('y', road.y - road.r - offset)
         .attr('text-anchor', 'middle')
         .text('Väg');
 
     svg.append('text')
         .attr('class', 'venn-label')
-        .attr('x', width * 0.09)
-        .attr('y', height * 0.63)
+        .attr('x', graveField.x - graveField.r - offset - 20)
+        .attr('y', graveField.y)
         .attr('text-anchor', 'middle')
         .text('Gravfält');
 
     svg.append('text')
         .attr('class', 'venn-label')
-        .attr('x', width * 0.90)
-        .attr('y', height * 0.63)
+        .attr('x', border.x + border.r + offset + 15)
+        .attr('y', border.y)
         .attr('text-anchor', 'middle')
         .text('Gräns');
 }

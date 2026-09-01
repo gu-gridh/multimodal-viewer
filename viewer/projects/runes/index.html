@@ -503,12 +503,11 @@
                 .append('svg')
                 .attr('viewBox', `0 0 ${width} ${height}`);
 
-            const circles =
-                getCircleGeometry(width, height);
+            const circles = getCircleGeometry(width, height);
 
             drawCircles(svg, circles);
 
-            addVennLabels(svg, width, height);
+            addVennLabels(svg, circles);
 
             const stones = getMockRunestones(
                 activeRegion,

@@ -10,7 +10,13 @@ const projectName = process.env.PROJECT || 'default';
 const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=';
 const backButtonBaseUrl = 'https://etruscan.dh.gu.se/';
 
-/* To test: http://localhost:8094/viewer/?q=2683/image or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/texturedmesh */
+/* To test: http://localhost:8094/viewer/?q=209/images or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/texturedmesh */
+
+function getImageTypeQuery(req) {
+  const types = req.query.type_of_image;
+  const values = Array.isArray(types) ? types : types ? [types] : ['2'];
+  return values.map(type => `&type_of_image=${encodeURIComponent(type)}`).join('');
+}
 
 function formatPeople(people) {
   const peopleList = Array.isArray(people) ? people : [people];
@@ -123,8 +129,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     apiUrl = `${contentApiBaseUrl}${queryName}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
-  } else if (viewerType === 'image') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=2`;
+  } else if (viewerType === 'images') {
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryName}&depth=3&limit=500${getImageTypeQuery(req)}`;
   } else {
     return res.status(400).send('Invalid viewer type');
   }
@@ -140,8 +146,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
     if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
       metadata = apiResponse.data.results?.[0];
-    } else if (viewerType === 'image') {
-      metadata = apiResponse.data;
+    } else if (viewerType === 'images') {
+      const images = apiResponse.data.results?.filter(image => image.iiif_file) || [];
+      const page = req.query.page;
+      metadata = page !== undefined
+        ? images[Number(page) || 0]
+        : images.find(image => String(image.id) === String(req.query.id)) || images[0];
     }
 
     if (!metadata) {
@@ -181,7 +191,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date')
             .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown');
         }
-      } else if (viewerType === 'image') {
+      } else if (viewerType === 'images') {
         modifiedHtml = htmlData.replace(/PLACEHOLDER_TITLE/g,
           metadata.tomb?.dataset?.short_name && metadata.tomb?.name
             ? `${metadata.tomb?.dataset?.short_name ?? ''} ${metadata.tomb?.name ?? ''}`
@@ -216,31 +226,36 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   const fullQuery = req.query.q;
-  const queryName = fullQuery ? fullQuery.split('/')[0] : '';
+  const [queryName, viewerType] = fullQuery ? fullQuery.split('/') : [];
 
-  if (!queryName) {
-    return res.status(400).send('Query parameter is missing');
+  if (!queryName || viewerType !== 'images') {
+    return res.status(400).send('image query is required');
   }
 
-  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryName}/?depth=1`;
+  const sequenceEnabled = true;
+  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryName}&depth=3&limit=500${getImageTypeQuery(req)}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
-    const imageData = apiResponse.data;
-    if (imageData && imageData.iiif_file) {
+    const images = apiResponse.data.results;
+    const availableImages = (images || []).filter(image => image.iiif_file);
+    if (availableImages.length) {
       fs.readFile(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
         if (err) {
           console.error('Error reading the file:', err);
           return res.status(500).send('Internal Server Error');
         }
 
-        const iiifFilePath = imageData.iiif_file;
-        const downloadFile = imageData.file;
-        const fullPath = `"${iiifFilePath}/info.json"`;
-        const downloadFilePath = `"${downloadFile}"`;
+        const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
+        const downloadFiles = availableImages.map(image => image.file);
+        const tileSourceValue = tileSources;
+        const downloadValue = downloadFiles;
+        const requestedImage = req.query.id;
+        const requestedPage = availableImages.findIndex(image => String(image.id) === String(requestedImage));
+        const initialPage = requestedPage >= 0 ? requestedPage : 0;
 
-        let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-          .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
+        let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSourceValue))
+          .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(JSON.stringify(downloadValue)))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
@@ -250,7 +265,9 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             point: Boolean(config.enablePointTool)
           }))
           .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false);
+          .replace(/'PLACEHOLDER_INITIAL_PAGE'/g, initialPage)
+          .replace(/'PLACEHOLDER_PRESERVE_VIEWPORT'/g, tileSources.length <= 1)
+          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled && tileSources.length > 1);
         res.send(modifiedData);
       });
     } else {
@@ -321,8 +338,8 @@ app.get('*', async (req, res) => {
     apiUrl = `${contentApiBaseUrl}${queryId}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
-  } else if (viewerType === 'image') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${queryId}/?depth=2`;
+  } else if (viewerType === 'images') {
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryId}&depth=3&limit=500${getImageTypeQuery(req)}`;
   } else {
     return res.status(400).send('Invalid viewer type');
   }
@@ -347,14 +364,12 @@ app.get('*', async (req, res) => {
           backButtonValue = `${shortName}_${tombName}`;
         }
       }
-    } else if (viewerType === 'image') {
-      const metadata = apiResponse.data;
-      if (metadata && metadata.tomb) {
-        const tombName = (metadata.tomb?.name ?? '').replace(/ /g, '_');
+    } else if (viewerType === 'images') {
+      const metadata = apiResponse.data.results?.[0];
+      if (metadata?.tomb) {
+        const tombName = (metadata.tomb.name ?? '').replace(/ /g, '_');
         const datasetShortName = (metadata.tomb.dataset?.short_name ?? '').replace(/ /g, '_');
         backButtonValue = `${datasetShortName}_${tombName}`;
-      } else {
-        backButtonValue = '';
       }
     }
 

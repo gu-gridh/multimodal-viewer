@@ -289,7 +289,7 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
     const panoramaScene = {
       type: 'multires',
       multiRes: {
-        basePath: '/viewer/projects/etruscan/panorama-289',
+        basePath: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289',
         path: '/%l/%s%y_%x',
         fallbackPath: '/fallback/%s',
         extension: 'jpg',

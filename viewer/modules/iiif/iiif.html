@@ -214,6 +214,10 @@
 
         const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
         const sequenceEnabled = 'PLACEHOLDER_SEQUENCE_ENABLE';
+        const preserveViewportSetting = 'PLACEHOLDER_PRESERVE_VIEWPORT';
+        const preserveViewport = typeof preserveViewportSetting === 'boolean'
+            ? preserveViewportSetting
+            : true;
         const configuredAnnotationTools = 'PLACEHOLDER_ANNOTATION_TOOLS';
         const annotationTools = typeof configuredAnnotationTools === 'object' ? configuredAnnotationTools : {};
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
@@ -456,6 +460,7 @@
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
                 tileSources: 'PLACEHOLDER_IIIF_IMAGE_URL',
+                initialPage: Number('PLACEHOLDER_INITIAL_PAGE') || 0,
                 immediateRender: false,
                 visibilityRatio: 0.50,
                 minZoomImageRatio: 0.75,
@@ -466,7 +471,7 @@
                 showRotationControl: true,
                 showNavigator: true,
                 navigatorAutoFade: true,
-                preserveViewport: true,
+                preserveViewport,
                 sequenceMode: sequenceEnabled,
                 nextButton: "next-button",
                 previousButton: "prev-button",
@@ -517,7 +522,7 @@
                         viewer.viewport.panTo(new OpenSeadragon.Point(x, y));
                         viewer.viewport.setRotation(rotation, true);
                         currentRotation = rotation;
-                    } else if (savedState) {
+                    } else if (savedState && preserveViewport) {
                         //console.log('setting position based on savedstate')
                         viewer.viewport.zoomTo(savedState.zoom);
                         viewer.viewport.panTo(new OpenSeadragon.Point(savedState.center.x, savedState.center.y));
@@ -536,6 +541,7 @@
 
             viewer.addHandler("page", function (data) {
                 updatePageInfo();
+                window.parent.postMessage({ type: 'iiifPageChange', page: viewer.currentPage() }, '*');
             });
 
             const annotationFocusInitPromise = annotationFocusLoadPromise

@@ -191,6 +191,11 @@
             return query ? `&${query}` : '';
         }
 
+        function getPanoramaOptionsQuery() {
+            const requestedPanorama = new URLSearchParams(window.location.search).get('id');
+            return requestedPanorama ? `&id=${encodeURIComponent(requestedPanorama)}` : '';
+        }
+
         function determineViewerTypeFromQuery() {
             const urlParams = new URLSearchParams(window.location.search);
             const qValue = urlParams.get('q');
@@ -242,8 +247,8 @@
                     newPath = `/viewer/?q=${qValue}/texturedmesh${hashFragment}`;
                     break;
                 case 'panorama':
-                    src = '/viewer/modules/panorama/panorama.html';
-                    newPath = `/viewer/?q=${qValue}/panorama${hashFragment}`;
+                    src = `/viewer/modules/panorama/panorama.html?q=${qValue}/panorama${getPanoramaOptionsQuery()}`;
+                    newPath = `/viewer/?q=${qValue}/panorama${getPanoramaOptionsQuery()}${hashFragment}`;
                     break;
             }
             if (iframe) {
@@ -259,6 +264,14 @@
                 iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY&page=${event.data.page}${getImageOptionsQuery()}`;
             }
 
+            if (event.data.type === 'panoramaChange' && determineViewerTypeFromQuery() === 'panorama') {
+                const iframe = document.getElementById('right-Iframe');
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY&id=${event.data.id}`;
+                const url = new URL(window.location.href);
+                url.searchParams.set('id', event.data.id);
+                window.history.replaceState({}, '', url);
+            }
+
             if (window.innerWidth > 1051) { //not in mobile view
                 if (event.data.type === 'togglePane') {
                     toggleRightPane();
@@ -272,7 +285,10 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY${getImageOptionsQuery()}`;
+                const options = determineViewerTypeFromQuery() === 'panorama'
+                    ? getPanoramaOptionsQuery()
+                    : getImageOptionsQuery();
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY${options}`;
             }
         }
 

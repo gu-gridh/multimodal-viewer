@@ -163,15 +163,14 @@
     <script src="pannellum.js"></script>
     <script>
         const panoramaConfig = 'PLACEHOLDER_PANORAMA_CONFIG';
-        const northOffset = 'PLACEHOLDER_NORTH_OFFSET';
         const panoramas = panoramaConfig.panoramas;
-        const scenes = Object.fromEntries(panoramas.map(({ id, title, startPos, ...scene }) => {
+        const scenes = Object.fromEntries(panoramas.map(({ id, title, downloadUrl, startPos, northOffset = 0, ...scene }) => {
             const [yaw, pitch, hfov] = startPos;
             return [id, { ...scene, yaw, pitch, hfov, northOffset }];
         }));
 
         const viewer = pannellum.viewer('panorama', {
-            default: { firstScene: panoramas[0].id },
+            default: { firstScene: panoramaConfig.initialScene || panoramas[0].id },
             scenes,
             autoLoad: true,
             compass: true,
@@ -190,7 +189,22 @@
         updateSwitcherPosition();
 
         panoramas.forEach(({ id, title }) => panoramaSwitcher.add(new Option(title, id)));
+        panoramaSwitcher.value = panoramaConfig.initialScene || panoramas[0].id;
         panoramaSwitcher.hidden = panoramas.length < 2;
+
+        function updateDownload(panorama) {
+            const download = document.getElementById('download');
+            const button = download.querySelector('.download-button');
+            if (panorama.downloadUrl) {
+                download.href = panorama.downloadUrl;
+                button.classList.remove('deactivated');
+            } else {
+                download.removeAttribute('href');
+                button.classList.add('deactivated');
+            }
+        }
+
+        updateDownload(panoramas.find(({ id }) => id === panoramaSwitcher.value));
 
         panoramaSwitcher.onchange = () => {
             viewer.loadScene(
@@ -199,6 +213,9 @@
                 viewer.getYaw(),
                 viewer.getHfov()
             );
+            const panorama = panoramas.find(({ id }) => id === panoramaSwitcher.value);
+            updateDownload(panorama);
+            window.parent.postMessage({ type: 'panoramaChange', id: panorama.id }, '*');
         };
 
         function showPanoramaGuide() {

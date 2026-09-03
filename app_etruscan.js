@@ -8,6 +8,7 @@ dotenv.config({ path: './.env.local' });
 const app = express();
 const projectName = process.env.PROJECT || 'default';
 const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=';
+const panoramaApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/panorama/?tomb=';
 const backButtonBaseUrl = 'https://etruscan.dh.gu.se/';
 
 /* To test: http://localhost:8094/viewer/?q=209/images or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/texturedmesh */
@@ -125,8 +126,10 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
 
   let apiUrl;
 
-  if (viewerType === 'pointcloud' || viewerType === 'panorama') {
+  if (viewerType === 'pointcloud') {
     apiUrl = `${contentApiBaseUrl}${queryName}&depth=2`;
+  } else if (viewerType === 'panorama') {
+    apiUrl = `${panoramaApiBaseUrl}${queryName}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
   } else if (viewerType === 'images') {
@@ -145,7 +148,15 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     let metadata;
 
     if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
-      metadata = apiResponse.data.results?.[0];
+      const results = (apiResponse.data.results || [])
+        .filter(result => viewerType !== 'panorama' || result.url_public);
+      metadata = viewerType === 'panorama' && req.query.id
+        ? results.find(panorama => String(panorama.id) === String(req.query.id)) || results[0]
+        : results[0];
+      if (viewerType === 'panorama' && Array.isArray(metadata?.tomb)) {
+        const requestedTomb = metadata.tomb.find(tomb => String(tomb.id) === String(queryName));
+        if (requestedTomb) metadata = { ...metadata, tomb: [requestedTomb] };
+      }
     } else if (viewerType === 'images') {
       const images = apiResponse.data.results?.filter(image => image.iiif_file) || [];
       const page = req.query.page;
@@ -177,12 +188,16 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb?.[0]?.description ?? metadata.preview_image?.tomb?.description ?? '')
           .replace(/PLACEHOLDER_DATASET/g, metadata.dataset?.short_name ?? '')
 
-        if (viewerType === 'pointcloud' || viewerType === 'panorama') {
+        if (viewerType === 'pointcloud') {
           modifiedHtml = modifiedHtml
             .replace(/PLACEHOLDER_POINTS_OPTIMIZED/g, metadata.points_optimized ?? 'Unknown')
             .replace(/PLACEHOLDER_POINTS_FULL/g, metadata.points_full_resolution ?? 'Unknown')
             .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown')
             .replace(/PLACEHOLDER_TECHNIQUE/g, metadata.technique?.text ?? 'Unknown')
+            .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date');
+        } else if (viewerType === 'panorama') {
+          modifiedHtml = modifiedHtml
+            .replace(/PLACEHOLDER_CREATOR/g, formatPeople(metadata.author) || 'Unknown')
             .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date');
         } else if (viewerType === 'texturedmesh') {
           modifiedHtml = modifiedHtml
@@ -279,35 +294,59 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
-  fs.readFile(path.join(__dirname, 'viewer', 'modules', 'panorama', 'panorama.html'), 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Internal Server Error');
+app.get('/viewer/modules/panorama/panorama.html', async (req, res) => {
+  const [tombId, viewerType] = req.query.q ? req.query.q.split('/') : [];
+
+  if (!tombId || viewerType !== 'panorama') {
+    return res.status(400).send('Panorama query is required');
+  }
+
+  try {
+    const apiResponse = await axios.get(`${panoramaApiBaseUrl}${encodeURIComponent(tombId)}`);
+    const panoramaResults = apiResponse.data.results || [];
+    const requestedPanoramaId = req.query.id;
+    const panoramas = panoramaResults
+      .filter(panorama => panorama.url_public)
+      .map((panorama, index) => {
+        const startPosition = Array.isArray(panorama.start_position) ? panorama.start_position : [];
+        const startPos = [
+          Number(startPosition[0]) || 0,
+          Number(startPosition[1]) || 0,
+          Number(startPosition[2]) > 0 ? Number(startPosition[2]) : 100
+        ];
+
+        return {
+          id: String(panorama.id),
+          title: panorama.title || `Panorama ${index + 1}`,
+          downloadUrl: panorama.url_download || '',
+          startPos,
+          northOffset: Number(panorama.north_offset) || 0,
+          type: 'multires',
+          multiRes: {
+            basePath: panorama.url_public.replace(/\/$/, ''),
+            path: '/%l/%s%y_%x',
+            fallbackPath: '/fallback/%s',
+            extension: 'jpg',
+            tileResolution: 512,
+            maxLevel: 5,
+            cubeResolution: 6456
+          }
+        };
+      });
+
+    if (!panoramas.length) {
+      return res.status(404).send('No panorama found');
     }
 
-    const panoramaScene = {
-      type: 'multires',
-      multiRes: {
-        basePath: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289',
-        path: '/%l/%s%y_%x',
-        fallbackPath: '/fallback/%s',
-        extension: 'jpg',
-        tileResolution: 512,
-        maxLevel: 5,
-        cubeResolution: 6456
-      }
-    };
-    const panoramaConfig = {
-      panoramas: [
-        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], ...panoramaScene },
-        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], ...panoramaScene }
-      ]
-    };
-    res.send(data
-      .replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig))
-      .replace(/'PLACEHOLDER_NORTH_OFFSET'/g, JSON.stringify(0)));
-  });
+    const initialScene = panoramas.find(panorama => panorama.id === String(requestedPanoramaId))?.id
+      || panoramas[0].id;
+    const templatePath = path.join(__dirname, 'viewer', 'modules', 'panorama', 'panorama.html');
+    const data = await fs.promises.readFile(templatePath, 'utf8');
+    res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify({ panoramas, initialScene })));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.use('/viewer/modules/pointcloud', express.static(path.join(__dirname, 'viewer', 'modules', 'pointcloud')));
@@ -334,8 +373,10 @@ app.get('*', async (req, res) => {
   let apiUrl;
 
   //fetch the backbutton data from the appropriate API
-  if (viewerType === 'pointcloud' || viewerType === 'panorama') {
+  if (viewerType === 'pointcloud') {
     apiUrl = `${contentApiBaseUrl}${queryId}&depth=2`;
+  } else if (viewerType === 'panorama') {
+    apiUrl = `${panoramaApiBaseUrl}${queryId}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
     apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
   } else if (viewerType === 'images') {
@@ -357,8 +398,10 @@ app.get('*', async (req, res) => {
     if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
       metadata = apiResponse.data?.results?.[0];
       if (metadata && metadata.tomb && metadata.tomb[0]) {
-        const tomb = metadata.tomb[0];
-        if (tomb.dataset && tomb.name) {
+        const tomb = viewerType === 'panorama'
+          ? metadata.tomb.find(tomb => String(tomb.id) === String(queryId))
+          : metadata.tomb[0];
+        if (tomb?.dataset && tomb.name) {
           const shortName = (tomb.dataset?.short_name ?? '').replace(/ /g, '_');
           const tombName = (tomb.name ?? '').replace(/ /g, '_');
           backButtonValue = `${shortName}_${tombName}`;

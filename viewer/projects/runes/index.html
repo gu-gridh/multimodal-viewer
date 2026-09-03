@@ -125,8 +125,6 @@
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
             }
-            else {
-            }
             else if (activeViewer === 'photo') {
                 rightIframe.src = `/viewer/projects/runes/photo/photo.html?${query}`;
                 rightIframe.style.display = 'block';
@@ -239,6 +237,8 @@
                 }
             }
             return null;
+        }
+
         function getCircleGeometry(width, height) {
             const radius = Math.min(width, height) * 0.29;
 

@@ -11,64 +11,80 @@
     <link rel="stylesheet" href="/viewer/shared/guide.css">
     <link rel="stylesheet" href="/viewer/modules/texturedmesh/css/style.css">
     <script src="/viewer/shared/back_button_layout.js"></script>
+    <script type="text/javascript" src="/viewer/libs/jquery.js"></script>
+    <script type="text/javascript" src="/viewer/libs/i18next.min.js"></script>
+    <script type="text/javascript" src="/viewer/libs/i18next-http-backend.min.js"></script>
 </head>
 
 <body>
     <div id="guide" onclick="hideTexturedMeshGuide();" style="opacity:0.0">
         <div class="guide-content">
             <div class="guide-instructions">
-                <div class="guide-instructions-intro">
-                    Use the tools below to inspect the textured mesh.
-                </div>
+                <div class="guide-instructions-intro" id="1"></div>
 
                 <div id="guide-instructions-tools">
-                    <h2>Tools</h2>
+                    <h2 id="3"></h2>
+
 
                     <div class="guide-instructions-item">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/frame_white.png)"></div>
-                        <div class="guide-instructions-item-label"><b>Frame Object.</b> Fit the textured mesh to the camera
-                            view.</div>
-                    </div>
-
-                    <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png)"></div>
-                        <div class="guide-instructions-item-label"><b>Zoom Controls.</b> Zoom the camera in and out.
+                        <div class="guide-instructions-item-label">
+                            <p id="4"></p>
                         </div>
-                    </div>
-
-                    <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/autorotate_white.svg)"></div>
-                        <div class="guide-instructions-item-label"><b>Auto-Rotate.</b> Enable automatic rotation of the
-                            textured mesh.</div>
-                    </div>
-
-                    <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon"
-                            style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg); background-size: 80%; background-position: center;">
                         </div>
-                        <div class="guide-instructions-item-label"><b>Wireframe.</b> Enable wireframe rendering to see
-                            the textured mesh structure.</div>
+
+                        <div class="guide-instructions-item">
+                            <div class="guide-instructions-item-icon"
+                                style="background-image:url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png)"></div>
+                            <div class="guide-instructions-item-label">
+                                <p id="5"></p>
+                            </div>
+                        </div>
+
+                        <div class="guide-instructions-item">
+                            <div class="guide-instructions-item-icon"
+                                style="background-image:url(https://data.dh.gu.se/ui-icons/autorotate_white.svg)"></div>
+                            <div class="guide-instructions-item-label">
+                                <p id="6"></p>
+                            </div>
+                        </div>
+
+                        <div class="guide-instructions-item">
+                            <div class="guide-instructions-item-icon"
+                                style="background-image:url(https://data.dh.gu.se/ui-icons/wireframe_white.svg); background-size: 80%; background-position: center;">
+                            </div>
+                            <div class="guide-instructions-item-label">
+                                <p id="7"></p>
+
+                            </div>
+                        </div>
+                        <div class="guide-instructions-item">
+                            <div class="guide-instructions-item-icon grid-toggle" style="opacity:1.0"></div>
+                            <div class="guide-instructions-item-label">
+                                <p id="8"></p>
+
+                            </div>
+                        </div>
+
+                        <div class="guide-instructions-item">
+                            <div class="guide-instructions-item-icon texturedmesh-guide-walk-icon"></div>
+                            <div class="guide-instructions-item-label">
+                                <p id="9"></p>
+
+                            </div>
+                        </div>
+
+                        <div class="module-acknowledgement">
+                            <p id="11">The module was created with</p>
+                            <p><a href="https://threejs.org" target="_blank">ThreeJS</a></p>
+                        </div>
+
+                        <div class="guide-closer" id="10"></div>
                     </div>
-                    <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon grid-toggle" style="opacity:1.0"></div>
-                        <div class="guide-instructions-item-label"><b>Grid.</b> Toggle grid visibility.</div>
-                    </div>
-
-                    <div class="guide-instructions-item">
-                        <div class="guide-instructions-item-icon texturedmesh-guide-walk-icon"></div>
-                        <div class="guide-instructions-item-label"><b>First-Person.</b> Toggle first-person
-                            navigation.</div>
-                    </div>
-
-
-
-                    <div class="guide-closer">Close</div>
                 </div>
             </div>
-        </div>
+     
     </div>
 
     <div id="toolButtonsContainerVertical">
@@ -92,8 +108,8 @@
             <button id="grid" class="SwitchButton grid-toggle" title="Toggle grid" aria-label="Toggle grid"></button>
             <button id="firstPerson" class="SwitchButton first-person" title="Toggle first-person controls"
                 aria-label="Toggle first-person controls"></button>
-            <div id="full-page1" class="NavButton full-page" title="Toggle full screen"
-                aria-label="Toggle full screen" onclick="classList.toggle('full-page-active'), togglePane()"></div>
+            <div id="full-page1" class="NavButton full-page" title="Toggle full screen" aria-label="Toggle full screen"
+                onclick="classList.toggle('full-page-active'), togglePane()"></div>
         </div>
 
         <div class="guide-button compact" title="User Guide" onclick="showTexturedMeshGuide();">?</div>
@@ -130,6 +146,14 @@
         </div>
     </div>
 
+    <!-- Here we  have a floating div with instructions on how to navigate -->
+    <div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none; ">
+        <div id="instructions" style="bottom:20px; width:260px;">
+            <div class="instruction-closer" onclick="$('#instructions').hide();" style=""></div>
+            <div id="2" style="margin-top: 0px;"></div>
+        </div>
+    </div>
+
     <section id="loading-screen">
         <div id="loader"></div>
         <div id="loader-progress">0%</div>
@@ -146,10 +170,39 @@
             lookAt: 'PLACEHOLDER_LOOK_AT'
         };
 
+        const savedLang = localStorage.getItem('i18nextLang') || 'en';
+
+	i18next
+		.use(i18nextHttpBackend)
+		.init({
+			lng: savedLang,
+			fallbackLng: 'en',
+			backend: {
+				loadPath: '/viewer/locales/{{lng}}/translation.json',
+			},
+		}, function (err, t) {
+			if (err) return console.error('i18next initialization error:', err);
+
+			applyTranslations();
+			window.addEventListener('message', function (event) {
+				if (event.data.type === 'languageChange') {
+					const newLang = event.data.lang;
+					i18next.changeLanguage(newLang, function (err) {
+						if (err) {
+							console.error('Error changing language:', err);
+						} else {
+							applyTranslations();
+						}
+					});
+				}
+			});
+		});
+
         function showTexturedMeshGuide() {
             document.getElementById('guide').style.pointerEvents = 'auto';
             document.getElementById('guide').style.opacity = '1.0';
             document.getElementById('guide-instructions-tools').style.transform = 'scale(1.0)';
+            hideInfo();
         }
 
         function hideTexturedMeshGuide() {
@@ -159,7 +212,37 @@
         }
 
         function togglePane() {
-            window.parent.postMessage({ type: 'togglePane' }, '*');
+            window.parent.postMessage({type: 'togglePane'}, '*');
+        }
+
+        function applyTranslations() {
+            if (typeof i18next.t === 'function') {
+                document.getElementById('1').innerHTML = i18next.t('texturedmesh-help-text');
+                document.getElementById('2').innerHTML = i18next.t('texturedmesh-help-text-short');
+                document.getElementById('3').textContent = i18next.t('tools');
+                document.getElementById('4').innerHTML = i18next.t('frame-object');
+                document.getElementById('5').innerHTML = i18next.t('texturedmesh-zoom-controls');
+        
+                document.getElementById('6').innerHTML = i18next.t('texturedmesh-auto-rotate');
+                /* <b>Auto-Rotate.</b> Enable automatic rotation of the textured mesh. */
+                document.getElementById('7').innerHTML = i18next.t('texturedmesh-wireframe-tool');
+                /* <b>Wireframe.</b>  */
+                document.getElementById('8').innerHTML = i18next.t('texturedmesh-grid-tool');
+                /*   <b>Grid.</b>  */
+                document.getElementById('9').innerHTML = i18next.t('texturedmesh-firstperson-tool');
+                /*  <b>First-Person.</b> Toggle first-person navigation. */
+                document.getElementById('10').innerHTML = i18next.t('close');
+                document.getElementById('11').innerHTML = i18next.t('createdwith');
+                document.getElementById('share-label').textContent = i18next.t('linkcopied');
+                document.getElementById('measure-label').innerHTML = i18next.t('measuredlength');
+                updateUI();
+            }
+        }
+
+        setTimeout(hideInfo, 12000)
+
+        function hideInfo() {
+            $('#instructions').css('transform', 'scale(0.0)');
         }
 
     </script>

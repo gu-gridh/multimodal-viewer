@@ -148,13 +148,14 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     let metadata;
 
     if (viewerType === 'pointcloud' || viewerType === 'texturedmesh' || viewerType === 'panorama') {
-      const results = (apiResponse.data.results || [])
-        .filter(result => viewerType !== 'panorama' || result.url_public);
-      metadata = viewerType === 'panorama' && req.query.id
-        ? results.find(panorama => String(panorama.id) === String(req.query.id)) || results[0]
-        : results[0];
-      if (viewerType === 'panorama' && Array.isArray(metadata?.tomb)) {
-        const requestedTomb = metadata.tomb.find(tomb => String(tomb.id) === String(queryName));
+      let results = apiResponse.data.results || [];
+      metadata = results[0];
+
+      if (viewerType === 'panorama') {
+        results = results.filter(panorama => panorama.url_public);
+        metadata = results.find(panorama => String(panorama.id) === String(req.query.id)) || results[0];
+
+        const requestedTomb = metadata?.tomb?.find(tomb => String(tomb.id) === String(queryName));
         if (requestedTomb) metadata = { ...metadata, tomb: [requestedTomb] };
       }
     } else if (viewerType === 'images') {
@@ -321,16 +322,7 @@ app.get('/viewer/modules/panorama/panorama.html', async (req, res) => {
           downloadUrl: panorama.url_download || '',
           startPos,
           northOffset: Number(panorama.north_offset) || 0,
-          type: 'multires',
-          multiRes: {
-            basePath: panorama.url_public.replace(/\/$/, ''),
-            path: '/%l/%s%y_%x',
-            fallbackPath: '/fallback/%s',
-            extension: 'jpg',
-            tileResolution: 512,
-            maxLevel: 5,
-            cubeResolution: 6456
-          }
+          urlPublic: panorama.url_public
         };
       });
 

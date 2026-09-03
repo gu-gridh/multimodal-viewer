@@ -53,27 +53,13 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
       return res.status(500).send('Internal Server Error');
     }
 
-    const panoramaScene = {
-      type: 'multires',
-      multiRes: {
-        basePath: '/viewer/projects/etruscan/panorama-289',
-        path: '/%l/%s%y_%x',
-        fallbackPath: '/fallback/%s',
-        extension: 'jpg',
-        tileResolution: 512,
-        maxLevel: 5,
-        cubeResolution: 6456
-      }
-    };
     const panoramaConfig = {
       panoramas: [
-        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], ...panoramaScene },
-        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], ...panoramaScene }
+        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289' },
+        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289' }
       ]
     };
-    res.send(data
-      .replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig))
-      .replace(/'PLACEHOLDER_NORTH_OFFSET'/g, JSON.stringify(0)));
+    res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
   });
 });
 

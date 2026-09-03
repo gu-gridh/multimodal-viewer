@@ -164,9 +164,24 @@
     <script>
         const panoramaConfig = 'PLACEHOLDER_PANORAMA_CONFIG';
         const panoramas = panoramaConfig.panoramas;
-        const scenes = Object.fromEntries(panoramas.map(({ id, title, downloadUrl, startPos, northOffset = 0, ...scene }) => {
+        const scenes = Object.fromEntries(panoramas.map(({ id, title, downloadUrl, startPos, northOffset = 0, urlPublic }) => {
             const [yaw, pitch, hfov] = startPos;
-            return [id, { ...scene, yaw, pitch, hfov, northOffset }];
+            return [id, {
+                type: 'multires',
+                yaw,
+                pitch,
+                hfov,
+                northOffset,
+                multiRes: {
+                    basePath: urlPublic.replace(/\/$/, ''),
+                    path: '/%l/%s%y_%x',
+                    fallbackPath: '/fallback/%s',
+                    extension: 'jpg',
+                    tileResolution: 512,
+                    maxLevel: 5,
+                    cubeResolution: 6456
+                }
+            }];
         }));
 
         const viewer = pannellum.viewer('panorama', {

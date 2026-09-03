@@ -14,6 +14,10 @@
     <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
     <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
     <link rel="stylesheet" href="/viewer/projects/runes/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
+    <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
+    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
 </head>
 
 <body>
@@ -115,6 +119,13 @@
                 rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
+            }
+            else if (activeViewer === 'photo') {
+                rightIframe.src = `/viewer/projects/runes/photo/photo.html?${query}`;
+                rightIframe.style.display = 'block';
+                rightPlaceholder.style.display = 'none';
+            }
+            else {
             }
             else if (activeViewer === 'photo') {
                 rightIframe.src = `/viewer/projects/runes/photo/photo.html?${query}`;

@@ -212,8 +212,8 @@
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
-        const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS';
-        const sequenceEnabled = 'PLACEHOLDER_SEQUENCE_ENABLE';
+        const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS' === true;
+        const sequenceEnabled = 'PLACEHOLDER_SEQUENCE_ENABLE' === true;
         const preserveViewportSetting = 'PLACEHOLDER_PRESERVE_VIEWPORT';
         const preserveViewport = typeof preserveViewportSetting === 'boolean'
             ? preserveViewportSetting
@@ -225,7 +225,7 @@
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
         const pagedAnnotationLoadingEnabled = 'PLACEHOLDER_PAGED_ANNOTATION_LOADING' === true;
-        const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS';
+        const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS' === true;
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
         const coordinateWidth = Number('PLACEHOLDER_COORDINATE_WIDTH');
         const coordinateHeight = Number('PLACEHOLDER_COORDINATE_HEIGHT');

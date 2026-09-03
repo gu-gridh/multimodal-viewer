@@ -10,122 +10,14 @@
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="/viewer/shared/split-layout.css">
     <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
-    <style>
-        html,
-        body {
-            width: 100vw;
-            height: 100%;
-            margin: 0;
-            overflow: hidden;
-            background: var(--viewer-bg);
-            font-family: "Oswald", sans-serif;
-        }
-
-        #main-content {
-            height: 100% !important;
-        }
-
-        #left-pane {
-            width: 70%;
-            position: relative;
-        }
-
-        #right-pane {
-            width: 30%;
-            background: rgb(228, 228, 220);
-        }
-
-        .module-placeholder {
-            height: 100%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 300;
-        }
-
-        .period-switcher {
-            position: absolute;
-            bottom: 28px;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-        }
-
-        .period-switcher .ui-module {
-            position: static;
-            display: flex;
-        }
-
-        .iframes {
-            width: 100%;
-            border: 0;
-        }
-
-        .mobile-metadata-tab,
-        .mobile-back-button {
-            display: none;
-        }
-
-        @media screen and (max-width: 1050px) {
-
-            #left-pane,
-            #right-pane {
-                display: block;
-                width: 50%;
-            }
-
-            .ui-module-container {
-                width: 50vw;
-            }
-        }
-
-        @media screen and (max-width: 1050px) {
-            #main-content {
-                overflow: hidden;
-            }
-
-            #left-pane,
-            #right-pane {
-                width: 100%;
-            }
-
-            .ui-module-container {
-                width: 100vw;
-            }
-
-            #right-pane {
-                display: none;
-            }
-
-            #main-content.mobile-metadata-open #left-pane {
-                display: none;
-            }
-
-            #main-content.mobile-metadata-open #right-pane {
-                display: block;
-            }
-
-            .mobile-metadata-tab {
-                display: block;
-            }
-
-            .mobile-back-button {
-                position: absolute;
-                display: block;
-                width: 30px;
-                height: 30px;
-                top: 28px;
-                left: 12px;
-                border-radius: 50%;
-                background: #000 url(https://data.dh.gu.se/ui-icons/arrow_back_white.png) center / 15px no-repeat;
-                z-index: 1100;
-                cursor: pointer;
-            }
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
+    <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
+    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
+    <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
+    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
 </head>
 
 <body>
@@ -140,7 +32,11 @@
                     <div class="ui-module-item left mobile-metadata-tab" onclick="showMobileMetadata()">About</div>
                 </div>
             </div>
-            <div id="left-placeholder" class="module-placeholder"></div>
+            <div id="left-placeholder" class="module-placeholder">
+                <div class="venn-panel">
+                    <div id="venn-diagram"></div>
+                </div>
+            </div>
             <iframe id="left-iframe" class="iframes" title="Region"></iframe>
             <div class="period-switcher">
                 <div class="ui-module">
@@ -155,28 +51,47 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
-                        Metadata</div>
-                    <div class="ui-module-item right" id="viewer-model" onclick="changeRightViewer('model')">3D Model
+                        Metadata
                     </div>
                     <div class="ui-module-item right" id="viewer-panorama" onclick="changeRightViewer('panorama')">
-                        Panorama</div>
+                        Panorama
+                    </div>
+                    <div class="ui-module-item right" id="viewer-photo" onclick="changeRightViewer('photo')">
+                        Foto
+                    </div>
+                    <div class="ui-module-item right" id="viewer-model" onclick="changeRightViewer('model')">
+                        3D Modell
+                    </div>
+                    
                 </div>
             </div>
             <iframe id="right-iframe" class="iframes" title="Rune content"></iframe>
             <div id="right-placeholder" class="module-placeholder"></div>
         </div>
-
+        <div id="footer-container"></div>
     </div>
 
     <script>
+        //load footer
+        $(document).ready(function () {
+            $("#footer-container").load("/viewer/projects/runes/footer.html");
+                changeRightViewer('pointcloud');
+        });
+
         let activeRegion = 'vastra';
         let activeViewer = 'metadata';
         let activePeriod = '1';
 
         $(document).ready(function () {
+            $("#footer-container").load("/viewer/projects/runes/footer.html");
+
             const params = new URLSearchParams(window.location.search);
             const region = params.get('region');
-            activeRegion = ['vastra', 'ostra'].includes(region) ? region : activeRegion;
+
+            activeRegion = ['vastra', 'ostra'].includes(region)
+                ? region
+                : activeRegion;
+
             changeLeftViewer();
             changeRightViewer(activeViewer);
         });
@@ -210,7 +125,14 @@
                 rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
-            } else {
+            }
+            else if (activeViewer === 'photo') {
+                const objectId = params.get('q') || '5';
+
+                rightIframe.src =
+                    `/viewer/modules/iiif/iiif.html?q=${encodeURIComponent(objectId)}`;
+            }
+            else {
                 const objectId = (params.get('q') || '1').split('/')[0];
                 rightIframe.src = activeViewer === 'model'
                     ? `/viewer/modules/texturedmesh/texturedmesh.html?q=${encodeURIComponent(objectId)}/texturedmesh`
@@ -227,17 +149,435 @@
             changeLeftViewer();
         }
 
+        //helper to check if point is in the circle
+        function pointInsideCircle(x, y, circle) {
+            const dx = x - circle.x;
+            const dy = y - circle.y;
+
+            return Math.sqrt(dx * dx + dy * dy) < circle.r;
+        }
+        //then check if the point is in the required circle-sets
+        function pointMatchesSets(x, y, requiredSets, circles) {
+            const margin = 14; //margin to avoid points being too close to the edge of the circle
+            return Object.entries(circles).every(([name, circle]) => {
+                const dx = x - circle.x;
+                const dy = y - circle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                const required = requiredSets.includes(name);
+
+                if (required) {
+                    return distance < circle.r - margin;
+                } else {
+                    return distance > circle.r + margin;
+                }
+            });
+        }
+
+        //then find a position that matches the required sets
+        function findPosition(sets, circles, width, height) {
+            const padding = 25;
+
+            for (let attempt = 0; attempt < 10000; attempt++) {
+                const x =
+                    padding +
+                    Math.random() * (width - padding * 2);
+
+                const y =
+                    padding +
+                    Math.random() * (height - padding * 2);
+
+                if (pointMatchesSets(x, y, sets, circles)) {
+                    return { x, y };
+                }
+            }
+
+            return {
+                x: width / 2,
+                y: height / 2
+            };
+        }
+
+        //helper to check if a position overlaps with existing stones
+        function overlapsExistingStone(position, positions, minDistance = 32) {
+            return positions.some(existing => {
+                const dx = position.x - existing.x;
+                const dy = position.y - existing.y;
+
+                return Math.sqrt(dx * dx + dy * dy) < minDistance;
+            });
+        }
+
+        function findStonePosition(
+            sets,
+            circles,
+            width,
+            height,
+            existingPositions
+        ) {
+            const padding = 25;
+
+            for (let attempt = 0; attempt < 5000; attempt++) {
+                const x =
+                    padding +
+                    Math.random() * (width - padding * 2);
+
+                const y =
+                    padding +
+                    Math.random() * (height - padding * 2);
+
+                const position = { x, y };
+
+                if (
+                    pointMatchesSets(x, y, sets, circles) &&
+                    !overlapsExistingStone(
+                        position,
+                        existingPositions
+                    )
+                ) {
+                    return position;
+                }
+            }
+            return null;
+        }
+
+        function getCircleGeometry(width, height) {
+            const radius = Math.min(width, height) * 0.29;
+
+            return {
+                'Väg': {
+                    x: width * 0.50,
+                    y: height * 0.34,
+                    r: radius
+                },
+
+                'Gravfält': {
+                    x: width * 0.38,
+                    y: height * 0.60,
+                    r: radius
+                },
+
+                'Gräns': {
+                    x: width * 0.62,
+                    y: height * 0.60,
+                    r: radius
+                }
+            };
+        }
+
+        function drawCircles(svg, circles) {
+            Object.entries(circles).forEach(([name, circle]) => {
+                svg.append('circle')
+                    .attr('cx', circle.x)
+                    .attr('cy', circle.y)
+                    .attr('r', circle.r)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#999')
+                    .attr('stroke-width', 2);
+            });
+        }
+
+        //helper to check if point is in the circle
+        function pointInsideCircle(x, y, circle) {
+            const dx = x - circle.x;
+            const dy = y - circle.y;
+
+            return Math.sqrt(dx * dx + dy * dy) < circle.r;
+        }
+        //then check if the point is in the required sets
+        function pointMatchesSets(x, y, requiredSets, circles) {
+            return Object.entries(circles).every(([name, circle]) => {
+                const inside = pointInsideCircle(x, y, circle);
+                const required = requiredSets.includes(name);
+
+                return inside === required;
+            });
+        }
+
+        //then find a position that matches the required sets
+        function findPosition(sets, circles, width, height) {
+            const padding = 25;
+
+            for (let attempt = 0; attempt < 5000; attempt++) {
+                const x =
+                    padding +
+                    Math.random() * (width - padding * 2);
+
+                const y =
+                    padding +
+                    Math.random() * (height - padding * 2);
+
+                if (pointMatchesSets(x, y, sets, circles)) {
+                    return { x, y };
+                }
+            }
+
+            return {
+                x: width / 2,
+                y: height / 2
+            };
+        }
+
+        //helper to check if a position overlaps with existing stones
+        function overlapsExistingStone(position, positions, minDistance = 32) {
+            return positions.some(existing => {
+                const dx = position.x - existing.x;
+                const dy = position.y - existing.y;
+
+                return Math.sqrt(dx * dx + dy * dy) < minDistance;
+            });
+        }
+
+        function findStonePosition(
+            sets,
+            circles,
+            width,
+            height,
+            existingPositions
+        ) {
+            const padding = 25;
+
+            for (let attempt = 0; attempt < 5000; attempt++) {
+                const x =
+                    padding +
+                    Math.random() * (width - padding * 2);
+
+                const y =
+                    padding +
+                    Math.random() * (height - padding * 2);
+
+                const position = { x, y };
+
+                if (
+                    pointMatchesSets(x, y, sets, circles) &&
+                    !overlapsExistingStone(
+                        position,
+                        existingPositions
+                    )
+                ) {
+                    return position;
+                }
+            }
+            return null;
+        }
+
+        //mock data for runestones in each region and period
+        function getMockRunestones(region, period) {
+            const variations = {
+                'vastra-1': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Väg'] },
+
+                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r6', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r7', sets: ['Väg', 'Gravfält'] },
+
+                    { id: 'r8', sets: ['Väg', 'Gräns'] },
+                    { id: 'r9', sets: ['Väg', 'Gräns'] },
+                    { id: 'r10', sets: ['Väg', 'Gräns'] },
+                    { id: 'r11', sets: ['Väg', 'Gräns'] },
+
+                    { id: 'r12', sets: ['Väg', 'Gravfält', 'Gräns'] },
+                    { id: 'r13', sets: ['Väg', 'Gravfält', 'Gräns'] },
+
+                    { id: 'r14', sets: ['Gravfält'] },
+
+                    {
+                        id: 'r15',
+                        sets: ['Gräns'],
+                        //selected: true,
+                        title: 'Title'
+                    }
+                ],
+
+                'vastra-2': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r4', sets: ['Väg', 'Gräns'] },
+                    { id: 'r5', sets: ['Väg', 'Gräns'] },
+                    { id: 'r6', sets: ['Väg', 'Gräns'] },
+                    { id: 'r7', sets: ['Gravfält'] },
+                    { id: 'r8', sets: ['Gräns'] },
+                    { id: 'r9', sets: ['Väg', 'Gravfält', 'Gräns'] }
+                ],
+
+                'ostra-1': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Gravfält'] },
+                    { id: 'r3', sets: ['Gravfält'] },
+                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
+                    { id: 'r6', sets: ['Väg', 'Gräns'] },
+                    { id: 'r7', sets: ['Gravfält', 'Gräns'] },
+                    { id: 'r8', sets: ['Väg', 'Gravfält', 'Gräns'] }
+                ],
+
+                'ostra-2': [
+                    { id: 'r1', sets: ['Väg'] },
+                    { id: 'r2', sets: ['Väg'] },
+                    { id: 'r3', sets: ['Gräns'] },
+                    { id: 'r4', sets: ['Väg', 'Gräns'] },
+                    { id: 'r5', sets: ['Gravfält', 'Gräns'] },
+                    { id: 'r6', sets: ['Väg', 'Gravfält', 'Gräns'] }
+                ]
+            };
+
+            return variations[`${region}-${period}`] || [];
+        }
+
+        function addRunestones(svg, stones, circles, width, height) {
+            const positions = [];
+            const markerSize = 18;
+
+            //hover tooltip for runestones
+            const tooltip = svg.append('g')
+                .attr('class', 'runestone-tooltip')
+                .style('display', 'none');
+
+            tooltip.append('rect')
+                .attr('rx', 4)
+                .attr('ry', 4);
+
+            tooltip.append('text')
+                .attr('x', 10)
+                .attr('y', 20);
+
+            stones.forEach(stone => {
+                const position = findStonePosition(
+                    stone.sets,
+                    circles,
+                    width,
+                    height,
+                    positions
+                );
+
+                if (!position) {
+                    return;
+                }
+
+                positions.push(position);
+
+                const group = svg.append('g')
+                    .attr('class', 'runestone')
+                    .attr('data-id', stone.id)
+                    .attr(
+                        'transform',
+                        `translate(${position.x}, ${position.y})`
+                    )
+                    .on('mouseenter', function () {
+                        const text = tooltip.select('text');
+
+                        text.text(stone.title || stone.id);
+
+                        // Measure text so the background fits it
+                        const bbox = text.node().getBBox();
+
+                        tooltip.select('rect')
+                            .attr('width', bbox.width + 20)
+                            .attr('height', bbox.height + 12)
+                            .attr('x', 0)
+                            .attr('y', 2);
+
+                        tooltip
+                            .attr(
+                                'transform',
+                                `translate(
+                                    ${position.x + markerSize / 2 + 8},
+                                    ${position.y - 14}
+                                )`
+                            )
+                            .style('display', null);
+
+                        // Make sure tooltip is above all stones
+                        tooltip.raise();
+                    })
+                    .on('mouseleave', function () {
+                        tooltip.style('display', 'none');
+                    })
+                    .on('click', function () {
+                        selectRunestone(stone);
+                    });
+
+                group.append('rect')
+                    .attr('x', -markerSize / 2)
+                    .attr('y', -markerSize / 2)
+                    .attr('width', markerSize)
+                    .attr('height', markerSize)
+                    .attr(
+                        'fill',
+                        stone.selected
+                            ? '#ffa500'
+                            : '#ffc76a'
+                    );
+            });
+        }
+
+
+
+        function renderVenn() {
+            const diagram = document.getElementById('venn-diagram');
+            diagram.innerHTML = '';
+
+            const width = diagram.clientWidth;
+            const height = diagram.clientHeight;
+
+            const svg = d3
+                .select('#venn-diagram')
+                .append('svg')
+                .attr('viewBox', `0 0 ${width} ${height}`);
+
+            const circles = getCircleGeometry(width, height);
+
+            drawCircles(svg, circles);
+
+            addVennLabels(svg, circles);
+
+            const stones = getMockRunestones(
+                activeRegion,
+                activePeriod
+            );
+
+            addRunestones(
+                svg,
+                stones,
+                circles,
+                width,
+                height
+            );
+        }
+
+        
+        function selectRunestone(stone) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('q', 5); //todo: change to stone.id 
+
+            window.history.pushState(
+                {},
+                '',
+                `${window.location.pathname}?${params.toString()}`
+            );
+
+            changeRightViewer(activeViewer);
+
+            d3.selectAll('.runestone rect')
+                .attr('fill', '#ffc76a');
+
+            d3.select(`.runestone[data-id="${stone.id}"] rect`)
+                .attr('fill', '#ffa500');
+        }
+
         function changeLeftViewer() {
             const leftIframe = document.getElementById('left-iframe');
             const leftPlaceholder = document.getElementById('left-placeholder');
 
-            //TODO: Implement venn diagram here.
             leftIframe.removeAttribute('src');
             leftIframe.style.display = 'none';
             leftPlaceholder.style.display = 'flex';
-            leftPlaceholder.textContent =
-                activeRegion === 'vastra' ? 'Västra Götaland' : 'Östra Götaland';
 
+            renderVenn()
             moduleSwitcherLeft();
         }
 

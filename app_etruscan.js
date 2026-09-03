@@ -175,7 +175,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
             : 'Unknown')
           .replace(/PLACEHOLDER_DESCRIPTION/g, metadata.description ?? 'Unknown')
           .replace(/PLACEHOLDER_TOMB_DESCRIPTION/g, metadata.tomb?.[0]?.description ?? metadata.preview_image?.tomb?.description ?? '')
-          .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.[0]?.dataset?.short_name ?? '')
+          .replace(/PLACEHOLDER_DATASET/g, metadata.dataset?.short_name ?? '')
 
         if (viewerType === 'pointcloud' || viewerType === 'panorama') {
           modifiedHtml = modifiedHtml
@@ -202,7 +202,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
           .replace(/PLACEHOLDER_DATE/g, metadata.date ?? 'Unknown Date')
           .replace(/PLACEHOLDER_IMAGE_URL/g, metadata.iiif_file ?? '')
           .replace(/PLACEHOLDER_DOWNLOAD_URL/g, metadata.file ?? '')
-          .replace(/PLACEHOLDER_DATASET/g, metadata.tomb?.dataset?.short_name ?? '');
+          .replace(/PLACEHOLDER_DATASET/g, metadata.dataset?.short_name ?? '');
       }
 
       //remove blocks with empty placeholders

@@ -83,9 +83,15 @@
         let activePeriod = '1';
 
         $(document).ready(function () {
+            $("#footer-container").load("/viewer/projects/runes/footer.html");
+
             const params = new URLSearchParams(window.location.search);
             const region = params.get('region');
-            activeRegion = ['vastra', 'ostra'].includes(region) ? region : activeRegion;
+
+            activeRegion = ['vastra', 'ostra'].includes(region)
+                ? region
+                : activeRegion;
+
             changeLeftViewer();
             changeRightViewer(activeViewer);
         });
@@ -104,7 +110,7 @@
             document.getElementById('main-content').classList.remove('mobile-metadata-open');
         }
 
-                function changeRightViewer(viewer) {
+        function changeRightViewer(viewer) {
             activeViewer = viewer;
             const params = new URLSearchParams(window.location.search);
             const query = new URLSearchParams({
@@ -121,14 +127,10 @@
                 rightPlaceholder.style.display = 'none';
             }
             else if (activeViewer === 'photo') {
-                rightIframe.src = `/viewer/projects/runes/photo/photo.html?${query}`;
-                rightIframe.style.display = 'block';
-                rightPlaceholder.style.display = 'none';
-            }
-            else if (activeViewer === 'photo') {
-                rightIframe.src = `/viewer/projects/runes/photo/photo.html?${query}`;
-                rightIframe.style.display = 'block';
-                rightPlaceholder.style.display = 'none';
+                const objectId = params.get('q') || '5';
+
+                rightIframe.src =
+                    `/viewer/modules/iiif/iiif.html?q=${encodeURIComponent(objectId)}`;
             }
             else {
                 const objectId = (params.get('q') || '1').split('/')[0];

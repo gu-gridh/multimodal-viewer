@@ -11,7 +11,6 @@ const projectName = process.env.PROJECT || 'runes';
 const projectPath = path.join(__dirname, 'viewer', 'projects', projectName);
 const port = 8099;
 
-
 app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
   const queryName = req.query.q?.split('/')[0] || '1';
 
@@ -62,6 +61,7 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
     res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
   });
 });
+
 app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
   try {
     const apiResponse = await axios.get('https://diana.dh.gu.se/api/etruscantombs/image/2870/?depth=2');
@@ -76,18 +76,46 @@ app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/projects/runes/photo/photo.html', async (req, res) => {
-  try {
-    const apiResponse = await axios.get('https://diana.dh.gu.se/api/etruscantombs/image/2870/?depth=2');
-    const templatePath = path.join(projectPath, 'photo', 'photo.html');
-    const template = await fs.promises.readFile(templatePath, 'utf8');
-    const iiifUrl = `${apiResponse.data.iiif_file}/info.json`;
+app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
+    //const imageId = req.query.q?.split('/')[0];
+    const imageId = '2870';
 
-    res.send(template.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifUrl)));
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
+    if (!imageId) {
+        return res.status(400).send('Image ID is required');
+    }
+
+    try {
+        const apiResponse = await axios.get(
+            `https://diana.dh.gu.se/api/etruscantombs/image/${encodeURIComponent(imageId)}/?depth=2`
+        );
+
+        const image = apiResponse.data;
+        if (!image?.iiif_file) {
+            return res.status(404).send('No IIIF image found');
+        }
+        const templatePath = path.join(
+            __dirname,
+            'viewer',
+            'modules',
+            'iiif',
+            'iiif.html'
+        );
+
+        const template = await fs.promises.readFile(
+            templatePath,
+            'utf8'
+        );
+        const iiifUrl = `${image.iiif_file}/info.json`;
+        const result = template.replace(
+            /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
+            JSON.stringify([iiifUrl])
+        );
+        res.send(result);
+
+    } catch (error) {
+        console.error('Error loading IIIF image:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 

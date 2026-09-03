@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <title>Foto</title>
+    <meta charset="utf-8">
+
+    <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
+    <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
+    <link rel="stylesheet" href="photo.css">
+
+    <script src="/viewer/libs/openseadragon.min.js"></script>
+</head>
+
+<body>
+    <div class="rune-viewer-shell">
+        <div id="rune-viewer"></div>
+
+        <div class="rune-viewer-top">
+            <button
+                id="rune-previous"
+                class="rune-page-button rune-previous"
+                type="button"
+                title="Previous image"
+                disabled>
+            </button>
+
+            <span>1/1</span>
+
+            <button
+                id="rune-next"
+                class="rune-page-button rune-next"
+                type="button"
+                title="Next image"
+                disabled>
+            </button>
+        </div>
+
+        <div class="rune-viewer-bottom">
+            <button
+                id="rune-home"
+                class="NavButton rune-home"
+                type="button"
+                title="Reset view">
+            </button>
+
+            <button
+                id="rune-zoom-in"
+                class="NavButton rune-zoom-in"
+                type="button"
+                title="Zoom in">
+            </button>
+
+            <button
+                id="rune-zoom-out"
+                class="NavButton rune-zoom-out"
+                type="button"
+                title="Zoom out">
+            </button>
+
+            <button
+                id="rune-fullscreen"
+                class="NavButton rune-fullscreen"
+                type="button"
+                title="Toggle fullscreen">
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const runeTileSources = ['PLACEHOLDER_IIIF_IMAGE_URL'];
+
+        const runeViewer = OpenSeadragon({
+            id: 'rune-viewer',
+            prefixUrl: '/viewer/libs/openseadragon/images/',
+            tileSources: runeTileSources,
+            sequenceMode: true,
+            showNavigator: true,
+            showNavigationControl: true,
+            showZoomControl: true,
+            showHomeControl: true,
+            showFullPageControl: false,
+            showSequenceControl: true,
+            previousButton: 'rune-previous',
+            nextButton: 'rune-next',
+            homeButton: 'rune-home',
+            zoomInButton: 'rune-zoom-in',
+            zoomOutButton: 'rune-zoom-out'
+        });
+
+        document.getElementById('rune-fullscreen').onclick = () => {
+            const shell = document.querySelector('.rune-viewer-shell');
+
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                shell.requestFullscreen();
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -47,11 +47,18 @@
             <div class="ui-module-container">
                 <div class="ui-module">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
-                        Metadata</div>
-                    <div class="ui-module-item right" id="viewer-model" onclick="changeRightViewer('model')">3D Model
+                        Metadata
                     </div>
                     <div class="ui-module-item right" id="viewer-panorama" onclick="changeRightViewer('panorama')">
-                        Panorama</div>
+                        Panorama
+                    </div>
+                    <div class="ui-module-item right" id="viewer-photo" onclick="changeRightViewer('photo')">
+                        Foto
+                    </div>
+                    <div class="ui-module-item right" id="viewer-model" onclick="changeRightViewer('model')">
+                        3D Modell
+                    </div>
+                    
                 </div>
             </div>
             <iframe id="right-iframe" class="iframes" title="Rune content"></iframe>
@@ -93,7 +100,7 @@
             document.getElementById('main-content').classList.remove('mobile-metadata-open');
         }
 
-        function changeRightViewer(viewer) {
+                function changeRightViewer(viewer) {
             activeViewer = viewer;
             const params = new URLSearchParams(window.location.search);
             const query = new URLSearchParams({
@@ -108,7 +115,13 @@
                 rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
-            } else {
+            }
+            else if (activeViewer === 'photo') {
+                rightIframe.src = `/viewer/projects/runes/photo/photo.html?${query}`;
+                rightIframe.style.display = 'block';
+                rightPlaceholder.style.display = 'none';
+            }
+            else {
                 const objectId = (params.get('q') || '1').split('/')[0];
                 rightIframe.src = activeViewer === 'model'
                     ? `/viewer/modules/texturedmesh/texturedmesh.html?q=${encodeURIComponent(objectId)}/texturedmesh`

@@ -81,17 +81,14 @@
 
             const params = new URLSearchParams(window.location.search);
             const region = params.get('region');
-            const viewer = params.get('q')?.split('/')[1];
 
             activeRegion = ['vastra', 'ostra'].includes(region)
                 ? region
                 : activeRegion;
-            activeViewer = ['metadata', 'panorama', 'images', 'texturedmesh'].includes(viewer)
-                ? viewer
-                : activeViewer;
+            activeViewer = determineInitialViewer(params);
 
             changeLeftViewer();
-            changeRightViewer(activeViewer, false);
+            changeRightViewer(activeViewer);
         });
 
         function changeRegion(region) {
@@ -108,63 +105,79 @@
             document.getElementById('main-content').classList.remove('mobile-metadata-open');
         }
 
-        function changeRightViewer(viewer, updateAddress = true) {
-            activeViewer = viewer;
+        function determineInitialViewer(params) {
+            const viewerType = params.get('q')?.split('/')[1];
+
+            switch (viewerType) {
+                case 'images':
+                case 'texturedmesh':
+                case 'panorama':
+                case 'metadata':
+                    return viewerType;
+                default:
+                    return 'metadata';
+            }
+        }
+
+        function changeRightViewer(viewerType) {
+            const iframe = document.getElementById('right-iframe');
             const params = new URLSearchParams(window.location.search);
-            const objectId = (params.get('q') || '1')
-                .split('/')[0]
-                .replace(/(?:images|texturedmesh|panorama)$/, '');
-            const query = new URLSearchParams({
-                region: activeRegion,
-                period: activePeriod,
-                q: objectId
-            });
-            const rightIframe = document.getElementById('right-iframe');
-            const rightPlaceholder = document.getElementById('right-placeholder');
-            const hash = window.location.hash;
+            const hashFragment = window.location.hash;
+            let qValue = params.get('q') || '1';
 
-            if (updateAddress) {
-                params.set('q', `${objectId}/${viewer}`);
-                const address = params.toString().replace(/%2F/gi, '/');
-                window.history.pushState({}, '', `${window.location.pathname}?${address}`);
+            if (qValue.includes('/')) {
+                qValue = qValue.split('/')[0];
             }
 
-            if (activeViewer === 'metadata') {
-                rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
-                rightIframe.style.display = 'block';
-                rightPlaceholder.style.display = 'none';
-            }
-            else if (activeViewer === 'images') {
-                rightIframe.src =
-                    `/viewer/modules/iiif/iiif.html?q=${encodeURIComponent(objectId)}/images${hash}`;
-                rightIframe.style.display = 'block';
-                rightPlaceholder.style.display = 'none';
-            }
-            else {
-                rightIframe.src = activeViewer === 'texturedmesh'
-                    ? `/viewer/modules/texturedmesh/texturedmesh.html?q=${encodeURIComponent(objectId)}/texturedmesh${hash}`
-                    : '/viewer/modules/panorama/panorama.html';
-                rightIframe.style.display = 'block';
-                rightPlaceholder.style.display = 'none';
+            let src;
+            let newPath;
+            switch (viewerType) {
+                case 'images':
+                    src = `/viewer/modules/iiif/iiif.html?q=${qValue}/images${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/images${hashFragment}`;
+                    break;
+                case 'texturedmesh':
+                    src = `/viewer/modules/texturedmesh/texturedmesh.html?q=${qValue}/texturedmesh${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/texturedmesh${hashFragment}`;
+                    break;
+                case 'panorama':
+                    src = `/viewer/modules/panorama/panorama.html?q=${qValue}/panorama${hashFragment}`;
+                    newPath = `/viewer/?q=${qValue}/panorama${hashFragment}`;
+                    break;
+                default:
+                    src = `/viewer/projects/runes/metadata/metadata.html?q=${qValue}`;
+                    newPath = `/viewer/?q=${qValue}/metadata`;
+                    viewerType = 'metadata';
             }
 
+            activeViewer = viewerType;
+            iframe.src = src;
+            iframe.style.display = 'block';
+            document.getElementById('right-placeholder').style.display = 'none';
+            window.history.pushState({}, '', newPath);
             moduleSwitcherRight();
         }
 
         window.addEventListener('message', function (event) {
-            if (event.source === document.getElementById('right-iframe').contentWindow &&
-                event.data?.type === 'togglePane') {
-                toggleRightViewerFullPage();
+            if (event.data.type === 'togglePane') {
+                toggleLeftPane();
             }
-        });
+        }, false);
 
-        function toggleRightViewerFullPage() {
+        function toggleLeftPane() {
             const leftPane = document.getElementById('left-pane');
             const rightPane = document.getElementById('right-pane');
-            const isFullPage = leftPane.style.width === '1px';
+            const uiModuleContainer = leftPane.querySelector('.ui-module-container');
 
-            leftPane.style.width = isFullPage ? '50%' : '1px';
-            rightPane.style.width = isFullPage ? '50%' : '100%';
+            if (leftPane.style.width === '1px') {
+                leftPane.style.width = '50%';
+                rightPane.style.width = '50%';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'flex';
+            } else {
+                leftPane.style.width = '1px';
+                rightPane.style.width = '100%';
+                if (uiModuleContainer) uiModuleContainer.style.display = 'none';
+            }
         }
 
         function changePeriod(period) {

@@ -56,10 +56,10 @@
                     <div class="ui-module-item right" id="viewer-panorama" onclick="changeRightViewer('panorama')">
                         Panorama
                     </div>
-                    <div class="ui-module-item right" id="viewer-photo" onclick="changeRightViewer('photo')">
+                    <div class="ui-module-item right" id="viewer-images" onclick="changeRightViewer('images')">
                         Foto
                     </div>
-                    <div class="ui-module-item right" id="viewer-model" onclick="changeRightViewer('model')">
+                    <div class="ui-module-item right" id="viewer-texturedmesh" onclick="changeRightViewer('texturedmesh')">
                         3D Modell
                     </div>
                     
@@ -72,12 +72,6 @@
     </div>
 
     <script>
-        //load footer
-        $(document).ready(function () {
-            $("#footer-container").load("/viewer/projects/runes/footer.html");
-                changeRightViewer('pointcloud');
-        });
-
         let activeRegion = 'vastra';
         let activeViewer = 'metadata';
         let activePeriod = '1';
@@ -87,13 +81,17 @@
 
             const params = new URLSearchParams(window.location.search);
             const region = params.get('region');
+            const viewer = params.get('q')?.split('/')[1];
 
             activeRegion = ['vastra', 'ostra'].includes(region)
                 ? region
                 : activeRegion;
+            activeViewer = ['metadata', 'panorama', 'images', 'texturedmesh'].includes(viewer)
+                ? viewer
+                : activeViewer;
 
             changeLeftViewer();
-            changeRightViewer(activeViewer);
+            changeRightViewer(activeViewer, false);
         });
 
         function changeRegion(region) {
@@ -110,38 +108,63 @@
             document.getElementById('main-content').classList.remove('mobile-metadata-open');
         }
 
-        function changeRightViewer(viewer) {
+        function changeRightViewer(viewer, updateAddress = true) {
             activeViewer = viewer;
             const params = new URLSearchParams(window.location.search);
+            const objectId = (params.get('q') || '1')
+                .split('/')[0]
+                .replace(/(?:images|texturedmesh|panorama)$/, '');
             const query = new URLSearchParams({
                 region: activeRegion,
                 period: activePeriod,
-                q: params.get('q') || ''
+                q: objectId
             });
             const rightIframe = document.getElementById('right-iframe');
             const rightPlaceholder = document.getElementById('right-placeholder');
+            const hash = window.location.hash;
+
+            if (updateAddress) {
+                params.set('q', `${objectId}/${viewer}`);
+                const address = params.toString().replace(/%2F/gi, '/');
+                window.history.pushState({}, '', `${window.location.pathname}?${address}`);
+            }
 
             if (activeViewer === 'metadata') {
                 rightIframe.src = `/viewer/projects/runes/metadata/metadata.html?${query}`;
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
             }
-            else if (activeViewer === 'photo') {
-                const objectId = params.get('q') || '5';
-
+            else if (activeViewer === 'images') {
                 rightIframe.src =
-                    `/viewer/modules/iiif/iiif.html?q=${encodeURIComponent(objectId)}`;
+                    `/viewer/modules/iiif/iiif.html?q=${encodeURIComponent(objectId)}/images${hash}`;
+                rightIframe.style.display = 'block';
+                rightPlaceholder.style.display = 'none';
             }
             else {
-                const objectId = (params.get('q') || '1').split('/')[0];
-                rightIframe.src = activeViewer === 'model'
-                    ? `/viewer/modules/texturedmesh/texturedmesh.html?q=${encodeURIComponent(objectId)}/texturedmesh`
+                rightIframe.src = activeViewer === 'texturedmesh'
+                    ? `/viewer/modules/texturedmesh/texturedmesh.html?q=${encodeURIComponent(objectId)}/texturedmesh${hash}`
                     : '/viewer/modules/panorama/panorama.html';
                 rightIframe.style.display = 'block';
                 rightPlaceholder.style.display = 'none';
             }
 
             moduleSwitcherRight();
+        }
+
+        window.addEventListener('message', function (event) {
+            if (event.source === document.getElementById('right-iframe').contentWindow &&
+                event.data?.type === 'togglePane') {
+                toggleRightViewerFullPage();
+            }
+        });
+
+        function toggleRightViewerFullPage() {
+            const leftPane = document.getElementById('left-pane');
+            const rightPane = document.getElementById('right-pane');
+            const isFullPage = leftPane.style.width === '1px';
+
+            leftPane.style.width = isFullPage ? '50%' : '1px';
+            rightPane.style.width = isFullPage ? '50%' : '100%';
         }
 
         function changePeriod(period) {
@@ -552,7 +575,7 @@
         
         function selectRunestone(stone) {
             const params = new URLSearchParams(window.location.search);
-            params.set('q', 5); //todo: change to stone.id 
+            params.set('q', 5); //todo: change to stone.id
 
             window.history.pushState(
                 {},

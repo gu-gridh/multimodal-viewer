@@ -14,9 +14,9 @@ export function createImageDownload({
 
     function chooseResolution() {
         const resolutions = [
-            { scale: 1, label: 'Full resolution' },
-            { scale: 0.5, label: 'Half resolution' },
-            { scale: 0.25, label: 'Quarter resolution' }
+            { scale: 1, label: 'High resolution' },
+            { scale: 0.5, label: 'Medium resolution' },
+            { scale: 0.25, label: 'Low resolution' }
         ];
 
         return new Promise(resolve => {

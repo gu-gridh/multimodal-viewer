@@ -170,6 +170,9 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
         clearCanvasAnnotations,
         drawCanvasAnnotations,
         isCanvasAnnotationMode: () => canvasAnnotationMode,
+        getAnnotationShapes: () => canvasAnnotationMode
+            ? annotationShapes
+            : anno.getAnnotations().map(parseAnnotation).filter(Boolean),
         setCanvasAnnotationVisible
     };
 }

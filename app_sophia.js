@@ -7,12 +7,12 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
+require('./server/iiif-download').registerIIIFDownload(app, 'sophia');
 const projectName = process.env.PROJECT || 'default';
 const panelApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=';
 const metadataApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=';
 const annotationApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/annotation/?surface=';
 const imageBaseUrl = 'https://img.dh.gu.se/saintsophia/static/';
-const downloadBaseUrl = 'https://data.dh.gu.se/saintsophia/static/';
 const pointCloudUrl = 'https://data.dh.gu.se/saintsophia/pointcloud/cloud.js';
 const pointCloudAnnotationsUrl = '/viewer/projects/sophia/annotations/pointcloud_annotations.json';
 const backButtonUrl = 'https://saintsophia.dh.gu.se';
@@ -133,15 +133,11 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = false;
         const basePath = imageBaseUrl;
-        const basePathDownload = downloadBaseUrl;
         const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
-        const downloadFile = modelData?.[0]?.properties?.attached_photograph?.[0]?.file;
         const annotationPath = annotationApiBaseUrl;
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-        const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
         let updatedHtmlContent = htmlContent
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-          .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
@@ -151,7 +147,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             line: Boolean(config.enableLineTool),
             point: Boolean(config.enablePointTool)
           }))
-          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
           .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
         res.send(updatedHtmlContent);
       } else {
@@ -162,7 +157,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = true;
         const basePathIiif = imageBaseUrl;
-        const basePathDownload = downloadBaseUrl;
         const annotationPath = annotationApiBaseUrl;
 
         //sort the attached_topography array based on the file name
@@ -175,18 +169,15 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         });
 
         const topographyImagesIiif = sortedTopography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
-        const topographyImagesJpg = sortedTopography.map(topography => `${basePathDownload}${topography.file}`);
 
         let updatedHtmlContent = htmlContent
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
-          .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
             rectangle: Boolean(config.enableRectangleTool),
             polygon: Boolean(config.enablePolygonTool),
             line: Boolean(config.enableLineTool),
             point: Boolean(config.enablePointTool)
           }))
-          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))

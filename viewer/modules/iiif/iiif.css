@@ -236,3 +236,15 @@ height:20px;
 	}
 
 }
+
+.download-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#download-crop-option:not([hidden]) {
+    display: block;
+    margin-top: 12px;
+}

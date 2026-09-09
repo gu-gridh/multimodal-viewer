@@ -179,8 +179,12 @@
         </a>
         <div id="download-label" class="label-popup" style="display: none;"></div>
         <div id="download-resolution" class="download-resolution" hidden>
-            <div id="download-resolution-title">Choose download resolution</div>
+            <div class="download-status">
+                <span id="download-resolution-title">Choose download resolution</span>
+                <img id="download-spinner" src="/viewer/shared/interface/6-dots-rotate_white.svg" width="16" height="16" alt="Loading..." hidden>
+            </div>
             <div id="download-resolution-options"></div>
+            <label id="download-crop-option"><input id="download-crop" type="checkbox"> Crop to current view</label>
             <button id="download-resolution-cancel" class="cancel-button" type="button">Cancel</button>
         </div>
 
@@ -206,7 +210,6 @@
         let annotationLoader = null;
 
         //variables for setting download name
-        var downloadNamesString = 'PLACEHOLDER_DOWNLOAD_NAMES';
         var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URL';
 
         OpenSeadragon.supportsFullScreen = false;
@@ -223,7 +226,6 @@
         const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
         const annotationEditorUrl = 'PLACEHOLDER_ANNOTATION_EDITOR_URL';
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
-        const filteredAnnotationDownloadEnabled = 'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD' === true;
         const pagedAnnotationLoadingEnabled = 'PLACEHOLDER_PAGED_ANNOTATION_LOADING' === true;
         const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS' === true;
         const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
@@ -635,11 +637,9 @@
                 module.createImageDownload({
                     viewer,
                     tileSources: tileSourcesString,
-                    downloadSourceString: 'PLACEHOLDER_DOWNLOAD_PATH',
-                    downloadNamesString,
-                    filteredAnnotationDownloadEnabled,
-                    getActiveAnnotationFilters,
-                    isPlaceholder
+                    getAnnotationShapes: () => annotationsVisible
+                        ? annotationCanvasRenderer?.getAnnotationShapes() || []
+                        : []
                 });
             }).catch(console.error);
 

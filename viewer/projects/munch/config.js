@@ -8,8 +8,6 @@ module.exports = {
   enablePagedAnnotationLoading: true,
   //if selecting an annotation focuses the corresponding region
   enableAnnotationFocus: true,
-  //if users can download the currently filtered annotations
-  enableFilteredAnnotationDownload: true,
   //if polygon annotation drawing is available
   enablePolygonTool: true,
   //if line annotation drawing is available

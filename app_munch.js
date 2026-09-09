@@ -4,8 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 const dotenv = require('dotenv');
-const sharp = require('sharp');
 const app = express();
+require('./server/iiif-download').registerIIIFDownload(app, 'munch');
 
 dotenv.config({ path: './.env.local' });
 
@@ -74,24 +74,6 @@ function getNextPageNumber(nextUrl) {
   }
 }
 
-function scaleNormalizedSvgPoints(pointsValue, width, height) {
-  const points = pointsValue.trim().split(/\s+/).map(point => {
-    const [x, y] = point.split(',').map(Number);
-    return { x, y };
-  });
-  const isNormalized = points.every(({ x, y }) =>
-    Number.isFinite(x) && Number.isFinite(y) && Math.abs(x) <= 1 && Math.abs(y) <= 1
-  );
-
-  return points
-    .map(({ x, y }) => {
-      const scaledX = isNormalized ? x * width : x;
-      const scaledY = isNormalized ? y * height : y;
-      return `${Number(scaledX.toFixed(2))},${Number(scaledY.toFixed(2))}`;
-    })
-    .join(' ');
-}
-
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
@@ -120,7 +102,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const displayIIIFAnnotations = Boolean(config.enableIIIFAnnotations);
     const pagedAnnotationLoadingEnabled = Boolean(config.enablePagedAnnotationLoading);
     const displayAnnotationFocus = Boolean(config.enableAnnotationFocus);
-    const filteredDownloadEnabled = Boolean(config.enableFilteredAnnotationDownload);
     const annotationTools = {
       rectangle: Boolean(config.enableRectangleTool),
       polygon: Boolean(config.enablePolygonTool),
@@ -129,18 +110,12 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     };
 
     if (queryType === 'iiif' || queryType === 'photo') {
-      const downloadSources = filteredDownloadEnabled
-        ? [`/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=photo&page=0`]
-        : [munchPhotoTileSource];
-
       const updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
-        .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify(annotationTools))
-        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
         .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
@@ -165,20 +140,12 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       }
 
       const topographyTileSources = sortedTopography.map(topography => `${topography.iiif_file}/info.json`);
-      const topographyDownloadSources = filteredDownloadEnabled
-        ? sortedTopography.map((topography, index) =>
-          `/viewer/modules/iiif/download-annotated?q=${encodedQueryName}&type=topography&page=${index}`
-        )
-        : sortedTopography.map(topography => topography.file);
-
       const updatedHtmlContent = htmlContent
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
-        .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyDownloadSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
         .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify(annotationTools))
-        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, filteredDownloadEnabled)
         .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
         .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
@@ -245,85 +212,6 @@ app.get('/viewer/modules/iiif/annotation', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not load annotations' });
-  }
-});
-
-app.get('/viewer/modules/iiif/download-annotated', async (req, res) => {
-  const title = req.query.q;
-  const queryType = req.query.type === 'topography' ? 'topography' : 'photo';
-  const pageIndex = Number.parseInt(req.query.page, 10) || 0;
-
-  if (!title) {
-    return res.status(400).json({ error: 'parameter not found' });
-  }
-
-  try {
-    const encodedTitle = encodeURIComponent(title);
-    const annotationParams = new URLSearchParams();
-    annotationParams.set('panel', title);
-    annotationParams.set('category', req.query.category || 'all');
-    annotationParams.set('tags', req.query.tags || req.query.tag || 'all');
-
-    if (req.query.annotation_year && req.query.annotation_year !== 'all') {
-      annotationParams.set('annotation_year', req.query.annotation_year);
-    }
-
-    const annotationUrl = `https://munch.dh.gu.se/api/annotation/?${annotationParams.toString()}`;
-    const [imagesResponse, annotations] = await Promise.all([
-      axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedTitle}`),
-      fetchAllPaginatedResults(annotationUrl)
-    ]);
-    const images = imagesResponse.data.results || [];
-    const image = queryType === 'topography'
-      ? images
-        .filter(item => item.image_type === 'topographical')
-        .sort((a, b) => a.sort_order - b.sort_order)[pageIndex]
-      : images.find(item => item.image_type === 'orthophoto');
-
-    if (!image?.file) {
-      return res.status(404).json({ error: 'image not found' });
-    }
-
-    const imageResponse = await axios.get(image.file, { responseType: 'arraybuffer' });
-    let sharpImage = sharp(Buffer.from(imageResponse.data)).rotate();
-    const metadata = await sharpImage.metadata();
-
-    if (metadata.width && metadata.height && annotations.length) {
-      const strokeWidth = Math.max(2, Math.round(Math.max(metadata.width, metadata.height) / 2000));
-      const shapes = annotations.map(annotation => {
-        const selectorValue = annotation.target.selector.value;
-        const points = selectorValue.match(/points="([^"]+)"/)?.[1];
-        const shape = selectorValue.includes('<polyline') ? 'polyline' : 'polygon';
-        const color = annotation.body.categories?.[0]?.color || '#ff0000';
-        const scaledPoints = points
-          ? scaleNormalizedSvgPoints(points, metadata.width, metadata.height)
-          : '';
-        return points
-          ? `<${shape} points="${scaledPoints}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`
-          : '';
-      }).join('');
-      const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${metadata.width} ${metadata.height}">${shapes}</svg>`;
-      sharpImage = sharpImage.composite([{ input: Buffer.from(overlay), top: 0, left: 0 }]);
-    }
-
-    const requestedScale = Number(req.query.scale);
-    const scale = [1, 0.5, 0.25].includes(requestedScale) ? requestedScale : 1;
-    const maxSize = Math.round(Math.max(metadata.width, metadata.height) * scale);
-    const composedImage = await sharpImage.toBuffer();
-    const output = await sharp(composedImage).resize({
-      width: maxSize,
-      height: maxSize,
-      fit: 'inside',
-      withoutEnlargement: true
-    }).jpeg({ quality: 95 }).toBuffer();
-    const safeTitle = title.replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '') || 'munch_image';
-
-    res.setHeader('Content-Type', 'image/jpeg');
-    res.setHeader('Content-Disposition', `attachment; filename="${safeTitle}_${queryType}_${pageIndex + 1}_annotated.jpg"`);
-    return res.send(output);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Unable to download' });
   }
 });
 

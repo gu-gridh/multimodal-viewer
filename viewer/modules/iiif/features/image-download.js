@@ -78,7 +78,7 @@ export function createImageDownload({ viewer, tileSources, getAnnotationShapes }
             options.replaceChildren();
             cancel.textContent = 'Cancel';
             cancel.onclick = () => { controller.abort(); panel.hidden = true; };
-            panel.hidden = false;
+            panel.hidden = true;
             const sourceResponse = await fetch('/viewer/modules/iiif/download-region', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...captureRegion(), scale: 1, crop: false, sourceOnly: true }),

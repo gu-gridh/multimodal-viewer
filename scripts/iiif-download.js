@@ -108,7 +108,7 @@ function validateExport(body) {
 
 function exportScale(body, height) {
   const maxHeight = body.crop
-    ? 6000 * body.scale
+    ? { 1: 3000, 0.5: 2000, 0.25: 1000 }[body.scale]
     : { 0.5: 10000, 0.25: 4000 }[body.scale] || Infinity;
   return Math.min(body.scale, maxHeight / height);
 }

@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
-require('./server/iiif-download').registerIIIFDownload(app, 'shfa');
+require('./scripts/iiif-download').registerIIIFDownload(app, 'shfa');
 const projectName = process.env.PROJECT || 'default';
 const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
 

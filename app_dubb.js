@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
-require('./server/iiif-download').registerIIIFDownload(app, 'dubb');
+require('./scripts/iiif-download').registerIIIFDownload(app, 'dubb');
 const projectName = process.env.PROJECT || 'default';
 const pointCloudApiBaseUrl = 'https://diana.dh.gu.se/api/mediaarchive/objectpointcloud/?title=';
 

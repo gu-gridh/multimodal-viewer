@@ -5,7 +5,7 @@ const fs = require('fs');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const app = express();
-require('./server/iiif-download').registerIIIFDownload(app, 'munch');
+require('./scripts/iiif-download').registerIIIFDownload(app, 'munch');
 
 dotenv.config({ path: './.env.local' });
 

@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
-require('./server/iiif-download').registerIIIFDownload(app, 'etruscan');
+require('./scripts/iiif-download').registerIIIFDownload(app, 'etruscan');
 const projectName = process.env.PROJECT || 'default';
 const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=';
 const panoramaApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/panorama/?tomb=';

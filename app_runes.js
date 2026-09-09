@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 
 const app = express();
-require('./server/iiif-download').registerIIIFDownload(app, 'runes');
+require('./scripts/iiif-download').registerIIIFDownload(app, 'runes');
 const projectName = process.env.PROJECT || 'runes';
 const projectPath = path.join(__dirname, 'viewer', 'projects', projectName);
 const port = 8099;

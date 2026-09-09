@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
-require('./server/iiif-download').registerIIIFDownload(app, 'sophia');
+require('./scripts/iiif-download').registerIIIFDownload(app, 'sophia');
 const projectName = process.env.PROJECT || 'default';
 const panelApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=';
 const metadataApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/panel-metadata/?title=';

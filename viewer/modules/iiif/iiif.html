@@ -259,7 +259,7 @@
                 return null;
             })
             : Promise.resolve(null);
-        const annotationCanvasLoadPromise = displayInscriptions === true && pagedAnnotationLoadingEnabled
+        const annotationCanvasLoadPromise = displayInscriptions === true
             ? import('/viewer/modules/iiif/features/annotation-canvas.js').catch(error => {
                 console.error(error);
                 return null;
@@ -602,7 +602,6 @@
                             clearCanvasAnnotations,
                             displayInscriptions,
                             drawCanvasAnnotations,
-                            getAnnotationsVisible: () => annotationsVisible,
                             isPlaceholder,
                             pagedAnnotationLoadingEnabled,
                             viewer
@@ -635,6 +634,9 @@
                     viewer,
                     tileSources: tileSourcesString,
                     downloads: 'PLACEHOLDER_IMAGE_DOWNLOAD',
+                    getAnnotationUrl: api => annotationsVisible && displayInscriptions
+                        ? annotationLoader?.getAnnotationUrl(getActiveAnnotationFilters(), undefined, api)
+                        : '',
                     getAnnotationShapes: () => annotationsVisible
                         ? annotationCanvasRenderer?.getAnnotationShapes() || []
                         : []

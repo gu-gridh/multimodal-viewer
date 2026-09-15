@@ -100,6 +100,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       'utf8'
     );
     const annotationPath = `/viewer/modules/iiif/annotation?q=${encodedQueryName}`;
+    const annotationDownloadApi = `https://munch.dh.gu.se/api/annotation/?panel=${encodedQueryName}`;
     const displayIIIFAnnotations = Boolean(config.enableIIIFAnnotations);
     const pagedAnnotationLoadingEnabled = Boolean(config.enablePagedAnnotationLoading);
     const displayAnnotationFocus = Boolean(config.enableAnnotationFocus);
@@ -121,7 +122,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     if (queryType === 'iiif' || queryType === 'photo') {
       const photo = images.find(image => image.image_type === 'orthophoto' && /\/[^/]*Medium[^/]*$/i.test(image.file));
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, [photo]))
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, [photo], annotationDownloadApi))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
@@ -150,7 +151,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
       const topographyTileSources = sortedTopography.map(topography => `${topography.iiif_file}/info.json`);
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, sortedTopography))
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, sortedTopography, annotationDownloadApi))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))

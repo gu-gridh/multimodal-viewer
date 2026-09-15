@@ -73,6 +73,7 @@ function validateExport(body) {
     ![1, 0.5, 0.25].includes(body.scale) || !Number.isFinite(body.rotation) ||
     !Number.isFinite(body.viewWidth) || body.viewWidth <= 0 ||
     typeof body.flipped !== 'boolean' || body.crop !== true ||
+    (body.focus !== undefined && typeof body.focus !== 'boolean') ||
     !Array.isArray(body.shapes) || !body.shapes.every(shape =>
       shape && Array.isArray(shape.points) && shape.points.length && shape.points.every(validPoint) &&
       typeof shape.color === 'string' && /^(#[\da-f]{3,8}|[a-z]+|rgba?\([\d.,%\s]+\))$/i.test(shape.color))) {
@@ -91,6 +92,10 @@ function exportScale(body, region, imageSize) {
 async function renderRegion(input, imageSize, region, body) {
   let image = sharp(input, { limitInputPixels: false });
   const { width, height } = await image.metadata();
+  if (body.focus) {
+    const tint = [0.2126, 0.7152, 0.0722].map(value => value * 0.45);
+    image = image.recomb([tint, tint, tint]);
+  }
   const project = point => `${(point.x * imageSize.width - region.left) * width / region.width},${(point.y * imageSize.height - region.top) * height / region.height}`;
   const [start, end] = body.viewport;
   const pixelsPerScreenPixel = Math.hypot(

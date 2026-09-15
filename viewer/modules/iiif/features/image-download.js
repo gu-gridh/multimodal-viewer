@@ -1,4 +1,4 @@
-export function createImageDownload({ viewer, tileSources, downloads, getAnnotationShapes }) {
+export function createImageDownload({ viewer, tileSources, downloads, getAnnotationShapes, getAnnotationUrl }) {
     const panel = document.getElementById('download-resolution');
     const options = document.getElementById('download-resolution-options');
     const title = document.getElementById('download-resolution-title');
@@ -23,13 +23,13 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
                 button.onclick = () => {
                     const image = downloads?.images?.[viewer.currentPage()];
                     const cropped = crop.checked;
-                    const zenodoUrl = image?.zenodoUrl;
-                    if (scale === 1 && !cropped && zenodoUrl) {
-                        window.open(zenodoUrl, '_blank', 'noopener,noreferrer');
+                    if (scale === 1 && !cropped && image?.zenodoUrl) {
+                        window.open(image.zenodoUrl, '_blank', 'noopener,noreferrer');
                         close(null);
                         return;
                     }
-                    close({ scale, image, cropped });
+                    const focus = viewer.element.classList.contains('annotation-focus');
+                    close({ scale, image, cropped, focus });
                 };
                 return button;
             }));
@@ -75,12 +75,18 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
             const controller = new AbortController();
             const selection = await chooseResolution();
             if (!selection) return;
-            const { scale, image, cropped } = selection;
+            const { scale, image, cropped, focus } = selection;
             if (!cropped && image?.id == null) throw new Error('No download image ID is available.');
             const endpoint = cropped ? '/viewer/modules/iiif/download-region' : downloads.endpoint;
             const request = cropped
-                ? { ...captureRegion(image), scale, crop: true }
-                : { api: image.api, id: image.id, quality: { 1: 1, 0.5: 2, 0.25: 3 }[scale] };
+                ? { ...captureRegion(image), scale, crop: true, focus }
+                : {
+                    api: image.api,
+                    id: image.id,
+                    annotations: downloads.annotationApi ? getAnnotationUrl(downloads.annotationApi) || '' : '',
+                    quality: { 1: 1, 0.5: 2, 0.25: 3 }[scale],
+                    focus
+                };
             if (!cropped && !endpoint) {
                 console.log('Image download POST payload:', JSON.stringify(request, null, 2));
                 return;

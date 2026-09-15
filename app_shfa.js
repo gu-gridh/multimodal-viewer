@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -25,7 +26,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   if (!queryName) {
     return res.status(400).send('Query parameter is missing');
   }
-  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=2`;
+  const apiUrl = `${visualizationApiBaseUrl}${encodeURIComponent(queryName)}&depth=2`;
+
   try {
     const apiResponse = await axios.get(apiUrl);
 
@@ -42,6 +44,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
       let updatedHtmlContent = htmlContent
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, modelData[0].colour_images))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
         .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
           rectangle: Boolean(config.enableRectangleTool),

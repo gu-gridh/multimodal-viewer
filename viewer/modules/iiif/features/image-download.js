@@ -1,4 +1,4 @@
-export function createImageDownload({ viewer, tileSources, getAnnotationShapes }) {
+export function createImageDownload({ viewer, tileSources, downloads, getAnnotationShapes }) {
     const panel = document.getElementById('download-resolution');
     const options = document.getElementById('download-resolution-options');
     const title = document.getElementById('download-resolution-title');
@@ -72,56 +72,36 @@ export function createImageDownload({ viewer, tileSources, getAnnotationShapes }
         busy = true;
         try {
             const controller = new AbortController();
-            title.textContent = 'Loading download options…';
-            spinner.hidden = false;
-            cropOption.hidden = true;
-            options.replaceChildren();
-            cancel.textContent = 'Cancel';
-            cancel.onclick = () => { controller.abort(); panel.hidden = true; };
-            panel.hidden = true;
-            const sourceResponse = await fetch('/viewer/modules/iiif/download-region', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...captureRegion(), scale: 1, crop: false, sourceOnly: true }),
-                signal: controller.signal
-            });
-            const source = await sourceResponse.json();
-            if (!sourceResponse.ok) throw new Error(source.error || 'Could not load download options.');
-            const zenodoUrl = source.zenodoUrl ? new URL(source.zenodoUrl) : null;
+            const image = downloads?.images?.[viewer.currentPage()];
+            const zenodoUrl = image?.zenodoUrl ? new URL(image.zenodoUrl) : null;
             if (zenodoUrl && (zenodoUrl.protocol !== 'https:' || zenodoUrl.hostname !== 'zenodo.org')) throw new Error('Invalid Zenodo link.');
-            spinner.hidden = true;
             const scale = await chooseResolution(zenodoUrl?.href);
             if (scale === null) return;
-            const request = captureRegion();
+            const cropped = crop.checked;
+            if (!cropped && image?.id == null) throw new Error('No download image ID is available.');
+            const endpoint = cropped ? '/viewer/modules/iiif/download-region' : downloads.endpoint;
+            const request = cropped
+                ? { ...captureRegion(), scale, crop: true }
+                : { api: image.api, id: image.id, quality: { 1: 1, 0.5: 2, 0.25: 3 }[scale] };
+            if (!cropped && !endpoint) {
+                console.log('Image download POST payload:', JSON.stringify(request, null, 2));
+                return;
+            }
             title.textContent = 'Preparing image…';
             spinner.hidden = false;
             cropOption.hidden = true;
             options.replaceChildren();
             cancel.onclick = () => { controller.abort(); panel.hidden = true; };
             panel.hidden = false;
-            const response = await fetch('/viewer/modules/iiif/download-region', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...request, scale, crop: crop.checked }),
+                body: JSON.stringify(request),
                 signal: controller.signal
             });
             if (!response.ok) {
                 const error = await response.json().catch(() => ({}));
-                throw new Error(error.error || 'Could not download this image region.');
-            }
-            if (response.headers.get('Content-Type')?.includes('application/json')) {
-                const { zenodoUrl } = await response.json();
-                const url = new URL(zenodoUrl);
-                if (url.protocol !== 'https:' || url.hostname !== 'zenodo.org') throw new Error('Invalid Zenodo link.');
-                const link = document.createElement('a');
-                link.href = url.href;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                link.textContent = 'Open Zenodo in a new tab';
-                title.textContent = 'High resolution on Zenodo';
-                options.replaceChildren(link);
-                cancel.textContent = 'Close';
-                cancel.onclick = () => { panel.hidden = true; };
-                return;
+                throw new Error(error.error || 'Could not download this image.');
             }
             const objectUrl = URL.createObjectURL(await response.blob());
             const link = document.createElement('a');

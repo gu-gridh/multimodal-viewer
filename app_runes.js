@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -86,9 +87,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     }
 
     try {
-        const apiResponse = await axios.get(
-            `https://diana.dh.gu.se/api/etruscantombs/image/${encodeURIComponent(imageId)}/?depth=2`
-        );
+        const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${encodeURIComponent(imageId)}/?depth=2`;
+        const apiResponse = await axios.get(apiUrl);
 
         const image = apiResponse.data;
         if (!image?.iiif_file) {
@@ -107,7 +107,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             'utf8'
         );
         const iiifUrl = `${image.iiif_file}/info.json`;
-        const result = template.replace(
+        const result = template.replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, [image])).replace(
             /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
             JSON.stringify([iiifUrl])
         );

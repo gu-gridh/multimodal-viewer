@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const cheerio = require('cheerio');
 const path = require('path');
@@ -109,8 +110,14 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       point: Boolean(config.enablePointTool)
     };
 
+    const imageApi = `https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`;
+    const imagesResponse = await axios.get(imageApi);
+    const images = imagesResponse.data.results || [];
+
     if (queryType === 'iiif' || queryType === 'photo') {
+      const photo = images.find(image => image.image_type === 'orthophoto' && /\/[^/]*Medium[^/]*$/i.test(image.file));
       const updatedHtmlContent = htmlContent
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, [photo]))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
@@ -129,8 +136,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     }
 
     if (queryType === 'topography') {
-      const imagesResponse = await axios.get(`https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`);
-      const images = imagesResponse.data.results || [];
       const sortedTopography = images
         .filter(image => image.image_type === 'topographical')
         .sort((a, b) => a.sort_order - b.sort_order);
@@ -141,6 +146,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
       const topographyTileSources = sortedTopography.map(topography => `${topography.iiif_file}/info.json`);
       const updatedHtmlContent = htmlContent
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, sortedTopography))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))

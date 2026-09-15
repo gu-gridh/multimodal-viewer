@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -250,7 +251,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 
   const sequenceEnabled = true;
-  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryName}&depth=3&limit=500${getImageTypeQuery(req)}`;
+  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${encodeURIComponent(queryName)}&depth=3&limit=500${getImageTypeQuery(req)}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -268,7 +269,8 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const requestedPage = availableImages.findIndex(image => String(image.id) === String(requestedImage));
         const initialPage = requestedPage >= 0 ? requestedPage : 0;
 
-        let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSources))
+        let modifiedData = data.replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, availableImages))
+          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSources))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({

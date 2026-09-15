@@ -145,23 +145,19 @@
                 style="display: none;"></div>
 
             <div id="rectangle-annotate-button" class="annotate-button NavButton"
-                style="line-height:1.0; display: none;"
-                onclick="annotationInteractions.startDrawing('rect')"
+                style="line-height:1.0; display: none;" onclick="annotationInteractions.startDrawing('rect')"
                 title="Area annotation tool."></div>
 
             <div id="polygon-annotate-button" class="polygon-annotate-button NavButton"
-                style="line-height:1.0; display: none;"
-                onclick="annotationInteractions.startDrawing('polygon')"
+                style="line-height:1.0; display: none;" onclick="annotationInteractions.startDrawing('polygon')"
                 title="Polygon annotation tool."></div>
 
             <div id="multiline-annotate-button" class="multiline-annotate-button NavButton"
                 style="line-height:1.0; display: none;"
-                onclick="annotationInteractions.startDrawing('line', 'polyline')"
-                title="Line annotation tool."></div>
+                onclick="annotationInteractions.startDrawing('line', 'polyline')" title="Line annotation tool."></div>
 
             <div id="point-annotate-button" class="point-annotate-button NavButton"
-                style="line-height:1.0; display: none;"
-                onclick="annotationInteractions.startDrawing('point')"
+                style="line-height:1.0; display: none;" onclick="annotationInteractions.startDrawing('point')"
                 title="Point annotation tool."></div>
 
             <div id="coordinate-toggle" class="coordinate-toggle NavButton" title="Toggle coordinates"
@@ -181,7 +177,8 @@
         <div id="download-resolution" class="download-resolution" hidden>
             <div class="download-status">
                 <span id="download-resolution-title">Choose download resolution</span>
-                <img id="download-spinner" src="/viewer/shared/interface/6-dots-rotate_white.svg" width="16" height="16" alt="Loading..." hidden>
+                <img id="download-spinner" src="/viewer/shared/interface/6-dots-rotate_white.svg" width="16" height="16"
+                    alt="Loading..." hidden>
             </div>
             <div id="download-resolution-options"></div>
             <label id="download-crop-option"><input id="download-crop" type="checkbox"> Crop to current view</label>
@@ -637,6 +634,7 @@
                 module.createImageDownload({
                     viewer,
                     tileSources: tileSourcesString,
+                    downloads: 'PLACEHOLDER_IMAGE_DOWNLOAD',
                     getAnnotationShapes: () => annotationsVisible
                         ? annotationCanvasRenderer?.getAnnotationShapes() || []
                         : []
@@ -729,31 +727,27 @@
                         </div>
                     </div>
 
-                    <div id="polygon-tool-guide" class="guide-instructions-item annotate-option"
-                        style="display: none;">
+                    <div id="polygon-tool-guide" class="guide-instructions-item annotate-option" style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/polygon_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="12">
                         </div>
                     </div>
 
-                    <div id="line-tool-guide" class="guide-instructions-item annotate-option"
-                        style="display: none;">
+                    <div id="line-tool-guide" class="guide-instructions-item annotate-option" style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/multiline_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="14">
                         </div>
                     </div>
 
-                    <div id="point-tool-guide" class="guide-instructions-item annotate-option"
-                        style="display: none;">
+                    <div id="point-tool-guide" class="guide-instructions-item annotate-option" style="display: none;">
                         <div class="guide-instructions-item-icon point-icon"></div>
                         <div class="guide-instructions-item-label" id="15">
                         </div>
                     </div>
 
-                    <div id="coordinate-guide" class="guide-instructions-item annotate-option"
-                        style="display: none;">
+                    <div id="coordinate-guide" class="guide-instructions-item annotate-option" style="display: none;">
                         <div class="guide-instructions-item-icon"
                             style="background-image:url(https://data.dh.gu.se/ui-icons/coordinate_white.svg)"></div>
                         <div class="guide-instructions-item-label" id="13">

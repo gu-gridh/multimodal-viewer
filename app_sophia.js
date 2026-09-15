@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const cheerio = require('cheerio');
 const path = require('path');
@@ -118,7 +119,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing or incorrect');
   }
 
-  const apiUrl = `${panelApiBaseUrl}${queryName}`;
+  const apiUrl = `${panelApiBaseUrl}${encodeURIComponent(queryName)}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -137,6 +138,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const annotationPath = annotationApiBaseUrl;
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
         let updatedHtmlContent = htmlContent
+          .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, [modelData[0].properties.attached_photograph[0]]))
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
@@ -171,6 +173,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const topographyImagesIiif = sortedTopography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
 
         let updatedHtmlContent = htmlContent
+          .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, sortedTopography))
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
             rectangle: Boolean(config.enableRectangleTool),

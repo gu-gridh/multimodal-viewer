@@ -2,35 +2,12 @@ const express = require('express');
 const axios = require('axios');
 const sharp = require('sharp');
 
-function imageUrl(value, host, allowQuery = false) {
+function imageUrl(value) {
   const url = new URL(value);
-  if (url.protocol !== 'https:' || url.hostname !== host || url.port || url.username || url.password || (!allowQuery && url.search) || url.hash) {
+  if (url.protocol !== 'https:' || url.hostname !== 'img.dh.gu.se' || url.port || url.username || url.password || url.search || url.hash) {
     throw new Error('Unsupported image server.');
   }
   return url.href.replace(/\/info\.json\/?$/, '').replace(/\/$/, '');
-}
-
-function sourcesForImage(image, scale, crop = false) {
-  if (!crop && scale === 1 && image.zenodo_url) {
-    return { zenodoUrl: imageUrl(image.zenodo_url, 'zenodo.org', true) };
-  }
-  if (!image.iiif_file) throw new Error('No IIIF download image is available.');
-  return { service: imageUrl(image.iiif_file, 'img.dh.gu.se') };
-}
-
-async function resolveSource(body, project, signal) {
-  if (project !== 'munch') return { service: imageUrl(body.service, 'img.dh.gu.se') };
-  const [panel, type] = String(body.query || '').split('/');
-  if (!panel) throw new Error('Missing painting.');
-  const { data } = await axios.get('https://munch.dh.gu.se/api/painting-images/', {
-    params: { panel }, maxRedirects: 0, signal
-  });
-  const images = data.results || [];
-  const image = type === 'topography'
-    ? images.filter(item => item.image_type === 'topographical').sort((a, b) => a.sort_order - b.sort_order)[body.page]
-    : images.find(item => item.image_type === 'orthophoto' && /\/[^/]*Medium[^/]*$/i.test(item.file));
-  if (!image) throw new Error('The requested image is not available.');
-  return sourcesForImage(image, body.scale, body.crop);
 }
 
 function registerIIIFDownload(app, project) {
@@ -43,23 +20,20 @@ function registerIIIFDownload(app, project) {
     res.on('close', () => { if (!res.writableFinished) controller.abort(); });
     try {
       validateExport(req.body);
-      const source = await resolveSource(req.body, project, signal);
-      if (req.body.sourceOnly || source.zenodoUrl) return res.json({ zenodoUrl: source.zenodoUrl || null });
-      const body = req.body.crop ? req.body : {
-        ...req.body,
-        viewport: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 1 }],
-        rotation: 0, flipped: false
-      };
-      const imageSize = await get(`${source.service}/info.json`);
+      const body = req.body;
+      const service = imageUrl(body.service);
+      const imageSize = await get(`${service}/info.json`);
       if (!(imageSize.width > 0 && imageSize.height > 0)) throw new Error('Invalid IIIF image dimensions.');
       const region = getRegion(body.viewport, imageSize.width, imageSize.height);
-      const scale = exportScale(body, region.height);
-      const size = scale < body.scale ? `,${Math.round(region.height * scale)}`
-        : body.scale === 1 ? 'max' : `pct:${body.scale * 100}`;
-      const regionPath = body.crop ? [region.left, region.top, region.width, region.height].join(',') : 'full';
-      const input = Buffer.from(await get(`${source.service}/${regionPath}/${size}/0/default.jpg`, 'arraybuffer'));
+      const scale = exportScale(body, region, imageSize);
+      const width = Math.max(1, Math.floor(region.width * scale));
+      const height = Math.max(1, Math.floor(region.height * scale));
+      const size = `!${width},${height}`;
+      const requestedScale = Math.min(width / region.width, height / region.height);
+      const regionPath = [region.left, region.top, region.width, region.height].join(',');
+      const input = Buffer.from(await get(`${service}/${regionPath}/${size}/0/default.jpg`, 'arraybuffer'));
       const actual = await sharp(input, { limitInputPixels: false }).metadata();
-      if (actual.width < Math.round(region.width * scale) - 1 || actual.height < Math.round(region.height * scale) - 1) {
+      if (actual.width < Math.round(region.width * requestedScale) - 1 || actual.height < Math.round(region.height * requestedScale) - 1) {
         throw new Error(`The IIIF server limited this image to ${actual.width} × ${actual.height} pixels.`);
       }
       const output = await renderRegion(input, imageSize, region, body);
@@ -98,7 +72,7 @@ function validateExport(body) {
   if (!body || !Array.isArray(body.viewport) || body.viewport.length !== 4 || !body.viewport.every(validPoint) ||
     ![1, 0.5, 0.25].includes(body.scale) || !Number.isFinite(body.rotation) ||
     !Number.isFinite(body.viewWidth) || body.viewWidth <= 0 ||
-    typeof body.flipped !== 'boolean' || typeof body.crop !== 'boolean' ||
+    typeof body.flipped !== 'boolean' || body.crop !== true ||
     !Array.isArray(body.shapes) || !body.shapes.every(shape =>
       shape && Array.isArray(shape.points) && shape.points.length && shape.points.every(validPoint) &&
       typeof shape.color === 'string' && /^(#[\da-f]{3,8}|[a-z]+|rgba?\([\d.,%\s]+\))$/i.test(shape.color))) {
@@ -106,11 +80,12 @@ function validateExport(body) {
   }
 }
 
-function exportScale(body, height) {
-  const maxHeight = body.crop
-    ? { 1: 3000, 0.5: 2000, 0.25: 1000 }[body.scale]
-    : { 0.5: 10000, 0.25: 4000 }[body.scale] || Infinity;
-  return Math.min(body.scale, maxHeight / height);
+function exportScale(body, region, imageSize) {
+  const maxSide = { 1: 3000, 0.5: 2000, 0.25: 1000 }[body.scale];
+  const maxWidth = Math.min(maxSide, imageSize.maxWidth || Infinity);
+  const maxHeight = Math.min(maxSide, imageSize.maxHeight || imageSize.maxWidth || Infinity);
+  return Math.min(body.scale, maxWidth / region.width, maxHeight / region.height,
+    Math.sqrt((imageSize.maxArea || Infinity) / (region.width * region.height)));
 }
 
 async function renderRegion(input, imageSize, region, body) {
@@ -150,4 +125,4 @@ async function renderRegion(input, imageSize, region, body) {
   return image.flatten({ background: '#ffffff' }).jpeg({ quality: 95, chromaSubsampling: '4:4:4' });
 }
 
-module.exports = { registerIIIFDownload, resolveSource, sourcesForImage, getRegion, validateExport, renderRegion };
+module.exports = { registerIIIFDownload };

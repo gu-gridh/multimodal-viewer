@@ -111,7 +111,11 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     };
 
     const imageApi = `https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`;
-    const imagesResponse = await axios.get(imageApi);
+    const imagesResponse = await axios.get(imageApi).catch(error => {
+      if (queryType !== 'iiif' && queryType !== 'photo') throw error;
+      console.error('Could not load photo download metadata:', error.message);
+      return { data: { results: [] } };
+    });
     const images = imagesResponse.data.results || [];
 
     if (queryType === 'iiif' || queryType === 'photo') {

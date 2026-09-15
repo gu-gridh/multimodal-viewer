@@ -8,7 +8,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
     const spinner = document.getElementById('download-spinner');
     let busy = false;
 
-    function chooseResolution(zenodoUrl) {
+    function chooseResolution() {
         return new Promise(resolve => {
             const close = value => { panel.hidden = true; resolve(value); };
             const resolutions = [
@@ -21,12 +21,15 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
                 button.type = 'button';
                 button.textContent = label;
                 button.onclick = () => {
-                    if (scale === 1 && !crop.checked && zenodoUrl) {
+                    const image = downloads?.images?.[viewer.currentPage()];
+                    const cropped = crop.checked;
+                    const zenodoUrl = image?.zenodoUrl;
+                    if (scale === 1 && !cropped && zenodoUrl) {
                         window.open(zenodoUrl, '_blank', 'noopener,noreferrer');
                         close(null);
                         return;
                     }
-                    close(scale);
+                    close({ scale, image, cropped });
                 };
                 return button;
             }));
@@ -38,7 +41,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         });
     }
 
-    function captureRegion() {
+    function captureRegion(image) {
         const item = viewer.world.getItemAt(0);
         if (!item) throw new Error('Wait for the image to load.');
         const size = item.getContentSize();
@@ -51,9 +54,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         });
         const page = viewer.currentPage();
         return {
-            query: new URLSearchParams(window.location.search).get('q'),
-            service: Array.isArray(tileSources) ? tileSources[page] : tileSources,
-            page,
+            service: image?.service || (Array.isArray(tileSources) ? tileSources[page] : tileSources),
             viewport,
             viewWidth: width,
             rotation: viewer.viewport.getRotation(true),
@@ -72,16 +73,13 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         busy = true;
         try {
             const controller = new AbortController();
-            const image = downloads?.images?.[viewer.currentPage()];
-            const zenodoUrl = image?.zenodoUrl ? new URL(image.zenodoUrl) : null;
-            if (zenodoUrl && (zenodoUrl.protocol !== 'https:' || zenodoUrl.hostname !== 'zenodo.org')) throw new Error('Invalid Zenodo link.');
-            const scale = await chooseResolution(zenodoUrl?.href);
-            if (scale === null) return;
-            const cropped = crop.checked;
+            const selection = await chooseResolution();
+            if (!selection) return;
+            const { scale, image, cropped } = selection;
             if (!cropped && image?.id == null) throw new Error('No download image ID is available.');
             const endpoint = cropped ? '/viewer/modules/iiif/download-region' : downloads.endpoint;
             const request = cropped
-                ? { ...captureRegion(), scale, crop: true }
+                ? { ...captureRegion(image), scale, crop: true }
                 : { api: image.api, id: image.id, quality: { 1: 1, 0.5: 2, 0.25: 3 }[scale] };
             if (!cropped && !endpoint) {
                 console.log('Image download POST payload:', JSON.stringify(request, null, 2));

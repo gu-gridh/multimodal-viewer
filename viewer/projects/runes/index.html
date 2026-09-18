@@ -9,15 +9,12 @@
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="/viewer/shared/split-layout.css">
+    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
     <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
     <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
-    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
-    <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
-    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
+
 </head>
 
 <body>
@@ -215,126 +212,6 @@
             const padding = 25;
 
             for (let attempt = 0; attempt < 10000; attempt++) {
-                const x =
-                    padding +
-                    Math.random() * (width - padding * 2);
-
-                const y =
-                    padding +
-                    Math.random() * (height - padding * 2);
-
-                if (pointMatchesSets(x, y, sets, circles)) {
-                    return { x, y };
-                }
-            }
-
-            return {
-                x: width / 2,
-                y: height / 2
-            };
-        }
-
-        //helper to check if a position overlaps with existing stones
-        function overlapsExistingStone(position, positions, minDistance = 32) {
-            return positions.some(existing => {
-                const dx = position.x - existing.x;
-                const dy = position.y - existing.y;
-
-                return Math.sqrt(dx * dx + dy * dy) < minDistance;
-            });
-        }
-
-        function findStonePosition(
-            sets,
-            circles,
-            width,
-            height,
-            existingPositions
-        ) {
-            const padding = 25;
-
-            for (let attempt = 0; attempt < 5000; attempt++) {
-                const x =
-                    padding +
-                    Math.random() * (width - padding * 2);
-
-                const y =
-                    padding +
-                    Math.random() * (height - padding * 2);
-
-                const position = { x, y };
-
-                if (
-                    pointMatchesSets(x, y, sets, circles) &&
-                    !overlapsExistingStone(
-                        position,
-                        existingPositions
-                    )
-                ) {
-                    return position;
-                }
-            }
-            return null;
-        }
-
-        function getCircleGeometry(width, height) {
-            const radius = Math.min(width, height) * 0.29;
-
-            return {
-                'Väg': {
-                    x: width * 0.50,
-                    y: height * 0.34,
-                    r: radius
-                },
-
-                'Gravfält': {
-                    x: width * 0.38,
-                    y: height * 0.60,
-                    r: radius
-                },
-
-                'Gräns': {
-                    x: width * 0.62,
-                    y: height * 0.60,
-                    r: radius
-                }
-            };
-        }
-
-        function drawCircles(svg, circles) {
-            Object.entries(circles).forEach(([name, circle]) => {
-                svg.append('circle')
-                    .attr('cx', circle.x)
-                    .attr('cy', circle.y)
-                    .attr('r', circle.r)
-                    .attr('fill', 'none')
-                    .attr('stroke', '#999')
-                    .attr('stroke-width', 2);
-            });
-        }
-
-        //helper to check if point is in the circle
-        function pointInsideCircle(x, y, circle) {
-            const dx = x - circle.x;
-            const dy = y - circle.y;
-
-            return Math.sqrt(dx * dx + dy * dy) < circle.r;
-        }
-        //then check if the point is in the required sets
-        function pointMatchesSets(x, y, requiredSets, circles) {
-            return Object.entries(circles).every(([name, circle]) => {
-                const inside = pointInsideCircle(x, y, circle);
-                const required = requiredSets.includes(name);
-
-                return inside === required;
-            });
-        }
-
-        //then find a position that matches the required sets
-        function findPosition(sets, circles, width, height) {
-            const padding = 25;
-
-            for (let attempt = 0; attempt < 5000; attempt++) {
                 const x =
                     padding +
                     Math.random() * (width - padding * 2);

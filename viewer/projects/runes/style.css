@@ -15,11 +15,12 @@
         #left-pane {
             width: 50%;
             position: relative;
+               background: rgb(228, 228, 228);
         }
 
         #right-pane {
             width: 50%;
-            background: rgb(228, 228, 220);
+            background: rgb(228, 228, 228);
         }
 
         .module-placeholder {
@@ -58,10 +59,10 @@
 
         .venn-panel {
             position: absolute;
-            top: 90px;
-            left: 20px;
-            right: 20px;
-            bottom: 30px;
+            top: 100px;
+            left: 30px;
+            right: 30px;
+            bottom: 50px;
         }
 
         .venn-panel h2 {
@@ -82,7 +83,7 @@
         }
 
         #venn-diagram text {
-            fill: white;
+            fill: black;
         }
 
         #venn-diagram .venn-area path {

@@ -102,10 +102,11 @@
         .runestone {
             cursor: pointer;
             transition: opacity 0.15s ease;
+            opacity: 0.8;
         }
 
         .runestone:hover {
-            opacity: 0.7;
+            opacity: 1.0;
         }
 
         .runestone-label {

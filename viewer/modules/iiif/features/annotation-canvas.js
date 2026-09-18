@@ -81,11 +81,20 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
                 return { x, y };
             }).filter(point => Number.isFinite(point.x) && Number.isFinite(point.y));
         } else {
-            const rect = selectorValue.match(/xywh=pixel:([^"]+)/)?.[1]?.split(',').map(Number);
-            if (!rect || !rect.every(Number.isFinite)) {
+            const fragment = selectorValue.match(/^xywh=(pixel|percent):(.+)$/);
+            const rect = fragment?.[2].split(',').map(Number);
+            if (!rect || rect.length !== 4 || !rect.every(Number.isFinite)) {
                 return null;
             }
-            const [x, y, width, height] = rect;
+            let [x, y, width, height] = rect;
+            if (fragment[1] === 'percent') {
+                const size = viewer.world.getItemAt(0)?.getContentSize();
+                if (!size) return null;
+                x *= size.x / 100;
+                y *= size.y / 100;
+                width *= size.x / 100;
+                height *= size.y / 100;
+            }
             points = [
                 { x, y },
                 { x: x + width, y },
@@ -98,9 +107,11 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
             return null;
         }
 
+        const rectangle = !pointsValue;
         return {
             points,
-            color: getAnnotationColor(annotation),
+            color: rectangle ? '#ffffff' : getAnnotationColor(annotation),
+            dotted: rectangle,
             closed: !selectorValue.includes('<polyline')
         };
     }
@@ -147,6 +158,8 @@ export function createAnnotationCanvasRenderer({ annotationCanvasThreshold, anno
             }
 
             context.strokeStyle = shape.color;
+            context.lineCap = shape.dotted ? 'butt' : 'round';
+            context.setLineDash(shape.dotted ? [1, 1] : []);
             context.stroke();
         });
     }

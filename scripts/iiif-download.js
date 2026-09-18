@@ -76,6 +76,7 @@ function validateExport(body) {
     (body.focus !== undefined && typeof body.focus !== 'boolean') ||
     !Array.isArray(body.shapes) || !body.shapes.every(shape =>
       shape && Array.isArray(shape.points) && shape.points.length && shape.points.every(validPoint) &&
+      (shape.dotted === undefined || typeof shape.dotted === 'boolean') &&
       typeof shape.color === 'string' && /^(#[\da-f]{3,8}|[a-z]+|rgba?\([\d.,%\s]+\))$/i.test(shape.color))) {
     throw new Error('Invalid image export request.');
   }
@@ -104,12 +105,13 @@ async function renderRegion(input, imageSize, region, body) {
   ) / body.viewWidth;
   const strokeWidth = Math.max(1.5, 1.5 * pixelsPerScreenPixel);
   const shapes = body.shapes.map(shape => {
+    const stroke = `stroke="${shape.color}"${shape.dotted ? ` stroke-dasharray="${strokeWidth / 1.5}" stroke-linecap="butt"` : ''}`;
     if (shape.points.length === 1) {
       const [cx, cy] = project(shape.points[0]).split(',');
-      return `<circle cx="${cx}" cy="${cy}" r="${strokeWidth * 2}" stroke="${shape.color}"/>`;
+      return `<circle cx="${cx}" cy="${cy}" r="${strokeWidth * 2}" ${stroke}/>`;
     }
     const tag = shape.closed ? 'polygon' : 'polyline';
-    return `<${tag} points="${shape.points.map(project).join(' ')}" stroke="${shape.color}"/>`;
+    return `<${tag} points="${shape.points.map(project).join(' ')}" ${stroke}/>`;
   }).join('');
   const svg = content => Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">${content}</svg>`);
   const rotation = ((body.rotation % 360) + 360) % 360;

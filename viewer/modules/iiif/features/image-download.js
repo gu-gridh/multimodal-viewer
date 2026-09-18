@@ -61,6 +61,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
             flipped,
             shapes: getAnnotationShapes().map(shape => ({
                 color: shape.color,
+                dotted: shape.dotted,
                 closed: shape.closed,
                 points: shape.points.map(point => ({ x: point.x / size.x, y: point.y / size.y }))
             }))

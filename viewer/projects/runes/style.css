@@ -58,10 +58,10 @@
 
         .venn-panel {
             position: absolute;
-            top: 80px;
+            top: 90px;
             left: 20px;
             right: 20px;
-            bottom: 90px;
+            bottom: 30px;
         }
 
         .venn-panel h2 {
@@ -93,8 +93,9 @@
         }
 
         .venn-label {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 300;
+            margin-right:20px!important;
         }
 
         .runestone {
@@ -120,12 +121,13 @@
         }
 
         .runestone-tooltip rect {
-            fill: #222;
+            fill: #fff;
             opacity: 0.9;
+            height:25px;
         }
 
         .runestone-tooltip text {
-            fill: #fff !important;
+            fill: #222 !important;
             font-family: "Oswald", sans-serif;
             font-size: 14px;
         }

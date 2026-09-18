@@ -269,7 +269,7 @@
                 iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY&id=${event.data.id}`;
                 const url = new URL(window.location.href);
                 url.searchParams.set('id', event.data.id);
-                window.history.replaceState({}, '', url);
+                window.history.replaceState({}, '', url.href.replace(/%2F/gi, '/'));
             }
 
             if (window.innerWidth > 1051) { //not in mobile view

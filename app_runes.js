@@ -7,7 +7,6 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 
 const app = express();
-app.use(require('./viewer-query'));
 const projectName = process.env.PROJECT || 'runes';
 const projectPath = path.join(__dirname, 'viewer', 'projects', projectName);
 const port = 8099;
@@ -16,7 +15,7 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
   const queryName = req.query.q?.split('/')[0] || '1';
 
   try {
-    const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${encodeURIComponent(queryName)}&depth=2`;
+    const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
     const apiResponse = await axios.get(apiUrl);
     const texturedMeshData = apiResponse.data.results?.[0];
 

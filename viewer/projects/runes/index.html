@@ -73,8 +73,20 @@
         let activeViewer = 'metadata';
         let activePeriod = '1';
 
-        $(document).ready(function () {
-            $("#footer-container").load("/viewer/projects/runes/footer.html");
+        let vennData = null;
+
+        async function init() {
+            // footer
+            try {
+                const footerResponse = await fetch(
+                    '/viewer/projects/runes/footer.html'
+                );
+                const footerHtml = await footerResponse.text();
+                document.getElementById('footer-container').innerHTML =
+                    footerHtml;
+            } catch (error) {
+                console.error('Could not load footer:', error);
+            }
 
             const params = new URLSearchParams(window.location.search);
             const region = params.get('region');
@@ -82,11 +94,26 @@
             activeRegion = ['vastra', 'ostra'].includes(region)
                 ? region
                 : activeRegion;
+
             activeViewer = determineInitialViewer(params);
 
+            // load initial venn data
+            try {
+                const response = await fetch('/api/runes/venn');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+                vennData = await response.json();
+
+            } catch (error) {
+                console.error('Error loading Venn data:', error);
+            }
             changeLeftViewer();
             changeRightViewer(activeViewer);
-        });
+        }
+
+        init();
 
         function changeRegion(region) {
             activeRegion = region;
@@ -274,71 +301,39 @@
             return null;
         }
 
-        //mock data for runestones in each region and period
-        function getMockRunestones(region, period) {
-            const variations = {
-                'vastra-1': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Väg'] },
+        function getRunestones(region, period) {
+            console.log('getRunestones:', region, period);
+            console.log('vennData:', vennData);
 
-                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r6', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r7', sets: ['Väg', 'Gravfält'] },
+            if (!vennData) {
+                return [];
+            }
 
-                    { id: 'r8', sets: ['Väg', 'Gräns'] },
-                    { id: 'r9', sets: ['Väg', 'Gräns'] },
-                    { id: 'r10', sets: ['Väg', 'Gräns'] },
-                    { id: 'r11', sets: ['Väg', 'Gräns'] },
-
-                    { id: 'r12', sets: ['Väg', 'Gravfält', 'Gräns'] },
-                    { id: 'r13', sets: ['Väg', 'Gravfält', 'Gräns'] },
-
-                    { id: 'r14', sets: ['Gravfält'] },
-
-                    {
-                        id: 'r15',
-                        sets: ['Gräns'],
-                        //selected: true,
-                        title: 'Title'
-                    }
-                ],
-
-                'vastra-2': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r4', sets: ['Väg', 'Gräns'] },
-                    { id: 'r5', sets: ['Väg', 'Gräns'] },
-                    { id: 'r6', sets: ['Väg', 'Gräns'] },
-                    { id: 'r7', sets: ['Gravfält'] },
-                    { id: 'r8', sets: ['Gräns'] },
-                    { id: 'r9', sets: ['Väg', 'Gravfält', 'Gräns'] }
-                ],
-
-                'ostra-1': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Gravfält'] },
-                    { id: 'r3', sets: ['Gravfält'] },
-                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r6', sets: ['Väg', 'Gräns'] },
-                    { id: 'r7', sets: ['Gravfält', 'Gräns'] },
-                    { id: 'r8', sets: ['Väg', 'Gravfält', 'Gräns'] }
-                ],
-
-                'ostra-2': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Väg'] },
-                    { id: 'r3', sets: ['Gräns'] },
-                    { id: 'r4', sets: ['Väg', 'Gräns'] },
-                    { id: 'r5', sets: ['Gravfält', 'Gräns'] },
-                    { id: 'r6', sets: ['Väg', 'Gravfält', 'Gräns'] }
-                ]
+            const regionMap = {
+                vastra: 'Västergötland',
+                ostra: 'Östergötland'
             };
 
-            return variations[`${region}-${period}`] || [];
+            const backendRegion = regionMap[region];
+            const backendPeriod = `Period ${period}`;
+
+            console.log(
+                'Looking up:',
+                backendRegion,
+                backendPeriod
+            );
+
+            const stones =
+                vennData[backendRegion]?.[backendPeriod] || [];
+
+            console.log(
+        'getRunestones:',
+        backendRegion,
+        backendPeriod,
+        stones
+    );
+
+            return stones;
         }
 
         function addRunestones(svg, stones, circles, width, height) {
@@ -383,7 +378,7 @@
                     .on('mouseenter', function () {
                         const text = tooltip.select('text');
 
-                        text.text(stone.title || stone.id);
+                        text.text(stone.name|| stone.id);
 
                         // Measure text so the background fits it
                         const bbox = text.node().getBBox();
@@ -428,8 +423,6 @@
             });
         }
 
-
-
         function renderVenn() {
             const diagram = document.getElementById('venn-diagram');
             diagram.innerHTML = '';
@@ -448,7 +441,7 @@
 
             addVennLabels(svg, circles);
 
-            const stones = getMockRunestones(
+            const stones = getRunestones(
                 activeRegion,
                 activePeriod
             );
@@ -464,16 +457,14 @@
 
         
         function selectRunestone(stone) {
-            const params = new URLSearchParams(window.location.search);
-            params.set('q', 5); //todo: change to stone.id
+            console.log('Selected rune:', stone);
 
-            window.history.pushState(
-                {},
-                '',
-                `${window.location.pathname}?${params.toString()}`
-            );
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', stone.id);
 
-            changeRightViewer(activeViewer);
+            window.history.pushState({}, '', url);
+
+            changeRightViewer('metadata');
 
             d3.selectAll('.runestone rect')
                 .attr('fill', '#ffc76a');

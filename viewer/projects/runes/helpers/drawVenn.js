@@ -8,7 +8,7 @@ function getCircleGeometry(width, height) {
                 r: radius
             },
 
-            'Gravfält': {
+            'Grav': {
                 x: width * 0.38,
                 y: height * 0.60,
                 r: radius
@@ -38,7 +38,7 @@ function drawCircles(svg, circles) {
 function addVennLabels(svg, circles) {
     const offset = 10 //distance to circles
     const road = circles['Väg'];
-    const graveField = circles['Gravfält'];
+    const graveField = circles['Grav'];
     const border = circles['Gräns'];
     svg.append('text')
         .attr('class', 'venn-label')

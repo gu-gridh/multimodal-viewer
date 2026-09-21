@@ -119,6 +119,36 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     }
 });
 
+//get runes venn data
+app.get('/api/runes/venn', async (req, res) => {
+    try {
+        const apiResponse = await axios.get(
+            'https://runes.dh.gu.se/api/venn/'
+        );
+        res.json(apiResponse.data);
+
+    } catch (error) {
+        res.status(500).json({
+            error: 'Could not load rune Venn data'
+        });
+    }
+});
+
+//get runes metadata
+app.get('/api/runes/metadata/:id', async (req, res) => {
+    try {
+        const response = await axios.get(
+            `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(req.params.id)}/`
+        );
+
+        res.json(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: 'Could not load rune metadata'
+        });
+    }
+});
 
 app.use('/viewer', express.static(path.join(__dirname, 'viewer')));
 

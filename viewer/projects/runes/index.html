@@ -76,9 +76,9 @@
         let vennData = null;
 
         const STONE_COLORS = {
-            normal: '#ffc76a',
-            period3: '#999', //change this
-            selected: '#ffa500'
+            normal: '#ffaa00',
+            period3: '#999', //change this?
+            selected: '#c43a04'
         };
 
         async function init() {
@@ -497,7 +497,7 @@
             d3.select(
                 `.runestone[data-id="${stone.id}"] rect`
             )
-                .attr('fill', STONE_COLORS.selected);
+                .attr('fill', '#c43a04');
         }
 
         function changeLeftViewer() {

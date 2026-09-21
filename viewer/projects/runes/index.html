@@ -76,7 +76,7 @@
         let vennData = null;
 
         async function init() {
-            // Load footer
+            // footer
             try {
                 const footerResponse = await fetch(
                     '/viewer/projects/runes/footer.html'
@@ -112,7 +112,7 @@
             changeLeftViewer();
             changeRightViewer(activeViewer);
         }
-        
+
         init();
 
         function changeRegion(region) {
@@ -457,16 +457,14 @@
 
         
         function selectRunestone(stone) {
-            const params = new URLSearchParams(window.location.search);
-            params.set('q', stone.id);
+            console.log('Selected rune:', stone);
 
-            window.history.pushState(
-                {},
-                '',
-                `${window.location.pathname}?${params.toString()}`
-            );
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', stone.id);
 
-            changeRightViewer(activeViewer);
+            window.history.pushState({}, '', url);
+
+            changeRightViewer('metadata');
 
             d3.selectAll('.runestone rect')
                 .attr('fill', '#ffc76a');

@@ -134,25 +134,17 @@ app.get('/api/runes/venn', async (req, res) => {
 });
 
 //get runes metadata
-app.get('/api/runes/metadata', async (req, res) => {
+app.get('/api/runes/metadata/:id', async (req, res) => {
     try {
         const response = await axios.get(
-            'https://runes.dh.gu.se/api/metadata/',
-            {
-                headers: {
-                    Accept: 'application/json'
-                },
-                params: {
-                    limit: 100
-                }
-            }
+            `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(req.params.id)}/`
         );
+
         res.json(response.data);
-        console.log('Rune metadata loaded successfully', response.data);
     } catch (error) {
-        console.error('Error loading rune metadata:', error.message);
+        console.error(error);
         res.status(500).json({
-            error: 'Could not load metadata'
+            error: 'Could not load rune metadata'
         });
     }
 });

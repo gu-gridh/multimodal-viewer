@@ -16,78 +16,98 @@
     <div class="metadata-container">
         <div class="metadata-card">
             <div class="metadata-content">
-            <!--     <div class="label">Titel</div> -->
-                <div class="metadata-title">VG 1</div>
+                <div class="metadata-title" id="metadata-title"></div>
             </div>
             <div class="metadata-content">
                 <div class="label">Beskrivning</div>
-                <p class="metadata-description"></p>
+                <p class="metadata-description" id="metadata-description"></p>
             </div>
             <div class="metadata-content">
                 <div class="label">Datum</div>
-                <div class="data"></div>
+                <div class="data" id="metadata-date"></div>
             </div>
             <div class="metadata-content">
                 <div class="label">Fornfynd</div>
-                <div class="data"></div>
+                <div class="data" id="metadata-fornfynd"></div>
             </div>
             <div class="metadata-content">
                 <div class="label">Lantmäteriet</div>
-                <div class="data"></div>
+                <div class="data" id="metadata-lantmateriet"></div>
             </div>
         </div>
-        <!-- <div class="rune-viewer-shell">
-            <div id="rune-viewer"></div>
-            <div class="rune-viewer-top">
-                <button id="rune-previous" class="rune-page-button rune-previous" type="button"
-                    title="Previous image" disabled></button>
-                <span>1/1</span>
-                <button id="rune-next" class="rune-page-button rune-next" type="button" title="Next image"
-                    disabled></button>
-            </div>
-            <div class="rune-viewer-bottom">
-                <button id="rune-home" class="NavButton rune-home" type="button" title="Reset view"></button>
-                <button id="rune-zoom-in" class="NavButton rune-zoom-in" type="button" title="Zoom in"></button>
-                <button id="rune-zoom-out" class="NavButton rune-zoom-out" type="button" title="Zoom out"></button>
-                <button id="rune-fullscreen" class="NavButton rune-fullscreen" type="button"
-                    title="Toggle fullscreen"></button>
-            </div>
-        </div> -->
         <div class="map-container">
             <div id="map"></div>
         </div>
     </div>
 
     <script>
-        // const runeTileSources = ['PLACEHOLDER_IIIF_IMAGE_URL'];
-        // const runeViewer = OpenSeadragon({
-        //     id: 'rune-viewer',
-        //     prefixUrl: '/viewer/libs/openseadragon/images/',
-        //     tileSources: runeTileSources,
-        //     sequenceMode: true,
-        //     showNavigator: true,
-        //     showNavigationControl: true,
-        //     showZoomControl: true,
-        //     showHomeControl: true,
-        //     showFullPageControl: false,
-        //     showSequenceControl: true,
-        //     previousButton: 'rune-previous',
-        //     nextButton: 'rune-next',
-        //     homeButton: 'rune-home',
-        //     zoomInButton: 'rune-zoom-in',
-        //     zoomOutButton: 'rune-zoom-out'
-        // });
+        async function loadMetadata() {
+    const params = new URLSearchParams(window.location.search);
+    const runeId = params.get('q');
 
-        // document.getElementById('rune-fullscreen').onclick = () => {
-        //     const shell = document.querySelector('.rune-viewer-shell');
-        //     if (document.fullscreenElement) {
-        //         document.exitFullscreen();
-        //     } else {
-        //         shell.requestFullscreen();
-        //     }
-        // };
+    if (!runeId) {
+        return;
+    }
+    try {
+        const response = await fetch(
+            `/api/runes/metadata/${runeId}`
+        );
+        if (!response.ok) {
+            throw new Error(
+                `Metadata request failed: ${response.status}`
+            );
+        }
 
-        //mock data for testing
+        const rune = await response.json();
+        console.log('Rune metadata:', rune);
+
+        document.getElementById('metadata-title').textContent =
+            rune.name || '';
+
+        document.getElementById('metadata-description').textContent =
+            rune.description || '';
+
+        document.getElementById('metadata-date').textContent =
+            rune.date_visit || '';
+
+        setLink(
+            'metadata-fornfynd',
+            rune.fornsoek_url,
+            'Öppna Fornfynd'
+        );
+
+        setLink(
+            'metadata-lantmateriet',
+            rune.lantmaeteriet_url,
+            'Öppna Lantmäteriet'
+        );
+
+    } catch (error) {
+        console.error('Could not load metadata:', error);
+    }
+}
+
+        function setLink(elementId, url, text) {
+            const element = document.getElementById(elementId);
+
+                if (!url) {
+                    element.textContent = '';
+                    return;
+                }
+
+                const link = document.createElement('a');
+
+                link.href = url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.textContent = text;
+
+                element.replaceChildren(link);
+            }
+
+        loadMetadata();
+
+        //mock for map
         const mockRune = {
             id: 'r1',
             title: 'Runsten R1',

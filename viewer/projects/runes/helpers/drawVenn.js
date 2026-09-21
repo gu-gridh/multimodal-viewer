@@ -1,4 +1,4 @@
-        //get wanted circle size
+//get wanted circle size
 function getCircleGeometry(width, height) {
     const radius = Math.min(width, height) * 0.30; //change to get smaller/bigger circles
         return {

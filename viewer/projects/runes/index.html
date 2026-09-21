@@ -75,6 +75,12 @@
 
         let vennData = null;
 
+        const STONE_COLORS = {
+            normal: '#ffc76a',
+            period3: '#999', //change this
+            selected: '#ffa500'
+        };
+
         async function init() {
             // footer
             try {
@@ -97,7 +103,7 @@
 
             activeViewer = determineInitialViewer(params);
 
-            // load initial venn data
+            // load venn data
             try {
                 const response = await fetch('/api/runes/venn');
 
@@ -302,9 +308,6 @@
         }
 
         function getRunestones(region, period) {
-            console.log('getRunestones:', region, period);
-            console.log('vennData:', vennData);
-
             if (!vennData) {
                 return [];
             }
@@ -315,32 +318,37 @@
             };
 
             const backendRegion = regionMap[region];
-            const backendPeriod = `Period ${period}`;
 
-            console.log(
-                'Looking up:',
-                backendRegion,
-                backendPeriod
-            );
+            const selectedPeriod =
+                vennData[backendRegion]?.[`Period ${period}`] || [];
 
-            const stones =
-                vennData[backendRegion]?.[backendPeriod] || [];
+            const period3 =
+                vennData[backendRegion]?.['Period 3'] || [];
 
-            console.log(
-        'getRunestones:',
-        backendRegion,
-        backendPeriod,
-        stones
-    );
+            const normalStones = selectedPeriod.map(stone => ({
+                ...stone,
+                isPeriod3: false
+            }));
 
-            return stones;
+            const period3Stones = period3.map(stone => ({
+                ...stone,
+                isPeriod3: true
+            }));
+
+            return [
+                ...normalStones,
+                ...period3Stones
+            ];
         }
 
         function addRunestones(svg, stones, circles, width, height) {
             const positions = [];
             const markerSize = 18;
 
-            //hover tooltip for runestones
+            const params = new URLSearchParams(window.location.search);
+            const selectedId = params.get('q')?.split('/')[0];
+
+            // hover tooltip for runestones
             const tooltip = svg.append('g')
                 .attr('class', 'runestone-tooltip')
                 .style('display', 'none');
@@ -372,15 +380,18 @@
                     .attr('class', 'runestone')
                     .attr('data-id', stone.id)
                     .attr(
+                        'data-period3',
+                        stone.isPeriod3 ? 'true' : 'false'
+                    )
+                    .attr(
                         'transform',
                         `translate(${position.x}, ${position.y})`
                     )
                     .on('mouseenter', function () {
                         const text = tooltip.select('text');
 
-                        text.text(stone.name|| stone.id);
+                        text.text(stone.name || stone.id);
 
-                        // Measure text so the background fits it
                         const bbox = text.node().getBBox();
 
                         tooltip.select('rect')
@@ -399,7 +410,6 @@
                             )
                             .style('display', null);
 
-                        // Make sure tooltip is above all stones
                         tooltip.raise();
                     })
                     .on('mouseleave', function () {
@@ -414,12 +424,17 @@
                     .attr('y', -markerSize / 2)
                     .attr('width', markerSize)
                     .attr('height', markerSize)
-                    .attr(
-                        'fill',
-                        stone.selected
-                            ? '#ffa500'
-                            : '#ffc76a'
-                    );
+                    .attr('fill', () => {
+                        if (String(stone.id) === String(selectedId)) {
+                            return STONE_COLORS.selected;
+                        }
+
+                        if (stone.isPeriod3) {
+                            return STONE_COLORS.period3;
+                        }
+
+                        return STONE_COLORS.normal;
+                    });
             });
         }
 
@@ -457,20 +472,32 @@
 
         
         function selectRunestone(stone) {
-            console.log('Selected rune:', stone);
-
             const url = new URL(window.location.href);
             url.searchParams.set('q', stone.id);
-
             window.history.pushState({}, '', url);
-
             changeRightViewer('metadata');
 
-            d3.selectAll('.runestone rect')
-                .attr('fill', '#ffc76a');
+            // Restore each stone's normal color
+            d3.selectAll('.runestone').each(function () {
+                const group = d3.select(this);
 
-            d3.select(`.runestone[data-id="${stone.id}"] rect`)
-                .attr('fill', '#c43a04');
+                const isPeriod3 =
+                    group.attr('data-period3') === 'true';
+
+                group.select('rect')
+                    .attr(
+                        'fill',
+                        isPeriod3
+                            ? STONE_COLORS.period3
+                            : STONE_COLORS.normal
+                    );
+            });
+
+            // Selected rune
+            d3.select(
+                `.runestone[data-id="${stone.id}"] rect`
+            )
+                .attr('fill', STONE_COLORS.selected);
         }
 
         function changeLeftViewer() {

@@ -72,6 +72,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         event.preventDefault();
         if (busy) return;
         busy = true;
+        let timeout;
         try {
             const controller = new AbortController();
             const selection = await chooseResolution();
@@ -82,36 +83,44 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
             const request = cropped
                 ? { ...captureRegion(image), scale, crop: true, focus }
                 : {
-                    api: image.api,
-                    id: image.id,
+                    api_url: image.api.split('?')[0],
+                    id: String(image.id),
                     annotations: downloads.annotationApi ? getAnnotationUrl(downloads.annotationApi) || '' : '',
                     quality: { 1: 1, 0.5: 2, 0.25: 3 }[scale],
+                    formats: ['jpeg'],
                     focus
                 };
-            if (!cropped && !endpoint) {
-                console.log('Image download POST payload:', JSON.stringify(request, null, 2));
-                return;
-            }
+            const postOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request)
+            };
             title.textContent = 'Preparing image…';
             spinner.hidden = false;
             cropOption.hidden = true;
             options.replaceChildren();
             cancel.onclick = () => { controller.abort(); panel.hidden = true; };
             panel.hidden = false;
+            timeout = setTimeout(() => controller.abort(new Error('Image processing timed out.')), 60000);
             const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(request),
+                ...postOptions,
                 signal: controller.signal
             });
             if (!response.ok) {
                 const error = await response.json().catch(() => ({}));
                 throw new Error(error.error || 'Could not download this image.');
             }
-            const objectUrl = URL.createObjectURL(await response.blob());
+            let downloadResponse = response;
+            if (!cropped) {
+                const result = await response.json();
+                if (!result.download_url) throw new Error('No download URL was returned.');
+                downloadResponse = await fetch(result.download_url, { signal: controller.signal });
+                if (!downloadResponse.ok) throw new Error('Could not download the processed image.');
+            }
+            const objectUrl = URL.createObjectURL(await downloadResponse.blob());
             const link = document.createElement('a');
             link.href = objectUrl;
-            link.download = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] || 'image.jpg';
+            link.download = downloadResponse.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] || 'image.jpg';
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -127,6 +136,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
             cancel.onclick = () => { panel.hidden = true; };
             panel.hidden = false;
         } finally {
+            clearTimeout(timeout);
             spinner.hidden = true;
             busy = false;
         }

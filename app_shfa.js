@@ -10,6 +10,7 @@ const app = express();
 require('./scripts/iiif-download').registerIIIFDownload(app, 'shfa');
 const projectName = process.env.PROJECT || 'default';
 const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
+const imageApiBaseUrl = 'https://shfa.dh.gu.se/api/image/';
 
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
@@ -44,7 +45,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
       let updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, modelData[0].colour_images))
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, modelData[0].colour_images))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
         .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
           rectangle: Boolean(config.enableRectangleTool),

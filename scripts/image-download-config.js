@@ -1,4 +1,4 @@
-const imageDownloadUrl = '';
+const imageDownloadUrl = 'https://image-download.dh.gu.se/process-image';
 
 function imageDownloadConfig(api, images, annotationApi = '') {
   return JSON.stringify({

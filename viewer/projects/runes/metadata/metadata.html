@@ -14,6 +14,10 @@
 
 <body>
     <div class="metadata-container">
+        <div id="start" class="start">
+            Välj en runsten för att visa information. Lorum ipsum bla bla bla.
+        </div>
+        <div id="metadata-content-wrapper" style="display: none;">
         <div class="metadata-card">
             <div class="metadata-content">
                 <div class="metadata-title" id="metadata-title"></div>
@@ -38,54 +42,63 @@
         <div class="map-container">
             <div id="map"></div>
         </div>
+        </div>
     </div>
 
     <script>
         async function loadMetadata() {
-    const params = new URLSearchParams(window.location.search);
-    const runeId = params.get('q');
+            const params = new URLSearchParams(window.location.search);
+            const runeId = params.get('q');
+            const emptyState = document.getElementById('start');
+            const content = document.getElementById('metadata-content-wrapper');
 
-    if (!runeId) {
-        return;
-    }
-    try {
-        const response = await fetch(
-            `/api/runes/metadata/${runeId}`
-        );
-        if (!response.ok) {
-            throw new Error(
-                `Metadata request failed: ${response.status}`
-            );
+            if (!runeId) {
+                emptyState.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            content.style.display = 'block';
+            
+            try {
+                const response = await fetch(
+                    `/api/runes/metadata/${runeId}`
+                );
+                if (!response.ok) {
+                    throw new Error(
+                        `Metadata request failed: ${response.status}`
+                    );
+                }
+
+                const rune = await response.json();
+                console.log('Rune metadata:', rune);
+
+                document.getElementById('metadata-title').textContent =
+                    rune.name || '';
+
+                document.getElementById('metadata-description').textContent =
+                    rune.description || '';
+
+                document.getElementById('metadata-date').textContent =
+                    rune.date_visit || '';
+
+                setLink(
+                    'metadata-fornfynd',
+                    rune.fornsoek_url,
+                    'Öppna Fornfynd'
+                );
+
+                setLink(
+                    'metadata-lantmateriet',
+                    rune.lantmaeteriet_url,
+                    'Öppna Lantmäteriet'
+                );
+
+            } catch (error) {
+                console.error('Could not load metadata:', error);
+            }
         }
-
-        const rune = await response.json();
-        console.log('Rune metadata:', rune);
-
-        document.getElementById('metadata-title').textContent =
-            rune.name || '';
-
-        document.getElementById('metadata-description').textContent =
-            rune.description || '';
-
-        document.getElementById('metadata-date').textContent =
-            rune.date_visit || '';
-
-        setLink(
-            'metadata-fornfynd',
-            rune.fornsoek_url,
-            'Öppna Fornfynd'
-        );
-
-        setLink(
-            'metadata-lantmateriet',
-            rune.lantmaeteriet_url,
-            'Öppna Lantmäteriet'
-        );
-
-    } catch (error) {
-        console.error('Could not load metadata:', error);
-    }
-}
 
         function setLink(elementId, url, text) {
             const element = document.getElementById(elementId);

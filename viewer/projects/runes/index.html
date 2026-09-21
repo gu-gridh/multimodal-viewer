@@ -147,7 +147,7 @@
             const iframe = document.getElementById('right-iframe');
             const params = new URLSearchParams(window.location.search);
             const hashFragment = window.location.hash;
-            let qValue = params.get('q') || '1';
+            let qValue = params.get('q') || '';
 
             if (qValue.includes('/')) {
                 qValue = qValue.split('/')[0];
@@ -169,8 +169,8 @@
                     newPath = `/viewer/?q=${qValue}/panorama${hashFragment}`;
                     break;
                 default:
-                    src = `/viewer/projects/runes/metadata/metadata.html?q=${qValue}`;
-                    newPath = `/viewer/?q=${qValue}/metadata`;
+                    src = qValue ? `/viewer/projects/runes/metadata/metadata.html?q=${qValue}` : `/viewer/projects/runes/metadata/metadata.html`;
+                    newPath =  qValue ? `/viewer/?q=${qValue}/metadata` : `/viewer/`;
                     viewerType = 'metadata';
             }
 

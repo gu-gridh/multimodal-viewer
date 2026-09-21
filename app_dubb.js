@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
+app.use(require('./viewer-query'));
 const projectName = process.env.PROJECT || 'default';
 const pointCloudApiBaseUrl = 'https://diana.dh.gu.se/api/mediaarchive/objectpointcloud/?title=';
 
@@ -30,7 +31,6 @@ app.get('/', (req, res) => {
       }
       
       let modifiedData = data
-      .replace(/PLACEHOLDER_QUERY/g, queryName)
       .replace('PLACEHOLDER_BACKBUTTON', '')
       res.send(modifiedData);
     });
@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  const apiUrl = `${pointCloudApiBaseUrl}${queryName}`;
+  const apiUrl = `${pointCloudApiBaseUrl}${encodeURIComponent(queryName)}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -103,7 +103,6 @@ app.get('*', (req, res) => {
     }
     
     let modifiedData = data
-    .replace(/PLACEHOLDER_QUERY/g, queryName)
     .replace('PLACEHOLDER_BACKBUTTON', '')
     res.send(modifiedData);
   });

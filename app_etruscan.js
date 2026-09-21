@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
+app.use(require('./viewer-query'));
 const projectName = process.env.PROJECT || 'default';
 const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=';
 const panoramaApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/panorama/?tomb=';
@@ -40,7 +41,7 @@ try {
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  const apiUrl = `${contentApiBaseUrl}${queryName}`;
+  const apiUrl = `${contentApiBaseUrl}${encodeURIComponent(queryName)}`;
   try {
     const apiResponse = await axios.get(apiUrl);
     const result = apiResponse.data.results?.[0];
@@ -80,7 +81,7 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
+  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${encodeURIComponent(queryName)}&depth=2`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -127,13 +128,13 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
   let apiUrl;
 
   if (viewerType === 'pointcloud') {
-    apiUrl = `${contentApiBaseUrl}${queryName}&depth=2`;
+    apiUrl = `${contentApiBaseUrl}${encodeURIComponent(queryName)}&depth=2`;
   } else if (viewerType === 'panorama') {
-    apiUrl = `${panoramaApiBaseUrl}${queryName}&depth=2`;
+    apiUrl = `${panoramaApiBaseUrl}${encodeURIComponent(queryName)}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${encodeURIComponent(queryName)}&depth=2`;
   } else if (viewerType === 'images') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryName}&depth=3&limit=500${getImageTypeQuery(req)}`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${encodeURIComponent(queryName)}&depth=3&limit=500${getImageTypeQuery(req)}`;
   } else {
     return res.status(400).send('Invalid viewer type');
   }
@@ -249,7 +250,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
   }
 
   const sequenceEnabled = true;
-  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryName}&depth=3&limit=500${getImageTypeQuery(req)}`;
+  const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${encodeURIComponent(queryName)}&depth=3&limit=500${getImageTypeQuery(req)}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -366,13 +367,13 @@ app.get('*', async (req, res) => {
 
   //fetch the backbutton data from the appropriate API
   if (viewerType === 'pointcloud') {
-    apiUrl = `${contentApiBaseUrl}${queryId}&depth=2`;
+    apiUrl = `${contentApiBaseUrl}${encodeURIComponent(queryId)}&depth=2`;
   } else if (viewerType === 'panorama') {
-    apiUrl = `${panoramaApiBaseUrl}${queryId}&depth=2`;
+    apiUrl = `${panoramaApiBaseUrl}${encodeURIComponent(queryId)}&depth=2`;
   } else if (viewerType === 'texturedmesh') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryId}&depth=2`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${encodeURIComponent(queryId)}&depth=2`;
   } else if (viewerType === 'images') {
-    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${queryId}&depth=3&limit=500${getImageTypeQuery(req)}`;
+    apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/?tomb=${encodeURIComponent(queryId)}&depth=3&limit=500${getImageTypeQuery(req)}`;
   } else {
     return res.status(400).send('Invalid viewer type');
   }
@@ -418,7 +419,6 @@ app.get('*', async (req, res) => {
       }
 
       let modifiedData = data
-        .replace(/PLACEHOLDER_QUERY/g, queryName)
         .replace('PLACEHOLDER_BACKBUTTON', backButtonUrl);
 
       res.send(modifiedData);

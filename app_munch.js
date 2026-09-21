@@ -6,6 +6,7 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 const sharp = require('sharp');
 const app = express();
+app.use(require('./viewer-query'));
 
 dotenv.config({ path: './.env.local' });
 
@@ -545,7 +546,6 @@ app.get('*', (req, res) => {
     }
 
     const modifiedData = data
-      .replace(/PLACEHOLDER_QUERY/g, queryName)
       .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
       .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);
 

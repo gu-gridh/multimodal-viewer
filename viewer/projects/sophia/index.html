@@ -448,20 +448,21 @@
 
             const iframe = document.getElementById('right-Iframe');
             let iframeUrl = '';
+            const query = encodeURIComponent(new URLSearchParams(window.location.search).get('q') || '');
             const currentLang = localStorage.getItem('i18nextLang') || 'en';
             if (viewerType === 'pointcloud') {
-                iframeUrl = `/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY`;
+                iframeUrl = `/viewer/modules/pointcloud/pointcloud.html?q=${query}`;
             }
 
             else if (viewerType === 'metadata') {
-                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&lang=${currentLang}`;
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=${query}&lang=${currentLang}`;
                 if (resetVersion) {
                     iframeUrl += `&reset=${resetVersion}`;
                 }
             }
 
             else if (viewerType === 'annotation' && annotationId) {
-                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=PLACEHOLDER_QUERY&annotationId=${annotationId}&lang=${currentLang}`;
+                iframeUrl = `/viewer/projects/sophia/metadata/metadata.html?q=${query}&annotationId=${annotationId}&lang=${currentLang}`;
             }
 
             iframe.src = iframeUrl;

@@ -141,6 +141,8 @@
     </div>
 
     <script>
+        const viewerQuery = encodeURIComponent(new URLSearchParams(window.location.search).get('q') || '');
+
         $(document).ready(function () {
             $("#footer-container").load("/viewer/projects/etruscan/footer.html");
 
@@ -239,7 +241,7 @@
                     newPath = `/viewer/?q=${qValue}/images${getImageOptionsQuery()}${hashFragment}`;
                     break;
                 case 'pointcloud':
-                    src = `/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY`;
+                    src = `/viewer/modules/pointcloud/pointcloud.html?q=${viewerQuery}`;
                     newPath = `/viewer/?q=${qValue}/pointcloud${hashFragment}`;
                     break;
                 case 'texturedmesh':
@@ -261,12 +263,12 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'iiifPageChange' && determineViewerTypeFromQuery() === 'images') {
                 const iframe = document.getElementById('right-Iframe');
-                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY&page=${event.data.page}${getImageOptionsQuery()}`;
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=${viewerQuery}&page=${event.data.page}${getImageOptionsQuery()}`;
             }
 
             if (event.data.type === 'panoramaChange' && determineViewerTypeFromQuery() === 'panorama') {
                 const iframe = document.getElementById('right-Iframe');
-                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY&id=${event.data.id}`;
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=${viewerQuery}&id=${event.data.id}`;
                 const url = new URL(window.location.href);
                 url.searchParams.set('id', event.data.id);
                 window.history.replaceState({}, '', url.href.replace(/%2F/gi, '/'));
@@ -288,7 +290,7 @@
                 const options = determineViewerTypeFromQuery() === 'panorama'
                     ? getPanoramaOptionsQuery()
                     : getImageOptionsQuery();
-                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=PLACEHOLDER_QUERY${options}`;
+                iframe.src = `/viewer/projects/etruscan/metadata/metadata.html?q=${viewerQuery}${options}`;
             }
         }
 

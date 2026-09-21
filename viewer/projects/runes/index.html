@@ -105,7 +105,8 @@
 
             // load venn data
             try {
-                const response = await fetch('/api/runes/venn');
+                const response = await fetch('https://runes.dh.gu.se/api/venn/');
+                //const response = await fetch('/api/runes/venn/');
 
                 if (!response.ok) {
                     throw new Error(`HTTP error ${response.status}`);

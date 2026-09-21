@@ -61,7 +61,7 @@
         content.style.display = 'block';
         
         try {
-            const response = await fetch(`http://runes.dh.gu.se/api/runes/metadata/${runeId}`);
+            const response = await fetch(`https://runes.dh.gu.se/api/runes/metadata/${runeId}`);
             //const response = await fetch(`/api/runes/metadata/${runeId}`);
             if (!response.ok) {
                 throw new Error(

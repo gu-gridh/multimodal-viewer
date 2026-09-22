@@ -312,19 +312,13 @@
             if (!vennData) {
                 return [];
             }
-
             const regionMap = {
                 vastra: 'Västergötland',
                 ostra: 'Östergötland'
             };
-
             const backendRegion = regionMap[region];
-
-            const selectedPeriod =
-                vennData[backendRegion]?.[`Period ${period}`] || [];
-
-            const period3 =
-                vennData[backendRegion]?.['Period 3'] || [];
+            const selectedPeriod = vennData[backendRegion]?.[`Period ${period}`] || [];
+            const period3 = vennData[backendRegion]?.['Period 3'] || [];
 
             const normalStones = selectedPeriod.map(stone => ({
                 ...stone,
@@ -449,7 +443,11 @@
             const svg = d3
                 .select('#venn-diagram')
                 .append('svg')
-                .attr('viewBox', `0 0 ${width} ${height}`);
+                .attr('viewBox', `0 0 ${width} ${height}`)
+                // clicking on the SVG deselects any selected runestone
+                .on('click', function () {
+                    clearSelectedRunestone();
+                });
 
             const circles = getCircleGeometry(width, height);
 
@@ -496,9 +494,37 @@
 
             // Selected rune
             d3.select(
-                `.runestone[data-id="${stone.id}"] rect`
-            )
+                `.runestone[data-id="${stone.id}"] rect`)
+                .on('click', function (event) {
+                    event.stopPropagation();
+                    selectRunestone(stone);
+                })
                 .attr('fill', '#c43a04');
+        }
+
+        function clearSelectedRunestone() {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('q');
+            window.history.pushState(
+                {},
+                '',
+                url.pathname
+            );
+
+            // Restore correct colors
+            d3.selectAll('.runestone').each(function () {
+                const group = d3.select(this);
+                const isPeriod3 = group.attr('data-period3') === 'true';
+                group.select('rect')
+                    .attr(
+                        'fill',
+                        isPeriod3
+                            ? '#999'
+                            : '#ffc76a'
+                    );
+            });
+            // Show empty metadata state
+            changeRightViewer('metadata');
         }
 
         function changeLeftViewer() {

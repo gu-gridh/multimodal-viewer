@@ -32,6 +32,11 @@ body {
         margin-left:10px;
     }
 
+    .runsten-button:hover{
+        transform:scale(1.05);
+        background-color: rgb(160, 100, 100);
+    }
+
   
 
 .metadata-container {

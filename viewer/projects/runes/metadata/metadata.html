@@ -109,6 +109,12 @@
                     const rune = await response.json();
                     console.log('Rune metadata:', rune);
 
+                    //check if mesh is avaliable
+                    window.parent.postMessage({
+                        type: 'meshAvailability',
+                        hasMesh: !!rune.mesh_url_public
+                    }, '*');
+
                     document.getElementById('metadata-title').textContent =
                         rune.name || '';
 

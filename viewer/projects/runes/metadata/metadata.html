@@ -50,7 +50,7 @@
             <div class="metadata-card">
                 <div class="metadata-super-content">
                     <div class="metadata-button-section">
-                        <div class="runsten-button">Redigera</div>
+                        <div class="runsten-button" id="edit-runestone">Redigera</div>
                         <div class="runsten-button close" onclick="clearData()">Stäng</div>
                     </div>
                     <div class="metadata-content">
@@ -130,7 +130,16 @@
                         'Öppna Lantmäteriet'
                     );
 
-                    addToMap(rune.longitude, rune.latitude, rune.name)
+                    document.getElementById('edit-runestone').onclick = function () {
+                        window.open(
+                            `https://runes.dh.gu.se/admin/login/?next=/admin/runes_viewer/runestone/${encodeURIComponent(rune.id)}/change/`,
+                            '_blank'
+                        );
+                    };
+
+                    if (rune.longitude && rune.latitude) {
+                        addToMap(rune.longitude, rune.latitude, rune.name);
+                    }
 
                 } catch (error) {
                     console.error('Could not load metadata:', error);

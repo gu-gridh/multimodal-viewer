@@ -14,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
     <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
+    <script src="/viewer/projects/runes/helpers/runestones.js"></script>
 
 </head>
 
@@ -46,7 +47,7 @@
         <div id="right-pane">
             <div class="mobile-back-button" title="Back to visuals" onclick="showMobileVisuals()"></div>
             <div class="ui-module-container">
-                <div class="ui-module">
+                <div class="ui-module" id="nav-bar" style="display: none;">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
                         Metadata
                     </div>
@@ -346,7 +347,8 @@
             // hover tooltip for runestones
             const tooltip = svg.append('g')
                 .attr('class', 'runestone-tooltip')
-                .style('display', 'none');
+                .style('display', 'none')
+                .style('pointer-events', 'none');
 
             tooltip.append('rect')
                 .attr('rx', 4)
@@ -475,6 +477,8 @@
             url.searchParams.set('q', stone.id);
             window.history.pushState({}, '', url);
             changeRightViewer('metadata');
+            //show the navigation bar
+            document.getElementById('nav-bar').style.display = 'block';
 
             // Restore each stone's normal color
             d3.selectAll('.runestone').each(function () {
@@ -499,32 +503,7 @@
                     event.stopPropagation();
                     selectRunestone(stone);
                 })
-                .attr('fill', '#c43a04');
-        }
-
-        function clearSelectedRunestone() {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('q');
-            window.history.pushState(
-                {},
-                '',
-                url.pathname
-            );
-
-            // Restore correct colors
-            d3.selectAll('.runestone').each(function () {
-                const group = d3.select(this);
-                const isPeriod3 = group.attr('data-period3') === 'true';
-                group.select('rect')
-                    .attr(
-                        'fill',
-                        isPeriod3
-                            ? '#999'
-                            : '#ffc76a'
-                    );
-            });
-            // Show empty metadata state
-            changeRightViewer('metadata');
+                .attr('fill', STONE_COLORS.selected);
         }
 
         function changeLeftViewer() {

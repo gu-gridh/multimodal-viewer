@@ -14,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
     <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
+    <script src="/viewer/projects/runes/helpers/runestones.js"></script>
 
 </head>
 
@@ -503,36 +504,6 @@
                     selectRunestone(stone);
                 })
                 .attr('fill', STONE_COLORS.selected);
-        }
-
-        function clearSelectedRunestone() {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('q');
-            window.history.pushState(
-                {},
-                '',
-                url.pathname
-            );
-            //hide the navigation bar
-            document.getElementById('nav-bar').style.display = 'none';
-
-            // Restore stone colors
-            d3.selectAll('.runestone').each(function () {
-                const group = d3.select(this);
-                const isPeriod3 = group.attr('data-period3') === 'true';
-                group.select('rect')
-                    .attr(
-                        'fill',
-                        isPeriod3
-                            ? STONE_COLORS.period3
-                            : STONE_COLORS.normal
-                    );
-            });
-            // Show empty metadata state
-            activeViewer = 'metadata';
-            const iframe = document.getElementById('right-iframe');
-            iframe.src = '/viewer/projects/runes/metadata/metadata.html'
-            moduleSwitcherRight();
         }
 
         function changeLeftViewer() {

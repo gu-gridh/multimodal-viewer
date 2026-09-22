@@ -15,11 +15,11 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
   const queryName = req.query.q?.split('/')[0] || '1';
 
   try {
-    const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
+    const apiUrl = `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(queryName)}/`;
     const apiResponse = await axios.get(apiUrl);
-    const texturedMeshData = apiResponse.data.results?.[0];
+    const texturedMeshData = apiResponse.data;
 
-    if (!texturedMeshData?.url_public) {
+    if (!texturedMeshData) {
       return res.status(404).send('No textured mesh');
     }
 
@@ -30,11 +30,11 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
         return res.status(500).send('Internal Server Error');
       }
 
-      const title = texturedMeshData.title || texturedMeshData.tomb?.[0]?.name || 'Textured mesh';
+      const title = texturedMeshData.name || 'Textured mesh';
       res.send(data
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.url_public))
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.mesh_url_public))
         .replace(/'PLACEHOLDER_TEXTUREDMESH_TITLE'/g, JSON.stringify(title))
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.url_download || ''))
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.mesh_url_download || ''))
         .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(texturedMeshData.camera_position || null))
         .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(texturedMeshData.look_at || null)));
     });

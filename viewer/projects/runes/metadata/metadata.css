@@ -190,4 +190,57 @@ body {
     height: calc(100vh - 400px);
 }
 
+.start{
+    width:100%;
+    height:calc(600px - 0px);
+
+  
+}
+
+.start-content{
+        display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+   margin:30px;
+    height:auto;
+
+.start-image{
+ background-image: url(runstentop.png);
+ background-size: 100%;
+ width:200px;
+ height:200px;
+ margin-bottom:20px;
+  margin-top:20px;
+}
+
+.start-title{
+    font-size: 2em;
+    text-align: center;
+}
+
+.start-subtitle{
+    font-size: 1.5em;
+}
+
+.start-text{
+    font-size: 1.2em;
+    margin-top:10px;
+    margin-bottom:20px;
+    font-weight:300;
+    text-align: center;
+    width:80%;
+  
+}
+
+.column{
+    width:100%;
+  columns: 2;
+  text-align: justify;
+      font-size: 1.0em;
+}
+
+
+
+
 

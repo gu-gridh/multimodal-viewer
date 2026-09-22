@@ -7,7 +7,7 @@
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="metadata.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="/viewer/libs/openseadragon.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
@@ -15,91 +15,114 @@
 <body>
     <div class="metadata-container">
         <div id="start" class="start">
-            Välj en runsten för att visa information. Lorum ipsum bla bla bla.
+            <div class="start-content">
+                <div class="start-image"></div>
+                <div class="start-title">
+                    Runstenarnas språkliga landskap
+                </div>
+                <div class="start-text">
+                    Venndiagrammet organiserar runstenarna utefter deras placering i relation till vägar, gravfält och
+                    gränser. Välj en runsten för att visa mer information.
+                </div>
+
+                <div class="start-subtitle">
+                    Om projektet
+                </div>
+                <div class="start-text column">
+                    Projektet undersöker hur ristandet och resandet av runstenar under vikingatiden (år 790–1100)
+                    fungerat som ett sätt att skapa mening på den plats där stenarna restes. Vi arbetar med två områden,
+                    Västergötland och Östergötland, där man kan följa hur bruket att resa runstenar får fäste i väster
+                    och sedan fortsätter vidare österut och norrut. Genom att vi i projektet är både språkvetare och
+                    arkeologer kommer vi att kunna göra analyser av hur stenarnas runinskrifter och utformning (slingor, bilder,
+                    stenmaterial och form osv.) kan ha samspelat med deras placering i landskapet (vid vägar, gravfält,
+                    gränser osv.). Vilka olika platser och riktningar kan runstenarna ha pekat ut i landskapet genom sin
+                    utformning och placering? Vissa resultat kommer att bli tillgängliga genom att vi digitalt publicerar stenars plats i det vikingatida landskapet.
+                </div>
+            </div>
         </div>
         <div id="metadata-content-wrapper" style="display: none;">
-        <div class="metadata-card">
-            <div class="metadata-content">
-                <div class="metadata-title" id="metadata-title"></div>
+            <div class="metadata-card">
+                <div class="metadata-content">
+                    <div class="metadata-title" id="metadata-title"></div>
+                </div>
+                <div class="metadata-content">
+                    <div class="label">Beskrivning</div>
+                    <p class="metadata-description" id="metadata-description"></p>
+                </div>
+                <div class="metadata-content">
+                    <div class="label">Datum</div>
+                    <div class="data" id="metadata-date"></div>
+                </div>
+                <div class="metadata-content">
+                    <div class="label">Fornfynd</div>
+                    <div class="data" id="metadata-fornfynd"></div>
+                </div>
+                <div class="metadata-content">
+                    <div class="label">Lantmäteriet</div>
+                    <div class="data" id="metadata-lantmateriet"></div>
+                </div>
             </div>
-            <div class="metadata-content">
-                <div class="label">Beskrivning</div>
-                <p class="metadata-description" id="metadata-description"></p>
-            </div>
-            <div class="metadata-content">
-                <div class="label">Datum</div>
-                <div class="data" id="metadata-date"></div>
-            </div>
-            <div class="metadata-content">
-                <div class="label">Fornfynd</div>
-                <div class="data" id="metadata-fornfynd"></div>
-            </div>
-            <div class="metadata-content">
-                <div class="label">Lantmäteriet</div>
-                <div class="data" id="metadata-lantmateriet"></div>
+            <div class="map-container">
+                <div id="map"></div>
             </div>
         </div>
-        <div class="map-container">
-            <div id="map"></div>
-        </div>
-    </div>
 
-    <script>
-        async function loadMetadata() {
-        const params = new URLSearchParams(window.location.search);
-        const runeId = params.get('q');
-        const emptyState = document.getElementById('start');
-        const content = document.getElementById('metadata-content-wrapper');
+        <script>
+            async function loadMetadata() {
+                const params = new URLSearchParams(window.location.search);
+                const runeId = params.get('q');
+                const emptyState = document.getElementById('start');
+                const content = document.getElementById('metadata-content-wrapper');
 
-        if (!runeId) {
-            emptyState.style.display = 'block';
-            content.style.display = 'none';
-            return;
-        }
+                if (!runeId) {
+                    emptyState.style.display = 'block';
+                    content.style.display = 'none';
+                    return;
+                }
 
-        emptyState.style.display = 'none';
-        content.style.display = 'block';
-        
-        try {
-            const response = await fetch(`https://runes.dh.gu.se/api/metadata/${runeId}`);
-            //const response = await fetch(`/api/runes/metadata/${runeId}`);
-            if (!response.ok) {
-                throw new Error(
-                    `Metadata request failed: ${response.status}`
-                );
+                emptyState.style.display = 'none';
+                content.style.display = 'block';
+
+                try {
+                    const response = await fetch(`https://runes.dh.gu.se/api/metadata/${runeId}`);
+                    //const response = await fetch(`/api/runes/metadata/${runeId}`);
+                    if (!response.ok) {
+                        throw new Error(
+                            `Metadata request failed: ${response.status}`
+                        );
+                    }
+
+                    const rune = await response.json();
+                    console.log('Rune metadata:', rune);
+
+                    document.getElementById('metadata-title').textContent =
+                        rune.name || '';
+
+                    document.getElementById('metadata-description').textContent =
+                        rune.description || '';
+
+                    document.getElementById('metadata-date').textContent =
+                        rune.date_visit || '';
+
+                    setLink(
+                        'metadata-fornfynd',
+                        rune.fornsoek_url,
+                        'Öppna Fornfynd'
+                    );
+
+                    setLink(
+                        'metadata-lantmateriet',
+                        rune.lantmaeteriet_url,
+                        'Öppna Lantmäteriet'
+                    );
+
+                } catch (error) {
+                    console.error('Could not load metadata:', error);
+                }
             }
 
-            const rune = await response.json();
-            console.log('Rune metadata:', rune);
-
-            document.getElementById('metadata-title').textContent =
-                rune.name || '';
-
-            document.getElementById('metadata-description').textContent =
-                rune.description || '';
-
-            document.getElementById('metadata-date').textContent =
-                rune.date_visit || '';
-
-            setLink(
-                'metadata-fornfynd',
-                rune.fornsoek_url,
-                'Öppna Fornfynd'
-            );
-
-            setLink(
-                'metadata-lantmateriet',
-                rune.lantmaeteriet_url,
-                'Öppna Lantmäteriet'
-            );
-
-        } catch (error) {
-            console.error('Could not load metadata:', error);
-        }
-    }
-
-        function setLink(elementId, url, text) {
-            const element = document.getElementById(elementId);
+            function setLink(elementId, url, text) {
+                const element = document.getElementById(elementId);
 
                 if (!url) {
                     element.textContent = '';
@@ -116,36 +139,36 @@
                 element.replaceChildren(link);
             }
 
-        loadMetadata();
+            loadMetadata();
 
-        //mock for map
-        const mockRune = {
-            id: 'r1',
-            title: 'Runsten R1',
-            lat: 58.3908,
-            lng: 13.8451
-        };
+            //mock for map
+            const mockRune = {
+                id: 'r1',
+                title: 'Runsten R1',
+                lat: 58.3908,
+                lng: 13.8451
+            };
 
-        const map = L.map('map').setView(
-            [mockRune.lat, mockRune.lng],
-            11
-        );
+            const map = L.map('map').setView(
+                [mockRune.lat, mockRune.lng],
+                11
+            );
 
-        L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap contributors'
-            }
-        ).addTo(map);
+            L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }
+            ).addTo(map);
 
-        L.marker([mockRune.lat, mockRune.lng])
-            .addTo(map)
-            .bindPopup(mockRune.title)
-            .openPopup();
+            L.marker([mockRune.lat, mockRune.lng])
+                .addTo(map)
+                .bindPopup(mockRune.title)
+                .openPopup();
 
 
-    </script>
+        </script>
 </body>
 
 </html>

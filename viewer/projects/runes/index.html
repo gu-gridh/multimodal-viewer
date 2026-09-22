@@ -46,7 +46,7 @@
         <div id="right-pane">
             <div class="mobile-back-button" title="Back to visuals" onclick="showMobileVisuals()"></div>
             <div class="ui-module-container">
-                <div class="ui-module">
+                <div class="ui-module" id="nav-bar" style="display: none;">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
                         Metadata
                     </div>
@@ -346,7 +346,8 @@
             // hover tooltip for runestones
             const tooltip = svg.append('g')
                 .attr('class', 'runestone-tooltip')
-                .style('display', 'none');
+                .style('display', 'none')
+                .style('pointer-events', 'none');
 
             tooltip.append('rect')
                 .attr('rx', 4)
@@ -475,6 +476,8 @@
             url.searchParams.set('q', stone.id);
             window.history.pushState({}, '', url);
             changeRightViewer('metadata');
+            //show the navigation bar
+            document.getElementById('nav-bar').style.display = 'block';
 
             // Restore each stone's normal color
             d3.selectAll('.runestone').each(function () {
@@ -499,7 +502,7 @@
                     event.stopPropagation();
                     selectRunestone(stone);
                 })
-                .attr('fill', '#c43a04');
+                .attr('fill', STONE_COLORS.selected);
         }
 
         function clearSelectedRunestone() {
@@ -510,8 +513,10 @@
                 '',
                 url.pathname
             );
+            //hide the navigation bar
+            document.getElementById('nav-bar').style.display = 'none';
 
-            // Restore correct colors
+            // Restore stone colors
             d3.selectAll('.runestone').each(function () {
                 const group = d3.select(this);
                 const isPeriod3 = group.attr('data-period3') === 'true';
@@ -519,12 +524,15 @@
                     .attr(
                         'fill',
                         isPeriod3
-                            ? '#999'
-                            : '#ffc76a'
+                            ? STONE_COLORS.period3
+                            : STONE_COLORS.normal
                     );
             });
             // Show empty metadata state
-            changeRightViewer('metadata');
+            activeViewer = 'metadata';
+            const iframe = document.getElementById('right-iframe');
+            iframe.src = '/viewer/projects/runes/metadata/metadata.html'
+            moduleSwitcherRight();
         }
 
         function changeLeftViewer() {

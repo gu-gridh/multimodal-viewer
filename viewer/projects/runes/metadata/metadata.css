@@ -230,10 +230,12 @@ body {
     font-weight:300;
     text-align: center;
     width:80%;
+    line-height:1.2;
   
 }
 
 .column{
+     line-height:1.3;
     width:100%;
   columns: 2;
   text-align: justify;

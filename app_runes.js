@@ -54,8 +54,8 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
 
     const panoramaConfig = {
       panoramas: [
-        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289' },
-        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289' }
+        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_189/' },
+        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_137/' }
       ]
     };
     res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));

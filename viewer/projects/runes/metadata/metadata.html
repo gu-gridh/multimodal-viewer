@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="/viewer/libs/openseadragon.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/viewer/projects/runes/helpers/runestones.js"></script>
 </head>
 
 <body>
@@ -49,7 +50,7 @@
                 <div class="metadata-super-content">
                     <div class="metadata-button-section">
                         <div class="runsten-button">Redigera</div>
-                        <div class="runsten-button close">Stäng</div>
+                        <div class="runsten-button close" onclick="clearData()">Stäng</div>
                     </div>
                     <div class="metadata-content">
                         <div class="metadata-title" id="metadata-title"></div>
@@ -98,7 +99,6 @@
 
                 try {
                     const response = await fetch(`https://runes.dh.gu.se/api/metadata/${runeId}`);
-                    //const response = await fetch(`/api/runes/metadata/${runeId}`);
                     if (!response.ok) {
                         throw new Error(
                             `Metadata request failed: ${response.status}`
@@ -129,6 +129,8 @@
                         'Öppna Lantmäteriet'
                     );
 
+                    addToMap(rune.longitude, rune.latitude, rune.name)
+
                 } catch (error) {
                     console.error('Could not load metadata:', error);
                 }
@@ -154,33 +156,35 @@
 
             loadMetadata();
 
-            //mock for map
-            const mockRune = {
-                id: 'r1',
-                title: 'Runsten R1',
-                lat: 58.3908,
-                lng: 13.8451
-            };
+            function addToMap(longitude, latitude, title) {
+                const map = L.map('map').setView(
+                    [latitude, longitude],
+                    11
+                );
 
-            const map = L.map('map').setView(
-                [mockRune.lat, mockRune.lng],
-                11
+                L.tileLayer(
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                        maxZoom: 19,
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }
+                ).addTo(map);
+
+                L.marker([latitude, longitude])
+                    .addTo(map)
+                    .bindPopup(title)
+                    .openPopup();
+            }
+
+
+           function clearData() {
+            window.parent.postMessage(
+                { type: 'clearSelectedRunestone' },
+                '*'
             );
-
-            L.tileLayer(
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                {
-                    maxZoom: 19,
-                    attribution: '&copy; OpenStreetMap contributors'
-                }
-            ).addTo(map);
-
-            L.marker([mockRune.lat, mockRune.lng])
-                .addTo(map)
-                .bindPopup(mockRune.title)
-                .openPopup();
-
-
+            //dont show menu
+            document.getElementById('nav-bar').style.display = 'none';
+        }
         </script>
 </body>
 

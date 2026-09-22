@@ -8,27 +8,75 @@ body {
     font-family: "Oswald", sans-serif;
 }
 
+  .metadata-button-section{
+            position:absolute;
+        display:flex;
+        flex-direction: row;
+             right:50px;
+        top:110px;
+    }
+
+
+ .runsten-button{
+        float: right;
+        background-color: rgb(180, 100, 100);
+        border-radius: 4px;
+        padding: 5px 10px;
+        color: white;
+     cursor:pointer;
+        font-size: 0.8em;
+    }
+
+     .close{
+
+        margin-left:10px;
+    }
+
+  
+
 .metadata-container {
     box-sizing: border-box;
     height: 100%;
     min-width: 250px;
     padding: 70px 40px 40px;
     overflow: auto;
+    
 }
 
 .metadata-title {
     margin: 0;
     font-weight: 300;
     font-size: 2.5em;
-    margin-bottom:10px;
+    margin-bottom: 10px;
+    color:rgb(180, 100, 100);
+}
+
+.divider {
+    border-width: 0 0 1px 0;
+    border-color:rgb(180, 100, 100);
+    border-style:dashed;
+    width:calc(100% + 40px);
+
+    margin-left:-20px;
+    margin-bottom:20px;
 }
 
 .metadata-card {
-    padding: 20px 0 10px;
-    display:flex;
+    margin-top:30px;
+    display: flex;
     flex-direction: column;
-    height:200px;
+    height: 200px;
+    background-color: white;
+    border-radius:10px 10px 0px 0px;
+    width: 100%;
+     padding-bottom:40px;
 }
+
+.metadata-super-content {
+    padding:20px;
+   
+}
+
 
 .metadata-content {
     display: flex;
@@ -37,6 +85,7 @@ body {
     line-height: 1.1;
     font-weight: 300;
 }
+
 
 .metadata-content .label {
     width: 110px;
@@ -177,12 +226,12 @@ body {
 }
 
 .map-container {
-    width: 98%;
-    margin-top:30px;
-    border-radius:10px;
-    overflow:hidden;
-    bottom:30px;
-      box-shadow: 0 0.1rem 2rem rgba(0, 0, 0, 0.3);
+    width: 100%;
+    margin-top: 0px;
+    border-radius: 0px 0px 10px 10px;
+    overflow: hidden;
+    bottom: 30px;
+    box-shadow: 0rem 1.0rem 2rem rgba(0, 0, 0, 0.3);
 }
 
 #map {
@@ -190,59 +239,57 @@ body {
     height: calc(100vh - 400px);
 }
 
-.start{
-    width:100%;
-    height:calc(600px - 0px);
+.start {
+    width: 100%;
+    height: calc(600px - 0px);
 
-  
+
 }
 
-.start-content{
-        display:flex;
+.start-content {
+    display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     justify-content: center;
-   margin:30px;
-    height:auto;
-
-.start-image{
- background-image: url(runstentop.png);
- background-size: 100%;
- width:200px;
- height:200px;
- margin-bottom:20px;
-  margin-top:20px;
+    margin: 30px;
+    height: auto;
 }
 
-.start-title{
-    font-size: 2em;
-    text-align: center;
-}
+    .start-image {
+        background-image: url(runstentop.png);
+        background-size: 100%;
+        width: 200px;
+        height: 200px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
 
-.start-subtitle{
-    font-size: 1.5em;
-}
+    .start-title {
+        font-size: 2em;
+        text-align: center;
+    }
 
-.start-text{
-    font-size: 1.2em;
-    margin-top:10px;
-    margin-bottom:20px;
-    font-weight:300;
-    text-align: center;
-    width:80%;
-    line-height:1.2;
-  
-}
+    .start-subtitle {
+        font-size: 1.5em;
+    }
 
-.column{
-     line-height:1.3;
-    width:100%;
-  columns: 2;
-  text-align: justify;
-      font-size: 1.0em;
-}
+    .start-text {
+        font-size: 1.2em;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-weight: 300;
+        text-align: center;
+        width: 80%;
+        line-height: 1.2;
 
+    }
 
+    .column {
+        line-height: 1.3;
+        width: 100%;
+        columns: 2;
+        text-align: justify;
+        font-size: 1.0em;
+    }
 
-
-
+   

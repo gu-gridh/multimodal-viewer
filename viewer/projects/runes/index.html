@@ -197,6 +197,13 @@
             if (event.data.type === 'clearSelectedRunestone') {
                 clearSelectedRunestone();
             }
+            if (event.data.type === 'meshAvailability') {
+                const modelButton =
+                    document.getElementById('viewer-texturedmesh');
+
+                modelButton.style.display =
+                    event.data.hasMesh ? '' : 'none';
+            }
         }, false);
 
         function toggleLeftPane() {

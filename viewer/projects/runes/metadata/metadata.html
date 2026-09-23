@@ -92,6 +92,17 @@
                 if (!runeId) {
                     emptyState.style.display = 'block';
                     content.style.display = 'none';
+
+                    window.parent.postMessage({
+                        type: 'meshAvailability',
+                        hasMesh: false
+                    }, '*');
+
+                    window.parent.postMessage({
+                        type: 'imageAvailability',
+                        hasImages: false
+                    }, '*');
+
                     return;
                 }
 
@@ -114,6 +125,8 @@
                         type: 'meshAvailability',
                         hasMesh: !!rune.mesh_url_public
                     }, '*');
+
+                    await checkImageAvailability(runeId);
 
                     document.getElementById('metadata-title').textContent =
                         rune.name || '';
@@ -171,6 +184,37 @@
             }
 
             loadMetadata();
+
+            async function checkImageAvailability(runeId) {
+            try {
+                const response = await fetch(
+                    `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(runeId)}`
+                );
+
+                if (!response.ok) {
+                    throw new Error(`Image request failed: ${response.status}`);
+                }
+                const data = await response.json();
+                const images = Array.isArray(data)
+                    ? data
+                    : data.results || [];
+
+                const hasImages = images.some(image => image.iiif_file);
+                console.log('Image availability for', runeId, ':', hasImages);
+                window.parent.postMessage({
+                    type: 'imageAvailability',
+                    hasImages
+                }, '*');
+
+            } catch (error) {
+                console.error('Could not check images:', error);
+                // Hide button
+                window.parent.postMessage({
+                    type: 'imageAvailability',
+                    hasImages: false
+                }, '*');
+            }
+        }
 
             function addToMap(longitude, latitude, title) {
                 const map = L.map('map').setView(

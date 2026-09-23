@@ -88,8 +88,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`
         );
 
-        console.log('IMAGE API RESPONSE:', apiResponse.data);
-
         const images = Array.isArray(apiResponse.data)
             ? apiResponse.data
             : apiResponse.data.results || [];

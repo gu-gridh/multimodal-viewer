@@ -51,7 +51,7 @@
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
                         Metadata
                     </div>
-                     <div class="ui-module-item right" id="viewer-images" onclick="changeRightViewer('images')">
+                     <div class="ui-module-item right" id="viewer-images" onclick="changeRightViewer('images')" style="display: none;">
                         Bild
                     </div>
                     <div class="ui-module-item right" id="viewer-panorama" onclick="changeRightViewer('panorama')">
@@ -198,11 +198,17 @@
                 clearSelectedRunestone();
             }
             if (event.data.type === 'meshAvailability') {
-                const modelButton =
-                    document.getElementById('viewer-texturedmesh');
+                const modelButton = document.getElementById('viewer-texturedmesh');
 
                 modelButton.style.display =
                     event.data.hasMesh ? '' : 'none';
+            }
+            if (event.data.type === 'imageAvailability') {
+                const imageButton =
+                    document.getElementById('viewer-images');
+
+                imageButton.style.display =
+                    event.data.hasImages ? '' : 'none';
             }
         }, false);
 
@@ -542,6 +548,11 @@
 
             // Hide the navigation bar
             document.getElementById('nav-bar').style.display = 'none';
+
+            document.getElementById('viewer-images')
+                .style.display = 'none';
+            document.getElementById('viewer-texturedmesh')
+                .style.display = 'none';
 
             window.history.pushState(
                 {},

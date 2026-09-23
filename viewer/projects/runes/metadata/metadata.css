@@ -55,6 +55,7 @@ body {
     margin-bottom: 0px;
     color: rgb(180, 100, 100);
     font-family: 'Teko', sans-serif;
+    min-height:60px;
 }
 
 .divider {

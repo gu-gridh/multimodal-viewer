@@ -51,11 +51,11 @@ body {
 .metadata-title {
     margin: 0;
     font-weight: 300;
-    font-size: 3.5em;
+    font-size: 3.0em;
     margin-bottom: 0px;
     color: rgb(180, 100, 100);
     font-family: 'Teko', sans-serif;
-    min-height:60px;
+    min-height:50px;
 }
 
 .divider {
@@ -71,7 +71,7 @@ body {
     margin-top: 30px;
     display: flex;
     flex-direction: column;
-    height: 200px;
+    height: 220px;
     background-color: white;
     border-radius: 10px 10px 0px 0px;
     width: 100%;
@@ -243,7 +243,7 @@ body {
 
 #map {
     width: 100%;
-    height: calc(100vh - 400px);
+    height: calc(100vh - 430px);
 }
 
 .start {

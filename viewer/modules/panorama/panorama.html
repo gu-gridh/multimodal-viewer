@@ -103,9 +103,9 @@
 
         .pnlm-compass {
             top: 20px;
-            right:25px;
+            right: 25px;
             bottom: auto;
-            opacity:0.8;
+            opacity: 0.8;
             border-width: 0px;
             pointer-events: none;
         }
@@ -144,7 +144,7 @@
                         <div class="guide-instructions-item-label"><b>Full Page.</b> Expand or restore the panorama
                             viewer.</div>
                     </div>
-                     <div class="module-acknowledgement">
+                    <div class="module-acknowledgement">
                         <p data-i18n="createdwith">The module was created with</p>
                         <p><a href="https://pannellum.org/" target="_blank" rel="noopener noreferrer">Pannellum</a></p>
                     </div>
@@ -172,14 +172,15 @@
     <script>
         const panoramaConfig = 'PLACEHOLDER_PANORAMA_CONFIG';
         const panoramas = panoramaConfig.panoramas;
-        const scenes = Object.fromEntries(panoramas.map(({ id, title, downloadUrl, startPos, northOffset = 0, urlPublic }) => {
+        const scenes = Object.fromEntries(panoramas.map(({ id, title, downloadUrl, startPos, northOffset, urlPublic }) => {
             const [yaw, pitch, hfov] = startPos;
             return [id, {
                 type: 'multires',
                 yaw,
                 pitch,
                 hfov,
-                northOffset,
+                northOffset: northOffset ?? 0,
+                compass: Number.isFinite(northOffset),
                 multiRes: {
                     basePath: urlPublic.replace(/\/$/, ''),
                     path: '/%l/%s%y_%x',
@@ -196,7 +197,6 @@
             default: { firstScene: panoramaConfig.initialScene || panoramas[0].id },
             scenes,
             autoLoad: true,
-            compass: true,
             showFullscreenCtrl: false,
             showZoomCtrl: false
         });
@@ -215,7 +215,8 @@
         panoramaSwitcher.value = panoramaConfig.initialScene || panoramas[0].id;
         panoramaSwitcher.hidden = panoramas.length < 2;
 
-        function updateDownload(panorama) {
+        function updateControls(panorama) {
+            document.getElementById('CompassToggle').style.display = scenes[panorama.id].compass ? '' : 'none';
             const download = document.getElementById('download');
             const button = download.querySelector('.download-button');
             if (panorama.downloadUrl) {
@@ -227,7 +228,7 @@
             }
         }
 
-        updateDownload(panoramas.find(({ id }) => id === panoramaSwitcher.value));
+        updateControls(panoramas.find(({ id }) => id === panoramaSwitcher.value));
 
         panoramaSwitcher.onchange = () => {
             viewer.loadScene(
@@ -237,7 +238,7 @@
                 viewer.getHfov()
             );
             const panorama = panoramas.find(({ id }) => id === panoramaSwitcher.value);
-            updateDownload(panorama);
+            updateControls(panorama);
             window.parent.postMessage({ type: 'panoramaChange', id: panorama.id }, '*');
         };
 

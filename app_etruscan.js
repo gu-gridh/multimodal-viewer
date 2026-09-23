@@ -322,7 +322,8 @@ app.get('/viewer/modules/panorama/panorama.html', async (req, res) => {
           title: panorama.title || `Panorama ${index + 1}`,
           downloadUrl: panorama.url_download || '',
           startPos,
-          northOffset: Number(panorama.north_offset) || 0,
+          northOffset: panorama.north_offset == null || String(panorama.north_offset).trim() === ''
+            ? null : Number(panorama.north_offset),
           urlPublic: panorama.url_public
         };
       });

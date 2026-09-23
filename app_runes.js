@@ -77,54 +77,96 @@ app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
 });
 
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
-    const placeId = req.query.q?.split('/')[0];
+    const fullQuery = req.query.q;
+    const [placeId, viewerType] = fullQuery
+        ? fullQuery.split('/')
+        : [];
 
-    if (!placeId) {
-        return res.status(400).send('Place ID is required');
+    if (!placeId || viewerType !== 'images') {
+        return res.status(400).send('image query is required');
     }
 
+    const sequenceEnabled = true;
+
+    const apiUrl =
+        `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`;
+
     try {
-        const apiResponse = await axios.get(
-            `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`
-        );
+        const apiResponse = await axios.get(apiUrl);
 
         const images = Array.isArray(apiResponse.data)
             ? apiResponse.data
             : apiResponse.data.results || [];
 
-        const iiifUrls = images
-            .filter(image => image.iiif_file)
-            .map(image => `${image.iiif_file}/info.json`);
+        const availableImages = images.filter(
+            image => image.iiif_file
+        );
 
-        if (iiifUrls.length === 0) {
-            return res.status(404).send('No IIIF images found');
+        if (!availableImages.length) {
+            return res.status(404).send('No IIIF image found.');
         }
 
-        const templatePath = path.join(
-            __dirname,
-            'viewer',
-            'modules',
-            'iiif',
-            'iiif.html'
-        );
+        fs.readFile(
+            path.join(
+                __dirname,
+                'viewer',
+                'modules',
+                'iiif',
+                'iiif.html'
+            ),
+            'utf8',
+            (err, data) => {
+                if (err) {
+                    console.error('Error reading the file:', err);
+                    return res
+                        .status(500)
+                        .send('Internal Server Error');
+                }
 
-        const template = await fs.promises.readFile(
-            templatePath,
-            'utf8'
-        );
+                const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
+                const downloadFiles = availableImages.map(image => image.file);
+                const requestedImage = req.query.id;
+                const requestedPage = availableImages.findIndex(image =>String(image.id) === String(requestedImage));
+                const initialPage =requestedPage >= 0 ? requestedPage : 0;
 
-        const result = template.replace(
-            /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
-            JSON.stringify(iiifUrls)
-        );
+                let modifiedData = data
+                    .replace(
+                        /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
+                        JSON.stringify(tileSources)
+                    )
+                    .replace(
+                        /'PLACEHOLDER_DOWNLOAD_PATH'/g,
+                        JSON.stringify(
+                            JSON.stringify(downloadFiles)
+                        )
+                    )
+                    .replace(
+                        /'PLACEHOLDER_INITIAL_PAGE'/g,
+                        initialPage
+                    )
+                    .replace(
+                        /'PLACEHOLDER_PRESERVE_VIEWPORT'/g,
+                        tileSources.length <= 1
+                    )
+                    .replace(
+                        /'PLACEHOLDER_SEQUENCE_ENABLE'/g,
+                        sequenceEnabled &&
+                        tileSources.length > 1
+                    );
 
-        res.send(result);
+                res.send(modifiedData);
+            }
+        );
 
     } catch (error) {
-        console.error('Error loading IIIF image:', error.message);
-        console.error(error.response?.data);
+        console.error(
+            'Error fetching rune images:',
+            error
+        );
 
-        res.status(500).send('Internal Server Error');
+        return res
+            .status(500)
+            .send('Internal Server Error');
     }
 });
 

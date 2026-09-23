@@ -113,6 +113,7 @@
                     throw new Error(`HTTP error ${response.status}`);
                 }
                 vennData = await response.json();
+                vennData = vennData.venn
 
             } catch (error) {
                 console.error('Error loading Venn data:', error);

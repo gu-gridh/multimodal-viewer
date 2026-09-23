@@ -77,22 +77,31 @@ app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
 });
 
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
-    //const imageId = req.query.q?.split('/')[0];
-    const imageId = '2870';
+    const placeId = req.query.q?.split('/')[0];
 
-    if (!imageId) {
-        return res.status(400).send('Image ID is required');
+    if (!placeId) {
+        return res.status(400).send('Place ID is required');
     }
 
     try {
         const apiResponse = await axios.get(
-            `https://diana.dh.gu.se/api/etruscantombs/image/${encodeURIComponent(imageId)}/?depth=2`
+            `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`
         );
 
-        const image = apiResponse.data;
-        if (!image?.iiif_file) {
-            return res.status(404).send('No IIIF image found');
+        console.log('IMAGE API RESPONSE:', apiResponse.data);
+
+        const images = Array.isArray(apiResponse.data)
+            ? apiResponse.data
+            : apiResponse.data.results || [];
+
+        const iiifUrls = images
+            .filter(image => image.iiif_file)
+            .map(image => `${image.iiif_file}/info.json`);
+
+        if (iiifUrls.length === 0) {
+            return res.status(404).send('No IIIF images found');
         }
+
         const templatePath = path.join(
             __dirname,
             'viewer',
@@ -105,15 +114,18 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             templatePath,
             'utf8'
         );
-        const iiifUrl = `${image.iiif_file}/info.json`;
+
         const result = template.replace(
             /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
-            JSON.stringify([iiifUrl])
+            JSON.stringify(iiifUrls)
         );
+
         res.send(result);
 
     } catch (error) {
-        console.error('Error loading IIIF image:', error);
+        console.error('Error loading IIIF image:', error.message);
+        console.error(error.response?.data);
+
         res.status(500).send('Internal Server Error');
     }
 });

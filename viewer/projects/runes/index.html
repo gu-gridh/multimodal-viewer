@@ -47,7 +47,7 @@
         <div id="right-pane">
             <div class="mobile-back-button" title="Back to visuals" onclick="showMobileVisuals()"></div>
             <div class="ui-module-container">
-                <div class="ui-module" id="nav-bar" style="display: none;">
+                <div class="ui-module" id="nav-bar">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
                         Metadata
                     </div>
@@ -83,19 +83,8 @@
         };
 
         async function init() {
-            // footer
-            try {
-                const footerResponse = await fetch(
-                    '/viewer/projects/runes/footer.html'
-                );
-                const footerHtml = await footerResponse.text();
-                document.getElementById('footer-container').innerHTML =
-                    footerHtml;
-            } catch (error) {
-                console.error('Could not load footer:', error);
-            }
-
             const params = new URLSearchParams(window.location.search);
+
             const region = params.get('region');
 
             activeRegion = ['vastra', 'ostra'].includes(region)
@@ -104,20 +93,29 @@
 
             activeViewer = determineInitialViewer(params);
 
-            // load venn data
+            const qValue = params.get('q');
+            const runeId = qValue?.split('/')[0];
+
+            const navBar = document.getElementById('nav-bar');
+            navBar.style.display = runeId ? '' : 'none';
+
+            // Load Venn data
             try {
-                const response = await fetch('https://runes.dh.gu.se/api/venn/');
-                //const response = await fetch('/api/runes/venn/');
+                const response = await fetch('/api/runes/venn');
 
                 if (!response.ok) {
                     throw new Error(`HTTP error ${response.status}`);
                 }
+
                 vennData = await response.json();
                 vennData = vennData.venn
 
             } catch (error) {
                 console.error('Error loading Venn data:', error);
             }
+
+            await updateViewerAvailability(runeId);
+
             changeLeftViewer();
             changeRightViewer(activeViewer);
         }
@@ -484,10 +482,12 @@
         }
 
         
-        function selectRunestone(stone) {
+        async function selectRunestone(stone) {
             const url = new URL(window.location.href);
             url.searchParams.set('q', stone.id);
             window.history.pushState({}, '', url);
+            //check what viewer
+            await updateViewerAvailability(stone.id);
             changeRightViewer('metadata');
             //show the navigation bar
             document.getElementById('nav-bar').style.display = 'block';
@@ -587,6 +587,63 @@
                 '/viewer/projects/runes/metadata/metadata.html';
 
             moduleSwitcherRight();
+        }
+
+        //this function checks which viewer is loaded when routing directly to iiif/image/context etc, since metadata.html isnt loaded there
+        async function updateViewerAvailability(runeId) {
+            const imageButton =  document.getElementById('viewer-images');
+            const meshButton = document.getElementById('viewer-texturedmesh');
+
+            if (!runeId) {
+                imageButton.style.display = 'none';
+                meshButton.style.display = 'none';
+                return;
+            }
+
+            // metadata is needed to check mesh availability
+            try {
+                const response = await fetch(
+                    `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(runeId)}`
+                );
+                if (response.ok) {
+                    const rune = await response.json();
+                    meshButton.style.display =
+                        rune.mesh_url_public ? '' : 'none';
+                } else {
+                    meshButton.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Could not check mesh availability:', error);
+                meshButton.style.display = 'none';
+            }
+            // check image availability
+            try {
+                const response = await fetch(
+                    `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(runeId)}`
+                );
+
+                if (!response.ok) {
+                    imageButton.style.display = 'none';
+                    return;
+                }
+
+                const data = await response.json();
+
+                const images = Array.isArray(data)
+                    ? data
+                    : data.results || [];
+
+                const hasImages = images.some(
+                    image => image.iiif_file
+                );
+
+                imageButton.style.display =
+                    hasImages ? '' : 'none';
+
+            } catch (error) {
+                console.error('Could not check image availability:', error);
+                imageButton.style.display = 'none';
+            }
         }
     </script>
 </body>

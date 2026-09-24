@@ -79,7 +79,7 @@
 
         const STONE_COLORS = {
             normal: '#ffaa00',
-            period3: '#999', //change this?
+            unknown: '#999', //change this?
             selected: '#c43a04'
         };
 
@@ -121,7 +121,6 @@
                 }
 
                 vennData = await response.json();
-                vennData = vennData.venn
 
             } catch (error) {
                 console.error('Error loading Venn data:', error);
@@ -339,30 +338,55 @@
 
         function getRunestones(region, period) {
             if (!vennData) {
-                return [];
+                return {
+                    venn: [],
+                    outside: []
+                };
             }
+
             const regionMap = {
                 vastra: 'Västergötland',
                 ostra: 'Östergötland'
             };
             const backendRegion = regionMap[region];
-            const selectedPeriod = vennData[backendRegion]?.[`Period ${period}`] || [];
-            const period3 = vennData[backendRegion]?.['Period 3'] || [];
+            const selectedPeriod = vennData[backendRegion]?.[`Period ${period}`] || {venn: [], outside: []};
+            const unknownPeriod =
+                vennData[backendRegion]?.['unknown'] || {
+                    venn: [],
+                    outside: []
+                };
 
-            const normalStones = selectedPeriod.map(stone => ({
+            const normalStones = selectedPeriod.venn.map(stone => ({
                 ...stone,
-                isPeriod3: false
+                isUnknown: false
             }));
 
-            const period3Stones = period3.map(stone => ({
+            const unknownStones = unknownPeriod.venn.map(stone => ({
                 ...stone,
-                isPeriod3: true
+                isUnknown: true
             }));
 
-            return [
-                ...normalStones,
-                ...period3Stones
+            const outsideStones = [
+                ...(selectedPeriod.outside || []).map(stone => ({
+                    ...stone,
+                    isUnknown: false
+                })),
+
+                ...(unknownPeriod.outside || []).map(stone => ({
+                    ...stone,
+                    isUnknown: true
+                }))
             ];
+
+            return {
+                venn: [
+                    ...normalStones,
+                    ...unknownStones
+                ],
+
+                outside: outsideStones
+            };
+
         }
 
         function addRunestones(svg, stones, circles, width, height) {
@@ -404,8 +428,8 @@
                     .attr('class', 'runestone')
                     .attr('data-id', stone.id)
                     .attr(
-                        'data-period3',
-                        stone.isPeriod3 ? 'true' : 'false'
+                        'data-unknown',
+                        stone.isUnknown ? 'true' : 'false'
                     )
                     .attr(
                         'transform',
@@ -453,12 +477,53 @@
                             return STONE_COLORS.selected;
                         }
 
-                        if (stone.isPeriod3) {
-                            return STONE_COLORS.period3;
+                        if (stone.isUnknown) {
+                            return STONE_COLORS.unknown;
                         }
 
                         return STONE_COLORS.normal;
                     });
+            });
+        }
+
+        function addOutsideRunestones(svg, stones, width, height) {
+            const markerSize = 18;
+            const gap = 10;
+            const padding = 25;
+
+            const params = new URLSearchParams(window.location.search);
+            const selectedId = params.get('q')?.split('/')[0];
+
+            stones.forEach((stone, index) => {
+                const x =
+                    padding +
+                    markerSize / 2 +
+                    index * (markerSize + gap);
+
+                const y = height - padding;
+
+                const group = svg.append('g')
+                    .attr('class', 'runestone outside-runestone')
+                    .attr('data-id', stone.id)
+                    .attr(
+                        'transform',
+                        `translate(${x}, ${y})`
+                    )
+                    .on('click', function () {
+                        selectRunestone(stone);
+                    });
+
+                group.append('rect')
+                    .attr('x', -markerSize / 2)
+                    .attr('y', -markerSize / 2)
+                    .attr('width', markerSize)
+                    .attr('height', markerSize)
+                    .attr(
+                        'fill',
+                        String(stone.id) === String(selectedId)
+                            ? STONE_COLORS.selected
+                            : STONE_COLORS.unknown
+                    );
             });
         }
 
@@ -487,8 +552,15 @@
 
             addRunestones(
                 svg,
-                stones,
+                stones.venn,
                 circles,
+                width,
+                height
+            );
+
+            addOutsideRunestones(
+                svg,
+                stones.outside,
                 width,
                 height
             );
@@ -509,14 +581,14 @@
             d3.selectAll('.runestone').each(function () {
                 const group = d3.select(this);
 
-                const isPeriod3 =
-                    group.attr('data-period3') === 'true';
+                const isUnknown =
+                    group.attr('data-unknown') === 'true';
 
                 group.select('rect')
                     .attr(
                         'fill',
-                        isPeriod3
-                            ? STONE_COLORS.period3
+                        isUnknown
+                            ? STONE_COLORS.unknown
                             : STONE_COLORS.normal
                     );
             });
@@ -578,13 +650,13 @@
             d3.selectAll('.runestone').each(function () {
                 const group = d3.select(this);
 
-                const isPeriod3 =
-                    group.attr('data-period3') === 'true';
+                const isUnknown =
+                    group.attr('data-unknown') === 'true';
 
                 group.select('rect')
                     .attr(
                         'fill',
-                        isPeriod3
+                        isUnknown
                             ? '#999'
                             : '#ffc76a'
                     );

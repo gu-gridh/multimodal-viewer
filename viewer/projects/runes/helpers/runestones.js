@@ -14,13 +14,13 @@ function clearSelectedRunestone() {
     d3.selectAll('.runestone').each(function () {
         const group = d3.select(this);
 
-        const isPeriod3 =
-            group.attr('data-period3') === 'true';
+        const isUnknown =
+            group.attr('data-unknown') === 'true';
 
         group.select('rect')
             .attr(
                 'fill',
-                isPeriod3
+                isUnknown
                     ? '#999'
                     : '#ffc76a'
             );

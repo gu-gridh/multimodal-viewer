@@ -12,14 +12,27 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         return new Promise(resolve => {
             const close = value => { panel.hidden = true; resolve(value); };
             const resolutions = [
-                { scale: 1, label: 'High resolution' },
-                { scale: 0.5, label: 'Medium resolution' },
-                { scale: 0.25, label: 'Low resolution' }
+                { scale: 1, label: 'High resolution', maxSide: 3000 },
+                { scale: 0.5, label: 'Medium resolution', maxSide: 2000 },
+                { scale: 0.25, label: 'Low resolution', maxSide: 1000 }
             ];
-            options.replaceChildren(...resolutions.map(({ scale, label }) => {
+            const buttons = resolutions.map(({ scale, label, maxSide }) => {
                 const button = document.createElement('button');
                 button.type = 'button';
-                button.textContent = label;
+                const updateLabel = () => {
+                    const image = downloads?.images?.[viewer.currentPage()];
+                    button.textContent = scale === 1 && !crop.checked && image?.zenodoUrl
+                        ? 'Accessible on Zenodo' : label;
+                    if (crop.checked) {
+                        const detail = document.createElement('small');
+                        detail.textContent = `Up to ${maxSide} px`;
+                        button.appendChild(detail);
+                    }
+                    button.title = crop.checked
+                        ? 'Maximum side length before rotation; actual dimensions may be smaller.'
+                        : '';
+                };
+                updateLabel();
                 button.onclick = () => {
                     const image = downloads?.images?.[viewer.currentPage()];
                     const cropped = crop.checked;
@@ -31,8 +44,10 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
                     const focus = viewer.element.classList.contains('annotation-focus');
                     close({ scale, image, cropped, focus });
                 };
-                return button;
-            }));
+                return { button, updateLabel };
+            });
+            options.replaceChildren(...buttons.map(({ button }) => button));
+            crop.onchange = () => buttons.forEach(({ updateLabel }) => updateLabel());
             title.textContent = 'Download image';
             cropOption.hidden = false;
             cancel.textContent = 'Cancel';

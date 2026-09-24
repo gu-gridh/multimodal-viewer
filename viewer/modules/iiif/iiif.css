@@ -111,7 +111,6 @@ body {
 }
 
 .download-resolution {
-	bottom: 110px;
 	z-index: 1001;
 	padding: 14px;
 	text-align: center;
@@ -122,8 +121,8 @@ body {
 	 position: fixed;
     color: white;
     left: 50%;
-    bottom: 50px;
-    transform: translate(-50%, -50%);
+    bottom: 150px;
+    transform: translateX(-50%);
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.8);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
@@ -144,6 +143,13 @@ body {
 	font: inherit;
 	font-size: 0.9em;
 	cursor: pointer;
+}
+
+.download-resolution button small {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.8em;
+    color: #ccc;
 }
 
 .download-resolution .cancel-button {

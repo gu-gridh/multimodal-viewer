@@ -201,6 +201,7 @@
             moduleSwitcherRight();
         }
 
+        //listens for messages from metadata.html
         window.addEventListener('message', function (event) {
             if (event.data.type === 'togglePane') {
                 toggleLeftPane();
@@ -210,14 +211,14 @@
             }
             if (event.data.type === 'meshAvailability') {
                 const modelButton = document.getElementById('viewer-texturedmesh');
-
+                //hide button
                 modelButton.style.display =
                     event.data.hasMesh ? '' : 'none';
             }
             if (event.data.type === 'imageAvailability') {
                 const imageButton =
                     document.getElementById('viewer-images');
-
+                //hide button
                 imageButton.style.display =
                     event.data.hasImages ? '' : 'none';
             }
@@ -486,30 +487,121 @@
             });
         }
 
-        function addOutsideRunestones(svg, stones, width, height) {
+        //helper to find position of outside venn circles
+        function findOutsideStonePosition(
+            circles,
+            width,
+            height,
+            existingPositions
+        ) {
+            const padding = 20;
+            const minOffset = 25;
+            const maxOffset = 70;
+
+            const circleList = Object.values(circles);
+
+            for (let attempt = 0; attempt < 5000; attempt++) {
+                // Pick one of the circles randomly
+                const circle =
+                    circleList[
+                        Math.floor(Math.random() * circleList.length)
+                    ];
+
+                // Random angle around that circle
+                const angle = Math.random() * Math.PI * 2;
+
+                // Random distance just outside its edge
+                const offset =
+                    minOffset +
+                    Math.random() * (maxOffset - minOffset);
+
+                const distance = circle.r + offset;
+
+                const x =
+                    circle.x +
+                    Math.cos(angle) * distance;
+
+                const y =
+                    circle.y +
+                    Math.sin(angle) * distance;
+
+                const position = { x, y };
+
+                // Keep it inside the SVG
+                if (
+                    x < padding ||
+                    x > width - padding ||
+                    y < padding ||
+                    y > height - padding
+                ) {
+                    continue;
+                }
+
+                // Must be outside ALL circles
+                const outsideAllCircles =
+                    circleList.every(otherCircle => {
+                        const dx = x - otherCircle.x;
+                        const dy = y - otherCircle.y;
+
+                        const distanceToCircle =
+                            Math.sqrt(dx * dx + dy * dy);
+
+                        return distanceToCircle >
+                            otherCircle.r + 10;
+                    });
+
+                if (!outsideAllCircles) {
+                    continue;
+                }
+
+                // Avoid overlapping other outside stones
+                if (
+                    overlapsExistingStone(
+                        position,
+                        existingPositions,
+                        32
+                    )
+                ) {
+                    continue;
+                }
+
+                return position;
+            }
+
+            return null;
+        }
+
+        function addOutsideRunestones(svg, stones, circles, width, height) {
             const markerSize = 18;
-            const gap = 10;
-            const padding = 25;
+            const positions = [];
 
             const params = new URLSearchParams(window.location.search);
             const selectedId = params.get('q')?.split('/')[0];
 
-            stones.forEach((stone, index) => {
-                const x =
-                    padding +
-                    markerSize / 2 +
-                    index * (markerSize + gap);
+            stones.forEach(stone => {
+                const position = findOutsideStonePosition(
+                    circles,
+                    width,
+                    height,
+                    positions
+                );
 
-                const y = height - padding;
+                if (!position) {
+                    return;
+                }
+
+                positions.push(position);
 
                 const group = svg.append('g')
                     .attr('class', 'runestone outside-runestone')
                     .attr('data-id', stone.id)
+                    .attr('data-unknown', 'true')
                     .attr(
                         'transform',
-                        `translate(${x}, ${y})`
+                        `translate(${position.x}, ${position.y})`
                     )
-                    .on('click', function () {
+                    .on('click', function (event) {
+                        event.stopPropagation();
                         selectRunestone(stone);
                     });
 
@@ -561,8 +653,10 @@
             addOutsideRunestones(
                 svg,
                 stones.outside,
+                circles,
                 width,
                 height
+                
             );
         }
 

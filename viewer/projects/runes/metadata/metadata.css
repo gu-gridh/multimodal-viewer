@@ -17,7 +17,7 @@ body {
 
 
 .edit-button {
-    font-family: "Barlow", sans-serif!important;
+    font-family: "Barlow", sans-serif !important;
     float: right;
     background-color: #b46464;
     border-radius: 4px;
@@ -25,9 +25,9 @@ body {
     color: white;
     cursor: pointer;
     font-size: 1em;
-     position: relative;
+    position: relative;
     right: 10px;
-   
+
     margin-top: 10px;
     z-index: 1000;
 }
@@ -41,12 +41,12 @@ body {
     background-color: black;
     height: 35px;
     width: 35px;
-     position: relative;
+    position: relative;
     margin-top: 10px;
     left: 10px;
     z-index: 1000;
     cursor: pointer;
-     float:left;
+    float: left;
 }
 
 .close-button:hover {
@@ -140,6 +140,14 @@ body {
     overflow: auto;
 }
 
+@media screen and (max-width: 600px) {
+    .metadata-card {
+        width: 100%;
+        margin-left: 0%;
+    }
+}
+
+
 .metadata-super-content {
     padding: 20px;
     padding-left: 35px;
@@ -161,7 +169,7 @@ body {
 #map {
     width: 100%;
     height: 300px;
-      transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 
 
@@ -200,21 +208,22 @@ body {
     border-width: 0.5px 0px 0px 0px;
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
-      transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 
 @media screen and (max-height: 760px) {
-#map {
-    width: 100%;
-    height: 200px;
+    #map {
+        width: 100%;
+        height: 200px;
+    }
+
+    .leaflet-control-zoom {
+
+        display: none;
+
+    }
 }
 
-.leaflet-control-zoom {
-    
-   display:none;
-    
-}
-}
 
 
 
@@ -415,6 +424,12 @@ body {
     columns: 2;
     text-align: justify;
     font-size: 1.0em;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        columns: 1;
+    }
 }
 
 

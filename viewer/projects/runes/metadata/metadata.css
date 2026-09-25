@@ -452,3 +452,10 @@ body {
     border-width: 0px !important;
     color: transparent !important;
 }
+
+/* close-btn should not show on mobile */
+@media (max-width: 800px) {
+    .close-button {
+        display: none;
+    }
+}

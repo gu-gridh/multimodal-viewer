@@ -97,6 +97,12 @@
             const qValue = params.get('q');
             const runeId = qValue?.split('/')[0];
 
+            if (runeId && activeViewer === 'metadata') {
+            document
+                .getElementById('main-content')
+                .classList.add('mobile-metadata-open');
+        }
+
             const navBar = document.getElementById('nav-bar');
             navBar.style.display = runeId ? '' : 'none';
 
@@ -668,6 +674,11 @@
             //check what viewer
             await updateViewerAvailability(stone.id);
             changeRightViewer('metadata');
+            // show right pane on mobile
+            document
+                .getElementById('main-content')
+                .classList.add('mobile-metadata-open');
+
             //show the navigation bar
             document.getElementById('nav-bar').style.display = 'block';
 

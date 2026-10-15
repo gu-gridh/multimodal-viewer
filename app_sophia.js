@@ -142,6 +142,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
         const downloadFilePath = `"${basePathDownload}${downloadFile}"`;
         let updatedHtmlContent = htmlContent
+          .replace('module.createImageDownload({', 'module.createImageDownload({ useOriginalDownload: true,')
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
           .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(downloadFilePath))
           .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${encodeURIComponent(queryName)}`))
@@ -180,6 +181,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         const topographyImagesJpg = sortedTopography.map(topography => `${basePathDownload}${topography.file}`);
 
         let updatedHtmlContent = htmlContent
+          .replace('module.createImageDownload({', 'module.createImageDownload({ useOriginalDownload: true,')
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
           .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(topographyImagesJpg))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({

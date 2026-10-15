@@ -3,6 +3,7 @@ export function createImageDownload({
     tileSources,
     downloadSourceString,
     downloadNamesString,
+    useOriginalDownload = false,
     filteredAnnotationDownloadEnabled,
     getActiveAnnotationFilters,
     isPlaceholder
@@ -65,7 +66,7 @@ export function createImageDownload({
             const downloadSources = parse(downloadSourceString, []);
             const downloadNames = parse(downloadNamesString, []);
             const pageIndex = viewer.currentPage();
-            const scale = await chooseResolution();
+            const scale = useOriginalDownload ? 1 : await chooseResolution();
             if (scale === null) return;
 
             let imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
@@ -78,7 +79,7 @@ export function createImageDownload({
                 });
                 url.searchParams.set('scale', scale);
                 imageUrl = url.toString();
-            } else {
+            } else if (!useOriginalDownload) {
                 imageUrl = getIIIFUrl(pageIndex, scale);
             }
 

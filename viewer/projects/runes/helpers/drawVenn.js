@@ -61,3 +61,72 @@ function addVennLabels(svg, circles) {
         .attr('text-anchor', 'middle')
         .text('Gräns');
 }
+
+// statistics legend
+function updateVennStatistics(stones) {
+    const container = document.getElementById('venn-statistics');
+
+    const allStones = [
+        ...stones.venn,
+        ...stones.outside
+    ];
+
+    // Avoid duplicate IDs
+    const uniqueStones = [
+        ...new Map(
+            allStones.map(stone => [stone.id, stone])
+        ).values()
+    ];
+
+    const total = uniqueStones.length;
+
+    if (!total) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const categories = [
+        { name: 'Endast väg', sets: ['Väg'] },
+        { name: 'Endast gravfält', sets: ['Grav'] },
+        { name: 'Endast gräns', sets: ['Gräns'] },
+        { name: 'Väg + gravfält', sets: ['Väg', 'Grav'] },
+        { name: 'Väg + gräns', sets: ['Väg', 'Gräns'] },
+        { name: 'Gravfält + gräns', sets: ['Grav', 'Gräns'] },
+        { name: 'Alla tre', sets: ['Väg', 'Grav', 'Gräns'] },
+        { name: 'Utanför', sets: [] }
+    ];
+
+    const statistics = categories.map(category => {
+        const count = uniqueStones.filter(stone => {
+            const sets = stone.sets || [];
+
+            return (
+                sets.length === category.sets.length &&
+                category.sets.every(set => sets.includes(set))
+            );
+        }).length;
+
+        return {
+            name: category.name,
+            count,
+            percent: Math.round((count / total) * 100),
+        };
+    });
+
+    container.innerHTML = `
+        <!--<div class="statistics-title">
+            Runstenarnas placering
+        </div> -->
+
+        <div class="statistics-total">
+            ${total} runstenar · Period ${activePeriod}
+        </div>
+
+        ${statistics.map(stat => `
+            <div class="statistics-row">
+                <span>${stat.name}</span>
+                <span>${stat.percent} %</span>
+            </div>
+        `).join('')}
+    `;
+}

@@ -33,6 +33,7 @@
             <div id="left-placeholder" class="module-placeholder">
                 <div class="venn-panel">
                     <div id="venn-diagram"></div>
+                    <div id="venn-statistics" class="venn-statistics"></div>
                 </div>
             </div>
             <iframe id="left-iframe" class="iframes" title="Region"></iframe>
@@ -647,7 +648,9 @@
                 activeRegion,
                 activePeriod
             );
-
+            //statistics
+            updateVennStatistics(stones);
+            //draw stones
             addRunestones(
                 svg,
                 stones.venn,

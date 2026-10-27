@@ -17,11 +17,11 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
   const queryName = req.query.q?.split('/')[0] || '1';
 
   try {
-    const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/objecttexturedmesh/?id=${queryName}&depth=2`;
+    const apiUrl = `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(queryName)}/`;
     const apiResponse = await axios.get(apiUrl);
-    const texturedMeshData = apiResponse.data.results?.[0];
+    const texturedMeshData = apiResponse.data;
 
-    if (!texturedMeshData?.url_public) {
+    if (!texturedMeshData) {
       return res.status(404).send('No textured mesh');
     }
 
@@ -32,11 +32,11 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
         return res.status(500).send('Internal Server Error');
       }
 
-      const title = texturedMeshData.title || texturedMeshData.tomb?.[0]?.name || 'Textured mesh';
+      const title = texturedMeshData.name || 'Textured mesh';
       res.send(data
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.url_public))
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.mesh_url_public))
         .replace(/'PLACEHOLDER_TEXTUREDMESH_TITLE'/g, JSON.stringify(title))
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.url_download || ''))
+        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.mesh_url_download || ''))
         .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(texturedMeshData.camera_position || null))
         .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(texturedMeshData.look_at || null)));
     });
@@ -56,8 +56,8 @@ app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
 
     const panoramaConfig = {
       panoramas: [
-        { id: 'panorama-1', title: 'Panorama 1', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289' },
-        { id: 'panorama-2', title: 'Panorama 2', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/etruscan/panoramas/panorama-289' }
+        { id: 'panorama-1', title: 'Nuvarande position', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_189/' },
+        { id: 'panorama-2', title: 'Ursprunglig position', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_137/' }
       ]
     };
     res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
@@ -79,46 +79,133 @@ app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
 });
 
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
-    //const imageId = req.query.q?.split('/')[0];
-    const imageId = '2870';
+    const fullQuery = req.query.q;
+    const [placeId, viewerType] = fullQuery
+        ? fullQuery.split('/')
+        : [];
 
-    if (!imageId) {
-        return res.status(400).send('Image ID is required');
+    if (!placeId || viewerType !== 'images') {
+        return res.status(400).send('image query is required');
     }
 
+    const sequenceEnabled = true;
+
+    const apiUrl =
+        `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`;
+
     try {
-        const apiUrl = `https://diana.dh.gu.se/api/etruscantombs/image/${encodeURIComponent(imageId)}/?depth=2`;
         const apiResponse = await axios.get(apiUrl);
 
-        const image = apiResponse.data;
-        if (!image?.iiif_file) {
-            return res.status(404).send('No IIIF image found');
-        }
-        const templatePath = path.join(
-            __dirname,
-            'viewer',
-            'modules',
-            'iiif',
-            'iiif.html'
+        const images = Array.isArray(apiResponse.data)
+            ? apiResponse.data
+            : apiResponse.data.results || [];
+
+        const availableImages = images.filter(
+            image => image.iiif_file
         );
 
-        const template = await fs.promises.readFile(
-            templatePath,
-            'utf8'
+        if (!availableImages.length) {
+            return res.status(404).send('No IIIF image found.');
+        }
+
+        fs.readFile(
+            path.join(
+                __dirname,
+                'viewer',
+                'modules',
+                'iiif',
+                'iiif.html'
+            ),
+            'utf8',
+            (err, data) => {
+                if (err) {
+                    console.error('Error reading the file:', err);
+                    return res
+                        .status(500)
+                        .send('Internal Server Error');
+                }
+
+                const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
+                const downloadFiles = availableImages.map(image => image.file);
+                const requestedImage = req.query.id;
+                const requestedPage = availableImages.findIndex(image =>String(image.id) === String(requestedImage));
+                const initialPage =requestedPage >= 0 ? requestedPage : 0;
+
+                let modifiedData = data
+                    .replace(
+                        /'PLACEHOLDER_IMAGE_DOWNLOAD'/g,
+                        imageDownloadConfig(apiUrl, availableImages)
+                    )
+                    .replace(
+                        /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
+                        JSON.stringify(tileSources)
+                    )
+                    .replace(
+                        /'PLACEHOLDER_DOWNLOAD_PATH'/g,
+                        JSON.stringify(
+                            JSON.stringify(downloadFiles)
+                        )
+                    )
+                    .replace(
+                        /'PLACEHOLDER_INITIAL_PAGE'/g,
+                        initialPage
+                    )
+                    .replace(
+                        /'PLACEHOLDER_PRESERVE_VIEWPORT'/g,
+                        tileSources.length <= 1
+                    )
+                    .replace(
+                        /'PLACEHOLDER_SEQUENCE_ENABLE'/g,
+                        sequenceEnabled &&
+                        tileSources.length > 1
+                    );
+
+                res.send(modifiedData);
+            }
         );
-        const iiifUrl = `${image.iiif_file}/info.json`;
-        const result = template.replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, [image])).replace(
-            /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
-            JSON.stringify([iiifUrl])
-        );
-        res.send(result);
 
     } catch (error) {
-        console.error('Error loading IIIF image:', error);
-        res.status(500).send('Internal Server Error');
+        console.error(
+            'Error fetching rune images:',
+            error
+        );
+
+        return res
+            .status(500)
+            .send('Internal Server Error');
     }
 });
 
+//get runes venn data
+app.get('/api/runes/venn', async (req, res) => {
+    try {
+        const apiResponse = await axios.get(
+            'https://runes.dh.gu.se/api/venn/'
+        );
+        res.json(apiResponse.data);
+
+    } catch (error) {
+        res.status(500).json({
+            error: 'Could not load rune Venn data'
+        });
+    }
+});
+
+//get runes metadata
+app.get('/api/runes/metadata/:id', async (req, res) => {
+    try {
+        const response = await axios.get(
+            `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(req.params.id)}/`
+        );
+
+        res.json(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: 'Could not load rune metadata'
+        });
+    }
+});
 
 app.use('/viewer', express.static(path.join(__dirname, 'viewer')));
 

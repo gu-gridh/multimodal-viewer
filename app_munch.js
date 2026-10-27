@@ -6,6 +6,7 @@ const fs = require('fs');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const app = express();
+app.use(require('./viewer-query'));
 require('./scripts/iiif-download').registerIIIFDownload(app, 'munch');
 
 dotenv.config({ path: './.env.local' });
@@ -444,7 +445,6 @@ app.get('*', (req, res) => {
     }
 
     const modifiedData = data
-      .replace(/PLACEHOLDER_QUERY/g, queryName)
       .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
       .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);
 

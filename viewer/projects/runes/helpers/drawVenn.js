@@ -1,4 +1,4 @@
-        //get wanted circle size
+//get wanted circle size
 function getCircleGeometry(width, height) {
     const radius = Math.min(width, height) * 0.30; //change to get smaller/bigger circles
         return {
@@ -8,7 +8,7 @@ function getCircleGeometry(width, height) {
                 r: radius
             },
 
-            'Gravfält': {
+            'Grav': {
                 x: width * 0.38,
                 y: height * 0.60,
                 r: radius
@@ -38,7 +38,7 @@ function drawCircles(svg, circles) {
 function addVennLabels(svg, circles) {
     const offset = 10 //distance to circles
     const road = circles['Väg'];
-    const graveField = circles['Gravfält'];
+    const graveField = circles['Grav'];
     const border = circles['Gräns'];
     svg.append('text')
         .attr('class', 'venn-label')
@@ -60,4 +60,73 @@ function addVennLabels(svg, circles) {
         .attr('y', border.y)
         .attr('text-anchor', 'middle')
         .text('Gräns');
+}
+
+// statistics legend
+function updateVennStatistics(stones) {
+    const container = document.getElementById('venn-statistics');
+
+    const allStones = [
+        ...stones.venn,
+        ...stones.outside
+    ];
+
+    // Avoid duplicate IDs
+    const uniqueStones = [
+        ...new Map(
+            allStones.map(stone => [stone.id, stone])
+        ).values()
+    ];
+
+    const total = uniqueStones.length;
+
+    if (!total) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const categories = [
+        { name: 'Endast väg', sets: ['Väg'] },
+        { name: 'Endast gravfält', sets: ['Grav'] },
+        { name: 'Endast gräns', sets: ['Gräns'] },
+        { name: 'Väg + gravfält', sets: ['Väg', 'Grav'] },
+        { name: 'Väg + gräns', sets: ['Väg', 'Gräns'] },
+        { name: 'Gravfält + gräns', sets: ['Grav', 'Gräns'] },
+        { name: 'Alla tre', sets: ['Väg', 'Grav', 'Gräns'] },
+        { name: 'Utanför', sets: [] }
+    ];
+
+    const statistics = categories.map(category => {
+        const count = uniqueStones.filter(stone => {
+            const sets = stone.sets || [];
+
+            return (
+                sets.length === category.sets.length &&
+                category.sets.every(set => sets.includes(set))
+            );
+        }).length;
+
+        return {
+            name: category.name,
+            count,
+            percent: Math.round((count / total) * 100),
+        };
+    });
+
+    container.innerHTML = `
+        <!--<div class="statistics-title">
+            Runstenarnas placering
+        </div> -->
+
+        <div class="statistics-total">
+            ${total} runstenar · Period ${activePeriod}
+        </div>
+
+        ${statistics.map(stat => `
+            <div class="statistics-row">
+                <span>${stat.name}</span>
+                <span>${stat.percent} %</span>
+            </div>
+        `).join('')}
+    `;
 }

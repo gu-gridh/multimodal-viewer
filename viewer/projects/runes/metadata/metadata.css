@@ -3,40 +3,237 @@ body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    background-color: rgb(228, 228, 220);
+    background-color: rgb(228, 228, 228);
     color: #191919;
-    font-family: "Oswald", sans-serif;
+    font-family: "Barlow", sans-serif;
 }
+
+.metadata-button-section {
+
+    display: flex;
+    flex-direction: row;
+
+}
+
+
+.edit-button {
+    font-family: "Barlow", sans-serif !important;
+    float: right;
+    background-color: #b46464;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    position: relative;
+    right: 10px;
+
+    margin-top: 10px;
+    z-index: 1000;
+}
+
+.close-button {
+    background: url(https://data.dh.gu.se/ui-icons/close_white.svg);
+    background-size: 40%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50px;
+    background-color: black;
+    height: 35px;
+    width: 35px;
+    position: relative;
+    margin-top: 10px;
+    left: 10px;
+    z-index: 1000;
+    cursor: pointer;
+    float: left;
+}
+
+.close-button:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+.edit-button:hover {
+    transform: scale(1.05);
+    background-color: rgb(160, 100, 100);
+}
+
+.runsten-button-link {
+    background: url(https://data.dh.gu.se/ui-icons/arrow_link_black_circle.png);
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: 0px;
+    padding: 5px;
+    padding-left: 30px;
+    cursor: pointer;
+    font-size: 1.0em;
+    float: left;
+    margin-right: 20px;
+}
+
+.runsten-button-link:hover {
+    opacity: 0.7;
+}
+
+
 
 .metadata-container {
     box-sizing: border-box;
     height: 100%;
     min-width: 250px;
-    padding: 70px 40px 40px;
+    padding: 70px 40px 20px;
     overflow: auto;
+
+}
+
+.metadata-title-space {
+    position: absolute;
+    margin-left: 40px;
+    margin-top: 30px;
+    z-index: 1000;
 }
 
 .metadata-title {
     margin: 0;
-    font-size: 3.5em;
     font-weight: 300;
+    font-size: 3.0em;
+    margin-bottom: 10px;
+    color: rgb(180, 100, 100);
+    font-family: 'Teko', sans-serif;
+    line-height: 0.8;
+
+}
+
+.metadata-subtitle {
+    margin: 0;
+    font-weight: 300;
+    font-size: 2.0em;
+    margin-bottom: 0px;
+    color: rgb(180, 100, 100);
+    font-family: 'Teko', sans-serif;
+    line-height: 0.8;
+    margin-bottom: 10px;
+}
+
+
+.divider {
+    border-width: 0 0 1px 0;
+    border-color: rgb(180, 100, 100);
+    border-style: dotted;
+    width: calc(100% + 55px);
+    margin-left: -35px;
+    margin-bottom: 20px;
 }
 
 .metadata-card {
-    padding: 20px 0 10px;
+    margin-top: 30px;
+    margin-left: 7%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    background-color: white;
+    border-radius: 10px 10px 10px 10px;
+    width: 86%;
+    padding-bottom: 0px;
+    box-shadow: 0rem 1.0rem 2rem rgba(0, 0, 0, 0.3);
+    overflow: auto;
 }
+
+@media screen and (max-width: 600px) {
+    .metadata-card {
+        width: 100%;
+        margin-left: 0%;
+    }
+}
+
+
+.metadata-super-content {
+    padding: 20px;
+    padding-left: 35px;
+    height: 300px;
+    overflow: hidden;
+
+}
+
 
 .metadata-content {
     display: flex;
+    flex-direction: row;
     padding-bottom: 10px;
     line-height: 1.1;
     font-weight: 300;
 }
 
+
+#map {
+    width: 100%;
+    height: 300px;
+    transition: all 0.5s ease-in-out;
+}
+
+
+
+
+.leaflet-control-container {}
+
+.leaflet-control-zoom {
+    border-radius: 8px !important;
+    width: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative !important;
+    left: calc(42vw - 80px) !important;
+    margin-top: calc(245px) !important;
+    z-index: 1000 !important;
+    border-width: 0px !important;
+    padding: 2px 10px;
+    background-color: rgb(0, 0, 0, 0.8);
+    z-index: 1000;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: none;
+    -ms-touch-action: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.3) !important;
+    border-style: solid;
+    border-color: grey;
+    border-width: 0.5px 0px 0px 0px;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    transition: all 0.5s ease-in-out;
+}
+
+@media screen and (max-height: 760px) {
+    #map {
+        width: 100%;
+        height: 200px;
+    }
+
+    .leaflet-control-zoom {
+
+        display: none;
+
+    }
+}
+
+
+
+
+
 .metadata-content .label {
     width: 110px;
     flex: 0 0 110px;
     font-weight: 400;
+    text-align: left;
+    margin-right: 20px;
 }
 
 .data {
@@ -170,11 +367,97 @@ body {
     margin: 0;
 }
 
-.map-container {
+
+
+.start {
     width: 100%;
+    height: auto;
 }
 
-#map {
+.start-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+    height: auto;
+}
+
+.start-image {
+    background-image: url(runstentop.png);
+    background-size: 100%;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 30px;
+    margin-top: -30px;
+}
+
+.start-title {
+
+    font-size: 3em;
+    text-align: center;
+    font-family: 'Teko', sans-serif;
+    line-height: 0.8;
+}
+
+.start-subtitle {
+    font-size: 2.5em;
+    font-family: 'Teko', sans-serif;
+    line-height: 0.8;
+    margin-top: 20px;
+}
+
+.start-text {
+    font-size: 1.2em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    text-align: center;
+    width: 80%;
+    line-height: 1.2;
+
+}
+
+.column {
+    line-height: 1.3;
     width: 100%;
-    height: 350px;
+    columns: 2;
+    text-align: justify;
+    font-size: 1.0em;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        columns: 1;
+    }
+}
+
+
+
+.leaflet-control-zoom-in {
+    background: url(https://data.dh.gu.se/ui-icons/zoomin_big_white.png) no-repeat center center !important;
+    background-size: contain !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-width: 0px !important;
+    border-width: 0px !important;
+    color: transparent !important;
+}
+
+.leaflet-control-zoom-out {
+    background: url(https://data.dh.gu.se/ui-icons/zoomout_big_white.png) no-repeat center center !important;
+    background-size: contain !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-width: 0px !important;
+    color: transparent !important;
+}
+
+
+
+/* close-btn should not show on mobile */
+@media (max-width: 800px) {
+    .close-button {
+        display: none;
+    }
 }

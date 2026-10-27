@@ -8,7 +8,9 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
+app.use(require('./viewer-query'));
 require('./scripts/iiif-download').registerIIIFDownload(app, 'sophia');
+
 const projectName = process.env.PROJECT || 'default';
 const panelApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/geojson/panel/?title=';
 const imageApiBaseUrl = 'https://saintsophia.dh.gu.se/api/inscriptions/image/';
@@ -33,7 +35,7 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
   //fetch RTI image data from the API
-  const apiUrl = `${panelApiBaseUrl}${queryName}`;
+  const apiUrl = `${panelApiBaseUrl}${encodeURIComponent(queryName)}`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -81,7 +83,7 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
   const fullQuery = req.query.q;
   const queryName = fullQuery ? fullQuery.split('/')[0] : '';
-  const apiUrl = `${panelApiBaseUrl}${queryName}`;
+  const apiUrl = `${panelApiBaseUrl}${encodeURIComponent(queryName)}`;
   try {
     const apiResponse = await axios.get(apiUrl);
     const position = apiResponse.data?.features?.[0]?.properties?.spatial_position;
@@ -141,7 +143,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         let updatedHtmlContent = htmlContent
           .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, [modelData[0].properties.attached_photograph[0]], `${annotationPath}${queryName}`))
           .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
+          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${encodeURIComponent(queryName)}`))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
@@ -183,7 +185,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             point: Boolean(config.enablePointTool)
           }))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
-          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${queryName}`))
+          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${encodeURIComponent(queryName)}`))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
           .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
         res.send(updatedHtmlContent);
@@ -210,7 +212,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${metadataApiBaseUrl}${queryName}&depth=1`;
+  const apiUrl = `${metadataApiBaseUrl}${encodeURIComponent(queryName)}&depth=1`;
   const metadataPath = path.join(__dirname, 'viewer', 'projects', projectName, 'metadata', 'metadata.html');
 
   try {
@@ -590,7 +592,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
   }
 
   try {
-    const { data } = await axios.get(`${panelApiBaseUrl}${queryName}`);
+    const { data } = await axios.get(`${panelApiBaseUrl}${encodeURIComponent(queryName)}`);
     const mesh = data.features?.[0]?.properties?.attached_3Dmesh?.[0] || {};
     const isDownloadable = mesh.is_downloadable && mesh.url_for_download;
     const parseStartValue = (value, fallback = 0.0) => {
@@ -694,7 +696,7 @@ app.get('*', async (req, res) => {
   }
 
   try {
-    const apiUrl = `${panelApiBaseUrl}${queryId}`;
+    const apiUrl = `${panelApiBaseUrl}${encodeURIComponent(queryId)}`;
     const apiResponse = await axios.get(apiUrl);
     const rtiImages = apiResponse.data?.features?.[0]?.properties?.attached_RTI || [];
 
@@ -705,8 +707,6 @@ app.get('*', async (req, res) => {
       }
 
       let modifiedData = data
-        .replace(/PLACEHOLDER_QUERY/g, queryName)
-        .replace(/PLACEHOLDER_ID/g, queryId)
         .replace('PLACEHOLDER_BACKBUTTON', backButtonUrl)
         .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
         .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId);

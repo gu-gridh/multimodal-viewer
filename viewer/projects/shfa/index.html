@@ -81,6 +81,8 @@
     </div>
 
     <script>
+        const viewerQuery = encodeURIComponent(new URLSearchParams(window.location.search).get('q') || '');
+
         $(document).ready(function () {
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -266,9 +268,9 @@
         function changeRightViewer(viewerType) {
             var iframe = document.getElementById('right-Iframe');
             if (viewerType === 'metadata') {
-                iframe.src = `/viewer/projects/shfa/metadata/metadata.html?q=PLACEHOLDER_QUERY`;
+                iframe.src = `/viewer/projects/shfa/metadata/metadata.html?q=${viewerQuery}`;
             } else if (viewerType === 'pointcloud') {
-                iframe.src = '/viewer/modules/pointcloud/pointcloud.html?q=PLACEHOLDER_QUERY';
+                iframe.src = `/viewer/modules/pointcloud/pointcloud.html?q=${viewerQuery}`;
             }
         }
 

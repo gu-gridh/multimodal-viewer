@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.local' });
 const app = express();
+app.use(require('./viewer-query'));
 require('./scripts/iiif-download').registerIIIFDownload(app, 'shfa');
 const projectName = process.env.PROJECT || 'default';
 const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
@@ -75,7 +76,7 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=3`;
+  const apiUrl = `${visualizationApiBaseUrl}${encodeURIComponent(queryName)}&depth=3`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -126,8 +127,8 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
       console.error('Error formatting creators:', error);
     }
 
-    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date ? shfaData.date.substr(0, 4) : 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`;
-    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date ? shfaData.date.substr(0, 4) : 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?q=${queryName}/mesh`;
+    const referenceSV = `${formattedPeopleSV || 'Unknown'}, ${shfaData?.date ? shfaData.date.substr(0, 4) : 'Unknown'}. Mesh av ${site?.lamning_id || site?.placename}, SHFA, åtkomst ${acc_date} på https://shfa.dh.gu.se/viewer/?q=${encodeURIComponent(queryName)}/mesh`;
+    const referenceEN = `${formattedPeopleEN || 'Unknown'}, ${shfaData?.date ? shfaData.date.substr(0, 4) : 'Unknown'}. Mesh of ${site?.lamning_id || site?.placename}, SHFA, accessed ${acc_date} at https://shfa.dh.gu.se/viewer/?q=${encodeURIComponent(queryName)}/mesh`;
 
     const imgMetadata = metadata.colour_images.map(image => image.subtype?.english_translation);
     const tvtVis = imgMetadata.findIndex((img) => img.includes('|'));
@@ -266,7 +267,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
 
-  const apiUrl = `${visualizationApiBaseUrl}${queryName}&depth=2`;
+  const apiUrl = `${visualizationApiBaseUrl}${encodeURIComponent(queryName)}&depth=2`;
 
   try {
     const apiResponse = await axios.get(apiUrl);
@@ -351,7 +352,6 @@ app.get('*', (req, res) => {
     }
 
     let modifiedData = data
-      .replace(/PLACEHOLDER_QUERY/g, queryName)
       .replace(/MATOMO_URL_PLACEHOLDER/g, matomoUrl)
       .replace(/MATOMO_ID_PLACEHOLDER/g, matomoId)
     res.send(modifiedData);

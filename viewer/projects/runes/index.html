@@ -2,22 +2,20 @@
 <html lang="sv" data-project="runes">
 
 <head>
-    <title>Runes</title>
+    <title>Runstenar</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link href="/viewer/shared/barlow_font.css" rel="stylesheet">
     <link href="/viewer/shared/oswald_font.css" rel="stylesheet">
+    <link href="/viewer/shared/teko_font.css" rel="stylesheet">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="/viewer/shared/split-layout.css">
+    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
     <script src="/viewer/modules/pointcloud/libs/jquery/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
     <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
-    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.20/build/venn.js"></script> 
-    <script src="/viewer/projects/runes/helpers/drawVenn.js"></script>  
-    <link rel="stylesheet" href="/viewer/projects/runes/style.css">
+
 </head>
 
 <body>
@@ -25,9 +23,9 @@
         <div id="left-pane">
             <div class="ui-module-container">
                 <div class="ui-module">
-                    <div class="ui-module-item left" id="region-west" onclick="changeRegion('vastra')">Västra Götaland
+                    <div class="ui-module-item left" id="region-west" onclick="changeRegion('vastra')">Västergötland
                     </div>
-                    <div class="ui-module-item left" id="region-east" onclick="changeRegion('ostra')">Östra Götaland
+                    <div class="ui-module-item left" id="region-east" onclick="changeRegion('ostra')">Östergötland
                     </div>
                     <div class="ui-module-item left mobile-metadata-tab" onclick="showMobileMetadata()">About</div>
                 </div>
@@ -35,6 +33,7 @@
             <div id="left-placeholder" class="module-placeholder">
                 <div class="venn-panel">
                     <div id="venn-diagram"></div>
+                    <div id="venn-statistics" class="venn-statistics"></div>
                 </div>
             </div>
             <iframe id="left-iframe" class="iframes" title="Region"></iframe>
@@ -49,19 +48,20 @@
         <div id="right-pane">
             <div class="mobile-back-button" title="Back to visuals" onclick="showMobileVisuals()"></div>
             <div class="ui-module-container">
-                <div class="ui-module">
+                <div class="ui-module" id="nav-bar">
                     <div class="ui-module-item right" id="viewer-metadata" onclick="changeRightViewer('metadata')">
                         Metadata
                     </div>
+                     <div class="ui-module-item right" id="viewer-images" onclick="changeRightViewer('images')" style="display: none;">
+                        Bild
+                    </div>
+                     <div class="ui-module-item right" id="viewer-texturedmesh" onclick="changeRightViewer('texturedmesh')">
+                        Modell
+                    </div>
                     <div class="ui-module-item right" id="viewer-panorama" onclick="changeRightViewer('panorama')">
-                        Panorama
+                        Kontext
                     </div>
-                    <div class="ui-module-item right" id="viewer-images" onclick="changeRightViewer('images')">
-                        Foto
-                    </div>
-                    <div class="ui-module-item right" id="viewer-texturedmesh" onclick="changeRightViewer('texturedmesh')">
-                        3D Modell
-                    </div>
+                   
                     
                 </div>
             </div>
@@ -76,20 +76,70 @@
         let activeViewer = 'metadata';
         let activePeriod = '1';
 
-        $(document).ready(function () {
-            $("#footer-container").load("/viewer/projects/runes/footer.html");
+        let vennData = null;
 
+        const STONE_COLORS = {
+            normal: '#ffaa00',
+            unknown: '#999', //change this?
+            selected: '#c43a04'
+        };
+
+        async function init() {
             const params = new URLSearchParams(window.location.search);
+
             const region = params.get('region');
 
             activeRegion = ['vastra', 'ostra'].includes(region)
                 ? region
                 : activeRegion;
+
             activeViewer = determineInitialViewer(params);
+
+            const qValue = params.get('q');
+            const runeId = qValue?.split('/')[0];
+
+            if (runeId && activeViewer === 'metadata') {
+            document
+                .getElementById('main-content')
+                .classList.add('mobile-metadata-open');
+        }
+
+            const navBar = document.getElementById('nav-bar');
+            navBar.style.display = runeId ? '' : 'none';
+
+            //load footer
+            try {
+                const footerResponse = await fetch(
+                    '/viewer/projects/runes/footer.html'
+                );
+                const footerHtml = await footerResponse.text();
+                document.getElementById('footer-container').innerHTML =
+                    footerHtml;
+            } catch (error) {
+                console.error('Could not load footer:', error);
+            }
+
+            // Load Venn data
+            try {
+                const response = await fetch('https://runes.dh.gu.se/api/venn/');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+
+                vennData = await response.json();
+
+            } catch (error) {
+                console.error('Error loading Venn data:', error);
+            }
+
+            await updateViewerAvailability(runeId);
 
             changeLeftViewer();
             changeRightViewer(activeViewer);
-        });
+        }
+
+        init();
 
         function changeRegion(region) {
             activeRegion = region;
@@ -123,7 +173,7 @@
             const iframe = document.getElementById('right-iframe');
             const params = new URLSearchParams(window.location.search);
             const hashFragment = window.location.hash;
-            let qValue = params.get('q') || '1';
+            let qValue = params.get('q') || '';
 
             if (qValue.includes('/')) {
                 qValue = qValue.split('/')[0];
@@ -145,8 +195,8 @@
                     newPath = `/viewer/?q=${qValue}/panorama${hashFragment}`;
                     break;
                 default:
-                    src = `/viewer/projects/runes/metadata/metadata.html?q=${qValue}`;
-                    newPath = `/viewer/?q=${qValue}/metadata`;
+                    src = qValue ? `/viewer/projects/runes/metadata/metadata.html?q=${qValue}` : `/viewer/projects/runes/metadata/metadata.html`;
+                    newPath =  qValue ? `/viewer/?q=${qValue}/metadata` : `/viewer/`;
                     viewerType = 'metadata';
             }
 
@@ -158,9 +208,26 @@
             moduleSwitcherRight();
         }
 
+        //listens for messages from metadata.html
         window.addEventListener('message', function (event) {
             if (event.data.type === 'togglePane') {
                 toggleLeftPane();
+            }
+            if (event.data.type === 'clearSelectedRunestone') {
+                clearSelectedRunestone();
+            }
+            if (event.data.type === 'meshAvailability') {
+                const modelButton = document.getElementById('viewer-texturedmesh');
+                //hide button
+                modelButton.style.display =
+                    event.data.hasMesh ? '' : 'none';
+            }
+            if (event.data.type === 'imageAvailability') {
+                const imageButton =
+                    document.getElementById('viewer-images');
+                //hide button
+                imageButton.style.display =
+                    event.data.hasImages ? '' : 'none';
             }
         }, false);
 
@@ -277,201 +344,70 @@
             return null;
         }
 
-        function getCircleGeometry(width, height) {
-            const radius = Math.min(width, height) * 0.29;
-
-            return {
-                'Väg': {
-                    x: width * 0.50,
-                    y: height * 0.34,
-                    r: radius
-                },
-
-                'Gravfält': {
-                    x: width * 0.38,
-                    y: height * 0.60,
-                    r: radius
-                },
-
-                'Gräns': {
-                    x: width * 0.62,
-                    y: height * 0.60,
-                    r: radius
-                }
-            };
-        }
-
-        function drawCircles(svg, circles) {
-            Object.entries(circles).forEach(([name, circle]) => {
-                svg.append('circle')
-                    .attr('cx', circle.x)
-                    .attr('cy', circle.y)
-                    .attr('r', circle.r)
-                    .attr('fill', 'none')
-                    .attr('stroke', '#999')
-                    .attr('stroke-width', 2);
-            });
-        }
-
-        //helper to check if point is in the circle
-        function pointInsideCircle(x, y, circle) {
-            const dx = x - circle.x;
-            const dy = y - circle.y;
-
-            return Math.sqrt(dx * dx + dy * dy) < circle.r;
-        }
-        //then check if the point is in the required sets
-        function pointMatchesSets(x, y, requiredSets, circles) {
-            return Object.entries(circles).every(([name, circle]) => {
-                const inside = pointInsideCircle(x, y, circle);
-                const required = requiredSets.includes(name);
-
-                return inside === required;
-            });
-        }
-
-        //then find a position that matches the required sets
-        function findPosition(sets, circles, width, height) {
-            const padding = 25;
-
-            for (let attempt = 0; attempt < 5000; attempt++) {
-                const x =
-                    padding +
-                    Math.random() * (width - padding * 2);
-
-                const y =
-                    padding +
-                    Math.random() * (height - padding * 2);
-
-                if (pointMatchesSets(x, y, sets, circles)) {
-                    return { x, y };
-                }
+        function getRunestones(region, period) {
+            if (!vennData) {
+                return {
+                    venn: [],
+                    outside: []
+                };
             }
 
+            const regionMap = {
+                vastra: 'Västergötland',
+                ostra: 'Östergötland'
+            };
+            const backendRegion = regionMap[region];
+            const selectedPeriod = vennData[backendRegion]?.[`Period ${period}`] || {venn: [], outside: []};
+            const unknownPeriod =
+                vennData[backendRegion]?.['unknown'] || {
+                    venn: [],
+                    outside: []
+                };
+
+            const normalStones = selectedPeriod.venn.map(stone => ({
+                ...stone,
+                isUnknown: false
+            }));
+
+            const unknownStones = unknownPeriod.venn.map(stone => ({
+                ...stone,
+                isUnknown: true
+            }));
+
+            const outsideStones = [
+                ...(selectedPeriod.outside || []).map(stone => ({
+                    ...stone,
+                    isUnknown: false
+                })),
+
+                ...(unknownPeriod.outside || []).map(stone => ({
+                    ...stone,
+                    isUnknown: true
+                }))
+            ];
+
             return {
-                x: width / 2,
-                y: height / 2
-            };
-        }
-
-        //helper to check if a position overlaps with existing stones
-        function overlapsExistingStone(position, positions, minDistance = 32) {
-            return positions.some(existing => {
-                const dx = position.x - existing.x;
-                const dy = position.y - existing.y;
-
-                return Math.sqrt(dx * dx + dy * dy) < minDistance;
-            });
-        }
-
-        function findStonePosition(
-            sets,
-            circles,
-            width,
-            height,
-            existingPositions
-        ) {
-            const padding = 25;
-
-            for (let attempt = 0; attempt < 5000; attempt++) {
-                const x =
-                    padding +
-                    Math.random() * (width - padding * 2);
-
-                const y =
-                    padding +
-                    Math.random() * (height - padding * 2);
-
-                const position = { x, y };
-
-                if (
-                    pointMatchesSets(x, y, sets, circles) &&
-                    !overlapsExistingStone(
-                        position,
-                        existingPositions
-                    )
-                ) {
-                    return position;
-                }
-            }
-            return null;
-        }
-
-        //mock data for runestones in each region and period
-        function getMockRunestones(region, period) {
-            const variations = {
-                'vastra-1': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Väg'] },
-
-                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r6', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r7', sets: ['Väg', 'Gravfält'] },
-
-                    { id: 'r8', sets: ['Väg', 'Gräns'] },
-                    { id: 'r9', sets: ['Väg', 'Gräns'] },
-                    { id: 'r10', sets: ['Väg', 'Gräns'] },
-                    { id: 'r11', sets: ['Väg', 'Gräns'] },
-
-                    { id: 'r12', sets: ['Väg', 'Gravfält', 'Gräns'] },
-                    { id: 'r13', sets: ['Väg', 'Gravfält', 'Gräns'] },
-
-                    { id: 'r14', sets: ['Gravfält'] },
-
-                    {
-                        id: 'r15',
-                        sets: ['Gräns'],
-                        //selected: true,
-                        title: 'Title'
-                    }
+                venn: [
+                    ...normalStones,
+                    ...unknownStones
                 ],
 
-                'vastra-2': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r3', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r4', sets: ['Väg', 'Gräns'] },
-                    { id: 'r5', sets: ['Väg', 'Gräns'] },
-                    { id: 'r6', sets: ['Väg', 'Gräns'] },
-                    { id: 'r7', sets: ['Gravfält'] },
-                    { id: 'r8', sets: ['Gräns'] },
-                    { id: 'r9', sets: ['Väg', 'Gravfält', 'Gräns'] }
-                ],
-
-                'ostra-1': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Gravfält'] },
-                    { id: 'r3', sets: ['Gravfält'] },
-                    { id: 'r4', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r5', sets: ['Väg', 'Gravfält'] },
-                    { id: 'r6', sets: ['Väg', 'Gräns'] },
-                    { id: 'r7', sets: ['Gravfält', 'Gräns'] },
-                    { id: 'r8', sets: ['Väg', 'Gravfält', 'Gräns'] }
-                ],
-
-                'ostra-2': [
-                    { id: 'r1', sets: ['Väg'] },
-                    { id: 'r2', sets: ['Väg'] },
-                    { id: 'r3', sets: ['Gräns'] },
-                    { id: 'r4', sets: ['Väg', 'Gräns'] },
-                    { id: 'r5', sets: ['Gravfält', 'Gräns'] },
-                    { id: 'r6', sets: ['Väg', 'Gravfält', 'Gräns'] }
-                ]
+                outside: outsideStones
             };
 
-            return variations[`${region}-${period}`] || [];
         }
 
         function addRunestones(svg, stones, circles, width, height) {
             const positions = [];
             const markerSize = 18;
 
-            //hover tooltip for runestones
+            const params = new URLSearchParams(window.location.search);
+            const selectedId = params.get('q')?.split('/')[0];
+
+            // hover tooltip for runestones
             const tooltip = svg.append('g')
                 .attr('class', 'runestone-tooltip')
-                .style('display', 'none');
+                .style('display', 'none')
 
             tooltip.append('rect')
                 .attr('rx', 4)
@@ -500,15 +436,18 @@
                     .attr('class', 'runestone')
                     .attr('data-id', stone.id)
                     .attr(
+                        'data-unknown',
+                        stone.isUnknown ? 'true' : 'false'
+                    )
+                    .attr(
                         'transform',
                         `translate(${position.x}, ${position.y})`
                     )
                     .on('mouseenter', function () {
                         const text = tooltip.select('text');
 
-                        text.text(stone.title || stone.id);
+                        text.text(stone.name || stone.id);
 
-                        // Measure text so the background fits it
                         const bbox = text.node().getBBox();
 
                         tooltip.select('rect')
@@ -527,7 +466,6 @@
                             )
                             .style('display', null);
 
-                        // Make sure tooltip is above all stones
                         tooltip.raise();
                     })
                     .on('mouseleave', function () {
@@ -542,16 +480,151 @@
                     .attr('y', -markerSize / 2)
                     .attr('width', markerSize)
                     .attr('height', markerSize)
-                    .attr(
-                        'fill',
-                        stone.selected
-                            ? '#ffa500'
-                            : '#ffc76a'
-                    );
+                    .attr('fill', () => {
+                        if (String(stone.id) === String(selectedId)) {
+                            return STONE_COLORS.selected;
+                        }
+
+                        if (stone.isUnknown) {
+                            return STONE_COLORS.unknown;
+                        }
+
+                        return STONE_COLORS.normal;
+                    });
             });
         }
 
+        //helper to find position of outside venn circles
+        function findOutsideStonePosition(
+            circles,
+            width,
+            height,
+            existingPositions
+        ) {
+            const padding = 20;
+            const minOffset = 25;
+            const maxOffset = 70;
 
+            const circleList = Object.values(circles);
+
+            for (let attempt = 0; attempt < 5000; attempt++) {
+                // Pick one of the circles randomly
+                const circle =
+                    circleList[
+                        Math.floor(Math.random() * circleList.length)
+                    ];
+
+                // Random angle around that circle
+                const angle = Math.random() * Math.PI * 2;
+
+                // Random distance just outside its edge
+                const offset =
+                    minOffset +
+                    Math.random() * (maxOffset - minOffset);
+
+                const distance = circle.r + offset;
+
+                const x =
+                    circle.x +
+                    Math.cos(angle) * distance;
+
+                const y =
+                    circle.y +
+                    Math.sin(angle) * distance;
+
+                const position = { x, y };
+
+                // Keep it inside the SVG
+                if (
+                    x < padding ||
+                    x > width - padding ||
+                    y < padding ||
+                    y > height - padding
+                ) {
+                    continue;
+                }
+
+                // Must be outside ALL circles
+                const outsideAllCircles =
+                    circleList.every(otherCircle => {
+                        const dx = x - otherCircle.x;
+                        const dy = y - otherCircle.y;
+
+                        const distanceToCircle =
+                            Math.sqrt(dx * dx + dy * dy);
+
+                        return distanceToCircle >
+                            otherCircle.r + 10;
+                    });
+
+                if (!outsideAllCircles) {
+                    continue;
+                }
+
+                // Avoid overlapping other outside stones
+                if (
+                    overlapsExistingStone(
+                        position,
+                        existingPositions,
+                        32
+                    )
+                ) {
+                    continue;
+                }
+
+                return position;
+            }
+
+            return null;
+        }
+
+        function addOutsideRunestones(svg, stones, circles, width, height) {
+            const markerSize = 18;
+            const positions = [];
+
+            const params = new URLSearchParams(window.location.search);
+            const selectedId = params.get('q')?.split('/')[0];
+
+            stones.forEach(stone => {
+                const position = findOutsideStonePosition(
+                    circles,
+                    width,
+                    height,
+                    positions
+                );
+
+                if (!position) {
+                    return;
+                }
+
+                positions.push(position);
+
+                const group = svg.append('g')
+                    .attr('class', 'runestone outside-runestone')
+                    .attr('data-id', stone.id)
+                    .attr('data-unknown', 'true')
+                    .attr(
+                        'transform',
+                        `translate(${position.x}, ${position.y})`
+                    )
+                    .on('click', function (event) {
+                        event.stopPropagation();
+                        selectRunestone(stone);
+                    });
+
+                group.append('rect')
+                    .attr('x', -markerSize / 2)
+                    .attr('y', -markerSize / 2)
+                    .attr('width', markerSize)
+                    .attr('height', markerSize)
+                    .attr(
+                        'fill',
+                        String(stone.id) === String(selectedId)
+                            ? STONE_COLORS.selected
+                            : STONE_COLORS.unknown
+                    );
+            });
+        }
 
         function renderVenn() {
             const diagram = document.getElementById('venn-diagram');
@@ -563,7 +636,7 @@
             const svg = d3
                 .select('#venn-diagram')
                 .append('svg')
-                .attr('viewBox', `0 0 ${width} ${height}`);
+                .attr('viewBox', `0 0 ${width} ${height}`)
 
             const circles = getCircleGeometry(width, height);
 
@@ -571,38 +644,71 @@
 
             addVennLabels(svg, circles);
 
-            const stones = getMockRunestones(
+            const stones = getRunestones(
                 activeRegion,
                 activePeriod
             );
-
+            //statistics
+            updateVennStatistics(stones);
+            //draw stones
             addRunestones(
                 svg,
-                stones,
+                stones.venn,
                 circles,
                 width,
                 height
             );
+
+            addOutsideRunestones(
+                svg,
+                stones.outside,
+                circles,
+                width,
+                height
+                
+            );
         }
 
         
-        function selectRunestone(stone) {
-            const params = new URLSearchParams(window.location.search);
-            params.set('q', 5); //todo: change to stone.id
+        async function selectRunestone(stone) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', stone.id);
+            window.history.pushState({}, '', url);
+            //check what viewer
+            await updateViewerAvailability(stone.id);
+            changeRightViewer('metadata');
+            // show right pane on mobile
+            document
+                .getElementById('main-content')
+                .classList.add('mobile-metadata-open');
 
-            window.history.pushState(
-                {},
-                '',
-                `${window.location.pathname}?${params.toString()}`
-            );
+            //show the navigation bar
+            document.getElementById('nav-bar').style.display = 'block';
 
-            changeRightViewer(activeViewer);
+            // Restore each stone's normal color
+            d3.selectAll('.runestone').each(function () {
+                const group = d3.select(this);
 
-            d3.selectAll('.runestone rect')
-                .attr('fill', '#ffc76a');
+                const isUnknown =
+                    group.attr('data-unknown') === 'true';
 
-            d3.select(`.runestone[data-id="${stone.id}"] rect`)
-                .attr('fill', '#ffa500');
+                group.select('rect')
+                    .attr(
+                        'fill',
+                        isUnknown
+                            ? STONE_COLORS.unknown
+                            : STONE_COLORS.normal
+                    );
+            });
+
+            // Selected rune
+            d3.select(
+                `.runestone[data-id="${stone.id}"] rect`)
+                .on('click', function (event) {
+                    event.stopPropagation();
+                    selectRunestone(stone);
+                })
+                .attr('fill', STONE_COLORS.selected);
         }
 
         function changeLeftViewer() {
@@ -627,6 +733,110 @@
         function moduleSwitcherRight() {
             $('.right').css('opacity', '0.6');
             $(`#viewer-${activeViewer}`).css('opacity', '1');
+        }
+
+        function clearSelectedRunestone() {
+            // Remove q from URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('q');
+
+            // Hide the navigation bar
+            document.getElementById('nav-bar').style.display = 'none';
+
+            document.getElementById('viewer-images')
+                .style.display = 'none';
+            document.getElementById('viewer-texturedmesh')
+                .style.display = 'none';
+
+            window.history.pushState(
+                {},
+                '',
+                url.pathname
+            );
+
+            // Restore colors in the Venn diagram
+            d3.selectAll('.runestone').each(function () {
+                const group = d3.select(this);
+
+                const isUnknown =
+                    group.attr('data-unknown') === 'true';
+
+                group.select('rect')
+                    .attr(
+                        'fill',
+                        isUnknown
+                            ? '#999'
+                            : '#ffc76a'
+                    );
+            });
+
+            // Reset right viewer to empty metadata page
+            activeViewer = 'metadata';
+
+            const iframe =
+                document.getElementById('right-iframe');
+
+            iframe.src =
+                '/viewer/projects/runes/metadata/metadata.html';
+
+            moduleSwitcherRight();
+        }
+
+        //this function checks which viewer is loaded when routing directly to iiif/image/context etc, since metadata.html isnt loaded there
+        async function updateViewerAvailability(runeId) {
+            const imageButton =  document.getElementById('viewer-images');
+            const meshButton = document.getElementById('viewer-texturedmesh');
+
+            if (!runeId) {
+                imageButton.style.display = 'none';
+                meshButton.style.display = 'none';
+                return;
+            }
+
+            // metadata is needed to check mesh availability
+            try {
+                const response = await fetch(
+                    `https://runes.dh.gu.se/api/metadata/${encodeURIComponent(runeId)}`
+                );
+                if (response.ok) {
+                    const rune = await response.json();
+                    meshButton.style.display =
+                        rune.mesh_url_public ? '' : 'none';
+                } else {
+                    meshButton.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Could not check mesh availability:', error);
+                meshButton.style.display = 'none';
+            }
+            // check image availability
+            try {
+                const response = await fetch(
+                    `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(runeId)}`
+                );
+
+                if (!response.ok) {
+                    imageButton.style.display = 'none';
+                    return;
+                }
+
+                const data = await response.json();
+
+                const images = Array.isArray(data)
+                    ? data
+                    : data.results || [];
+
+                const hasImages = images.some(
+                    image => image.iiif_file
+                );
+
+                imageButton.style.display =
+                    hasImages ? '' : 'none';
+
+            } catch (error) {
+                console.error('Could not check image availability:', error);
+                imageButton.style.display = 'none';
+            }
         }
     </script>
 </body>

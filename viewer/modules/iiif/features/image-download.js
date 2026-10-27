@@ -128,8 +128,9 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
             let downloadResponse = response;
             if (!cropped) {
                 const result = await response.json();
-                if (!result.download_url) throw new Error('No download URL was returned.');
-                downloadResponse = await fetch(result.download_url, { signal: controller.signal });
+                const downloadUrl = result.files?.jpeg?.download_url || result.download_url;
+                if (!downloadUrl) throw new Error('No download URL was returned.');
+                downloadResponse = await fetch(downloadUrl, { signal: controller.signal });
                 if (!downloadResponse.ok) throw new Error('Could not download the processed image.');
             }
             const objectUrl = URL.createObjectURL(await downloadResponse.blob());

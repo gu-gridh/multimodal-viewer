@@ -13,6 +13,7 @@ dotenv.config({ path: './.env.local' });
 
 const projectName = process.env.PROJECT || 'default';
 const munchPhotoTileSource = 'https://data.dh.gu.se/munch/static/munch/iiif/SolenMedium-v3.dzi';
+const imageApiBaseUrl = 'https://munch.dh.gu.se/api/painting-images/';
 const inscriptionAdminUrl = 'https://munch.dh.gu.se/admin/munch/visualannotation/add/';
 const apiCache = new Map();
 const apiCacheTtlMs = 60 * 1000;
@@ -112,7 +113,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
       point: Boolean(config.enablePointTool)
     };
 
-    const imageApi = `https://munch.dh.gu.se/api/painting-images/?panel=${encodedQueryName}`;
+    const imageApi = `${imageApiBaseUrl}?panel=${encodedQueryName}`;
     const imagesResponse = await axios.get(imageApi).catch(error => {
       if (queryType !== 'iiif' && queryType !== 'photo') throw error;
       console.error('Could not load photo download metadata:', error.message);
@@ -123,7 +124,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     if (queryType === 'iiif' || queryType === 'photo') {
       const photo = images.find(image => image.image_type === 'orthophoto' && /\/[^/]*Medium[^/]*$/i.test(image.file));
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, [photo], annotationDownloadApi))
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, [photo], annotationDownloadApi))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
@@ -152,7 +153,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
       const topographyTileSources = sortedTopography.map(topography => `${topography.iiif_file}/info.json`);
       const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApi, sortedTopography, annotationDownloadApi))
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, sortedTopography, annotationDownloadApi))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
         .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
         .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))

@@ -1,102 +1,159 @@
-export function createImageDownload({
-    viewer,
-    tileSources,
-    downloadSourceString,
-    downloadNamesString,
-    filteredAnnotationDownloadEnabled,
-    getActiveAnnotationFilters,
-    isPlaceholder
-}) {
+export function createImageDownload({ viewer, tileSources, downloads, getAnnotationShapes, getAnnotationUrl }) {
     const panel = document.getElementById('download-resolution');
     const options = document.getElementById('download-resolution-options');
     const title = document.getElementById('download-resolution-title');
     const cancel = document.getElementById('download-resolution-cancel');
+    const cropOption = document.getElementById('download-crop-option');
+    const crop = document.getElementById('download-crop');
+    const spinner = document.getElementById('download-spinner');
+    let busy = false;
 
     function chooseResolution() {
-        const resolutions = [
-            { scale: 1, label: 'High resolution' },
-            { scale: 0.5, label: 'Medium resolution' },
-            { scale: 0.25, label: 'Low resolution' }
-        ];
-
         return new Promise(resolve => {
-            const close = value => {
-                panel.hidden = true;
-                resolve(value);
-            };
-            options.replaceChildren(...resolutions.map(resolution => {
+            const close = value => { panel.hidden = true; resolve(value); };
+            const resolutions = [
+                { scale: 1, label: 'High resolution', maxSide: 3000 },
+                { scale: 0.5, label: 'Medium resolution', maxSide: 2000 },
+                { scale: 0.25, label: 'Low resolution', maxSide: 1000 }
+            ];
+            const buttons = resolutions.map(({ scale, label, maxSide }) => {
                 const button = document.createElement('button');
                 button.type = 'button';
-                button.textContent = resolution.label;
-                button.onclick = () => close(resolution.scale);
-                return button;
-            }));
-            title.textContent = 'Choose download resolution';
+                const updateLabel = () => {
+                    const image = downloads?.images?.[viewer.currentPage()];
+                    button.textContent = scale === 1 && !crop.checked && image?.zenodoUrl
+                        ? 'Accessible on Zenodo' : label;
+                    if (crop.checked) {
+                        const detail = document.createElement('small');
+                        detail.textContent = `Up to ${maxSide} px`;
+                        button.appendChild(detail);
+                    }
+                    button.title = crop.checked
+                        ? 'Maximum side length before rotation; actual dimensions may be smaller.'
+                        : '';
+                };
+                updateLabel();
+                button.onclick = () => {
+                    const image = downloads?.images?.[viewer.currentPage()];
+                    const cropped = crop.checked;
+                    if (scale === 1 && !cropped && image?.zenodoUrl) {
+                        window.open(image.zenodoUrl, '_blank', 'noopener,noreferrer');
+                        close(null);
+                        return;
+                    }
+                    const focus = viewer.element.classList.contains('annotation-focus');
+                    close({ scale, image, cropped, focus });
+                };
+                return { button, updateLabel };
+            });
+            options.replaceChildren(...buttons.map(({ button }) => button));
+            crop.onchange = () => buttons.forEach(({ updateLabel }) => updateLabel());
+            title.textContent = 'Download image';
+            cropOption.hidden = false;
             cancel.textContent = 'Cancel';
             cancel.onclick = () => close(null);
             panel.hidden = false;
         });
     }
 
-    function getIIIFUrl(pageIndex, scale) {
-        const sources = Array.isArray(tileSources) ? tileSources : [tileSources];
-        const infoUrl = sources[pageIndex] || sources[0];
-        const maxSize = Math.round(Math.max(viewer.source.width, viewer.source.height) * scale);
-        return `${infoUrl.replace(/\/info\.json(?:\?.*)?$/, '')}/full/!${maxSize},${maxSize}/0/default.jpg`;
-    }
-
-    function showError() {
-        title.textContent = 'Could not download image';
-        options.replaceChildren();
-        cancel.textContent = 'Close';
-        cancel.onclick = () => { panel.hidden = true; };
-        panel.hidden = false;
-    }
-
-    function parse(value, fallback) {
-        if (typeof value !== 'string') return value;
-        return isPlaceholder(value) ? fallback : JSON.parse(value);
+    function captureRegion(image) {
+        const item = viewer.world.getItemAt(0);
+        if (!item) throw new Error('Wait for the image to load.');
+        const size = item.getContentSize();
+        const width = viewer.container.clientWidth;
+        const height = viewer.container.clientHeight;
+        const flipped = viewer.viewport.getFlip();
+        const viewport = [[0, 0], [width, 0], [width, height], [0, height]].map(([x, y]) => {
+            const point = viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(flipped ? width - x : x, y));
+            return { x: point.x / size.x, y: point.y / size.y };
+        });
+        const page = viewer.currentPage();
+        return {
+            service: image?.service || (Array.isArray(tileSources) ? tileSources[page] : tileSources),
+            viewport,
+            viewWidth: width,
+            rotation: viewer.viewport.getRotation(true),
+            flipped,
+            shapes: getAnnotationShapes().map(shape => ({
+                color: shape.color,
+                dotted: shape.dotted,
+                closed: shape.closed,
+                points: shape.points.map(point => ({ x: point.x / size.x, y: point.y / size.y }))
+            }))
+        };
     }
 
     document.getElementById('download').addEventListener('click', async event => {
         event.preventDefault();
-
+        if (busy) return;
+        busy = true;
+        let timeout;
         try {
-            const downloadSources = parse(downloadSourceString, []);
-            const downloadNames = parse(downloadNamesString, []);
-            const pageIndex = viewer.currentPage();
-            const scale = await chooseResolution();
-            if (scale === null) return;
-
-            let imageUrl = Array.isArray(downloadSources) ? downloadSources[pageIndex] : downloadSources;
-            if (filteredAnnotationDownloadEnabled) {
-                const url = new URL(imageUrl, window.location.origin);
-                Object.entries(getActiveAnnotationFilters()).forEach(([key, value]) => {
-                    if (value && value !== 'all') {
-                        url.searchParams.set(key === 'tag' ? 'tags' : key, value);
-                    }
-                });
-                url.searchParams.set('scale', scale);
-                imageUrl = url.toString();
-            } else {
-                imageUrl = getIIIFUrl(pageIndex, scale);
+            const controller = new AbortController();
+            const selection = await chooseResolution();
+            if (!selection) return;
+            const { scale, image, cropped, focus } = selection;
+            if (!cropped && image?.id == null) throw new Error('No download image ID is available.');
+            const endpoint = cropped ? '/viewer/modules/iiif/download-region' : downloads.endpoint;
+            const request = cropped
+                ? { ...captureRegion(image), scale, crop: true, focus }
+                : {
+                    api_url: image.api.split('?')[0],
+                    id: String(image.id),
+                    annotations: downloads.annotationApi ? getAnnotationUrl(downloads.annotationApi) || '' : '',
+                    quality: { 1: 1, 0.5: 2, 0.25: 3 }[scale],
+                    formats: ['jpeg'],
+                    focus
+                };
+            const postOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request)
+            };
+            title.textContent = 'Preparing image…';
+            spinner.hidden = false;
+            cropOption.hidden = true;
+            options.replaceChildren();
+            cancel.onclick = () => { controller.abort(); panel.hidden = true; };
+            panel.hidden = false;
+            timeout = setTimeout(() => controller.abort(new Error('Image processing timed out.')), 60000);
+            const response = await fetch(endpoint, {
+                ...postOptions,
+                signal: controller.signal
+            });
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || 'Could not download this image.');
             }
-
-            const response = await fetch(imageUrl);
-            if (!response.ok) throw new Error(`Download failed: ${response.status}`);
-            const blob = await response.blob();
-            const objectUrl = URL.createObjectURL(blob);
-            const filename = downloadNames[pageIndex] || `image_${pageIndex + 1}.jpg`;
+            let downloadResponse = response;
+            if (!cropped) {
+                const result = await response.json();
+                if (!result.download_url) throw new Error('No download URL was returned.');
+                downloadResponse = await fetch(result.download_url, { signal: controller.signal });
+                if (!downloadResponse.ok) throw new Error('Could not download the processed image.');
+            }
+            const objectUrl = URL.createObjectURL(await downloadResponse.blob());
             const link = document.createElement('a');
             link.href = objectUrl;
-            link.download = filename;
+            link.download = downloadResponse.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] || 'image.jpg';
             document.body.appendChild(link);
             link.click();
-            URL.revokeObjectURL(objectUrl);
             link.remove();
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+            panel.hidden = true;
         } catch (error) {
-            console.error('Could not download the image', error);
-            showError();
+            if (error.name === 'AbortError') return;
+            console.error('Could not export image region', error);
+            title.textContent = error.message;
+            cropOption.hidden = true;
+            options.replaceChildren();
+            cancel.textContent = 'Close';
+            cancel.onclick = () => { panel.hidden = true; };
+            panel.hidden = false;
+        } finally {
+            clearTimeout(timeout);
+            spinner.hidden = true;
+            busy = false;
         }
     });
 }

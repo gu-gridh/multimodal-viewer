@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -7,6 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 app.use(require('./viewer-query'));
+require('./scripts/iiif-download').registerIIIFDownload(app, 'etruscan');
 const projectName = process.env.PROJECT || 'default';
 const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointcloud/?id=';
 const panoramaApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/panorama/?tomb=';
@@ -264,15 +266,12 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
         }
 
         const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
-        const downloadFiles = availableImages.map(image => image.file);
-        const tileSourceValue = tileSources;
-        const downloadValue = downloadFiles;
         const requestedImage = req.query.id;
         const requestedPage = availableImages.findIndex(image => String(image.id) === String(requestedImage));
         const initialPage = requestedPage >= 0 ? requestedPage : 0;
 
-        let modifiedData = data.replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSourceValue))
-          .replace(/'PLACEHOLDER_DOWNLOAD_PATH'/g, JSON.stringify(JSON.stringify(downloadValue)))
+        let modifiedData = data.replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, availableImages))
+          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSources))
           .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
           .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
           .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
@@ -281,7 +280,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
             line: Boolean(config.enableLineTool),
             point: Boolean(config.enablePointTool)
           }))
-          .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
           .replace(/'PLACEHOLDER_INITIAL_PAGE'/g, initialPage)
           .replace(/'PLACEHOLDER_PRESERVE_VIEWPORT'/g, tileSources.length <= 1)
           .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled && tileSources.length > 1);

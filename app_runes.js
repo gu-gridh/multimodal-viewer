@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -7,6 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 
 const app = express();
+require('./scripts/iiif-download').registerIIIFDownload(app, 'runes');
 const projectName = process.env.PROJECT || 'runes';
 const projectPath = path.join(__dirname, 'viewer', 'projects', projectName);
 const port = 8099;
@@ -130,6 +132,10 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
                 const initialPage =requestedPage >= 0 ? requestedPage : 0;
 
                 let modifiedData = data
+                    .replace(
+                        /'PLACEHOLDER_IMAGE_DOWNLOAD'/g,
+                        imageDownloadConfig(apiUrl, availableImages)
+                    )
                     .replace(
                         /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
                         JSON.stringify(tileSources)

@@ -1,3 +1,4 @@
+const { imageDownloadConfig } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -7,8 +8,10 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env.local' });
 const app = express();
 app.use(require('./viewer-query'));
+require('./scripts/iiif-download').registerIIIFDownload(app, 'shfa');
 const projectName = process.env.PROJECT || 'default';
 const visualizationApiBaseUrl = 'https://shfa.dh.gu.se/api/visualization_groups/?text=';
+const imageApiBaseUrl = 'https://shfa.dh.gu.se/api/image/';
 
 const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
 let config;
@@ -26,6 +29,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     return res.status(400).send('Query parameter is missing');
   }
   const apiUrl = `${visualizationApiBaseUrl}${encodeURIComponent(queryName)}&depth=2`;
+
   try {
     const apiResponse = await axios.get(apiUrl);
 
@@ -39,26 +43,17 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     if (modelData.length > 0 && modelData[0].colour_images && modelData[0].shfa_3d_data) {
 
       //Extract all IIIF image URLs from colour_images
-      const creators = modelData[0].shfa_3d_data.map(data => data.creators.map(creator => creator.name));
-      const locationID = modelData[0].shfa_3d_data.map(data => data.site.lamning_id || data.site.raa_id || data.site.placename);
-      const imageIDs = modelData[0].colour_images.map(image => image.id);
-      const creatorName = creators[0]?.[0]?.replace(/,\s*/g, '_') || 'Unknown_Creator';
-      const locationName = locationID[0] || 'Unknown_Location';
-      const downloadNames = imageIDs.map(id => `${creatorName}_${locationName}_SHFAid${id}.jpg`);
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
-      const downloadableFiles = modelData[0].colour_images.map(image => image.file);
       const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
       let updatedHtmlContent = htmlContent
+        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, modelData[0].colour_images))
         .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
-        .replace('PLACEHOLDER_DOWNLOAD_PATH', JSON.stringify(downloadableFiles))
-        .replace(/'PLACEHOLDER_DOWNLOAD_NAMES'/g, JSON.stringify(downloadNames))
         .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
           rectangle: Boolean(config.enableRectangleTool),
           polygon: Boolean(config.enablePolygonTool),
           line: Boolean(config.enableLineTool),
           point: Boolean(config.enablePointTool)
         }))
-        .replace(/'PLACEHOLDER_FILTERED_ANNOTATION_DOWNLOAD'/g, Boolean(config.enableFilteredAnnotationDownload))
         .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
         .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true)
       res.send(updatedHtmlContent);

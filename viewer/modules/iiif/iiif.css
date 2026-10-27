@@ -119,25 +119,24 @@ body {
 }
 
 .download-resolution {
-	bottom: 110px;
 	z-index: 1001;
 	padding: 14px;
 	text-align: center;
 	pointer-events: auto;
-	border-style: solid;
-	border-color: grey;
-	border-width: 0.5px 0px 0px 0px;
-	position: fixed;
-	color: white;
-	left: 50%;
-	bottom: 50px;
-	transform: translate(-50%, -50%);
-	border-radius: 8px;
-	background-color: rgba(0, 0, 0, 0.8);
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
-	width: 260px;
-	-webkit-backdrop-filter: blur(5px);
-	backdrop-filter: blur(5px);
+  border-style: solid;
+  border-color: grey;
+  border-width: 0.5px 0px 0px 0px;
+  position: fixed;
+  color: white;
+  left: 50%;
+  bottom: 150px;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+  width: 260px;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .download-resolution button {
@@ -152,6 +151,13 @@ body {
 	font: inherit;
 	font-size: 0.9em;
 	cursor: pointer;
+}
+
+.download-resolution button small {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.8em;
+    color: #ccc;
 }
 
 .download-resolution .cancel-button {
@@ -243,4 +249,16 @@ body {
 		display: none !important;
 	}
 
+}
+
+.download-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#download-crop-option:not([hidden]) {
+    display: block;
+    margin-top: 12px;
 }

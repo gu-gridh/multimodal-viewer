@@ -5,7 +5,6 @@ export function createAnnotationLoader({
     clearCanvasAnnotations,
     displayInscriptions,
     drawCanvasAnnotations,
-    getAnnotationsVisible,
     isPlaceholder,
     pagedAnnotationLoadingEnabled,
     viewer
@@ -42,12 +41,12 @@ export function createAnnotationLoader({
         return filters;
     }
 
-    function getAnnotationUrl(filters, page) {
-        if (!displayInscriptions || !annotationPath || isPlaceholder(annotationPath)) {
+    function getAnnotationUrl(filters, page, api = annotationPath) {
+        if (!displayInscriptions || !api || isPlaceholder(api)) {
             return '';
         }
 
-        const url = new URL(annotationPath, window.location.origin);
+        const url = new URL(api, window.location.origin);
         Object.entries(filters || {}).forEach(([key, value]) => {
             if (value && value !== 'all') {
                 url.searchParams.set(key === 'tag' ? 'tags' : key, value);

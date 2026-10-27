@@ -89,11 +89,11 @@ function updateVennStatistics(stones) {
         { name: 'Endast väg', sets: ['Väg'] },
         { name: 'Endast gravfält', sets: ['Grav'] },
         { name: 'Endast gräns', sets: ['Gräns'] },
+        { name: 'Gravfält + gräns', sets: ['Grav', 'Gräns'] },
         { name: 'Väg + gravfält', sets: ['Väg', 'Grav'] },
         { name: 'Väg + gräns', sets: ['Väg', 'Gräns'] },
-        { name: 'Gravfält + gräns', sets: ['Grav', 'Gräns'] },
         { name: 'Alla tre', sets: ['Väg', 'Grav', 'Gräns'] },
-        { name: 'Utanför', sets: [] }
+        { name: 'Osäkra', sets: [] }
     ];
 
     const statistics = categories.map(category => {

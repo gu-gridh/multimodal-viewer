@@ -7,11 +7,12 @@ A Node.js application built with Express for visualizing and interacting with me
 ```npm install``` <br>
 
 Define a .env.local variable with PROJECT=etruscan/shfa/sophia + ```npm start```: <br>
-PROJECT=sophia npm start  
-PROJECT=shfa npm start  
-PROJECT=etruscan npm start  
-PROJECT=dubb npm start  
-PROJECT=runes npm start
+PROJECT=sophia npm start <br>
+PROJECT=shfa npm start <br>
+PROJECT=etruscan npm start <br>
+PROJECT=dubb npm start <br>
+PROJECT=runes npm start <br>
+PROJECT=forsviks npm start <br>
 
 ## Usage
 
@@ -21,3 +22,4 @@ SHFA: http://localhost:8097/viewer/?q=Tanum_1_1-2019_06_13/orthophoto <br>
 Etruscan: http://localhost:8094/viewer/?q=2683/image  <br>
 Munch: http://localhost:8098/viewer/?q=solen/photo <br>
 Runes: http://localhost:8099/viewer/?q=5 WIP <br>
+Forsviks: http://localhost:8100/viewer/?q=1/pointcloud <br>

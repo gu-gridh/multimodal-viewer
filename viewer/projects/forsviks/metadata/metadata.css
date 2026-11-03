@@ -1,10 +1,25 @@
 body {
+    position: relative;
     margin: 0;
     background: #f5f5f5;
     color: #222;
+    overflow: hidden;
+}
+
+.cutoff-circle {
+    position: absolute;
+    top: -135px;
+    right: -135px;
+    width: 270px;
+    height: 270px;
+    border-radius: 50%;
+    background: #feae00;
+    z-index: 0;
 }
 
 .metadata-container {
+    position: relative;
+    z-index: 1;
     padding: 40px;
 }
 

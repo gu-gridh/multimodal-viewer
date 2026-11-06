@@ -11,7 +11,16 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res, next) => 
   try {
     const { data } = await axios.get(sources.pointcloudPanel);
     const panel = data.features?.[0]?.properties;
-    await renderModule(res, 'pointcloud', {
+    const response = {
+      send: html => res.send(html.replace('</head>',
+        `<script>
+        const menuStyle = document.head.appendChild(document.createElement('style'));
+        menuStyle.textContent = 'html .potree_menu_toggle { display: none; }';
+        window.setPointcloudExpanded = expanded => menuStyle.sheet.disabled = Boolean(expanded);
+        window.setPointcloudExpanded(window.parent.document.getElementById('main-content')?.classList.contains('panel-hidden'));
+      </script></head>`))
+    };
+    await renderModule(response, 'pointcloud', {
       pointCloudUrl: sources.pointcloud,
       cameraPosition: panel?.spatial_position || [],
       lookAt: panel?.spatial_direction || [],

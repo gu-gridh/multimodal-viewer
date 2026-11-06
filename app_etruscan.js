@@ -15,8 +15,6 @@ const contentApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/objectpointc
 const panoramaApiBaseUrl = 'https://diana.dh.gu.se/api/etruscantombs/panorama/?tomb=';
 const backButtonBaseUrl = 'https://etruscan.dh.gu.se/';
 
-/* To test: http://localhost:8094/viewer/?q=209/images or http://localhost:8094/viewer/?q=1/pointcloud or http://localhost:8094/viewer/?q=1/texturedmesh */
-
 function getImageTypeQuery(req) {
   const types = req.query.type_of_image;
   const values = Array.isArray(types) ? types : types ? [types] : ['2'];
@@ -322,7 +320,7 @@ app.use('/viewer/projects', express.static(path.join(__dirname, 'viewer', 'proje
 app.use('/viewer/locales', express.static(path.join(__dirname, 'viewer', 'locales')));
 app.use('/viewer/libs', express.static(path.join(__dirname, 'viewer', 'libs')));
 
-// Fallback route, serve index.html
+//fallback route, serve index.html
 app.get('*', async (req, res) => {
   const queryName = req.query.q;
   const querySegments = queryName ? queryName.split('/') : [];

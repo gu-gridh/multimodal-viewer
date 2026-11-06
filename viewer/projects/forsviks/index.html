@@ -182,7 +182,8 @@
         window.addEventListener('message', event => {
             if (event.origin !== window.location.origin || event.source !== viewer.contentWindow) return;
             if (['togglePane', 'togglePane2'].includes(event.data?.type) && window.innerWidth > 1050) {
-                layout.classList.toggle('panel-hidden');
+                const expanded = layout.classList.toggle('panel-hidden');
+                viewer.contentWindow.setPointcloudExpanded?.(expanded);
             }
             if (event.data?.type === 'panoramaChange') {
                 const url = new URL(window.location.href);

@@ -2,6 +2,12 @@
 <html lang="en">
 
 <head>
+    <script>
+        const viewerConfig = {
+            pointCloudUrl: '', cameraPosition: [], lookAt: [], annotationsUrl: '',
+            ...'PLACEHOLDER_VIEWER_CONFIG'
+        };
+    </script>
 	<script src="/viewer/shared/project_context.js"></script>
 	<meta charset="utf-8">
 	<meta name="description" content="">
@@ -372,8 +378,8 @@
 		}
 		// <-- Control Buttons -->
 
-			const annotationsUrl = 'PLACEHOLDER_POINTCLOUD_ANNOTATIONS';
-			const displayAnnotations = Boolean(annotationsUrl) && !annotationsUrl.includes('PLACEHOLDER');
+			const annotationsUrl = viewerConfig.annotationsUrl;
+			const displayAnnotations = Boolean(annotationsUrl);
 
 		async function loadAnnotations() {
 				const response = await fetch(annotationsUrl);
@@ -411,7 +417,7 @@
 		});
 
 		/* The link to the model. URL and name of cloud must be fetched from the backend */
-		const pointCloudUrl = 'PLACEHOLDER_URL_PUBLIC';
+		const pointCloudUrl = viewerConfig.pointCloudUrl;
 
 		Potree.loadPointCloud(
 			pointCloudUrl,
@@ -430,7 +436,7 @@
 				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 				material.shape = Potree.PointShape.CIRCLE;
 
-				const cameraPosition = 'PLACEHOLDER_POSITION';
+				const cameraPosition = viewerConfig.cameraPosition;
 
 				/*  The position of the camera: x z y. These must be fetched in the backend */
 				viewer.scene.view.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -440,7 +446,7 @@
 				the user will be able to look around from a static point of view which is good for small spaces.
 				The user exits this mode by a double click to change focus point. 
 				Suggest intitial viewing direction by making a decimal or smaller deviation from the camera position */
-				const lookAtPosition = 'PLACEHOLDER_DIRECTION';
+				const lookAtPosition = viewerConfig.lookAt;
 
 				viewer.scene.view.lookAt(new THREE.Vector3(lookAtPosition[0], lookAtPosition[1], lookAtPosition[2]));
 			}

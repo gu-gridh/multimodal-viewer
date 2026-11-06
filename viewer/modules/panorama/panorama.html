@@ -2,6 +2,12 @@
 <html>
 
 <head>
+    <script>
+        const viewerConfig = {
+            panoramas: [], initialScene: '',
+            ...'PLACEHOLDER_VIEWER_CONFIG'
+        };
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>360 image viewer</title>
@@ -170,7 +176,7 @@
     </div>
     <script src="pannellum.js"></script>
     <script>
-        const panoramaConfig = 'PLACEHOLDER_PANORAMA_CONFIG';
+        const panoramaConfig = viewerConfig;
         const panoramas = panoramaConfig.panoramas;
         const scenes = Object.fromEntries(panoramas.map(({ id, title, downloadUrl, startPos, northOffset, urlPublic }) => {
             const [yaw, pitch, hfov] = startPos;

@@ -2,6 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
 <head>
+    <script>
+        const viewerConfig = {
+            meshUrl: '', secondMeshUrl: '', downloadUrl: '', baseModelPhi: 0, baseModelTheta: 0,
+            baseModelRotation: 0, cameraStartDistance: 1.5, cameraStartPan: [0, 0, 0],
+            minMaxPhi: [-180, 180], minMaxTheta: [-180, 180], cameraStartState: [0, 0, 0, 0, 0, 1.5],
+            ...'PLACEHOLDER_VIEWER_CONFIG'
+        };
+    </script>
 	<script src="/viewer/shared/project_context.js"></script>
 	<meta content="charset=UTF-8" />
 	<title>GRIDH Mesh Viewer</title>
@@ -282,7 +290,11 @@
 	var currentPage = 1;
 	var totalPages = 2;
 	var presenter = null;
-	var rotationAngle = PLACEHOLDER_BASEMODELROTATION; //current model roll angle
+	const downloadLink = document.getElementById('download');
+	if (viewerConfig.downloadUrl) downloadLink.href = viewerConfig.downloadUrl;
+	downloadLink.querySelector('.download-button').classList.toggle('deactivated', !viewerConfig.downloadUrl);
+
+	var rotationAngle = viewerConfig.baseModelRotation; //current model roll angle
 
 	// <-- Language Control -->
 	const savedLang = localStorage.getItem('i18nextLang') || 'en';
@@ -319,8 +331,8 @@
 
 	function getBaseModelMatrix() {
 		var matrix = SglMat4.identity();
-		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELTHETA), [1.0, 0.0, 0.0]));
-		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(PLACEHOLDER_BASEMODELPHI), [0.0, -1.0, 0.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(viewerConfig.baseModelTheta), [1.0, 0.0, 0.0]));
+		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(viewerConfig.baseModelPhi), [0.0, -1.0, 0.0]));
 		matrix = SglMat4.mul(matrix, SglMat4.rotationAngleAxis(sglDegToRad(rotationAngle), [0.0, 0.0, 1.0]));
 		return matrix;
 	}
@@ -384,8 +396,8 @@
 		presenter = new Presenter("draw-canvas");
 		presenter.setScene({
 			meshes: {
-				"mesh1": { url: PLACEHOLDER_MESH },
-				"mesh2": { url: PLACEHOLDER_SECOND_MESH }
+				"mesh1": { url: viewerConfig.meshUrl },
+				"mesh2": { url: viewerConfig.secondMeshUrl }
 			},
 			modelInstances: {
 				"mesh1": {
@@ -414,12 +426,12 @@
 					trackOptions: {
 						startPhi: 0.0,
 						startTheta: 0.0,
-						startDistance: PLACEHOLDER_CAMERASTARTDISTANCE,
-						startPanX: PLACEHOLDER_CAMERASTARTPAN[0],
-						startPanY: PLACEHOLDER_CAMERASTARTPAN[1],
-						startPanZ: PLACEHOLDER_CAMERASTARTPAN[2],
-						minMaxPhi: PLACEHOLDER_MINMAXPHI,
-						minMaxTheta: PLACEHOLDER_MINMAXTHETA,
+						startDistance: viewerConfig.cameraStartDistance,
+						startPanX: viewerConfig.cameraStartPan[0],
+						startPanY: viewerConfig.cameraStartPan[1],
+						startPanZ: viewerConfig.cameraStartPan[2],
+						minMaxPhi: viewerConfig.minMaxPhi,
+						minMaxTheta: viewerConfig.minMaxTheta,
 						minMaxDist: [0.05, 4.0]
 				}
 			}
@@ -433,7 +445,7 @@
 		const panZ = parseFloat(urlParams.get('panZ'));
 		const zoom = parseFloat(urlParams.get('zoom'));
 		const rotation = parseFloat(urlParams.get('rotation'));
-		const defaultCameraState = PLACEHOLDER_CAMERASTARTSTATE;
+		const defaultCameraState = viewerConfig.cameraStartState;
 
 		if (!isNaN(phi) && !isNaN(theta) && !isNaN(zoom) && !isNaN(panX) && !isNaN(panY) && !isNaN(panZ)) {
 			presenter.animateToTrackballPosition([phi, theta, panX, panY, panZ, zoom]);
@@ -443,7 +455,7 @@
 		} else if (Array.isArray(defaultCameraState) && defaultCameraState.some(value => value !== 0.0)) {
 			presenter.animateToTrackballPosition(defaultCameraState);
 		} else {
-			rotationAngle = PLACEHOLDER_BASEMODELROTATION;
+			rotationAngle = viewerConfig.baseModelRotation;
 		}
 
 		for (inst in presenter._scene.modelInstances) {
@@ -462,7 +474,7 @@
 	}
 
 	function updateUI() {
-		var hasSecondMesh = PLACEHOLDER_SECOND_MESH.trim() !== '';
+		var hasSecondMesh = viewerConfig.secondMeshUrl.trim() !== '';
 		$('#Prev, #Next').toggle(hasSecondMesh); //show or hide buttons based on mesh2
 		if (!hasSecondMesh) {
 			totalPages = 1;
@@ -534,8 +546,8 @@
 	function actionsToolbar(action) {
 		// This one needs to be the same one as the above start position fetched from backend
 		if (action == 'home' || action == 'home_m') {
-			presenter.animateToTrackballPosition(PLACEHOLDER_CAMERASTARTSTATE);
-			setMeshRoll(PLACEHOLDER_BASEMODELROTATION);
+			presenter.animateToTrackballPosition(viewerConfig.cameraStartState);
+			setMeshRoll(viewerConfig.baseModelRotation);
 		}
 
 		//--FULLSCREEN--

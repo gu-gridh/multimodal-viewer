@@ -1,4 +1,5 @@
-const { imageDownloadConfig } = require('./scripts/image-download-config');
+const { renderModule } = require('./scripts/render-module');
+const { imageDownloadData } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -51,23 +52,11 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
     const direction = result?.look_at;
     const url = result?.url_public;
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-      let modifiedData = data;
-      const positionStr = Array.isArray(position) ? position.join(',') : '';
-      const directionStr = Array.isArray(direction) ? direction.join(',') : '';
-
-      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, `${url}`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(
-        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
-        JSON.stringify(config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : '')
-      );
-      res.send(modifiedData);
+    await renderModule(res, 'pointcloud', {
+      pointCloudUrl: url || '',
+      cameraPosition: Array.isArray(position) ? position : [],
+      lookAt: Array.isArray(direction) ? direction : [],
+      annotationsUrl: config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : ''
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);
@@ -93,21 +82,12 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
       return res.status(404).send('No textured mesh');
     }
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'texturedmesh', 'texturedmesh.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Internal Server Error');
-      }
-
-      const texturedMeshTitle = texturedMeshData.title || texturedMeshData.tomb?.[0]?.name || 'Textured mesh';
-      const modifiedData = data
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.url_public))
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_TITLE'/g, JSON.stringify(texturedMeshTitle))
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.url_download || ''))
-        .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(texturedMeshData.camera_position || null))
-        .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(texturedMeshData.look_at || null));
-
-      res.send(modifiedData);
+    await renderModule(res, 'texturedmesh', {
+      texturedMeshUrl: texturedMeshData.url_public,
+      title: texturedMeshData.title || texturedMeshData.tomb?.[0]?.name || 'Textured mesh',
+      downloadUrl: texturedMeshData.url_download || '',
+      cameraPosition: texturedMeshData.camera_position || null,
+      lookAt: texturedMeshData.look_at || null
     });
   } catch (error) {
     console.error(error);
@@ -259,31 +239,25 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const images = apiResponse.data.results;
     const availableImages = (images || []).filter(image => image.iiif_file);
     if (availableImages.length) {
-      fs.readFile(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8', (err, data) => {
-        if (err) {
-          console.error('Error reading the file:', err);
-          return res.status(500).send('Internal Server Error');
-        }
+      const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
+      const requestedImage = req.query.id;
+      const requestedPage = availableImages.findIndex(image => String(image.id) === String(requestedImage));
+      const initialPage = requestedPage >= 0 ? requestedPage : 0;
 
-        const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
-        const requestedImage = req.query.id;
-        const requestedPage = availableImages.findIndex(image => String(image.id) === String(requestedImage));
-        const initialPage = requestedPage >= 0 ? requestedPage : 0;
-
-        let modifiedData = data.replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(apiUrl, availableImages))
-          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(tileSources))
-          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(config.inscriptionAdminUrl || ''))
-          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
-          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
-            rectangle: Boolean(config.enableRectangleTool),
-            polygon: Boolean(config.enablePolygonTool),
-            line: Boolean(config.enableLineTool),
-            point: Boolean(config.enablePointTool)
-          }))
-          .replace(/'PLACEHOLDER_INITIAL_PAGE'/g, initialPage)
-          .replace(/'PLACEHOLDER_PRESERVE_VIEWPORT'/g, tileSources.length <= 1)
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled && tileSources.length > 1);
-        res.send(modifiedData);
+      await renderModule(res, 'iiif', {
+        downloads: imageDownloadData(apiUrl, availableImages),
+        tileSources,
+        annotationEditorUrl: config.inscriptionAdminUrl || '',
+        displayInscriptions: Boolean(config.enableIIIFAnnotations),
+        annotationTools: {
+          rectangle: Boolean(config.enableRectangleTool),
+          polygon: Boolean(config.enablePolygonTool),
+          line: Boolean(config.enableLineTool),
+          point: Boolean(config.enablePointTool)
+        },
+        initialPage,
+        preserveViewport: tileSources.length <= 1,
+        sequenceEnabled: sequenceEnabled && tileSources.length > 1
       });
     } else {
       res.status(404).send('No IIIF image found.');
@@ -332,9 +306,7 @@ app.get('/viewer/modules/panorama/panorama.html', async (req, res) => {
 
     const initialScene = panoramas.find(panorama => panorama.id === String(requestedPanoramaId))?.id
       || panoramas[0].id;
-    const templatePath = path.join(__dirname, 'viewer', 'modules', 'panorama', 'panorama.html');
-    const data = await fs.promises.readFile(templatePath, 'utf8');
-    res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify({ panoramas, initialScene })));
+    await renderModule(res, 'panorama', { panoramas, initialScene });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

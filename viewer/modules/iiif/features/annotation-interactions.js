@@ -4,7 +4,6 @@ export function createAnnotationInteractions({
     displayInscriptions,
     getCurrentImageSize,
     initialAnnotationId,
-    isPlaceholder,
     loadAnnotationsPromise,
     viewer
 }) {
@@ -149,7 +148,7 @@ export function createAnnotationInteractions({
 
             anno.removeAnnotation(annotation.id);
             pendingAnnotationId = null;
-            if (annotationEditorUrl && !isPlaceholder(annotationEditorUrl)) {
+            if (annotationEditorUrl) {
                 window.open(annotationEditorUrl, '_blank');
             }
             document.getElementById('savePopup').style.display = 'none';

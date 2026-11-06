@@ -2,6 +2,12 @@
 <html lang="en">
 
 <head>
+    <script>
+        const viewerConfig = {
+            texturedMeshUrl: '', title: '', downloadUrl: '', cameraPosition: null, lookAt: null,
+            ...'PLACEHOLDER_VIEWER_CONFIG'
+        };
+    </script>
     <script src="/viewer/shared/project_context.js"></script>
     <title>Textured Mesh Viewer</title>
     <meta charset="utf-8">
@@ -162,13 +168,7 @@
     <div id="viewer"></div>
 
     <script>
-        window.TEXTUREDMESH_VIEWER_OPTIONS = {
-            texturedMeshUrl: 'PLACEHOLDER_TEXTUREDMESH_URL',
-            title: 'PLACEHOLDER_TEXTUREDMESH_TITLE',
-            downloadUrl: 'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL',
-            cameraPosition: 'PLACEHOLDER_CAMERA_POSITION',
-            lookAt: 'PLACEHOLDER_LOOK_AT'
-        };
+        window.TEXTUREDMESH_VIEWER_OPTIONS = viewerConfig;
 
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
 

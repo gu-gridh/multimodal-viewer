@@ -1,3 +1,4 @@
+const { renderModule } = require('./scripts/render-module');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -53,23 +54,11 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
     const direction = apiResponse.data.results[0]?.look_at;
     const urlPublic = apiResponse.data.results[0]?.url_public; 
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-      let modifiedData = data;
-      const positionStr = position ? position.join(',') : '';
-      const directionStr = direction ? direction.join(',') : '';
-      
-      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, urlPublic || 'default-url');
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(
-        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
-        JSON.stringify(config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : '')
-      );
-      res.send(modifiedData);
+    await renderModule(res, 'pointcloud', {
+      pointCloudUrl: urlPublic || 'default-url',
+      cameraPosition: Array.isArray(position) ? position : [],
+      lookAt: Array.isArray(direction) ? direction : [],
+      annotationsUrl: config.enablePointCloudAnnotations ? config.pointCloudAnnotationsUrl || '' : ''
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);

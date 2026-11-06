@@ -5,7 +5,6 @@ export function createAnnotationLoader({
     clearCanvasAnnotations,
     displayInscriptions,
     drawCanvasAnnotations,
-    isPlaceholder,
     pagedAnnotationLoadingEnabled,
     viewer
 }) {
@@ -42,7 +41,7 @@ export function createAnnotationLoader({
     }
 
     function getAnnotationUrl(filters, page, api = annotationPath) {
-        if (!displayInscriptions || !api || isPlaceholder(api)) {
+        if (!displayInscriptions || !api) {
             return '';
         }
 

@@ -2,6 +2,12 @@
 <html>
 
 <head>
+    <script>
+        const viewerConfig = {
+            images: [],
+            ...'PLACEHOLDER_VIEWER_CONFIG'
+        };
+    </script>
 	<script src="/viewer/shared/project_context.js"></script>
 	<title>OpenLime</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -80,7 +86,7 @@
 
 <body style="user-select:none; -webkit-user-select:none;">
 
-	<div id="rti-buttons-container"><!-- PLACEHOLDER_FOR_BUTTONS --></div>
+	<div id="rti-buttons-container"><select id="rtiImageDropdown" onchange="updateRTIImage(this.value)"></select></div>
 
 	<div id="openlime">
 		<div class="ui-overlay-container" style="height:300px; z-index:1000; pointer-events:none;  bottom:0px;">
@@ -259,11 +265,19 @@
 		return false;
 	}
 
+	const dropdown = document.getElementById('rtiImageDropdown');
+	for (const image of viewerConfig.images) {
+		const option = new Option(image.title, image.url);
+		option.dataset.downloadable = image.downloadUrl ? '1' : '0';
+		option.dataset.dlUrl = image.downloadUrl;
+		dropdown.add(option);
+	}
+
 	var lime = new OpenLIME.Viewer('#openlime', { background: 'var(--viewer-bg)' });
 	var currentLayer = null;
 
 	async function init() {
-		var initialRTIUrl = 'PLACEHOLDER_RTI';
+		var initialRTIUrl = viewerConfig.images[0]?.url || '';
 		var infoUrl = initialRTIUrl + 'info.json';
 		currentLayer = new OpenLIME.Layer({
 			layout: 'deepzoom',
@@ -280,7 +294,7 @@
 		ui.actions.layers.display = false;
 		lime.camera.maxFixedZoom = 1.5;
 		window.lime = lime;
-		updateDownloadButtonFor('PLACEHOLDER_RTI');
+		updateDownloadButtonFor(viewerConfig.images[0]?.url || '');
 	}
 
 	function removePreviousLimeViewer() {

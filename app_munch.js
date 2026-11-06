@@ -1,6 +1,6 @@
-const { imageDownloadConfig } = require('./scripts/image-download-config');
+const { renderModule } = require('./scripts/render-module');
+const { imageDownloadData } = require('./scripts/image-download-config');
 const express = require('express');
-const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
@@ -97,10 +97,6 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     const annotationCanvasThreshold = Number(painting.interactive_annotations) || 150;
     const displayCoordinateTool = Boolean(config.enableCoordinateTool && coordinateWidthCm && coordinateHeightCm);
 
-    const htmlContent = fs.readFileSync(
-      path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'),
-      'utf8'
-    );
     const annotationPath = `/viewer/modules/iiif/annotation?q=${encodedQueryName}`;
     const annotationDownloadApi = `https://munch.dh.gu.se/api/annotation/?panel=${encodedQueryName}`;
     const displayIIIFAnnotations = Boolean(config.enableIIIFAnnotations);
@@ -121,57 +117,41 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
     });
     const images = imagesResponse.data.results || [];
 
+    let selectedImages;
+    let tileSources;
+    let sequenceEnabled = false;
     if (queryType === 'iiif' || queryType === 'photo') {
-      const photo = images.find(image => image.image_type === 'orthophoto' && /\/[^/]*Medium[^/]*$/i.test(image.file));
-      const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, [photo], annotationDownloadApi))
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(munchPhotoTileSource))
-        .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
-        .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify(annotationTools))
-        .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
-        .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
-        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, false)
-        .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
-        .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
-        .replace(/'PLACEHOLDER_COORDINATE_WIDTH'/g, JSON.stringify(coordinateWidthCm))
-        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT'/g, JSON.stringify(coordinateHeightCm))
-        .replace(/'PLACEHOLDER_COORDINATE_UNIT'/g, JSON.stringify('cm'));
-
-      return res.send(updatedHtmlContent);
-    }
-
-    if (queryType === 'topography') {
-      const sortedTopography = images
+      selectedImages = [images.find(image => image.image_type === 'orthophoto' && /\/[^/]*Medium[^/]*$/i.test(image.file))];
+      tileSources = munchPhotoTileSource;
+    } else if (queryType === 'topography') {
+      selectedImages = images
         .filter(image => image.image_type === 'topographical')
         .sort((a, b) => a.sort_order - b.sort_order);
-
-      if (!sortedTopography.length) {
+      if (!selectedImages.length) {
         return res.status(404).send('No attached topography images found.');
       }
-
-      const topographyTileSources = sortedTopography.map(topography => `${topography.iiif_file}/info.json`);
-      const updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, sortedTopography, annotationDownloadApi))
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyTileSources))
-        .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(annotationPath))
-        .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminUrl))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, displayIIIFAnnotations)
-        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify(annotationTools))
-        .replace(/'PLACEHOLDER_PAGED_ANNOTATION_LOADING'/g, pagedAnnotationLoadingEnabled)
-        .replace(/'PLACEHOLDER_INTERACTIVE_ANNOTATIONS'/g, JSON.stringify(annotationCanvasThreshold))
-        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, topographyTileSources.length > 1)
-        .replace(/'PLACEHOLDER_COORDINATE_TOOL_ENABLED'/g, displayCoordinateTool)
-        .replace(/'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS'/g, displayAnnotationFocus)
-        .replace(/'PLACEHOLDER_COORDINATE_WIDTH'/g, JSON.stringify(coordinateWidthCm))
-        .replace(/'PLACEHOLDER_COORDINATE_HEIGHT'/g, JSON.stringify(coordinateHeightCm))
-        .replace(/'PLACEHOLDER_COORDINATE_UNIT'/g, JSON.stringify('cm'));
-
-      return res.send(updatedHtmlContent);
+      tileSources = selectedImages.map(image => `${image.iiif_file}/info.json`);
+      sequenceEnabled = tileSources.length > 1;
+    } else {
+      return res.status(400).send('Invalid type specified in query');
     }
 
-    return res.status(400).send('Invalid type specified in query');
+    await renderModule(res, 'iiif', {
+      downloads: imageDownloadData(imageApiBaseUrl, selectedImages, annotationDownloadApi),
+      tileSources,
+      annotationPath,
+      annotationEditorUrl: inscriptionAdminUrl,
+      displayInscriptions: displayIIIFAnnotations,
+      annotationTools,
+      pagedAnnotationLoading: pagedAnnotationLoadingEnabled,
+      annotationCanvasThreshold,
+      sequenceEnabled,
+      coordinateToolEnabled: displayCoordinateTool,
+      displayAnnotationFocus,
+      coordinateWidth: coordinateWidthCm,
+      coordinateHeight: coordinateHeightCm,
+      coordinateUnit: 'cm'
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -316,35 +296,15 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     const baseModelRotation = hasApiStartPosition ? parseStartValue(mesh.start_position_rotation) : 0.0;
     const cameraStartState = [0.0, 0.0, cameraStartPan[0], cameraStartPan[1], cameraStartPan[2], cameraStartDistance];
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'), 'utf8', (err, html) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Internal Server Error');
-      }
-
-      let modified = html
-        .replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
-        .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
-        .replace(/PLACEHOLDER_BASEMODELPHI/g, JSON.stringify(baseModelPhi))
-        .replace(/PLACEHOLDER_BASEMODELTHETA/g, JSON.stringify(baseModelTheta))
-        .replace(/PLACEHOLDER_CAMERASTARTDISTANCE/g, JSON.stringify(cameraStartDistance))
-        .replace(/PLACEHOLDER_CAMERASTARTPAN/g, JSON.stringify(cameraStartPan))
-        .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
-        .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-        .replace(/PLACEHOLDER_CAMERASTARTSTATE/g, JSON.stringify(cameraStartState))
-        .replace(/PLACEHOLDER_BASEMODELROTATION/g, JSON.stringify(baseModelRotation));
-
-      const isDownloadable = Boolean(meshUrl);
-      const $ = cheerio.load(modified);
-      if (isDownloadable) {
-        $('#download').attr('href', meshUrl);
-        $('#download .download-button').removeClass('deactivated');
-      } else {
-        $('#download').removeAttr('href');
-        $('#download .download-button').addClass('deactivated');
-      }
-
-      res.send($.html());
+    await renderModule(res, 'mesh', {
+      meshUrl,
+      baseModelPhi,
+      baseModelTheta,
+      cameraStartDistance,
+      cameraStartPan,
+      cameraStartState,
+      baseModelRotation,
+      downloadUrl: meshUrl
     });
   } catch (error) {
     console.error(error);

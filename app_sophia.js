@@ -1,4 +1,5 @@
-const { imageDownloadConfig } = require('./scripts/image-download-config');
+const { renderModule } = require('./scripts/render-module');
+const { imageDownloadData } = require('./scripts/image-download-config');
 const express = require('express');
 const cheerio = require('cheerio');
 const path = require('path');
@@ -49,30 +50,12 @@ app.get('/viewer/modules/rti/rti.html', async (req, res) => {
       });
     }
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'rti', 'rti.html'), 'utf8', (err, htmlData) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-      const initialRTIUrl = rtiImages.length > 0 ? rtiImages[0].url : '';
-
-      const dropdownHtml = rtiImages.map(rti => {
-        const dl = rti.url_for_download || '';
-        const downloadable = rti.is_downloadable && !!dl;
-        return `<option
-                  value="${rti.url}"
-                  data-downloadable="${downloadable ? '1' : '0'}"
-                  data-dl-url="${dl}">
-                  ${rti.title}
-                </option>`;
-      }).join('');
-
-      let modifiedHtml = htmlData.replace("PLACEHOLDER_RTI", initialRTIUrl);
-      modifiedHtml = modifiedHtml.replace('<!-- PLACEHOLDER_FOR_BUTTONS -->',
-        `<select id="rtiImageDropdown" onchange="updateRTIImage(this.value)">
-          ${dropdownHtml}
-        </select>`);
-      res.send(modifiedHtml);
+    await renderModule(res, 'rti', {
+      images: rtiImages.map(rti => ({
+        url: rti.url,
+        title: rti.title,
+        downloadUrl: rti.is_downloadable ? rti.url_for_download || '' : ''
+      }))
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);
@@ -89,23 +72,11 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res) => {
     const position = apiResponse.data?.features?.[0]?.properties?.spatial_position;
     const direction = apiResponse.data?.features?.[0]?.properties?.spatial_direction;
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'pointcloud', 'pointcloud.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-      let modifiedData = data;
-      const positionStr = position ? position.join(',') : '';
-      const directionStr = direction ? direction.join(',') : '';
-
-      modifiedData = modifiedData.replace(/PLACEHOLDER_URL_PUBLIC/g, pointCloudUrl);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_POSITION'/g, `[${positionStr}]`);
-      modifiedData = modifiedData.replace(/'PLACEHOLDER_DIRECTION'/g, `[${directionStr}]`);
-      modifiedData = modifiedData.replace(
-        /'PLACEHOLDER_POINTCLOUD_ANNOTATIONS'/g,
-        JSON.stringify(config.enablePointCloudAnnotations ? pointCloudAnnotationsUrl : '')
-      );
-      res.send(modifiedData);
+    await renderModule(res, 'pointcloud', {
+      pointCloudUrl,
+      cameraPosition: Array.isArray(position) ? position : [],
+      lookAt: Array.isArray(direction) ? direction : [],
+      annotationsUrl: config.enablePointCloudAnnotations ? pointCloudAnnotationsUrl : ''
     });
   } catch (error) {
     console.error('Error fetching data from API:', error);
@@ -134,32 +105,30 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
     if (queryType === 'orthophoto') {
       if (modelData?.[0]?.properties?.attached_photograph?.length) {
-        const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = false;
         const basePath = imageBaseUrl;
         const iiifFilePath = modelData?.[0]?.properties?.attached_photograph?.[0]?.iiif_file;
         const annotationPath = annotationApiBaseUrl;
-        const fullPath = `"${basePath}${iiifFilePath}/info.json"`;
-        let updatedHtmlContent = htmlContent
-          .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, [modelData[0].properties.attached_photograph[0]], `${annotationPath}${queryName}`))
-          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, fullPath || '')
-          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${encodeURIComponent(queryName)}`))
-          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
-          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
-          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+
+        await renderModule(res, 'iiif', {
+          downloads: imageDownloadData(imageApiBaseUrl, [modelData[0].properties.attached_photograph[0]], `${annotationPath}${queryName}`),
+          tileSources: `${basePath}${iiifFilePath}/info.json`,
+          annotationPath: `${annotationPath}${encodeURIComponent(queryName)}`,
+          annotationEditorUrl: inscriptionAdminBaseUrl,
+          displayInscriptions: Boolean(config.enableIIIFAnnotations),
+          annotationTools: {
             rectangle: Boolean(config.enableRectangleTool),
             polygon: Boolean(config.enablePolygonTool),
             line: Boolean(config.enableLineTool),
             point: Boolean(config.enablePointTool)
-          }))
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
-        res.send(updatedHtmlContent);
+          },
+          sequenceEnabled
+        });
       } else {
         res.send('No attached photographs found.');
       }
     } else if (queryType === 'topography') {
       if (modelData?.[0]?.properties?.attached_topography?.length) {
-        const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
         const sequenceEnabled = true;
         const basePathIiif = imageBaseUrl;
         const annotationPath = annotationApiBaseUrl;
@@ -175,20 +144,20 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
         const topographyImagesIiif = sortedTopography.map(topography => `${basePathIiif}${topography.iiif_file}/info.json`);
 
-        let updatedHtmlContent = htmlContent
-          .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, sortedTopography, `${annotationPath}${queryName}`))
-          .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(topographyImagesIiif))
-          .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+        await renderModule(res, 'iiif', {
+          downloads: imageDownloadData(imageApiBaseUrl, sortedTopography, `${annotationPath}${queryName}`),
+          tileSources: topographyImagesIiif,
+          annotationTools: {
             rectangle: Boolean(config.enableRectangleTool),
             polygon: Boolean(config.enablePolygonTool),
             line: Boolean(config.enableLineTool),
             point: Boolean(config.enablePointTool)
-          }))
-          .replace(/'PLACEHOLDER_ANNOTATION_EDITOR_URL'/g, JSON.stringify(inscriptionAdminBaseUrl))
-          .replace(/'PLACEHOLDER_ANNOTATION_PATH'/g, JSON.stringify(`${annotationPath}${encodeURIComponent(queryName)}`))
-          .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
-          .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, sequenceEnabled);
-        res.send(updatedHtmlContent);
+          },
+          annotationEditorUrl: inscriptionAdminBaseUrl,
+          annotationPath: `${annotationPath}${encodeURIComponent(queryName)}`,
+          displayInscriptions: Boolean(config.enableIIIFAnnotations),
+          sequenceEnabled
+        });
       } else {
         res.send('No attached topography images found.');
       }
@@ -625,36 +594,16 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     const baseModelRotation = hasApiStartPosition ? parseStartValue(mesh.start_position_rotation) : 0.0;
     const cameraStartState = [0.0, 0.0, cameraStartPan[0], cameraStartPan[1], cameraStartPan[2], cameraStartDistance];
 
-    fs.readFile(
-      path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'),
-      'utf8',
-      (err, html) => {
-        if (err) return res.status(500).send('Internal server error');
-
-        let modified = html
-          .replace(/PLACEHOLDER_MESH/g, JSON.stringify(mesh.url || ''))
-          .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(''))
-          .replace(/PLACEHOLDER_BASEMODELPHI/g, JSON.stringify(baseModelPhi))
-          .replace(/PLACEHOLDER_BASEMODELTHETA/g, JSON.stringify(baseModelTheta))
-          .replace(/PLACEHOLDER_CAMERASTARTDISTANCE/g, JSON.stringify(cameraStartDistance))
-          .replace(/PLACEHOLDER_CAMERASTARTPAN/g, JSON.stringify(cameraStartPan))
-          .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
-          .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-          .replace(/PLACEHOLDER_CAMERASTARTSTATE/g, JSON.stringify(cameraStartState))
-          .replace(/PLACEHOLDER_BASEMODELROTATION/g, JSON.stringify(baseModelRotation));
-        const $ = cheerio.load(modified);
-
-        if (isDownloadable) {
-          $('#download').attr('href', mesh.url_for_download);
-          $('#download .download-button').removeClass('deactivated');
-        } else {
-          $('#download').removeAttr('href');
-          $('#download .download-button').addClass('deactivated');
-        }
-
-        res.send($.html());
-      }
-    );
+    await renderModule(res, 'mesh', {
+      meshUrl: mesh.url || '',
+      baseModelPhi,
+      baseModelTheta,
+      cameraStartDistance,
+      cameraStartPan,
+      cameraStartState,
+      baseModelRotation,
+      downloadUrl: isDownloadable ? mesh.url_for_download : ''
+    });
   } catch (e) {
     console.error(e);
     res.status(500).send('Internal server error');

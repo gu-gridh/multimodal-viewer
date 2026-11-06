@@ -2,6 +2,16 @@
 <html>
 
 <head>
+    <script>
+        const viewerConfig = {
+            tileSources: [], annotationCanvasThreshold: 150, displayInscriptions: false,
+            sequenceEnabled: false, preserveViewport: true, initialPage: 0, annotationTools: {},
+            annotationPath: '', annotationEditorUrl: '', pagedAnnotationLoading: false,
+            displayAnnotationFocus: false, coordinateToolEnabled: false,
+            coordinateWidth: 0, coordinateHeight: 0, coordinateUnit: '', downloads: null,
+            ...'PLACEHOLDER_VIEWER_CONFIG'
+        };
+    </script>
     <title>IIIF Image Viewer</title>
     <script src="/viewer/shared/project_context.js"></script>
     <link rel="stylesheet" href="iiif.css">
@@ -202,34 +212,33 @@
         let currentRotation = 0; //current rotation
         let isInitialLoad = true;
         let annotationInteractions = null;
-        const annotationCanvasThreshold = Number('PLACEHOLDER_INTERACTIVE_ANNOTATIONS') || 150;
+        const annotationCanvasThreshold = Number(viewerConfig.annotationCanvasThreshold) || 150;
         let annotationCanvasRenderer = null;
         let annotationLoader = null;
 
         //variables for setting download name
-        var tileSourcesString = 'PLACEHOLDER_IIIF_IMAGE_URL';
+        var tileSourcesString = viewerConfig.tileSources;
 
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
-        const displayInscriptions = 'PLACEHOLDER_IIIF_ANNOTATIONS' === true;
-        const sequenceEnabled = 'PLACEHOLDER_SEQUENCE_ENABLE' === true;
-        const preserveViewportSetting = 'PLACEHOLDER_PRESERVE_VIEWPORT';
+        const displayInscriptions = viewerConfig.displayInscriptions === true;
+        const sequenceEnabled = viewerConfig.sequenceEnabled === true;
+        const preserveViewportSetting = viewerConfig.preserveViewport;
         const preserveViewport = typeof preserveViewportSetting === 'boolean'
             ? preserveViewportSetting
             : true;
-        const configuredAnnotationTools = 'PLACEHOLDER_ANNOTATION_TOOLS';
+        const configuredAnnotationTools = viewerConfig.annotationTools;
         const annotationTools = typeof configuredAnnotationTools === 'object' ? configuredAnnotationTools : {};
-        const annotationPath = 'PLACEHOLDER_ANNOTATION_PATH';
-        const annotationEditorUrl = 'PLACEHOLDER_ANNOTATION_EDITOR_URL';
+        const annotationPath = viewerConfig.annotationPath;
+        const annotationEditorUrl = viewerConfig.annotationEditorUrl;
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
-        const pagedAnnotationLoadingEnabled = 'PLACEHOLDER_PAGED_ANNOTATION_LOADING' === true;
-        const displayAnnotationFocus = 'PLACEHOLDER_DISPLAY_ANNOTATION_FOCUS' === true;
-        const coordinateToolEnabled = 'PLACEHOLDER_COORDINATE_TOOL_ENABLED' === true;
-        const coordinateWidth = Number('PLACEHOLDER_COORDINATE_WIDTH');
-        const coordinateHeight = Number('PLACEHOLDER_COORDINATE_HEIGHT');
-        const coordinateUnitValue = 'PLACEHOLDER_COORDINATE_UNIT';
-        const coordinateUnit = isPlaceholder(coordinateUnitValue) ? '' : coordinateUnitValue;
+        const pagedAnnotationLoadingEnabled = viewerConfig.pagedAnnotationLoading === true;
+        const displayAnnotationFocus = viewerConfig.displayAnnotationFocus === true;
+        const coordinateToolEnabled = viewerConfig.coordinateToolEnabled === true;
+        const coordinateWidth = Number(viewerConfig.coordinateWidth);
+        const coordinateHeight = Number(viewerConfig.coordinateHeight);
+        const coordinateUnit = viewerConfig.coordinateUnit;
 
         document.getElementById('clear-annotations').style.display = displayInscriptions ? 'flex' : 'none';
         document.getElementById('sequence-controls').style.display = sequenceEnabled ? 'flex' : 'none';
@@ -271,10 +280,6 @@
                 return null;
             })
             : Promise.resolve(null);
-
-        function isPlaceholder(value) {
-            return value.includes('PLACEHOLDER');
-        }
 
         function setCanvasAnnotationVisible(visible) {
             if (annotationCanvasRenderer) {
@@ -458,8 +463,8 @@
             viewer = OpenSeadragon({
                 id: "openseadragon",
                 prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
-                tileSources: 'PLACEHOLDER_IIIF_IMAGE_URL',
-                initialPage: Number('PLACEHOLDER_INITIAL_PAGE') || 0,
+                tileSources: viewerConfig.tileSources,
+                initialPage: Number(viewerConfig.initialPage) || 0,
                 immediateRender: false,
                 visibilityRatio: 0.50,
                 minZoomImageRatio: 0.75,
@@ -602,7 +607,6 @@
                             clearCanvasAnnotations,
                             displayInscriptions,
                             drawCanvasAnnotations,
-                            isPlaceholder,
                             pagedAnnotationLoadingEnabled,
                             viewer
                         });
@@ -622,7 +626,6 @@
                         displayInscriptions,
                         getCurrentImageSize,
                         initialAnnotationId,
-                        isPlaceholder,
                         loadAnnotationsPromise,
                         viewer
                     });
@@ -633,7 +636,7 @@
                 module.createImageDownload({
                     viewer,
                     tileSources: tileSourcesString,
-                    downloads: 'PLACEHOLDER_IMAGE_DOWNLOAD',
+                    downloads: viewerConfig.downloads,
                     getAnnotationUrl: api => annotationsVisible && displayInscriptions
                         ? annotationLoader?.getAnnotationUrl(getActiveAnnotationFilters(), undefined, api)
                         : '',

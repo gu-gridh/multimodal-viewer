@@ -1,4 +1,5 @@
-const { imageDownloadConfig } = require('./scripts/image-download-config');
+const { renderModule } = require('./scripts/render-module');
+const { imageDownloadData } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -44,19 +45,19 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
 
       //Extract all IIIF image URLs from colour_images
       const iiifImageUrls = modelData[0].colour_images.map(image => `${image.iiif_file}/info.json`);
-      const htmlContent = fs.readFileSync(path.join(__dirname, 'viewer', 'modules', 'iiif', 'iiif.html'), 'utf8');
-      let updatedHtmlContent = htmlContent
-        .replace(/'PLACEHOLDER_IMAGE_DOWNLOAD'/g, imageDownloadConfig(imageApiBaseUrl, modelData[0].colour_images))
-        .replace(/'PLACEHOLDER_IIIF_IMAGE_URL'/g, JSON.stringify(iiifImageUrls))
-        .replace(/'PLACEHOLDER_ANNOTATION_TOOLS'/g, JSON.stringify({
+
+      await renderModule(res, 'iiif', {
+        downloads: imageDownloadData(imageApiBaseUrl, modelData[0].colour_images),
+        tileSources: iiifImageUrls,
+        annotationTools: {
           rectangle: Boolean(config.enableRectangleTool),
           polygon: Boolean(config.enablePolygonTool),
           line: Boolean(config.enableLineTool),
           point: Boolean(config.enablePointTool)
-        }))
-        .replace(/'PLACEHOLDER_IIIF_ANNOTATIONS'/g, Boolean(config.enableIIIFAnnotations))
-        .replace(/'PLACEHOLDER_SEQUENCE_ENABLE'/g, true)
-      res.send(updatedHtmlContent);
+        },
+        displayInscriptions: Boolean(config.enableIIIFAnnotations),
+        sequenceEnabled: true
+      });
     } else {
       console.log('No colour images found.');
       res.send('No colour images found.');
@@ -287,25 +288,7 @@ app.get('/viewer/modules/mesh/mesh.html', async (req, res) => {
     const meshUrl = modelData.three_d_mesh.mesh_url;
     const qualityUrl = modelData.three_d_mesh.quality_url || '';
 
-    fs.readFile(path.join(__dirname, 'viewer', 'modules', 'mesh', 'mesh.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return res.status(500).send('Internal Server Error');
-      }
-
-      let modifiedData = data.replace(/PLACEHOLDER_MESH/g, JSON.stringify(meshUrl))
-        .replace(/PLACEHOLDER_SECOND_MESH/g, JSON.stringify(qualityUrl))
-        .replace(/PLACEHOLDER_BASEMODELPHI/g, 0.0)
-        .replace(/PLACEHOLDER_BASEMODELTHETA/g, 0.0)
-        .replace(/PLACEHOLDER_CAMERASTARTDISTANCE/g, 1.5)
-        .replace(/PLACEHOLDER_CAMERASTARTPAN/g, JSON.stringify([0.0, 0.0, 0.0]))
-        .replace(/PLACEHOLDER_MINMAXPHI/g, JSON.stringify([-180.0, 180.0]))
-        .replace(/PLACEHOLDER_MINMAXTHETA/g, JSON.stringify([-180.0, 180.0]))
-        .replace(/PLACEHOLDER_CAMERASTARTSTATE/g, JSON.stringify([0.0, 0.0, 0.0, 0.0, 0.0, 1.5]))
-        .replace(/PLACEHOLDER_BASEMODELROTATION/g, 0.0);
-
-      res.send(modifiedData);
-    });
+    await renderModule(res, 'mesh', { meshUrl, secondMeshUrl: qualityUrl });
   } catch (error) {
     console.error('Error fetching data from API:', error);
     return res.status(500).send('Internal Server Error');

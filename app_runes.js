@@ -1,4 +1,5 @@
-const { imageDownloadConfig } = require('./scripts/image-download-config');
+const { renderModule } = require('./scripts/render-module');
+const { imageDownloadData } = require('./scripts/image-download-config');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -25,20 +26,12 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
       return res.status(404).send('No textured mesh');
     }
 
-    const templatePath = path.join(__dirname, 'viewer', 'modules', 'texturedmesh', 'texturedmesh.html');
-    fs.readFile(templatePath, 'utf8', (error, data) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send('Internal Server Error');
-      }
-
-      const title = texturedMeshData.name || 'Textured mesh';
-      res.send(data
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_URL'/g, JSON.stringify(texturedMeshData.mesh_url_public))
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_TITLE'/g, JSON.stringify(title))
-        .replace(/'PLACEHOLDER_TEXTUREDMESH_DOWNLOAD_URL'/g, JSON.stringify(texturedMeshData.mesh_url_download || ''))
-        .replace(/'PLACEHOLDER_CAMERA_POSITION'/g, JSON.stringify(texturedMeshData.camera_position || null))
-        .replace(/'PLACEHOLDER_LOOK_AT'/g, JSON.stringify(texturedMeshData.look_at || null)));
+    await renderModule(res, 'texturedmesh', {
+      texturedMeshUrl: texturedMeshData.mesh_url_public,
+      title: texturedMeshData.name || 'Textured mesh',
+      downloadUrl: texturedMeshData.mesh_url_download || '',
+      cameraPosition: texturedMeshData.camera_position || null,
+      lookAt: texturedMeshData.look_at || null
     });
   } catch (error) {
     console.error(error);
@@ -46,22 +39,19 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
   }
 });
 
-app.get('/viewer/modules/panorama/panorama.html', (req, res) => {
-  const templatePath = path.join(__dirname, 'viewer', 'modules', 'panorama', 'panorama.html');
-  fs.readFile(templatePath, 'utf8', (error, data) => {
-    if (error) {
-      console.error(error);
-      return res.status(500).send('Internal Server Error');
-    }
-
+app.get('/viewer/modules/panorama/panorama.html', async (req, res) => {
+  try {
     const panoramaConfig = {
       panoramas: [
         { id: 'panorama-1', title: 'Nuvarande position', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_189/' },
         { id: 'panorama-2', title: 'Ursprunglig position', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_137/' }
       ]
     };
-    res.send(data.replace(/'PLACEHOLDER_PANORAMA_CONFIG'/g, JSON.stringify(panoramaConfig)));
-  });
+    await renderModule(res, 'panorama', panoramaConfig);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
@@ -79,101 +69,33 @@ app.get('/viewer/projects/runes/metadata/metadata.html', async (req, res) => {
 });
 
 app.get('/viewer/modules/iiif/iiif.html', async (req, res) => {
-    const fullQuery = req.query.q;
-    const [placeId, viewerType] = fullQuery
-        ? fullQuery.split('/')
-        : [];
+  const [placeId, viewerType] = req.query.q ? req.query.q.split('/') : [];
+  if (!placeId || viewerType !== 'images') {
+    return res.status(400).send('image query is required');
+  }
 
-    if (!placeId || viewerType !== 'images') {
-        return res.status(400).send('image query is required');
+  const apiUrl = `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`;
+  try {
+    const { data } = await axios.get(apiUrl);
+    const images = Array.isArray(data) ? data : data.results || [];
+    const availableImages = images.filter(image => image.iiif_file);
+    if (!availableImages.length) {
+      return res.status(404).send('No IIIF image found.');
     }
 
-    const sequenceEnabled = true;
-
-    const apiUrl =
-        `https://runes.dh.gu.se/api/image/?place=${encodeURIComponent(placeId)}`;
-
-    try {
-        const apiResponse = await axios.get(apiUrl);
-
-        const images = Array.isArray(apiResponse.data)
-            ? apiResponse.data
-            : apiResponse.data.results || [];
-
-        const availableImages = images.filter(
-            image => image.iiif_file
-        );
-
-        if (!availableImages.length) {
-            return res.status(404).send('No IIIF image found.');
-        }
-
-        fs.readFile(
-            path.join(
-                __dirname,
-                'viewer',
-                'modules',
-                'iiif',
-                'iiif.html'
-            ),
-            'utf8',
-            (err, data) => {
-                if (err) {
-                    console.error('Error reading the file:', err);
-                    return res
-                        .status(500)
-                        .send('Internal Server Error');
-                }
-
-                const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
-                const downloadFiles = availableImages.map(image => image.file);
-                const requestedImage = req.query.id;
-                const requestedPage = availableImages.findIndex(image =>String(image.id) === String(requestedImage));
-                const initialPage =requestedPage >= 0 ? requestedPage : 0;
-
-                let modifiedData = data
-                    .replace(
-                        /'PLACEHOLDER_IMAGE_DOWNLOAD'/g,
-                        imageDownloadConfig(apiUrl, availableImages)
-                    )
-                    .replace(
-                        /'PLACEHOLDER_IIIF_IMAGE_URL'/g,
-                        JSON.stringify(tileSources)
-                    )
-                    .replace(
-                        /'PLACEHOLDER_DOWNLOAD_PATH'/g,
-                        JSON.stringify(
-                            JSON.stringify(downloadFiles)
-                        )
-                    )
-                    .replace(
-                        /'PLACEHOLDER_INITIAL_PAGE'/g,
-                        initialPage
-                    )
-                    .replace(
-                        /'PLACEHOLDER_PRESERVE_VIEWPORT'/g,
-                        tileSources.length <= 1
-                    )
-                    .replace(
-                        /'PLACEHOLDER_SEQUENCE_ENABLE'/g,
-                        sequenceEnabled &&
-                        tileSources.length > 1
-                    );
-
-                res.send(modifiedData);
-            }
-        );
-
-    } catch (error) {
-        console.error(
-            'Error fetching rune images:',
-            error
-        );
-
-        return res
-            .status(500)
-            .send('Internal Server Error');
-    }
+    const tileSources = availableImages.map(image => `${image.iiif_file}/info.json`);
+    const requestedPage = availableImages.findIndex(image => String(image.id) === String(req.query.id));
+    await renderModule(res, 'iiif', {
+      downloads: imageDownloadData(apiUrl, availableImages),
+      tileSources,
+      initialPage: requestedPage >= 0 ? requestedPage : 0,
+      preserveViewport: tileSources.length <= 1,
+      sequenceEnabled: tileSources.length > 1
+    });
+  } catch (error) {
+    console.error('Error fetching rune images:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 //get runes venn data

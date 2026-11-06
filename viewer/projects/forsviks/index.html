@@ -54,12 +54,31 @@
             opacity: 1;
         }
 
-        #main-content.panel-hidden #left-pane {
-            width: 100%;
+        @media (min-width: 1051px) {
+
+            #left-pane,
+            #right-pane {
+                flex-shrink: 0;
+                transition: width 250ms ease-out;
+            }
+
+            #main-content.panel-hidden #left-pane {
+                width: 100%;
+            }
+
+            #main-content.panel-hidden #right-pane {
+                visibility: hidden;
+                transition: visibility 0s 250ms;
+            }
         }
 
-        #main-content.panel-hidden #right-pane {
-            width: 0;
+        @media (prefers-reduced-motion: reduce) {
+
+            #main-content #left-pane,
+            #main-content #right-pane,
+            #main-content.panel-hidden #right-pane {
+                transition: none;
+            }
         }
 
         @media (max-width: 1050px) {

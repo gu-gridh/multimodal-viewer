@@ -1,11 +1,32 @@
 const express = require('express');
 const path = require('path');
 const { renderModule } = require('./scripts/render-module');
+const { imageDownloadData } = require('./scripts/image-download-config');
 const axios = require('axios');
 require('dotenv').config({ path: './.env.local' });
 const { temporarySources: sources } = require('./viewer/projects/forsviks/config');
 const app = express();
+app.use((req, res, next) => {
+  if (typeof req.query.q === 'string' && req.query.q.endsWith('/')) req.query.q += 'image';
+  next();
+});
 app.use(require('./viewer-query'));
+
+app.get('/viewer/modules/iiif/iiif.html', async (req, res, next) => {
+  try {
+    const { data } = await axios.get(sources.image);
+    const images = (Array.isArray(data) ? data : data.results || []).filter(image => image.iiif_file);
+    if (!images.length) return res.status(404).send('No image found');
+    const requestedPage = images.findIndex(image => String(image.id) === String(req.query.id));
+    await renderModule(res, 'iiif', {
+      downloads: imageDownloadData(sources.image, images),
+      tileSources: images.map(image => `${image.iiif_file}/info.json`),
+      initialPage: requestedPage >= 0 ? requestedPage : 0,
+      preserveViewport: images.length === 1,
+      sequenceEnabled: images.length > 1
+    });
+  } catch (error) { next(error); }
+});
 
 app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res, next) => {
   try {

@@ -1,0 +1,155 @@
+<style>
+    #footer {
+        display: block;
+        position: absolute;
+        bottom: -2px;
+        z-index: 3000;
+        width: calc(100% + 2px);
+        height: 82px;
+        background-color: #9b4631;
+        color: white;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    #footer a {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .partners {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+        height: 80px;
+    }
+
+    .GRIDHLogo,
+    .PartnerLogo {
+        width: auto;
+        height: auto;
+        margin-top: 27px;
+        text-align: left;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 100;
+        line-height: 0.8;
+        vertical-align: middle;
+    }
+
+    .GRIDHLogo {
+        position: relative;
+        padding: 0 50px 5px 30px;
+    }
+
+    .PartnerLogo {
+        padding: 0 30px 5px;
+    }
+
+    .GRIDHLogo::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 0.5px;
+        height: 29px;
+        background: white;
+    }
+
+    #developer-info {
+        display: flex;
+        align-items: flex-end;
+        margin-top: 15px;
+        margin-left: 30px;
+        font-size: 1.5em;
+        font-weight: 200;
+        line-height: 1.4;
+    }
+
+    .border-style {
+        padding-right: 10px;
+        padding-left: 20px;
+        border-width: 0 0 0 0.5px;
+        border-color: white;
+        border-style: dashed;
+    }
+
+    .link,
+    .link:visited {
+        color: white;
+    }
+
+    .link:hover {
+        opacity: 0.8;
+    }
+
+    .site-link,
+    .download-link {
+        padding-left: 25px;
+        background-position: 0 50%;
+        background-repeat: no-repeat;
+        background-size: 18px;
+    }
+
+    .site-link {
+        background-image: url("https://data.dh.gu.se/ui-icons/arrow_link_white_circle.png");
+    }
+
+    .download-link {
+        margin-left: 0;
+        background-image: url("https://data.dh.gu.se/ui-icons/download_white_circle.png");
+    }
+
+    .links-stack {
+        margin-right: 20px;
+    }
+
+    .links-stack a {
+        display: block;
+    }
+
+    #developer-info a:link {
+        font-weight: 200;
+    }
+
+    @media (max-width: 1400px) {
+        .extra {
+            display: none;
+        }
+    }
+</style>
+
+<footer id="footer">
+    <nav id="developer-info">
+        <div class="links-stack">
+            <a class="site-link link"
+                href="https://github.com/gu-gridh/documentation/blob/main/gridh-projects/saintsophia.md#saint-sophias-inscriptions"
+                target="_blank">GitHub repositories and development</a>
+            <a class="site-link link"
+                href="https://github.com/gu-gridh/documentation/blob/main/gridh-projects/saintsophia.md#database-and-api-documentation"
+                target="_blank">Database and API documentation</a>
+        </div>
+        <div class="links-stack border-style">
+            <a class="site-link link"
+                href="https://github.com/gu-gridh/documentation/blob/main/gridh-projects/saintsophia.md#datasets"
+                target="_blank">Dataset documentation</a>
+            <a class="download-link link" href="https://saintsophia.dh.gu.se/api/inscriptions/inscription/?depth=2"
+                target="_blank">Download all inscription data</a>
+        </div>
+        <div class="links-stack border-style extra">
+            <a class="site-link link"
+                href="https://github.com/gu-gridh/documentation/blob/main/gridh-projects/saintsophia.md#project-team"
+                target="_blank">Project team</a>
+            <a class="site-link link" href="https://forms.office.com/e/3CaZQqAK16" target="_blank">Feedback form</a>
+        </div>
+    </nav>
+    <div class="partners">
+        <div class="PartnerLogo">FORSVIKS BRUK</div>
+        <a href="https://dh.gu.se/">
+            <div class="GRIDHLogo">GU / GRIDH</div>
+        </a>
+    </div>
+</footer>

@@ -37,7 +37,7 @@ app.get('/viewer/modules/iiif/iiif.html', async (req, res, next) => {
     const media = (await getArticle(req))?.advanced_media;
     if (!media?.iiif_url) return res.status(404).send('No IIIF image found');
     await renderModule(res, 'iiif', {
-      downloadUrl: absoluteMediaUrl(media.download_url),
+      downloads: { directUrl: absoluteMediaUrl(media.download_url) },
       tileSources: [`${absoluteMediaUrl(media.iiif_url).replace(/\/$/, '')}/info.json`],
       initialPage: 0,
       preserveViewport: true,

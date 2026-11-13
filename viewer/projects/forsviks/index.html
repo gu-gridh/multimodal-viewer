@@ -27,7 +27,7 @@
         #right-pane {
             position: relative;
             width: 450px;
-            background: #dab88e;
+            background: #e9dcd1;
         }
 
         #right-Iframe {
@@ -115,24 +115,40 @@
         };
         const layout = document.getElementById('main-content');
         const viewer = document.getElementById('left-Iframe');
+        const metadata = document.getElementById('right-Iframe');
+        let article;
 
-        function showModule(module) {
-            if (!modules[module]) module = 'image';
-            const url = new URL(window.location.href);
-            const area = (url.searchParams.get('q') || '1').split('/')[0];
-            url.searchParams.set('q', `${area}/${module}`);
-            const query = new URLSearchParams(url.searchParams);
+        function showModule(module, area) {
             const viewerModule = modules[module];
+            if (!viewerModule) {
+                viewer.src = 'about:blank';
+                return;
+            }
+            const url = new URL(window.location.href);
+            const routeName = viewerModule === 'iiif' ? 'image' : viewerModule;
+            url.searchParams.set('q', `${area}/${routeName}`);
+            const query = new URLSearchParams(url.searchParams);
             viewer.src = `/viewer/modules/${viewerModule}/${viewerModule}.html?${query}${url.hash}`;
             window.history.replaceState({}, '', url.href.replace(/%2F/gi, '/'));
         }
 
-        function loadFromUrl() {
-            showModule(new URLSearchParams(window.location.search).get('q')?.split('/')[1]);
+        function updateMetadata() {
+            if (article) metadata.contentWindow?.postMessage({ type: 'articleData', article }, window.location.origin);
+        }
+
+        async function loadFromUrl() {
+            const query = new URLSearchParams(window.location.search).get('q') || '1';
+            const [area, requestedType] = query.split('/');
+            const response = await fetch(`/api/article-info?id=${encodeURIComponent(area)}`);
+            if (!response.ok) throw new Error('Unable to load article');
+            article = await response.json();
+            updateMetadata();
+            showModule(requestedType?.trim().toLowerCase() || 'image', area);
         }
 
         $('#footer-container').load('/viewer/projects/forsviks/footer.html');
-        window.addEventListener('popstate', loadFromUrl);
+        metadata.addEventListener('load', updateMetadata);
+        window.addEventListener('popstate', () => loadFromUrl().catch(console.error));
         window.addEventListener('message', event => {
             if (event.origin !== window.location.origin || event.source !== viewer.contentWindow) return;
             if (['togglePane', 'togglePane2'].includes(event.data?.type) && window.innerWidth > 1050) {
@@ -145,7 +161,7 @@
                 window.history.replaceState({}, '', url.href.replace(/%2F/gi, '/'));
             }
         });
-        loadFromUrl();
+        loadFromUrl().catch(console.error);
     </script>
 </body>
 

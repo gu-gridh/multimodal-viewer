@@ -7,22 +7,90 @@
     <title>Forsviks — About</title>
     <link rel="stylesheet" href="/viewer/shared/barlow_condensed.css">
     <link rel="stylesheet" href="/viewer/shared/teko_font.css">
-    <link rel="stylesheet" href="/viewer/shared/alumni_sans_pinstripe_font.css">
     <link rel="stylesheet" href="/viewer/shared/shared_styles.css">
     <link rel="stylesheet" href="metadata.css">
 </head>
 
 <body>
     <main class="metadata-container">
-        <img class="panel-logo" src="/viewer/projects/forsviks/logo-1.png" alt="Forsviks">
-        <h1>Lorem ipsum</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua.</p>
-        <figure>
-            <video controls playsinline preload="none" title="Placeholder video"></video>
-            <figcaption>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</figcaption>
-        </figure>
+        <h1 id="title"></h1>
+        <div id="spaces"></div>
+        <nav id="links"></nav>
     </main>
+    <script>
+        const title = document.getElementById('title');
+        const spaces = document.getElementById('spaces');
+        const links = document.getElementById('links');
+
+        function imageElement(space) {
+            if (space.image) {
+                const image = document.createElement('img');
+                image.src = space.image;
+                image.alt = space.caption || '';
+                image.loading = 'lazy';
+                return image;
+            }
+        }
+
+        function renderArticle(article) {
+            document.title = `${article.title} — Forsviks`;
+            title.textContent = article.title;
+            const sections = (article.spaces || []).sort((a, b) => a.order - b.order).map(space => {
+                const section = document.createElement('div');
+                section.className = 'space';
+                const contentInner = document.createElement('div');
+                contentInner.className = 'space-content-inner';
+                const image = imageElement(space);
+                if (image) {
+                    const figure = document.createElement('figure');
+                    figure.append(image);
+                    if (space.caption) {
+                        const caption = document.createElement('figcaption');
+                        caption.textContent = space.caption;
+                        figure.append(caption);
+                    }
+                    contentInner.append(figure);
+                }
+                if (space.text) {
+                    const text = document.createElement('p');
+                    text.textContent = space.text;
+                    contentInner.append(text);
+                }
+                const toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'space-toggle';
+                toggle.title = 'Collapse article';
+                const arrow = document.createElement('span');
+                arrow.className = 'space-toggle-arrow';
+                toggle.append(arrow);
+                toggle.onclick = () => {
+                    const collapsed = section.classList.toggle('collapsed');
+                    toggle.title = collapsed ? 'Expand article' : 'Collapse article';
+                };
+                section.append(contentInner, toggle);
+                return section;
+            });
+            spaces.replaceChildren(...sections);
+            requestAnimationFrame(() => sections.forEach(section => {
+                const text = section.querySelector('.space-content-inner > p');
+                if (text) text.style.setProperty('--text-height', `${text.scrollHeight}px`);
+            }));
+            links.replaceChildren(...(article.links || []).sort((a, b) => a.order - b.order).map(item => {
+                const link = document.createElement('a');
+                link.href = item.url;
+                link.textContent = item.label || item.url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                return link;
+            }));
+        }
+
+        window.addEventListener('message', event => {
+            if (event.origin === window.location.origin && event.data?.type === 'articleData') {
+                renderArticle(event.data.article);
+            }
+        });
+    </script>
 </body>
 
 </html>

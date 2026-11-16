@@ -61,28 +61,27 @@ p {
 .space-content-inner {
     min-height: 0;
     margin: -20px;
-    padding-bottom: 36px;
+    padding-bottom: 10px;
     overflow: hidden;
     transition: padding-bottom 250ms ease;
 }
 
 .space-toggle {
     position: absolute;
-    left: 50%;
-    bottom: 8px;
+    top: 8px;
+    right: 8px;
     z-index: 2;
     display: block;
-    width: 38px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: 12px;
+    border-radius: 50%;
     background: rgba(233, 220, 209, 0.75);
     color: black;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(77, 43, 30, 0.12);
-    transform: translateX(-50%);
 }
 
 .space-toggle:hover {
@@ -90,7 +89,7 @@ p {
 }
 
 .space-toggle-arrow {
-    display: block;
+    display: none;
     width: 7px;
     height: 7px;
     margin: 5px auto 0;
@@ -100,7 +99,49 @@ p {
     transition: transform 250ms ease;
 }
 
+.space-toggle-close {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    font-size: 0;
+    transform: translate(-50%, -50%);
+}
+
+.space-toggle-close::before,
+.space-toggle-close::after {
+    position: absolute;
+    top: 5.5px;
+    left: 0;
+    width: 12px;
+    height: 1px;
+    background: currentColor;
+    content: '';
+    transform: rotate(45deg);
+}
+
+.space-toggle-close::after {
+    transform: rotate(-45deg);
+}
+
+.space.collapsed .space-toggle {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: 8px;
+    width: 38px;
+    height: 24px;
+    border-radius: 12px;
+    transform: translateX(-50%);
+}
+
+.space.collapsed .space-toggle-close {
+    display: none;
+}
+
 .space.collapsed .space-toggle-arrow {
+    display: block;
     margin-top: 1px;
     transform: rotate(45deg);
 }

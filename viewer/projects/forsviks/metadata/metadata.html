@@ -60,9 +60,12 @@
                 toggle.type = 'button';
                 toggle.className = 'space-toggle';
                 toggle.title = 'Collapse article';
+                const close = document.createElement('span');
+                close.className = 'space-toggle-close';
+                close.textContent = '×';
                 const arrow = document.createElement('span');
                 arrow.className = 'space-toggle-arrow';
-                toggle.append(arrow);
+                toggle.append(close, arrow);
                 toggle.onclick = () => {
                     const collapsed = section.classList.toggle('collapsed');
                     toggle.title = collapsed ? 'Expand article' : 'Collapse article';

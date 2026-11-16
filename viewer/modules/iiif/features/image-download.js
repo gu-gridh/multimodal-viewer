@@ -83,6 +83,17 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         };
     }
 
+    async function saveDownload(response, fallbackName = 'image.jpg') {
+        const objectUrl = URL.createObjectURL(await response.blob());
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] || fallbackName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+    }
+
     document.getElementById('download').addEventListener('click', async event => {
         event.preventDefault();
         if (busy) return;
@@ -90,6 +101,14 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
         let timeout;
         try {
             const controller = new AbortController();
+            if (downloads?.directUrl) {
+                timeout = setTimeout(() => controller.abort(new Error('Image download timed out.')), 60000);
+                const response = await fetch(downloads.directUrl, { signal: controller.signal });
+                if (!response.ok) throw new Error('Could not download this image');
+                const filename = new URL(downloads.directUrl, window.location.href).pathname.split('/').pop() || 'image.jpg';
+                await saveDownload(response, filename);
+                return;
+            }
             const selection = await chooseResolution();
             if (!selection) return;
             const { scale, image, cropped, focus } = selection;
@@ -133,14 +152,7 @@ export function createImageDownload({ viewer, tileSources, downloads, getAnnotat
                 downloadResponse = await fetch(downloadUrl, { signal: controller.signal });
                 if (!downloadResponse.ok) throw new Error('Could not download the processed image.');
             }
-            const objectUrl = URL.createObjectURL(await downloadResponse.blob());
-            const link = document.createElement('a');
-            link.href = objectUrl;
-            link.download = downloadResponse.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] || 'image.jpg';
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+            await saveDownload(downloadResponse);
             panel.hidden = true;
         } catch (error) {
             if (error.name === 'AbortError') return;

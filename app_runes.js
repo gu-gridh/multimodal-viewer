@@ -44,7 +44,7 @@ app.get('/viewer/modules/panorama/panorama.html', async (req, res) => {
     const panoramaConfig = {
       panoramas: [
         { id: 'panorama-1', title: 'Nuvarande position', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_189/' },
-        { id: 'panorama-2', title: 'Ursprunglig position', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_137/' }
+        { id: 'panorama-2', title: 'Ursprunglig position', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_163/' }
       ]
     };
     await renderModule(res, 'panorama', panoramaConfig);

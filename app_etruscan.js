@@ -83,7 +83,7 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res) => {
     await renderModule(res, 'texturedmesh', {
       texturedMeshUrl: texturedMeshData.url_public,
       title: texturedMeshData.title || texturedMeshData.tomb?.[0]?.name || 'Textured mesh',
-      downloadUrl: texturedMeshData.url_download || '',
+      downloadUrl: '',
       cameraPosition: texturedMeshData.camera_position || null,
       lookAt: texturedMeshData.look_at || null
     });

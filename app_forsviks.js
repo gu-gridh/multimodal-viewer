@@ -85,19 +85,11 @@ app.get('/viewer/modules/texturedmesh/texturedmesh.html', async (req, res, next)
 
 app.get('/viewer/modules/panorama/panorama.html', async (req, res, next) => {
   try {
-    const media = (await getArticle(req))?.advanced_media;
-    if (!media?.url) return res.status(404).send('No panorama found');
-    const panorama = {
-      id: String(media.id),
-      title: media.title || 'Panorama',
-      urlPublic: absoluteMediaUrl(media.url),
-      downloadUrl: absoluteMediaUrl(media.download_url),
-      startPos: media.start_position || [0, 0, 100],
-      northOffset: media.north_offset == null ? null : Number(media.north_offset)
-    };
     await renderModule(res, 'panorama', {
-      panoramas: [panorama],
-      initialScene: panorama.id
+      panoramas: [
+        { id: 'panorama-1', title: 'Nuvarande position', startPos: [0, 0, 100], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_189/' },
+        { id: 'panorama-2', title: 'Ursprunglig position', startPos: [90, -10, 70], urlPublic: 'https://data.dh.gu.se/runes/panorama/og_163/' }
+      ]
     });
   } catch (error) { next(error); }
 });

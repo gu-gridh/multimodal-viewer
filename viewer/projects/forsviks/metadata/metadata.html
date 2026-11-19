@@ -56,6 +56,13 @@
                     text.textContent = space.text;
                     contentInner.append(text);
                 }
+                for (const [tag, url] of [['video', space.video_url], ['audio', space.sound]]) {
+                    if (!url?.trim()) continue;
+                    const player = document.createElement(tag);
+                    player.className = 'media-placeholder';
+                    player.controls = true;
+                    contentInner.append(player);
+                }
                 const toggle = document.createElement('button');
                 toggle.type = 'button';
                 toggle.className = 'space-toggle';

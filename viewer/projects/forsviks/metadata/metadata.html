@@ -32,6 +32,22 @@
             }
         }
 
+        function embedPlayer(markup, kind) {
+            if (!markup) return;
+            const template = document.createElement('template');
+            template.innerHTML = markup;
+            const src = template.content.querySelector('iframe')?.getAttribute('src');
+            if (!src || !URL.canParse(src)) return;
+            const url = new URL(src);
+            if (url.protocol !== 'https:' || url.origin === window.location.origin) return;
+
+            const player = document.createElement('iframe');
+            player.className = `media-player media-player-${kind}`;
+            player.src = url.href;
+            player.title = kind === 'video' ? 'Video player' : 'Sound player';
+            return player;
+        }
+
         function renderArticle(article) {
             document.title = `${article.title} — Forsviks`;
             title.textContent = article.title;
@@ -56,13 +72,10 @@
                     text.textContent = space.text;
                     contentInner.append(text);
                 }
-                for (const [tag, url] of [['video', space.video_url], ['audio', space.sound]]) {
-                    if (!url?.trim()) continue;
-                    const player = document.createElement(tag);
-                    player.className = 'media-placeholder';
-                    player.controls = true;
-                    contentInner.append(player);
-                }
+                const video = embedPlayer(space.video_url, 'video');
+                const sound = embedPlayer(space.sound_embed, 'sound');
+                if (video) contentInner.append(video);
+                if (sound) contentInner.append(sound);
                 const toggle = document.createElement('button');
                 toggle.type = 'button';
                 toggle.className = 'space-toggle';

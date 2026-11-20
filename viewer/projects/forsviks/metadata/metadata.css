@@ -180,22 +180,28 @@ figcaption {
     transition: max-height 250ms ease, margin 250ms ease, opacity 180ms ease;
 }
 
-.media-placeholder {
+.media-player {
     display: block;
     width: calc(100% - 40px);
     margin: 12px 20px 0;
+    border: 0;
 }
 
-.media-placeholder:first-child {
+.media-player:first-child {
     margin-top: 40px;
 }
 
-video.media-placeholder {
+.media-player-video {
+    height: auto;
     aspect-ratio: 16 / 9;
     background: black;
 }
 
-.space.collapsed .media-placeholder {
+.media-player-sound {
+    height: 166px;
+}
+
+.space.collapsed .media-player {
     display: none;
 }
 
@@ -213,7 +219,7 @@ video.media-placeholder {
     padding-bottom: 0;
 }
 
-.space.collapsed .space-content-inner:has(.media-placeholder) {
+.space.collapsed .space-content-inner:has(.media-player) {
     min-height: 45px;
 }
 

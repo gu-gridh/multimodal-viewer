@@ -387,16 +387,14 @@ annotationsUrl (string)
 		}
 		// <-- Control Buttons -->
 
-			const annotationsUrl = viewerConfig.annotationsUrl;
-			const displayAnnotations = Boolean(annotationsUrl);
+		const annotationsUrl = viewerConfig.annotationsUrl;
 
 		async function loadAnnotations() {
-				const response = await fetch(annotationsUrl);
+			const response = await fetch(annotationsUrl);
+			if (!response.ok) throw new Error(`${response.status}`);
 			const data = await response.json();
 
 			if (Array.isArray(data.annotations)) {
-				if (!displayAnnotations) return;
-
 				data.annotations.forEach(annotation => {
 
 					if (!Array.isArray(annotation.position) || annotation.position.length !== 3) {
@@ -422,7 +420,7 @@ annotationsUrl (string)
 
 		viewer.loadGUI(() => {
 			viewer.setLanguage('en');
-		if (displayAnnotations) loadAnnotations();
+			if (annotationsUrl) loadAnnotations().catch(console.error);
 		});
 
 		/* The link to the model. URL and name of cloud must be fetched from the backend */

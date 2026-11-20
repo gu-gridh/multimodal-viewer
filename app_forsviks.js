@@ -3,7 +3,7 @@ const path = require('path');
 const { renderModule } = require('./scripts/render-module');
 const axios = require('axios');
 require('dotenv').config({ path: './.env.local' });
-const { articleInfo } = require('./viewer/projects/forsviks/config');
+const { articleInfo, pointCloudAnnotations } = require('./viewer/projects/forsviks/config');
 const app = express();
 app.use((req, res, next) => {
   if (typeof req.query.q === 'string' && req.query.q.endsWith('/')) req.query.q += 'image';
@@ -29,6 +29,26 @@ app.get('/api/article-info', async (req, res, next) => {
     const article = await getArticle(req);
     if (!article) return res.status(404).send('Article not found');
     res.json(article);
+  } catch (error) { next(error); }
+});
+
+app.get('/api/pointcloud-annotations', async (req, res, next) => {
+  const { article } = req.query;
+  if (typeof article !== 'string' || !/^\d+$/.test(article)) {
+    return res.status(400).send('Invalid article id');
+  }
+  try {
+    const annotations = [];
+    let params = new URLSearchParams();
+    while (params) {
+      params.set('article', article);
+      const { data } = await axios.get(pointCloudAnnotations, { params });
+      for (const { id, position } of data.results) {
+        annotations.push({ title: `Annotation ${Number(id)}`, position });
+      }
+      params = data.next ? new URL(data.next, pointCloudAnnotations).searchParams : null;
+    }
+    res.json({ annotations });
   } catch (error) { next(error); }
 });
 
@@ -64,7 +84,7 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res, next) => 
       pointCloudUrl: absoluteMediaUrl(media.url),
       cameraPosition: media.camera_position || [],
       lookAt: media.look_at || [],
-      annotationsUrl: ''
+      annotationsUrl: `/api/pointcloud-annotations?article=${encodeURIComponent(article.id)}`
     });
   } catch (error) { next(error); }
 });

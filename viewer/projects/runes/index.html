@@ -29,11 +29,19 @@
                     </div>
                     <div class="ui-module-item left mobile-metadata-tab" onclick="showMobileMetadata()">About</div>
                 </div>
+                <div class="ui-module gallery-switcher">
+                    <div class="ui-module-item" id="venn-view" onclick="changeLeftView('venn')">Venn</div>
+                    <div class="ui-module-item" id="gallery-view" onclick="changeLeftView('gallery')">Galleri</div>
+                </div>
             </div>
             <div id="left-placeholder" class="module-placeholder">
-                <div class="venn-panel">
+                <div class="venn-panel" id="venn-panel">
                     <div id="venn-diagram"></div>
                     <div id="venn-statistics" class="venn-statistics"></div>
+                </div>
+
+                <div class="gallery-panel" id="gallery-panel" style="display: none;">
+                    <div id="gallery-content">This is gallery content</div>
                 </div>
             </div>
             <iframe id="left-iframe" class="iframes" title="Region"></iframe>
@@ -75,6 +83,7 @@
         let activeRegion = 'vastra';
         let activeViewer = 'metadata';
         let activePeriod = '1';
+        let activeLeftView = 'venn';
 
         let vennData = null;
 
@@ -153,6 +162,30 @@
 
         function showMobileVisuals() {
             document.getElementById('main-content').classList.remove('mobile-metadata-open');
+        }
+
+        //Venn or Gallery view switcher
+        function changeLeftView(view) {
+            activeLeftView = view;
+
+            document.getElementById('venn-panel').style.display =
+                view === 'venn' ? 'block' : 'none';
+
+            document.getElementById('gallery-panel').style.display =
+                view === 'gallery' ? 'block' : 'none';
+
+            document.querySelectorAll('.gallery-switcher .ui-module-item')
+                .forEach(item => {
+                    item.style.opacity = '0.6';
+                });
+
+            document.getElementById(
+                view === 'venn' ? 'venn-view' : 'gallery-view'
+            ).style.opacity = '1';
+
+            if (view === 'gallery') {
+                renderGallery();
+            }
         }
 
         function determineInitialViewer(params) {

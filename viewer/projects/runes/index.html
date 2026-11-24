@@ -934,17 +934,15 @@
                 item.className = 'gallery-item';
                 item.dataset.id = stone.id;
 
-                // IIIF thumbnail
                 const thumbnail = document.createElement('img');
 
                 thumbnail.src = `${image.iiif_file.replace(/\/$/, '')}/full/300,/0/default.jpg`;
                 thumbnail.loading = 'lazy';
                 thumbnail.alt = stone.name || 'Runsten';
 
-                // Runestone name
                 const title = document.createElement('div');
                 title.className = 'gallery-item-title';
-                title.textContent = stone.name || `Runsten ${stone.id}`;
+                title.textContent = stone.name || stone.id
 
                 item.append(thumbnail, title);
 

@@ -87,11 +87,15 @@
 
         let vennData = null;
 
+        let imageData = null;
+
         const STONE_COLORS = {
             normal: '#ffaa00',
             unknown: '#999', //change this?
             selected: '#c43a04'
         };
+
+        document.getElementById("venn-view").style.opacity = activeLeftView === 'venn' ? '1' : '0.6';
 
         async function init() {
             const params = new URLSearchParams(window.location.search);
@@ -104,14 +108,15 @@
 
             activeViewer = determineInitialViewer(params);
 
+
             const qValue = params.get('q');
             const runeId = qValue?.split('/')[0];
 
             if (runeId && activeViewer === 'metadata') {
-            document
-                .getElementById('main-content')
-                .classList.add('mobile-metadata-open');
-        }
+                document
+                    .getElementById('main-content')
+                    .classList.add('mobile-metadata-open');
+            }
 
             const navBar = document.getElementById('nav-bar');
             navBar.style.display = runeId ? '' : 'none';
@@ -164,28 +169,15 @@
             document.getElementById('main-content').classList.remove('mobile-metadata-open');
         }
 
-        //Venn or Gallery view switcher
+        //venn/gallery viewer switcher
         function changeLeftView(view) {
             activeLeftView = view;
+            document.getElementById('venn-panel').style.display = view === 'venn' ? 'block' : 'none';
+            document.getElementById('gallery-panel').style.display = view === 'gallery' ? 'block' : 'none';
+            document.getElementById("venn-view").style.opacity = view === 'venn' ? '1' : '0.6';
+            document.getElementById("gallery-view").style.opacity = view === 'gallery' ? '1' : '0.6';
 
-            document.getElementById('venn-panel').style.display =
-                view === 'venn' ? 'block' : 'none';
-
-            document.getElementById('gallery-panel').style.display =
-                view === 'gallery' ? 'block' : 'none';
-
-            document.querySelectorAll('.gallery-switcher .ui-module-item')
-                .forEach(item => {
-                    item.style.opacity = '0.6';
-                });
-
-            document.getElementById(
-                view === 'venn' ? 'venn-view' : 'gallery-view'
-            ).style.opacity = '1';
-
-            if (view === 'gallery') {
-                renderGallery();
-            }
+            changeLeftViewer();
         }
 
         function determineInitialViewer(params) {
@@ -752,7 +744,12 @@
             leftIframe.style.display = 'none';
             leftPlaceholder.style.display = 'flex';
 
-            renderVenn()
+            if (activeLeftView === 'venn') {
+                renderVenn();
+            }
+            if (activeLeftView === 'gallery') {
+                renderGallery();
+            }
             moduleSwitcherLeft();
         }
 
@@ -870,6 +867,93 @@
                 console.error('Could not check image availability:', error);
                 imageButton.style.display = 'none';
             }
+        }
+
+        async function loadImages() {
+            if (imageData !== null) {
+                return imageData;
+            }
+            try {
+                const response = await fetch(
+                    'https://runes.dh.gu.se/api/image/'
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+                const data = await response.json();
+                imageData = Array.isArray(data) ? data : data.results || [];
+                return imageData;
+
+            } catch (error) {
+                console.error('Could not load gallery images:', error);
+                return [];
+            }
+        }
+        //only render gallery if activeLeftView is 'gallery'
+        async function renderGallery() {
+            const container = document.getElementById('gallery-content');
+            const images = await loadImages();
+            const stones = getRunestones(activeRegion,activePeriod);
+
+            const allStones = [
+                ...stones.venn,
+                ...stones.outside
+            ];
+
+            // lookup for runestones by ID
+            const stoneMap = new Map(
+                allStones.map(stone => [
+                    String(stone.id),
+                    stone
+                ])
+            );
+
+            // images belonging to the current runestones
+            const filteredImages = images.filter(image => {
+                const placeId = image.place?.id ?? image.place;
+                return (
+                    stoneMap.has(String(placeId)) &&
+                    image.iiif_file
+                );
+            });
+
+            container.replaceChildren();
+
+            if (!filteredImages.length) {
+                container.textContent = 'Inga bilder tillgängliga';
+                return;
+            }
+
+            filteredImages.forEach(image => {
+                const placeId = image.place?.id ?? image.place;
+                const stone = stoneMap.get(String(placeId));
+
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'gallery-item';
+                item.dataset.id = stone.id;
+
+                // IIIF thumbnail
+                const thumbnail = document.createElement('img');
+
+                thumbnail.src = `${image.iiif_file.replace(/\/$/, '')}/full/300,/0/default.jpg`;
+                thumbnail.loading = 'lazy';
+                thumbnail.alt = stone.name || 'Runsten';
+
+                // Runestone name
+                const title = document.createElement('div');
+                title.className = 'gallery-item-title';
+                title.textContent = stone.name || `Runsten ${stone.id}`;
+
+                item.append(thumbnail, title);
+
+                item.addEventListener('click', () => {
+                    selectRunestone(stone);
+                });
+
+                container.appendChild(item);
+            });
         }
     </script>
 </body>

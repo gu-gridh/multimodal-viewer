@@ -258,3 +258,114 @@
         white-space: nowrap;
     }
 }
+
+.gallery-switcher {
+    display: flex;
+    gap: 10px;
+    margin-top: 40px;
+    font-size: 0.9em;
+    font-weight: 300;
+    line-height: 1.0;
+    position: absolute;
+    background-color: black;
+    border-radius: 8px;
+    padding: 0px 6px;
+    box-shadow: 0.0rem 0.1rem 1rem rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Gallery  */
+.gallery-panel {
+    position: absolute;
+    top: 100px;
+    left: 30px;
+    right: 30px;
+    bottom: 50px;
+
+    overflow-y: auto;
+    min-height: 0;
+}
+
+#gallery-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    padding: 10px;
+}
+
+.gallery-item {
+    padding: 15px;
+    background: rgba(150, 150, 150, 0.1);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    background: rgba(150, 150, 150, 0.2);
+}
+
+.gallery-item-title {
+    font-family: "Oswald", sans-serif;
+    font-size: 15px;
+}
+
+.gallery-panel {
+    position: absolute;
+    top: 100px;
+    left: 30px;
+    right: 30px;
+    bottom: 50px;
+    overflow-y: auto;
+}
+
+#gallery-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.gallery-item {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    color: inherit;
+    background: rgba(150, 150, 150, 0.1);
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    transition: opacity 0.2s;
+}
+
+.gallery-item:hover img {
+    opacity: 0.75;
+}
+
+.gallery-item-title {
+    padding: 8px;
+    font-family: "Oswald", sans-serif;
+    font-size: 16px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .gallery-panel {
+        left: 10px;
+        right: 10px;
+    }
+
+    #gallery-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .gallery-item-title {
+        font-size: 14px;
+    }
+}

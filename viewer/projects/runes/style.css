@@ -193,27 +193,27 @@
 
 .venn-statistics {
     position: absolute;
-    top: 0;
+    top: -20px;
     left: 0;
     z-index: 10;
-
     width: 150px;
-    padding: 12px;
+    padding: 10px;
+    background: rgba(228, 228, 228, 0.6);
 
-    background: rgba(20, 20, 20, 0.85);
+    
     border-radius: 6px;
-    color: white;
+    color: black;
     box-sizing: border-box;
 }
 
 .statistics-title {
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 40px;
+    font-weight: 600;
     margin-bottom: 3px;
 }
 
 .statistics-total {
-    font-size: 12px;
+    font-size: 14px;
     opacity: 0.6;
     margin-bottom: 8px;
 }
@@ -221,7 +221,7 @@
 .statistics-row {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     padding: 3px 0;
     font-size: 12px;
 }

@@ -76,28 +76,10 @@
                 const sound = embedPlayer(space.sound_embed, 'sound');
                 if (video) contentInner.append(video);
                 if (sound) contentInner.append(sound);
-                const toggle = document.createElement('button');
-                toggle.type = 'button';
-                toggle.className = 'space-toggle';
-                toggle.title = 'Collapse article';
-                const close = document.createElement('span');
-                close.className = 'space-toggle-close';
-                close.textContent = '×';
-                const arrow = document.createElement('span');
-                arrow.className = 'space-toggle-arrow';
-                toggle.append(close, arrow);
-                toggle.onclick = () => {
-                    const collapsed = section.classList.toggle('collapsed');
-                    toggle.title = collapsed ? 'Expand article' : 'Collapse article';
-                };
-                section.append(contentInner, toggle);
+                section.append(contentInner);
                 return section;
             });
             spaces.replaceChildren(...sections);
-            requestAnimationFrame(() => sections.forEach(section => {
-                const text = section.querySelector('.space-content-inner > p');
-                if (text) text.style.setProperty('--text-height', `${text.scrollHeight}px`);
-            }));
             links.replaceChildren(...(article.links || []).sort((a, b) => a.order - b.order).map(item => {
                 const link = document.createElement('a');
                 link.href = item.url;

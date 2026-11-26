@@ -56,6 +56,12 @@
             color: white !important;
         }
 
+        #show-metadata {
+            border: 0;
+            background: transparent;
+            font: inherit;
+        }
+
         @media (min-width: 1051px) {
 
             #left-pane,
@@ -91,6 +97,31 @@
             #left-pane {
                 width: 100%;
             }
+
+            #back-to-visuals {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                z-index: 1;
+                display: block;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                border: 0;
+                border-radius: 50%;
+                background: #000 url(https://data.dh.gu.se/ui-icons/arrow_back_white.png) no-repeat center / 15px;
+                cursor: pointer;
+            }
+
+            #back-to-visuals:hover {
+                transform: scale(1.07);
+            }
+
+            #right-Iframe {
+                position: static;
+                width: 100%;
+                min-width: 0;
+            }
         }
     </style>
 </head>
@@ -98,9 +129,17 @@
 <body>
     <main id="main-content">
         <div id="left-pane">
+            <div class="ui-module-container">
+                <div class="ui-module">
+                    <button type="button" id="show-metadata" class="ui-module-item compact"
+                        onclick="showMobileMetadata(true)">Articles</button>
+                </div>
+            </div>
             <iframe id="left-Iframe" class="iframes" title="Forsviks visualisation"></iframe>
         </div>
         <aside id="right-pane">
+            <button type="button" id="back-to-visuals" title="Back to visuals"
+                onclick="showMobileMetadata(false)"></button>
             <iframe id="right-Iframe" class="iframes" title="About this area"
                 src="/viewer/projects/forsviks/metadata/metadata.html"></iframe>
         </aside>
@@ -116,6 +155,7 @@
         const layout = document.getElementById('main-content');
         const viewer = document.getElementById('left-Iframe');
         const metadata = document.getElementById('right-Iframe');
+        const mobileLayout = window.matchMedia('(max-width: 1050px)');
         let article;
 
         function showModule(module, area) {
@@ -146,8 +186,19 @@
             showModule(requestedType?.trim().toLowerCase() || 'image', area);
         }
 
+        function showMobileMetadata(open) {
+            layout.classList.toggle('single-module-right', open);
+            document.getElementById(open ? 'back-to-visuals' : 'show-metadata').focus();
+        }
+
+        function updateMetadataLayout() {
+            metadata.contentDocument?.documentElement.classList.toggle('mobile-layout', mobileLayout.matches);
+        }
+
         $('#footer-container').load('/viewer/projects/forsviks/footer.html');
         metadata.addEventListener('load', updateMetadata);
+        metadata.addEventListener('load', updateMetadataLayout);
+        mobileLayout.addEventListener('change', updateMetadataLayout);
         window.addEventListener('popstate', () => loadFromUrl().catch(console.error));
         window.addEventListener('message', event => {
             if (event.origin !== window.location.origin || event.source !== viewer.contentWindow) return;

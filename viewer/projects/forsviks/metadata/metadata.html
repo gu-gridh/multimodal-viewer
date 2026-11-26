@@ -13,7 +13,8 @@
 
 <body>
     <main class="metadata-container">
-        <h1 id="title"></h1>
+        <h1 id="area"></h1>
+        <h2 id="title"></h2>
         <div id="spaces"></div>
         <nav id="links"></nav>
     </main>
@@ -21,6 +22,7 @@
         const title = document.getElementById('title');
         const spaces = document.getElementById('spaces');
         const links = document.getElementById('links');
+        const area = document.getElementById('area');
 
         function imageElement(space) {
             if (space.image) {
@@ -51,6 +53,7 @@
         function renderArticle(article) {
             document.title = `${article.title} — Forsviks`;
             title.textContent = article.title;
+            area.textContent = article.area.name;
             const sections = (article.spaces || []).sort((a, b) => a.order - b.order).map(space => {
                 const section = document.createElement('div');
                 section.className = 'space';

@@ -56,12 +56,6 @@
             color: white !important;
         }
 
-        #show-metadata {
-            border: 0;
-            background: transparent;
-            font: inherit;
-        }
-
         @media (min-width: 1051px) {
 
             #left-pane,
@@ -129,12 +123,6 @@
 <body>
     <main id="main-content">
         <div id="left-pane">
-            <div class="ui-module-container">
-                <div class="ui-module">
-                    <button type="button" id="show-metadata" class="ui-module-item compact"
-                        onclick="showMobileMetadata(true)">Articles</button>
-                </div>
-            </div>
             <iframe id="left-Iframe" class="iframes" title="Forsviks visualisation"></iframe>
         </div>
         <aside id="right-pane">
@@ -145,6 +133,9 @@
         </aside>
         <div id="footer-container"></div>
     </main>
+    <template id="articles-menu">
+        <button type="button" class="SwitchButton forsviks-articles-button" title="Articles" hidden></button>
+    </template>
     <script>
         const modules = {
             image: 'iiif',
@@ -155,6 +146,7 @@
         const layout = document.getElementById('main-content');
         const viewer = document.getElementById('left-Iframe');
         const metadata = document.getElementById('right-Iframe');
+        const articlesButton = document.getElementById('articles-menu').content.firstElementChild;
         const mobileLayout = window.matchMedia('(max-width: 1050px)');
         let article;
 
@@ -188,17 +180,23 @@
 
         function showMobileMetadata(open) {
             layout.classList.toggle('single-module-right', open);
-            document.getElementById(open ? 'back-to-visuals' : 'show-metadata').focus();
+            (open ? document.getElementById('back-to-visuals') : articlesButton).focus();
         }
 
         function updateMetadataLayout() {
             metadata.contentDocument?.documentElement.classList.toggle('mobile-layout', mobileLayout.matches);
+            articlesButton.hidden = !mobileLayout.matches;
         }
 
         $('#footer-container').load('/viewer/projects/forsviks/footer.html');
+        articlesButton.addEventListener('click', () => showMobileMetadata(true));
+        viewer.addEventListener('load', () => {
+            viewer.contentDocument?.querySelector('.toolbar-bottom')?.append(articlesButton);
+        });
         metadata.addEventListener('load', updateMetadata);
         metadata.addEventListener('load', updateMetadataLayout);
         mobileLayout.addEventListener('change', updateMetadataLayout);
+        updateMetadataLayout();
         window.addEventListener('popstate', () => loadFromUrl().catch(console.error));
         window.addEventListener('message', event => {
             if (event.origin !== window.location.origin || event.source !== viewer.contentWindow) return;

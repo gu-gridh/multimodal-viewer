@@ -103,7 +103,6 @@ body {
 }
 
 /* Common share and download buttons for all media categories */
-
 .round-button {
     width: 40px;
     height: 40px;
@@ -139,7 +138,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     bottom: 50px;
-      z-index:20;
+    z-index: 20;
 }
 
 .clear-annotation-button {
@@ -289,7 +288,6 @@ svg.a9s-annotationlayer .a9s-annotation polygon.a9s-inner {
 }
 
 /* This is the label that states what type of viewer this is: mesh or point cloud */
-
 .model-viewer-id {
     position: absolute;
     z-index: 1000;
@@ -316,8 +314,6 @@ svg.a9s-annotationlayer .a9s-annotation polygon.a9s-inner {
     }
 }
 
-
-
 h3 {
     cursor: pointer;
     padding: 4px 10px 4px 20px;
@@ -340,7 +336,6 @@ h2 {
     margin-bottom: 10px;
 }
 
-
 .button-icon {
     width: 25px !important;
     height: 25px !important;
@@ -358,7 +353,6 @@ h2 {
 .button-icon:hover {
     opacity: 1.0;
 }
-
 
 .tool-item h2 {
     padding-top: 0px;
@@ -417,40 +411,93 @@ h2 {
     backdrop-filter: blur(3px);
 }
 
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) {
+    box-sizing: border-box;
+    max-width: calc(100% - 12px);
+    padding-inline: 4px;
+}
+
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) > #tools {
+    width: auto;
+}
+
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) > #tools .tool-icon-expanded {
+    width: 36px;
+    padding-inline: 0;
+    margin-inline: 0;
+}
+
+.forsviks-articles-button:not([hidden]) {
+    flex: 0 0 44px;
+    align-self: center;
+    height: 44px;
+    margin: 0;
+    border: 0;
+    background: transparent url('/viewer/modules/mesh/skins/minimal_light/menu.png') center / 36px no-repeat;
+}
+
+.forsviks-articles-button:focus-visible {
+    outline: 2px solid currentColor !important;
+    outline-offset: -3px;
+    border-radius: 6px;
+}
+
+@media (max-width: 400px) {
+    #bottomToolbar > .SwitchButton:has(~ .forsviks-articles-button:not([hidden])) {
+        margin-inline: 3px;
+    }
+}
+
 @media (max-width: 500px) {
     .pointcloud-fullscreen {
         display: none !important;
     }
 
-    .project-munch #home, /*IIIF*/
-    .project-munch #zoom-in, /*IIIF*/
-    .project-munch #zoom-out, /*IIIF*/
-    .project-munch #zoomin, /*Mesh*/
-    .project-munch #zoomout, /*Mesh*/
-    .project-munch button#ZoomIn, /*Textured Mesh*/
-    .project-munch button#ZoomOut, /*Textured Mesh*/
-    .project-munch .openlime-toolbar svg:has(.openlime-zoomin), /*OpenLime*/
-    .project-munch .openlime-toolbar svg:has(.openlime-zoomout) /*OpenLime*/
-    {
+    .project-munch #home,
+    /*IIIF*/
+    .project-munch #zoom-in,
+    /*IIIF*/
+    .project-munch #zoom-out,
+    /*IIIF*/
+    .project-munch #zoomin,
+    /*Mesh*/
+    .project-munch #zoomout,
+    /*Mesh*/
+    .project-munch button#ZoomIn,
+    /*Textured Mesh*/
+    .project-munch button#ZoomOut,
+    /*Textured Mesh*/
+    .project-munch .openlime-toolbar svg:has(.openlime-zoomin),
+    /*OpenLime*/
+    .project-munch .openlime-toolbar svg:has(.openlime-zoomout)
+    /*OpenLime*/
+        {
         display: none !important;
     }
 
-    .project-sophia #zoomin, /*Mesh*/
-    .project-sophia #zoomout, /*Mesh*/
-    .project-sophia .openlime-toolbar svg:has(.openlime-fullscreen) /*OpenLime*/
-    {
+    .project-sophia #zoomin,
+    /*Mesh*/
+    .project-sophia #zoomout,
+    /*Mesh*/
+    .project-sophia .openlime-toolbar svg:has(.openlime-fullscreen)
+    /*OpenLime*/
+        {
         display: none !important;
     }
 
-    .project-shfa #zoomin, /*Mesh*/
-    .project-shfa #zoomout /*Mesh*/
-    {
+    .project-shfa #zoomin,
+    /*Mesh*/
+    .project-shfa #zoomout
+    /*Mesh*/
+        {
         display: none !important;
     }
 
-    .project-etruscan button#ZoomIn, /*Textured Mesh*/
-    .project-etruscan button#ZoomOut /*Textured Mesh*/
-    {
+    .project-etruscan button#ZoomIn,
+    /*Textured Mesh*/
+    .project-etruscan button#ZoomOut
+    /*Textured Mesh*/
+        {
         display: none !important;
     }
 

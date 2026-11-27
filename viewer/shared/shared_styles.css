@@ -417,16 +417,6 @@ h2 {
     padding-inline: 4px;
 }
 
-.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) > #tools {
-    width: auto;
-}
-
-.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) > #tools .tool-icon-expanded {
-    width: 36px;
-    padding-inline: 0;
-    margin-inline: 0;
-}
-
 .forsviks-articles-button:not([hidden]) {
     flex: 0 0 44px;
     align-self: center;

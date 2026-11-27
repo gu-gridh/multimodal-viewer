@@ -1,0 +1,28 @@
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) {
+    width: auto !important;
+    column-gap: 4px;
+}
+
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden]))>#tools {
+    align-self: center;
+    width: auto;
+}
+
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) .tool-icon-expanded {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 44px;
+    padding: 0;
+    margin-inline: 0;
+}
+
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) .tool-icon-label:empty {
+    display: none;
+}
+
+.toolbar-bottom:has(> .forsviks-articles-button:not([hidden])) .tool-icon-image>.button-icon {
+    display: block;
+    margin: 0 !important;
+}

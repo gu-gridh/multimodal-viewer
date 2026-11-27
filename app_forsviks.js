@@ -73,7 +73,8 @@ app.get('/viewer/modules/pointcloud/pointcloud.html', async (req, res, next) => 
     if (!media?.url) return res.status(404).send('No pointcloud found');
     const response = {
       send: html => res.send(html.replace('</head>',
-        `<script>
+        `<link rel="stylesheet" href="/viewer/projects/forsviks/toolbar.css">
+        <script>
         const menuStyle = document.head.appendChild(document.createElement('style'));
         menuStyle.textContent = 'html .potree_menu_toggle { display: none; }';
         window.setPointcloudExpanded = expanded => menuStyle.sheet.disabled = Boolean(expanded);

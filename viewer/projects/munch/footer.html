@@ -154,7 +154,7 @@
                     target="_blank">Documentation</a>
             </div>
             <div class="links-stack">
-                <div class="download-section">
+                <div class="download-section" data-annotation-only>
                     <a class="download-link link" href="#">Download all visual annotations</a>
                     <img src="/viewer/shared/interface/6-dots-rotate_white.svg" class="spinner" alt="Loading...">
                 </div>
@@ -168,7 +168,7 @@
             <div class="link PartnerLogo">OSLO UNIVERSITY</div>
         </div>
     </div>
-    <script>
+    <script data-annotation-only>
         document.querySelector('.download-link').addEventListener('click', async function (event) {
             event.preventDefault();
             const spinner = document.querySelector('.spinner');

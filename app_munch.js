@@ -356,12 +356,12 @@ app.get('/viewer/projects/:projectName/metadata/metadata.html', async (req, res)
     const modifiedHtml = htmlData
       .replace('PLACEHOLDER_TITLE', painting.title || '')
       .replace('PLACEHOLDER_ARTIST', artist)
+      .replace('PLACEHOLDER_YEAR_FILTERS', yearFilters)
       .replace('PLACEHOLDER_YEAR', painting.creation_year || '')
       .replace('PLACEHOLDER_DIMENSIONS', dimensions)
       .replace('PLACEHOLDER_TECHNIQUE', techniques)
       .replace('PLACEHOLDER_SUPPORT', materials)
       .replace('PLACEHOLDER_DESCRIPTION', painting.description || '')
-      .replace('PLACEHOLDER_YEAR_FILTERS', yearFilters)
       .replace('PLACEHOLDER_CATEGORY_FILTERS', categoryFilters)
       .replace('PLACEHOLDER_TAG_FILTERS', tagFilters);
 

@@ -6,11 +6,13 @@ A Node.js application built with Express for visualizing and interacting with me
 ```nvm use 22``` <br>
 ```npm install``` <br>
 
-Define a .env.local variable with PROJECT=etruscan/shfa/sophia + ```npm start```: <br>
+Set `PROJECT` in `.env.local` and run `npm start`<br>
 PROJECT=sophia npm start <br>
 PROJECT=shfa npm start <br>
 PROJECT=etruscan npm start <br>
 PROJECT=dubb npm start <br>
+PROJECT=munch npm start <br>
+PROJECT=munch-annotationless npm start <br>
 PROJECT=runes npm start <br>
 PROJECT=forsviks npm start <br>
 
@@ -20,6 +22,7 @@ Sample URLs for testing:
 Sophia: http://localhost:8095/viewer/?q=120-19c/orthophoto <br>
 SHFA: http://localhost:8097/viewer/?q=Tanum_1_1-2019_06_13/orthophoto <br>
 Etruscan: http://localhost:8094/viewer/?q=2683/image  <br>
-Munch: http://localhost:8098/viewer/?q=solen/photo <br>
+Munch with annotations: http://localhost:8098/viewer/?q=solen/photo <br>
+Munch without annotations: http://localhost:8101/viewer/?q=solen/photo <br>
 Runes: http://localhost:8099/viewer/?q=5 WIP <br>
 Forsviks: http://localhost:8100/viewer/?q=1/pointcloud <br>

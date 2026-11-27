@@ -37,7 +37,7 @@
             PLACEHOLDER_DESCRIPTION
         </p>
 
-        <section class="filtering" aria-labelledby="filtering-title">
+        <section class="filtering" aria-labelledby="filtering-title" data-annotation-only>
             <h2 id="filtering-title" class="widget-title-space">Filtering</h2>
             <div class="filter-box">
                 <div class="filter-group" data-filter-group="annotation_year">
@@ -70,16 +70,16 @@
             </div>
         </section>
 
-        <section class="document-list" id="document-list" aria-labelledby="document-list-title">
+        <section class="document-list" id="document-list" aria-labelledby="document-list-title" hidden>
             <h2 id="document-list-title" class="widget-title-space">Documents</h2>
             <div class="filter-box">
                 <div id="document-list-items"></div>
             </div>
         </section>
 
-        <div class="annotation-count-pill" id="annotation-count-pill"></div>
+        <div class="annotation-count-pill" id="annotation-count-pill" data-annotation-only></div>
 
-        <section class="annotation-detail" id="annotation-detail">
+        <section class="annotation-detail" id="annotation-detail" data-annotation-only>
             <h2 id="annotation-title" class="widget-title-space"></h2>
             <div class="filter-box">
                 <div class="annotation-detail-row">
@@ -108,12 +108,48 @@
     </div>
 
     <script>
-        const filteringSection = document.querySelector('.filtering');
         const documentList = document.getElementById('document-list');
         const documentListItems = document.getElementById('document-list-items');
+        const panelTitle = new URLSearchParams(window.location.search).get('q') || '';
+
+        function renderDocuments(documents) {
+            documentList.hidden = documents.length === 0;
+            documentListItems.replaceChildren(...documents.map(item => {
+                const link = document.createElement('a');
+                link.className = 'document-item';
+                link.href = item.file || '#';
+                link.target = '_blank';
+                link.rel = 'noopener';
+                const icon = document.createElement('span');
+                icon.className = 'document-icon';
+                const title = document.createElement('span');
+                title.textContent = item.title || '—';
+                link.append(icon, title);
+                return link;
+            }));
+        }
+
+        async function loadDocuments(year = 'all') {
+            if (!panelTitle) return;
+
+            try {
+                const params = new URLSearchParams({ q: panelTitle });
+                if (year !== 'all') params.set('year', year);
+                const response = await fetch(`/viewer/projects/munch/documents?${params}`);
+                if (!response.ok) throw new Error('Could not load documents');
+                renderDocuments(await response.json());
+            } catch (error) {
+                console.error(error);
+                renderDocuments([]);
+            }
+        }
+
+        loadDocuments();
+    </script>
+    <script data-annotation-only>
+        const filteringSection = document.querySelector('.filtering');
         const annotationCountPill = document.getElementById('annotation-count-pill');
         const annotationDetail = document.getElementById('annotation-detail');
-        const panelTitle = new URLSearchParams(window.location.search).get('q') || '';
         let totalAnnotationCount = null;
         let annotationCountRequestId = 0;
 
@@ -147,7 +183,7 @@
             filteringSection.style.display = '';
             annotationCountPill.style.display = '';
             annotationDetail.style.display = 'none';
-            loadDocuments();
+            loadDocuments(getActiveAnnotationFilters().annotation_year);
             loadAnnotationCount();
         }
 
@@ -199,45 +235,12 @@
         }
 
         function notifyAnnotationFiltersChanged() {
-            loadDocuments();
+            loadDocuments(getActiveAnnotationFilters().annotation_year);
             loadAnnotationCount();
             window.parent.postMessage({
                 type: 'annotationFiltersChange',
                 filters: getActiveAnnotationFilters()
             }, '*');
-        }
-
-        function renderDocuments(documents) {
-            documentList.hidden = documents.length === 0;
-            documentListItems.innerHTML = documents.length
-                ? documents.map((item) => `
-                    <a class="document-item" href="${item.file || '#'}" target="_blank" rel="noopener">
-                        <span class="document-icon"></span>
-                        <span>${getText(item.title)}</span>
-                    </a>
-                `).join('')
-                : '';
-        }
-
-        async function loadDocuments() {
-            if (!panelTitle || annotationDetail.style.display === 'block') {
-                return;
-            }
-
-            try {
-                const url = new URL('/viewer/projects/munch/documents', window.location.origin);
-                const year = getActiveAnnotationFilters().annotation_year;
-                url.searchParams.set('q', panelTitle);
-
-                if (year !== 'all') {
-                    url.searchParams.set('year', year);
-                }
-
-                renderDocuments(await fetch(url).then((response) => response.json()));
-            } catch (error) {
-                console.error(error);
-                renderDocuments([]);
-            }
         }
 
         async function loadAnnotationCount() {
@@ -294,7 +297,6 @@
             }
         });
 
-        loadDocuments();
         loadAnnotationCount();
     </script>
 </body>

@@ -19,6 +19,7 @@ coordinateWidth (number)
 coordinateHeight (number)
 coordinateUnit (string)
 downloads (object | null)
+disableAnnotations (boolean)
 -->
 <html>
 
@@ -243,19 +244,20 @@ downloads (object | null)
         OpenSeadragon.supportsFullScreen = false;
         OpenSeadragon.supportsFullPage = true;
 
-        const displayInscriptions = viewerConfig.displayInscriptions === true;
+        const annotationsEnabled = viewerConfig.disableAnnotations !== true;
+        const displayInscriptions = annotationsEnabled && viewerConfig.displayInscriptions === true;
         const sequenceEnabled = viewerConfig.sequenceEnabled === true;
         const preserveViewportSetting = viewerConfig.preserveViewport;
         const preserveViewport = typeof preserveViewportSetting === 'boolean'
             ? preserveViewportSetting
             : true;
         const configuredAnnotationTools = viewerConfig.annotationTools;
-        const annotationTools = typeof configuredAnnotationTools === 'object' ? configuredAnnotationTools : {};
+        const annotationTools = annotationsEnabled && typeof configuredAnnotationTools === 'object' ? configuredAnnotationTools : {};
         const annotationPath = viewerConfig.annotationPath;
         const annotationEditorUrl = viewerConfig.annotationEditorUrl;
         const savedLang = localStorage.getItem('i18nextLang') || 'en';
         const pagedAnnotationLoadingEnabled = viewerConfig.pagedAnnotationLoading === true;
-        const displayAnnotationFocus = viewerConfig.displayAnnotationFocus === true;
+        const displayAnnotationFocus = annotationsEnabled && viewerConfig.displayAnnotationFocus === true;
         const coordinateToolEnabled = viewerConfig.coordinateToolEnabled === true;
         const coordinateWidth = Number(viewerConfig.coordinateWidth);
         const coordinateHeight = Number(viewerConfig.coordinateHeight);
@@ -466,17 +468,19 @@ downloads (object | null)
             const savedState = getSavedViewerState(currentBaseQuery);
             sessionStorage.setItem('lastBaseQuery', currentBaseQuery);
 
-            const annotationId = new URLSearchParams(window.location.search).get('annotationId');
-            if (annotationId && !isNaN(annotationId)) {
-                initialAnnotationId = annotationId;
-            } else {
-                const parentUrl = new URL(window.parent.location.href);
-                const qValue = parentUrl.searchParams.get('q');
+            if (annotationsEnabled) {
+                const annotationId = new URLSearchParams(window.location.search).get('annotationId');
+                if (annotationId && !isNaN(annotationId)) {
+                    initialAnnotationId = annotationId;
+                } else {
+                    const parentUrl = new URL(window.parent.location.href);
+                    const qValue = parentUrl.searchParams.get('q');
 
-                if (qValue && qValue.includes('/')) {
-                    const potentialId = qValue.split('/')[1];
-                    if (!isNaN(potentialId)) {
-                        initialAnnotationId = potentialId;
+                    if (qValue && qValue.includes('/')) {
+                        const potentialId = qValue.split('/')[1];
+                        if (!isNaN(potentialId)) {
+                            initialAnnotationId = potentialId;
+                        }
                     }
                 }
             }
@@ -530,11 +534,12 @@ downloads (object | null)
             //hide annotations when rotating
             viewer.addHandler('rotate', function () {
                 currentRotation = viewer.viewport.getRotation();
-                document.body.classList.add('annotations-hidden');
+                if (annotationsEnabled) document.body.classList.add('annotations-hidden');
             });
 
             //show annotations after rotation
             viewer.addHandler('animation-finish', function () {
+                if (!anno) return;
                 document.body.classList.toggle('annotations-hidden', !annotationsVisible);
                 anno.setVisible(true);
             });
@@ -587,25 +592,27 @@ downloads (object | null)
                     }
                 });
 
-            //Initialize the Annotorious plugin
-            anno = OpenSeadragon.Annotorious(viewer, {
-                //additional configuration options
-                disableEditor: true,
-                formatters: [
-                    function (annotation) {
-                        const bodies = Array.isArray(annotation?.body) ? annotation.body : [annotation?.body].filter(Boolean);
-                        const isPending = bodies.some(body => body?.purpose === 'tagging' && body?.value === 'MyTag');
-                        const color = annotation?.body?.category?.color || annotation?.body?.categories?.[0]?.color;
-                        const formatted = isPending ? { className: 'pending-annotation' } : {};
+            if (annotationsEnabled) {
+                //Initialize the Annotorious plugin
+                anno = OpenSeadragon.Annotorious(viewer, {
+                    //additional configuration options
+                    disableEditor: true,
+                    formatters: [
+                        function (annotation) {
+                            const bodies = Array.isArray(annotation?.body) ? annotation.body : [annotation?.body].filter(Boolean);
+                            const isPending = bodies.some(body => body?.purpose === 'tagging' && body?.value === 'MyTag');
+                            const color = annotation?.body?.category?.color || annotation?.body?.categories?.[0]?.color;
+                            const formatted = isPending ? { className: 'pending-annotation' } : {};
 
-                        if (color) {
-                            formatted.style = `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:1.5;`;
+                            if (color) {
+                                formatted.style = `--annotation-stroke:${color}; stroke:${color}; fill:transparent; stroke-width:1.5;`;
+                            }
+
+                            return Object.keys(formatted).length ? formatted : null;
                         }
-
-                        return Object.keys(formatted).length ? formatted : null;
-                    }
-                ]
-            });
+                    ]
+                });
+            }
 
             const annotationCanvasInitPromise = annotationCanvasLoadPromise
                 .then(function (module) {
@@ -639,19 +646,21 @@ downloads (object | null)
                 })
                 : Promise.resolve([]);
 
-            const annotationInteractionsInitPromise = import('/viewer/modules/iiif/features/annotation-interactions.js')
-                .then(function (module) {
-                    annotationInteractions = module.createAnnotationInteractions({
-                        anno,
-                        annotationEditorUrl,
-                        displayInscriptions,
-                        getCurrentImageSize,
-                        initialAnnotationId,
-                        loadAnnotationsPromise,
-                        viewer
-                    });
-                    annotationInteractions.updateInstructions();
-                });
+            const annotationInteractionsInitPromise = annotationsEnabled
+                ? import('/viewer/modules/iiif/features/annotation-interactions.js')
+                    .then(function (module) {
+                        annotationInteractions = module.createAnnotationInteractions({
+                            anno,
+                            annotationEditorUrl,
+                            displayInscriptions,
+                            getCurrentImageSize,
+                            initialAnnotationId,
+                            loadAnnotationsPromise,
+                            viewer
+                        });
+                        annotationInteractions.updateInstructions();
+                    })
+                : Promise.resolve();
 
             import('/viewer/modules/iiif/features/image-download.js').then(module => {
                 module.createImageDownload({

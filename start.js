@@ -14,7 +14,10 @@ dotenv.config({ path: './.env.local' });
 const projectName = process.env.PROJECT || 'default';
 
 //path to the configuration file for the specified project
-const configPath = path.join(__dirname, 'viewer', 'projects', projectName, 'config.js');
+const configFile = projectName === 'munch-annotationless'
+    ? 'munch/config.annotationless.js'
+    : path.join(projectName, 'config.js');
+const configPath = path.join(__dirname, 'viewer', 'projects', configFile);
 
 let config;
 try {

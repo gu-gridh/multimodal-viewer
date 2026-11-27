@@ -47,25 +47,25 @@
             background-color: rgb(236, 232, 226);
         }
 
-        .mobile-panel-toggle {
+        .mobile-panel-toggle,
+        .mobile-panel-header {
             display: none;
         }
 
-        .back-button {
-            display: none;
-            position: absolute;
-            height: 30px;
-            width: 30px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 1.0);
+        .mobile-panel-toggle {
+            border: 0;
+            background: transparent;
+            font: inherit;
+        }
+
+        #back-to-visuals {
+            display: block;
+            position: static;
+            border: 0;
             background-image: url(https://data.dh.gu.se/ui-icons/arrow_back_white.png);
             background-size: 15px;
             background-position: center;
             background-repeat: no-repeat;
-            margin-top: 30px;
-            margin-left: 12px;
-            z-index: 1200;
-            cursor: pointer;
         }
 
         .iframes {
@@ -77,10 +77,6 @@
 
             #main-content {
                 height: calc(100% - 80px) !important;
-            }
-
-            .compact {
-                display: none;
             }
 
             #right-pane {
@@ -95,38 +91,32 @@
         /* Small screen adaption */
         @media screen and (max-width: 950px) {
             #main-content {
-                height: calc(100% - 0px) !important;
+                height: 100% !important;
             }
 
-            #left-pane {
+            #left-pane,
+            #right-pane {
                 width: 100% !important;
             }
 
-            .mobile-panel-toggle {
+            .mobile-panel-toggle,
+            .mobile-panel-header {
                 display: block;
             }
 
-            #right-pane {
+            #right-pane,
+            .mobile-metadata-open #left-pane {
                 display: none;
-
-                top: 0;
-                right: 0;
-                width: 100vw;
-                height: 100%;
-                z-index: 1100;
-                position: fixed;
             }
 
-            #right-pane.mobile-open {
-                display: block !important;
+            .mobile-metadata-open #right-pane {
+                display: grid;
+                grid-template-rows: auto minmax(0, 1fr);
             }
 
-            #right-pane.mobile-open .back-button {
-                display: block;
-            }
-
-            .compact {
-                display: block;
+            .mobile-panel-header {
+                padding: 12px;
+                background-color: #fafafa;
             }
 
             #footer-container {
@@ -150,14 +140,17 @@
                     <div class="ui-module-item left" id="btn3"
                         onclick="changeLeftViewer('mesh'); moduleSwitcherLeft(3);">
                     </div>
-                    <div class="ui-module-item left mobile-panel-toggle" id="btn4" onclick="toggleMobileMetadata()">
-                    </div>
+                    <button type="button" class="ui-module-item left mobile-panel-toggle" id="btn4"
+                        onclick="showMobileMetadata(true)">About</button>
                 </div>
             </div>
             <iframe id="left-Iframe" class="iframes" style="width:100%;"></iframe>
         </div>
         <div id="right-pane">
-            <div id="back-to-visuals" class="back-button" title="Back to visuals" onclick="closeMobileMetadata()"></div>
+            <div class="mobile-panel-header">
+                <button type="button" id="back-to-visuals" class="round-button" title="Back to visuals"
+                    onclick="showMobileMetadata(false)"></button>
+            </div>
             <iframe id="right-iframe" class="iframes" style="width:100%;"></iframe>
         </div>
         <div id="footer-container"></div>
@@ -165,7 +158,6 @@
 
     <script>
         let activeLeftViewer = 'photo';
-        let activeAnnotationFilters = {};
 
         $(document).ready(function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -179,16 +171,6 @@
         window.addEventListener('message', function (event) {
             if (event.data.type === 'togglePane') {
                 toggleRightPane();
-            } else if (event.data.type === 'annotationFiltersChange') {
-                activeAnnotationFilters = event.data.filters || {};
-                sendActiveAnnotationFilters();
-            } else if (event.data.type === 'iiifViewerReady') {
-                sendActiveAnnotationFilters();
-            } else if (event.data.type === 'annotationClick' || event.data.type === 'annotationLoaded') {
-                document.getElementById('right-iframe').contentWindow.postMessage({
-                    type: 'annotationSelectionChange',
-                    value: event.data.value
-                }, '*');
             }
         }, false);
 
@@ -218,7 +200,6 @@
             document.getElementById('btn1').textContent = 'Photo';
             document.getElementById('btn2').textContent = 'Topography';
             document.getElementById('btn3').textContent = 'Mesh';
-            document.getElementById('btn4').textContent = 'About';
         }
 
         function getBaseQuery() {
@@ -233,28 +214,6 @@
             return qValue;
         }
 
-        function sendActiveAnnotationFilters() {
-            if (!['photo', 'topography'].includes(activeLeftViewer)) {
-                return;
-            }
-
-            document.getElementById('left-Iframe').contentWindow.postMessage({
-                type: 'annotationFiltersChange',
-                filters: activeAnnotationFilters
-            }, '*');
-        }
-
-        function getAnnotationFilterQuery() {
-            const params = new URLSearchParams();
-            Object.entries(activeAnnotationFilters).forEach(([key, value]) => {
-                if (value && value !== 'all') {
-                    params.set(key, value);
-                }
-            });
-
-            return params.toString();
-        }
-
         function changeLeftViewer(viewerType) {
             activeLeftViewer = viewerType;
             const iframe = document.getElementById('left-Iframe');
@@ -262,7 +221,7 @@
             const currentUrl = new URL(window.location.href);
             const hashFragment = currentUrl.hash || '';
             const qValue = getBaseQuery();
-            const filterQuery = getAnnotationFilterQuery();
+            const filterQuery = window.getAnnotationFilterQuery?.();
             const filterSuffix = filterQuery ? `&${filterQuery}` : '';
             let src = '';
             let newPath = `/viewer/?q=${qValue}`;
@@ -306,18 +265,9 @@
             }
         }
 
-        function toggleMobileMetadata() {
-            changeRightViewer('metadata');
-
-            if (window.innerWidth > 950) {
-                return;
-            }
-
-            document.getElementById('right-pane').classList.toggle('mobile-open');
-        }
-
-        function closeMobileMetadata() {
-            document.getElementById('right-pane').classList.remove('mobile-open');
+        function showMobileMetadata(open) {
+            document.getElementById('main-content').classList.toggle('mobile-metadata-open', open);
+            document.getElementById(open ? 'back-to-visuals' : 'btn4').focus();
         }
 
         function toggleRightPane() {
@@ -335,6 +285,45 @@
         function moduleSwitcherLeft(num) {
             $('.left').css('opacity', '0.6');
             $('#btn' + num).css('opacity', '1.0');
+        }
+    </script>
+    <script data-annotation-only>
+        let activeAnnotationFilters = {};
+
+        window.addEventListener('message', event => {
+            if (event.data.type === 'annotationFiltersChange') {
+                activeAnnotationFilters = event.data.filters || {};
+                sendActiveAnnotationFilters();
+            } else if (event.data.type === 'iiifViewerReady') {
+                sendActiveAnnotationFilters();
+            } else if (event.data.type === 'annotationClick' || event.data.type === 'annotationLoaded') {
+                document.getElementById('right-iframe').contentWindow.postMessage({
+                    type: 'annotationSelectionChange',
+                    value: event.data.value
+                }, '*');
+            }
+        });
+
+        function sendActiveAnnotationFilters() {
+            if (!['photo', 'topography'].includes(activeLeftViewer)) {
+                return;
+            }
+
+            document.getElementById('left-Iframe').contentWindow.postMessage({
+                type: 'annotationFiltersChange',
+                filters: activeAnnotationFilters
+            }, '*');
+        }
+
+        function getAnnotationFilterQuery() {
+            const params = new URLSearchParams();
+            Object.entries(activeAnnotationFilters).forEach(([key, value]) => {
+                if (value && value !== 'all') {
+                    params.set(key, value);
+                }
+            });
+
+            return params.toString();
         }
     </script>
     <!-- Matomo -->
